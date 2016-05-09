@@ -139,6 +139,30 @@ namespace AdvancedControlsMod
             Invert = invert;
         }
 
+        public struct Param
+        {
+            public string axis;
+            public float sens;
+            public float curv;
+            public float dead;
+            public bool inv;
+        }
+
+        public Param Parameters
+        {
+            get
+            {
+                return new Param()
+                {
+                    axis = Axis,
+                    sens = Sensitivity,
+                    curv = Curvature,
+                    dead = Deadzone,
+                    inv = Invert
+                };
+            }
+        }
+
         public override float Input
         {
             get

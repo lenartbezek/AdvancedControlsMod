@@ -6,8 +6,10 @@ namespace AdvancedControlsMod.UI
     public static class Util
     {
 
-        private static Texture2D _staticRectTexture = new Texture2D(1, 1);
-        private static GUIStyle _staticRectStyle = new GUIStyle();
+        private static Texture2D _rectTexture = new Texture2D(1, 1);
+        private static GUIStyle _rectStyle = new GUIStyle();
+
+        private static Color _currentColor = new Color();
 
         public static GUIStyle LabelStyle
         {
@@ -60,12 +62,15 @@ namespace AdvancedControlsMod.UI
 
         public static void DrawRect(Rect position, Color color)
         {
-            _staticRectTexture.SetPixel(0, 0, color);
-            _staticRectTexture.Apply();
+            if (color != _currentColor)
+            {
+                _rectTexture.SetPixel(0, 0, color);
+                _rectTexture.Apply();
 
-            _staticRectStyle.normal.background = _staticRectTexture;
+                _rectStyle.normal.background = _rectTexture;
+            }
 
-            GUI.Box(position, GUIContent.none, _staticRectStyle);
+            GUI.Box(position, GUIContent.none, _rectStyle);
         }
 
         public static void DrawPixel(Vector2 point, Color color)

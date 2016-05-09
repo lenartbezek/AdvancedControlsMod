@@ -11,7 +11,11 @@ namespace AdvancedControlsMod.UI
 
         private int windowID = spaar.ModLoader.Util.GetWindowID();
         private Rect windowRect = new Rect(100, 100, 320, 610);
+        private Rect graphRect;
+        private GUIStyle graphStyle = new GUIStyle();
+        private Texture2D graphTex;
 
+        private ControllerAxis.Param last_parameters;
         private ControllerAxis axis = new ControllerAxis("vertical");
 
         private bool vertical = true;
@@ -40,6 +44,31 @@ namespace AdvancedControlsMod.UI
             }
         }
 
+        private void DrawGraph()
+        {
+            if (graphTex == null)
+                graphTex = new Texture2D((int)graphRect.width, (int)graphRect.height);
+            if (!axis.Parameters.Equals(last_parameters))
+            {
+                for (int i = 0; i < graphRect.width; i++)
+                {
+                    var value = axis.Process((i - graphRect.width / 2) / (graphRect.width / 2));
+                    var point = graphRect.height / 2 - graphRect.height / 2 * value;
+                    for (int j = 0; j < graphRect.height; j++)
+                    {
+                        if ((int)point == j)
+                            graphTex.SetPixel((int)graphRect.width - i, j, Color.white);
+                        else
+                            graphTex.SetPixel((int)graphRect.width - i, j, new Color(0, 0, 0, 0));
+                    }
+                }
+                graphTex.Apply();
+                last_parameters = axis.Parameters;
+            }
+            graphStyle.normal.background = graphTex;
+            GUI.Box(graphRect, GUIContent.none, graphStyle);
+        }
+
         private void DoWindow(int id)
         {
             // Draw save text field and save button
@@ -57,7 +86,7 @@ namespace AdvancedControlsMod.UI
             GUILayout.EndHorizontal();
 
             // Draw graph
-            Rect graphRect = new Rect(
+            graphRect = new Rect(
                 GUI.skin.window.padding.left,
                 GUI.skin.window.padding.top + 36,
                 windowRect.width - GUI.skin.window.padding.left - GUI.skin.window.padding.right,
@@ -69,11 +98,7 @@ namespace AdvancedControlsMod.UI
                               graphRect.height),
                      Color.yellow);
 
-            for(int i = 0; i <= graphRect.width; i++)
-            {
-                float value = axis.Process((i - graphRect.width / 2) / (graphRect.width / 2));
-                Util.DrawPixel(new Vector2(graphRect.x + i, graphRect.y + graphRect.height / 2 - graphRect.height / 2 * value), Color.white);
-            }
+            DrawGraph();
 
             // Draw axis controls
             GUILayout.BeginArea(new Rect(
