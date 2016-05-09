@@ -29,6 +29,7 @@ namespace AdvancedControlsMod
             AdvancedControls.Instance.gameObject.AddComponent<ControllerAxisEdit>();
             AdvancedControls.Instance.gameObject.AddComponent<OneKeyAxisEdit>();
             AdvancedControls.Instance.gameObject.AddComponent<TwoKeyAxisEdit>();
+            AdvancedControls.Instance.gameObject.AddComponent<CustomAxisEdit>();
         }
 
         public override void OnUnload()
@@ -51,7 +52,7 @@ namespace AdvancedControlsMod
         public delegate void ResetEventHandler();
         public event ResetEventHandler OnReset;
         
-        public void SaveAxis(Axis axis, string name)
+        public void SaveAxis(Axis axis)
         {
 
         } 

@@ -74,6 +74,7 @@
     <Compile Include="UI\ControllerAxisEdit.cs" />
     <Compile Include="Mod.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="UI\CustomAxisEdit.cs" />
     <Compile Include="UI\OneKeyAxisEdit.cs" />
     <Compile Include="UI\TwoKeyAxisEdit.cs" />
     <Compile Include="UI\Util.cs" />

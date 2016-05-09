@@ -6,26 +6,25 @@ namespace AdvancedControlsMod.UI
 {
     public class TwoKeyAxisEdit : MonoBehaviour
     {
-        public bool Visible { get; set; } = false;
+        public bool Visible { get; set; } = true;
 
         public new string name { get { return "Edit Two Key Axis window"; } }
 
         private int windowID = spaar.ModLoader.Util.GetWindowID();
-        private Rect windowRect = new Rect(100, 100, 320, 294);
+        private Rect windowRect = new Rect(100, 100, 320, 286);
 
-        private string axisSaveName = "new axis";
-        private TwoKeyAxis configuringAxis = new TwoKeyAxis(KeyCode.None, KeyCode.None);
+        private TwoKeyAxis axis = new TwoKeyAxis(KeyCode.None, KeyCode.None);
 
         private void SaveAxis()
         {
             Visible = false;
-            AdvancedControls.Instance.SaveAxis(configuringAxis, axisSaveName);
+            AdvancedControls.Instance.SaveAxis(axis);
         }
 
         public void EditAxis(TwoKeyAxis axis)
         {
             Visible = true;
-            configuringAxis = axis;
+            this.axis = axis;
         }
 
         /// <summary>
@@ -35,149 +34,119 @@ namespace AdvancedControlsMod.UI
         {
             if (Visible)
             {
-                GUI.skin = ModGUI.Skin;
-                GUI.skin.window.padding.left = 8;
-                windowRect = GUI.Window(windowID, windowRect, DoWindow, "Edit Two Key Axis");
+                GUI.skin = Util.Skin;
+                windowRect = GUILayout.Window(windowID, windowRect, DoWindow, "Edit Two Key Axis");
             }
         }
 
         private void DoWindow(int id)
         {
 
-            // Draw save text field and button
-            float vertical_offset = GUI.skin.window.padding.top;
+            /// Draw save text field and save button
+            GUILayout.BeginHorizontal();
+            axis.Name = GUILayout.TextField(axis.Name,
+                Elements.InputFields.Default);
 
-            var oldColor = GUI.backgroundColor;
-            GUI.backgroundColor = new Color(0.7f, 0.7f, 0.7f, 1);
-            axisSaveName = GUI.TextField(new Rect(
-                GUI.skin.window.padding.left,
-                vertical_offset,
-                windowRect.width * 0.75f - 2 * GUI.skin.window.padding.left, 20),
-                axisSaveName, Elements.InputFields.ComponentField);
-            GUI.backgroundColor = oldColor;
-
-            if (GUI.Button(new Rect(
-                windowRect.width * 0.75f - 0.5f * GUI.skin.window.padding.left,
-                vertical_offset,
-                windowRect.width * 0.25f - 0.5f * GUI.skin.window.padding.left, 20),
-                "Save", Elements.Buttons.Default) && axisSaveName != "")
+            if (GUILayout.Button("Save",
+                Elements.Buttons.Default,
+                GUILayout.Width(80))
+                && axis.Name != "")
             {
                 SaveAxis();
             }
+            GUILayout.EndHorizontal();
 
-            // Draw visualisation
-            vertical_offset += GUI.skin.window.padding.left + 20;
-
-            Util.DrawRect(new Rect(
+            // Draw graph
+            Rect graphRect = new Rect(
                 GUI.skin.window.padding.left,
-                vertical_offset,
-                windowRect.width - 2 * GUI.skin.window.padding.left,
-                20), Color.black);
+                GUI.skin.window.padding.top + 36,
+                windowRect.width - GUI.skin.window.padding.left - GUI.skin.window.padding.right,
+                20);
+
             Util.DrawRect(new Rect(
-                windowRect.width / 2 - 10 + configuringAxis.Output * (windowRect.width - 2 * GUI.skin.window.padding.left - 20) / 2,
-                vertical_offset,
+                graphRect.x + graphRect.width / 2 - 10 + axis.Output * (graphRect.width - 20) / 2,
+                graphRect.y,
                 20, 20), Color.yellow);
 
-            // Draw key mapper
-            vertical_offset += GUI.skin.window.padding.left + 20;
-
-            GUI.Button(new Rect(
+            // Draw axis controls
+            GUILayout.BeginArea(new Rect(
                 GUI.skin.window.padding.left,
-                vertical_offset,
-                windowRect.width * 0.5f - 1.5f * GUI.skin.window.padding.left,
-                30),
-                new GUIContent(configuringAxis.NegativeKey.ToString(), "Key Mapper Negative"), Elements.Buttons.Red);
+                graphRect.y + graphRect.height + GUI.skin.window.padding.bottom,
+                windowRect.width - GUI.skin.window.padding.left - GUI.skin.window.padding.right,
+                400));
 
-            GUI.Button(new Rect(
-                windowRect.width * 0.5f + 0.5f * GUI.skin.window.padding.left,
-                vertical_offset,
-                windowRect.width * 0.5f - 1.5f * GUI.skin.window.padding.left,
-                30),
-                new GUIContent(configuringAxis.PositiveKey.ToString(), "Key Mapper Positive"), Elements.Buttons.Red);
+            // Draw key mappers
+            GUILayout.BeginHorizontal();
 
+            GUILayout.Button(new GUIContent(axis.NegativeKey.ToString(), "Key Mapper Negative"), Elements.Buttons.Red);
             if (GUI.tooltip == "Key Mapper Negative")
             {
                 foreach (KeyCode key in Enum.GetValues(typeof(KeyCode)))
                     if (Input.GetKey(key))
                     {
-                        configuringAxis.NegativeKey = key == KeyCode.Backspace ? KeyCode.None : key;
+                        axis.NegativeKey = key == KeyCode.Backspace ? KeyCode.None : key;
                         break;
                     }
             }
-
+            GUILayout.Button(new GUIContent(axis.PositiveKey.ToString(), "Key Mapper Positive"), Elements.Buttons.Red);
             if (GUI.tooltip == "Key Mapper Positive")
             {
                 foreach (KeyCode key in Enum.GetValues(typeof(KeyCode)))
                     if (Input.GetKey(key))
                     {
-                        configuringAxis.PositiveKey = key == KeyCode.Backspace ? KeyCode.None : key;
+                        axis.PositiveKey = key == KeyCode.Backspace ? KeyCode.None : key;
                         break;
                     }
             }
 
+            GUILayout.EndHorizontal();
+
             // Draw Sensitivity slider
-            vertical_offset += GUI.skin.window.padding.left + 30;
+            GUILayout.BeginHorizontal();
+            GUILayout.Label("Sensitivity", Util.LabelStyle);
+            GUILayout.Label((Mathf.Round(axis.Sensitivity * 100) / 100).ToString(),
+                Util.LabelStyle,
+                GUILayout.Width(60));
+            GUILayout.EndHorizontal();
 
-            GUI.Label(new Rect(
-                GUI.skin.window.padding.left,
-                vertical_offset,
-                windowRect.width - 2f * GUI.skin.window.padding.left, 20),
-                "Sensitivity: " + configuringAxis.Sensitivity);
+            axis.Sensitivity = GUILayout.HorizontalSlider(axis.Sensitivity, 0, 10);
 
-            vertical_offset += GUI.skin.window.padding.left + 8;
+            // Draw Curvature slider
+            GUILayout.BeginHorizontal();
+            GUILayout.Label("Gravity", Util.LabelStyle);
+            GUILayout.Label((Mathf.Round(axis.Gravity * 100) / 100).ToString(),
+                Util.LabelStyle,
+                GUILayout.Width(60));
+            GUILayout.EndHorizontal();
 
-            configuringAxis.Sensitivity = GUI.HorizontalSlider(new Rect(
-                GUI.skin.window.padding.left,
-                vertical_offset,
-                windowRect.width - 2f * GUI.skin.window.padding.left, 20),
-                configuringAxis.Sensitivity, 0, 10);
+            axis.Gravity = GUILayout.HorizontalSlider(axis.Gravity, 0, 10);
 
-            vertical_offset += GUI.skin.window.padding.left + 20;
+            // Draw toggles
+            GUILayout.BeginHorizontal();
 
-            // Draw Gravity slider
-            GUI.Label(new Rect(
-                GUI.skin.window.padding.left,
-                vertical_offset,
-                windowRect.width - 2f * GUI.skin.window.padding.left, 20),
-                "Gravity: " + configuringAxis.Gravity);
+            axis.Invert = GUILayout.Toggle(axis.Invert, "",
+                Util.ToggleStyle,
+                GUILayout.Width(20),
+                GUILayout.Height(20));
 
-            vertical_offset += GUI.skin.window.padding.left + 8;
+            GUILayout.Label("Invert ",
+                new GUIStyle(Elements.Labels.Default) { margin = new RectOffset(0, 0, 14, 0) });
 
-            configuringAxis.Gravity = GUI.HorizontalSlider(new Rect(
-                GUI.skin.window.padding.left,
-                vertical_offset,
-                windowRect.width - 2f * GUI.skin.window.padding.left, 20),
-                configuringAxis.Gravity, 0, 10);
+            axis.Snap = GUILayout.Toggle(axis.Snap, "",
+                Util.ToggleStyle,
+                GUILayout.Width(20),
+                GUILayout.Height(20));
 
-            vertical_offset += GUI.skin.window.padding.left + 20;
+            GUILayout.Label("Snap ",
+                new GUIStyle(Elements.Labels.Default) { margin = new RectOffset(0, 0, 14, 0) });
 
-            // Draw Invert toggle
+            GUILayout.EndHorizontal();
 
-            configuringAxis.Invert = GUI.Toggle(new Rect(
-                GUI.skin.window.padding.left,
-                vertical_offset,
-                20, 20),
-                configuringAxis.Invert, "");
-            GUI.Label(new Rect(
-                GUI.skin.window.padding.left + 28,
-                vertical_offset + 4,
-                windowRect.width - 2f * GUI.skin.window.padding.left, 20),
-                "Invert ");
+            GUILayout.EndArea();
 
-            vertical_offset += GUI.skin.window.padding.left + 20;
-
-            // Draw Invert toggle
-            configuringAxis.Snap = GUI.Toggle(new Rect(
-                GUI.skin.window.padding.left,
-                vertical_offset,
-                20, 20),
-                configuringAxis.Snap, "");
-
-            GUI.Label(new Rect(
-                GUI.skin.window.padding.left + 28,
-                vertical_offset + 4,
-                windowRect.width - 2f * GUI.skin.window.padding.left, 20),
-                "Snap ");
+            if (GUI.Button(new Rect(windowRect.width - 28, 8, 20, 20),
+                "×", Elements.Buttons.Red))
+                Visible = false;
 
             GUI.DragWindow(new Rect(0, 0, windowRect.width, GUI.skin.window.padding.top));
         }

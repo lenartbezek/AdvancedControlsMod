@@ -1,9 +1,11 @@
 ﻿using UnityEngine;
+using LenchScripter;
 
 namespace AdvancedControlsMod
 {
     public class Axis
     {
+        public virtual string Name { get; set; } = "new axis";
         public virtual float Input { get; } = 0;
         public virtual float Output { get; set; } = 0;
 
@@ -164,5 +166,30 @@ namespace AdvancedControlsMod
             value = value > 0 ? Mathf.Pow(value, Curvature) : - Mathf.Pow(-value, Curvature);
             return Mathf.Clamp(value, -1, 1);
         }
+    }
+
+    public class CustomAxis : Axis
+    {
+
+        public CustomAxis() : base() { }
+
+        public string InitialisationCode { get; set; } = @"time = 0";
+        public string UpdateCode { get; set; } = 
+@"time = time + Time.deltaTime
+axis_value = Mathf.Sin(time)
+return axis_value";
+
+        public override void Update()
+        {
+            if (!Lua.IsActive) return;
+            Output = Mathf.Clamp((float)Lua.Evaluate(@UpdateCode)[0], -1, 1);
+        }
+
+        public override void Reset()
+        {
+            if (!Lua.IsActive) return;
+            Lua.Evaluate(InitialisationCode);
+        }
+
     }
 }
