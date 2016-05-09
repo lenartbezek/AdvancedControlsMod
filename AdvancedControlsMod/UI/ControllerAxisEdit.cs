@@ -1,33 +1,20 @@
 ﻿using UnityEngine;
-using spaar.ModLoader;
 using spaar.ModLoader.UI;
 
-namespace AdvancedControlsMod
+namespace AdvancedControlsMod.UI
 {
     public class ControllerAxisEdit : MonoBehaviour
     {
         public bool Visible { get; set; } = false;
 
-        /// <summary>
-        /// Name in the Unity Hierarchy.
-        /// </summary>
         public new string name { get { return "Edit Controller Axis window"; } }
 
-        private int windowID = Util.GetWindowID();
-        private Rect windowRect = new Rect(100, 100, 320, 584);
+        private int windowID = spaar.ModLoader.Util.GetWindowID();
+        private Rect windowRect = new Rect(100, 100, 320, 594);
 
         private string axisSaveName = "new axis";
         private ControllerAxis configuringAxis = new ControllerAxis("vertical");
         private bool vertical = true;
-
-        private static Texture2D _staticRectTexture;
-        private static GUIStyle _staticRectStyle;
-
-        private void Awake()
-        {
-            _staticRectTexture = new Texture2D(1, 1);
-            _staticRectStyle = new GUIStyle();
-        }
 
         private void SaveAxis()
         {
@@ -87,7 +74,7 @@ namespace AdvancedControlsMod
                 windowRect.width - 2 * GUI.skin.window.padding.left,
                 windowRect.width - 2 * GUI.skin.window.padding.left);
 
-            DrawRect(new Rect(graphRect.x + graphRect.width / 2 + graphRect.width / 2 * configuringAxis.Input,
+            Util.DrawRect(new Rect(graphRect.x + graphRect.width / 2 + graphRect.width / 2 * configuringAxis.Input,
                               graphRect.y,
                               1,
                               graphRect.height),
@@ -96,31 +83,37 @@ namespace AdvancedControlsMod
             for(int i = 0; i <= graphRect.width; i++)
             {
                 float value = configuringAxis.Process((i - graphRect.width/2) / (graphRect.width));
-                DrawPixel(new Vector2(graphRect.x + i, graphRect.y + graphRect.height / 2 - graphRect.height / 2 * value), Color.white);
+                Util.DrawPixel(new Vector2(graphRect.x + i, graphRect.y + graphRect.height / 2 - graphRect.height / 2 * value), Color.white);
             }
 
             // Draw axis toggles
             vertical_offset += GUI.skin.window.padding.left + windowRect.width - 2 * GUI.skin.window.padding.left;
 
-            vertical = GUI.Toggle(new Rect(
+            if (GUI.Button(new Rect(
                 GUI.skin.window.padding.left,
                 vertical_offset,
-                windowRect.width * 0.5f - 1.5f * GUI.skin.window.padding.left, 20),
-                vertical, "Vertical",
-                vertical ? Elements.Buttons.Default : Elements.Buttons.Disabled);
+                windowRect.width * 0.5f - 1.5f * GUI.skin.window.padding.left, 30),
+                "Vertical",
+                vertical ? Elements.Buttons.Default : Elements.Buttons.Disabled))
+            {
+                vertical = true;
+            }
 
-            vertical = !GUI.Toggle(new Rect(
+            if (GUI.Button(new Rect(
                 windowRect.width * 0.5f + 0.5f * GUI.skin.window.padding.left,
                 vertical_offset,
-                windowRect.width * 0.5f - 1.5f * GUI.skin.window.padding.left, 20),
-                !vertical, "Horizontal",
-                !vertical ? Elements.Buttons.Default : Elements.Buttons.Disabled);
+                windowRect.width * 0.5f - 1.5f * GUI.skin.window.padding.left, 30),
+                "Horizontal",
+                !vertical ? Elements.Buttons.Default : Elements.Buttons.Disabled))
+            {
+                vertical = false;
+            }
 
             configuringAxis.Axis = vertical ? "Vertical" : "Horizontal";
 
 
             // Draw Sensitivity slider
-            vertical_offset += GUI.skin.window.padding.left + 20;
+            vertical_offset += GUI.skin.window.padding.left + 30;
 
             GUI.Label(new Rect(
                 GUI.skin.window.padding.left,
@@ -170,10 +163,10 @@ namespace AdvancedControlsMod
                 windowRect.width - 2f * GUI.skin.window.padding.left, 20),
                 configuringAxis.Deadzone, 0, 0.5f);
 
+
             vertical_offset += GUI.skin.window.padding.left + 20;
 
             // Draw Invert toggle
-
             configuringAxis.Invert = GUI.Toggle(new Rect(
                 GUI.skin.window.padding.left,
                 vertical_offset,
@@ -187,21 +180,6 @@ namespace AdvancedControlsMod
                 "Invert ");
 
             GUI.DragWindow(new Rect(0, 0, windowRect.width, GUI.skin.window.padding.top));
-        }
-
-        private void DrawRect(Rect position, Color color)
-        {
-            _staticRectTexture.SetPixel(0, 0, color);
-            _staticRectTexture.Apply();
-
-            _staticRectStyle.normal.background = _staticRectTexture;
-
-            GUI.Box(position, GUIContent.none, _staticRectStyle);
-        }
-
-        private void DrawPixel(Vector2 point, Color color)
-        {
-            DrawRect(new Rect(point.x, point.y, 1, 1), color);
         }
     }
 }

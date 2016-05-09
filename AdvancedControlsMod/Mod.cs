@@ -4,6 +4,8 @@ using UnityEngine;
 using LenchScripter;
 using LenchScripter.Blocks;
 
+using AdvancedControlsMod.UI;
+
 namespace AdvancedControlsMod
 {
 
@@ -23,7 +25,10 @@ namespace AdvancedControlsMod
         {
             UnityEngine.Object.DontDestroyOnLoad(AdvancedControls.Instance);
             Game.OnSimulationToggle += AdvancedControls.Instance.OnSimulationToggle;
+
             AdvancedControls.Instance.gameObject.AddComponent<ControllerAxisEdit>();
+            AdvancedControls.Instance.gameObject.AddComponent<OneKeyAxisEdit>();
+            AdvancedControls.Instance.gameObject.AddComponent<TwoKeyAxisEdit>();
         }
 
         public override void OnUnload()

@@ -63,12 +63,13 @@ namespace AdvancedControlsMod
         public float Gravity { get; set; }
         public float Sensitivity { get; set; }
         public bool Snap { get; set; }
-        public int Invert { get; set; }
+        public bool Invert { get; set; }
         public KeyCode PositiveKey { get; set; }
         public KeyCode NegativeKey { get; set; }
 
         private float speed = 0;
         private float force = 0;
+        private float last = 0;
 
         public TwoKeyAxis(KeyCode positiveKey, KeyCode negativeKey, float sensitivity = 1, float gravity = 1, bool snap = false, bool invert = false) : base()
         {
@@ -77,7 +78,7 @@ namespace AdvancedControlsMod
             Sensitivity = sensitivity;
             Gravity = gravity;
             Snap = snap;
-            Invert = invert ? -1 : 1;
+            Invert = invert;
         }
 
         public override float Input
@@ -86,7 +87,7 @@ namespace AdvancedControlsMod
             {
                 float p = UnityEngine.Input.GetKey(PositiveKey) ? 1 : 0;
                 float n = UnityEngine.Input.GetKey(NegativeKey) ? -1 : 0;
-                return p + n * Invert;
+                return (p + n) * (Invert ? -1 : 1);
             }
         }
 
@@ -102,8 +103,18 @@ namespace AdvancedControlsMod
             float g_force = Output > 0 ? - Gravity : Gravity;
             force = Input != 0 ? Input * Sensitivity : g_force;
             speed += force * Time.deltaTime;
-            if (Snap && Mathf.Abs(Output - Input) > 1) Output = 0;
-            Output = Mathf.Clamp(Output + speed * Time.deltaTime, 0, 1);
+            Output = Mathf.Clamp(Output + speed * Time.deltaTime, -1, 1);
+            if (Snap && Mathf.Abs(Output - Input) > 1)
+            {
+                speed = 0;
+                Output = 0;
+            }
+            if (Input == 0 && (last > 0 != Output > 0))
+            {
+                speed = 0;
+                Output = 0;
+            }
+            last = Output;
             if (Output == -1 || Output == 1)
                 speed = 0;
         }
