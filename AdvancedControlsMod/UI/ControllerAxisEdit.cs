@@ -3,87 +3,67 @@ using spaar.ModLoader.UI;
 
 namespace AdvancedControlsMod.UI
 {
-    public class ControllerAxisEdit : MonoBehaviour
+    public class ControllerAxisEdit : AxisEdit
     {
-        public bool Visible { get; set; } = true;
-
         public new string name { get { return "Edit Controller Axis window"; } }
 
-        private int windowID = spaar.ModLoader.Util.GetWindowID();
-        private Rect windowRect = new Rect(100, 100, 320, 610);
+        protected new ControllerAxis axis = new ControllerAxis("Vertical");
+
+        protected override float DesiredWidth { get; } = 320;
+        protected override float DesiredHeight { get; } = 611;
+
+        public override void SaveAxis()
+        {
+            Visible = false;
+            axis.Name = axisName;
+            AdvancedControlsMod.AxisList.SaveAxis(axis);
+        }
+
+        public override void EditAxis(Axis axis)
+        {
+            Visible = true;
+            this.axisName = axis.Name;
+            this.axis = (axis as ControllerAxis).Clone();
+        }
+
         private Rect graphRect;
+        private Rect last_graphRect;
         private GUIStyle graphStyle = new GUIStyle();
         private Texture2D graphTex;
 
         private ControllerAxis.Param last_parameters;
-        private ControllerAxis axis = new ControllerAxis("vertical");
 
         private bool vertical = true;
 
-        private void SaveAxis()
-        {
-            Visible = false;
-            AdvancedControls.Instance.SaveAxis(axis);
-        }
-
-        public void EditAxis(ControllerAxis axis)
-        {
-            Visible = true;
-            this.axis = axis;
-        }
-
-        /// <summary>
-        /// Render window.
-        /// </summary>
-        private void OnGUI()
-        {
-            if (Visible)
-            {
-                GUI.skin = Util.Skin;
-                windowRect = GUILayout.Window(windowID, windowRect, DoWindow, "Edit Controller Axis");
-            }
-        }
-
         private void DrawGraph()
         {
-            if (graphTex == null)
+            if (graphTex == null || graphRect != last_graphRect)
                 graphTex = new Texture2D((int)graphRect.width, (int)graphRect.height);
-            if (!axis.Parameters.Equals(last_parameters))
+            if (!axis.Parameters.Equals(last_parameters) || graphRect != last_graphRect)
             {
                 for (int i = 0; i < graphRect.width; i++)
                 {
                     var value = axis.Process((i - graphRect.width / 2) / (graphRect.width / 2));
-                    var point = graphRect.height / 2 - graphRect.height / 2 * value;
+                    var point = graphRect.height / 2 - (graphRect.height-1) / 2 * value;
                     for (int j = 0; j < graphRect.height; j++)
                     {
                         if ((int)point == j)
-                            graphTex.SetPixel((int)graphRect.width - i, j, Color.white);
+                            graphTex.SetPixel((int)graphRect.width - i - 1, j, Color.white);
                         else
-                            graphTex.SetPixel((int)graphRect.width - i, j, new Color(0, 0, 0, 0));
+                            graphTex.SetPixel((int)graphRect.width - i - 1, j, new Color(0, 0, 0, 0));
                     }
                 }
                 graphTex.Apply();
+                last_graphRect = graphRect;
                 last_parameters = axis.Parameters;
             }
             graphStyle.normal.background = graphTex;
             GUI.Box(graphRect, GUIContent.none, graphStyle);
         }
 
-        private void DoWindow(int id)
+        protected override void DoWindow(int id)
         {
-            // Draw save text field and save button
-            GUILayout.BeginHorizontal();
-            axis.Name = GUILayout.TextField(axis.Name,
-                Elements.InputFields.Default);
-
-            if (GUILayout.Button("Save",
-                Elements.Buttons.Default,
-                GUILayout.Width(80))
-                && axis.Name != "")
-            {
-                SaveAxis();
-            }
-            GUILayout.EndHorizontal();
+            base.DoWindow(id);
 
             // Draw graph
             graphRect = new Rect(
@@ -164,12 +144,6 @@ namespace AdvancedControlsMod.UI
             GUILayout.EndHorizontal();
 
             GUILayout.EndArea();
-
-            if (GUI.Button(new Rect(windowRect.width - 28, 8, 20, 20),
-                "×", Elements.Buttons.Red))
-                Visible = false;
-
-            GUI.DragWindow(new Rect(0, 0, windowRect.width, GUI.skin.window.padding.top));
         }
     }
 }

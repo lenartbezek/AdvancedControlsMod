@@ -35,18 +35,6 @@ namespace AdvancedControlsMod.UI
             }
         }
 
-        public static GUIStyle CancelButton
-        {
-            get
-            {
-                var style = new GUIStyle(Elements.Buttons.Red);
-                style.margin.top = 12;
-                style.padding.top = 2;
-                style.padding.bottom = 2;
-                return style;
-            }
-        }
-
         public static GUISkin Skin
         {
             get
@@ -72,11 +60,5 @@ namespace AdvancedControlsMod.UI
 
             GUI.Box(position, GUIContent.none, _rectStyle);
         }
-
-        public static void DrawPixel(Vector2 point, Color color)
-        {
-            DrawRect(new Rect(point.x, point.y, 1, 1), color);
-        }
-
     }
 }

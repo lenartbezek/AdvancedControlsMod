@@ -21,15 +21,22 @@ namespace AdvancedControlsMod
         public override bool CanBeUnloaded { get; } = true;
         public override bool Preload { get; } = false;
 
+        internal static ControllerAxisEdit ControllerAxisEdit;
+        internal static OneKeyAxisEdit OneKeyAxisEdit;
+        internal static TwoKeyAxisEdit TwoKeyAxisEdit;
+        internal static CustomAxisEdit CustomAxisEdit;
+        internal static AxisList AxisList;
+
         public override void OnLoad()
         {
             UnityEngine.Object.DontDestroyOnLoad(AdvancedControls.Instance);
             Game.OnSimulationToggle += AdvancedControls.Instance.OnSimulationToggle;
 
-            AdvancedControls.Instance.gameObject.AddComponent<ControllerAxisEdit>();
-            AdvancedControls.Instance.gameObject.AddComponent<OneKeyAxisEdit>();
-            AdvancedControls.Instance.gameObject.AddComponent<TwoKeyAxisEdit>();
-            AdvancedControls.Instance.gameObject.AddComponent<CustomAxisEdit>();
+            ControllerAxisEdit = AdvancedControls.Instance.gameObject.AddComponent<ControllerAxisEdit>();
+            OneKeyAxisEdit = AdvancedControls.Instance.gameObject.AddComponent<OneKeyAxisEdit>();
+            TwoKeyAxisEdit = AdvancedControls.Instance.gameObject.AddComponent<TwoKeyAxisEdit>();
+            CustomAxisEdit = AdvancedControls.Instance.gameObject.AddComponent<CustomAxisEdit>();
+            AxisList = AdvancedControls.Instance.gameObject.AddComponent<AxisList>();
         }
 
         public override void OnUnload()
@@ -51,11 +58,6 @@ namespace AdvancedControlsMod
 
         public delegate void ResetEventHandler();
         public event ResetEventHandler OnReset;
-        
-        public void SaveAxis(Axis axis)
-        {
-
-        } 
 
         private void Update()
         {

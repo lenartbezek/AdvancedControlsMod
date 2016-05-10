@@ -4,57 +4,32 @@ using spaar.ModLoader.UI;
 
 namespace AdvancedControlsMod.UI
 {
-    public class TwoKeyAxisEdit : MonoBehaviour
+    public class TwoKeyAxisEdit : AxisEdit
     {
-        public bool Visible { get; set; } = true;
-
         public new string name { get { return "Edit Two Key Axis window"; } }
 
-        private int windowID = spaar.ModLoader.Util.GetWindowID();
-        private Rect windowRect = new Rect(100, 100, 320, 286);
+        protected override float DesiredWidth { get; } = 320;
+        protected override float DesiredHeight { get; } = 286;
 
-        private TwoKeyAxis axis = new TwoKeyAxis(KeyCode.None, KeyCode.None);
+        private new TwoKeyAxis axis = new TwoKeyAxis(KeyCode.None, KeyCode.None);
 
-        private void SaveAxis()
+        public override void SaveAxis()
         {
             Visible = false;
-            AdvancedControls.Instance.SaveAxis(axis);
+            axis.Name = axisName;
+            AdvancedControlsMod.AxisList.SaveAxis(axis);
         }
 
-        public void EditAxis(TwoKeyAxis axis)
+        public override void EditAxis(Axis axis)
         {
             Visible = true;
-            this.axis = axis;
+            this.axisName = axis.Name;
+            this.axis = (axis as TwoKeyAxis).Clone();
         }
 
-        /// <summary>
-        /// Render window.
-        /// </summary>
-        private void OnGUI()
+        protected override void DoWindow(int id)
         {
-            if (Visible)
-            {
-                GUI.skin = Util.Skin;
-                windowRect = GUILayout.Window(windowID, windowRect, DoWindow, "Edit Two Key Axis");
-            }
-        }
-
-        private void DoWindow(int id)
-        {
-
-            /// Draw save text field and save button
-            GUILayout.BeginHorizontal();
-            axis.Name = GUILayout.TextField(axis.Name,
-                Elements.InputFields.Default);
-
-            if (GUILayout.Button("Save",
-                Elements.Buttons.Default,
-                GUILayout.Width(80))
-                && axis.Name != "")
-            {
-                SaveAxis();
-            }
-            GUILayout.EndHorizontal();
+            base.DoWindow(id);
 
             // Draw graph
             Rect graphRect = new Rect(
@@ -78,7 +53,7 @@ namespace AdvancedControlsMod.UI
             // Draw key mappers
             GUILayout.BeginHorizontal();
 
-            GUILayout.Button(new GUIContent(axis.NegativeKey.ToString(), "Key Mapper Negative"), Elements.Buttons.Red);
+            GUILayout.Button(new GUIContent(axis.NegativeKey.ToString(), "Key Mapper Negative"), Elements.Buttons.Red, GUILayout.Width(140));
             if (GUI.tooltip == "Key Mapper Negative")
             {
                 foreach (KeyCode key in Enum.GetValues(typeof(KeyCode)))
@@ -88,7 +63,7 @@ namespace AdvancedControlsMod.UI
                         break;
                     }
             }
-            GUILayout.Button(new GUIContent(axis.PositiveKey.ToString(), "Key Mapper Positive"), Elements.Buttons.Red);
+            GUILayout.Button(new GUIContent(axis.PositiveKey.ToString(), "Key Mapper Positive"), Elements.Buttons.Red, GUILayout.Width(140));
             if (GUI.tooltip == "Key Mapper Positive")
             {
                 foreach (KeyCode key in Enum.GetValues(typeof(KeyCode)))
@@ -143,12 +118,6 @@ namespace AdvancedControlsMod.UI
             GUILayout.EndHorizontal();
 
             GUILayout.EndArea();
-
-            if (GUI.Button(new Rect(windowRect.width - 28, 8, 20, 20),
-                "×", Elements.Buttons.Red))
-                Visible = false;
-
-            GUI.DragWindow(new Rect(0, 0, windowRect.width, GUI.skin.window.padding.top));
         }
     }
 }

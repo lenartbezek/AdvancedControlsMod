@@ -71,6 +71,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Axis.cs" />
+    <Compile Include="BlockControls\Control.cs" />
+    <Compile Include="UI\AxisEdit.cs" />
+    <Compile Include="UI\AxisList.cs" />
     <Compile Include="UI\ControllerAxisEdit.cs" />
     <Compile Include="Mod.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

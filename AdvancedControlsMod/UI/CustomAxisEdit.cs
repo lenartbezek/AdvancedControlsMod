@@ -4,62 +4,35 @@ using LenchScripter;
 
 namespace AdvancedControlsMod.UI
 {
-    public class CustomAxisEdit : MonoBehaviour
+    public class CustomAxisEdit : AxisEdit
     {
-        public bool Visible { get; set; } = true;
-
         public new string name { get { return "Edit Custom Axis window"; } }
 
-        private int windowID = spaar.ModLoader.Util.GetWindowID();
-        private Rect windowRect = new Rect(100, 100, 100, 100);
+        private new CustomAxis axis = new CustomAxis();
 
-        private CustomAxis axis = new CustomAxis();
+        protected override float DesiredWidth { get; } = 320;
+        protected override float DesiredHeight { get; } = 466;
 
         private Vector2 initialisationScrollPosition = Vector2.zero;
         private Vector2 updateScrollPosition = Vector2.zero;
 
-        private void SaveAxis()
+        public override void SaveAxis()
         {
             Visible = false;
-            AdvancedControls.Instance.SaveAxis(axis);
+            axis.Name = axisName;
+            AdvancedControlsMod.AxisList.SaveAxis(axis);
         }
 
-        public void EditAxis(CustomAxis axis)
+        public override void EditAxis(Axis axis)
         {
             Visible = true;
-            this.axis = axis;
+            this.axisName = axis.Name;
+            this.axis = (axis as CustomAxis).Clone();
         }
 
-        /// <summary>
-        /// Render window.
-        /// </summary>
-        private void OnGUI()
+        protected override void DoWindow(int id)
         {
-            if (Visible)
-            {
-                GUI.skin = Util.Skin;
-                windowRect = GUILayout.Window(windowID, windowRect, DoWindow, "Edit Custom Axis",
-                    GUILayout.Width(320),
-                    GUILayout.Height(466));
-            }
-        }
-
-        private void DoWindow(int id)
-        {
-
-            // Draw save text field and save button
-            GUILayout.BeginHorizontal();
-            axis.Name = GUILayout.TextField(axis.Name,
-                Elements.InputFields.Default);
-
-            if (GUILayout.Button("Save",
-                Elements.Buttons.Default,
-                GUILayout.Width(80))
-                && axis.Name != "")
-            {
-                SaveAxis();
-            }
-            GUILayout.EndHorizontal();
+            base.DoWindow(id);
 
             // Draw initialisation code text area
             GUILayout.Label("Initialisation code ",
@@ -85,12 +58,6 @@ namespace AdvancedControlsMod.UI
 @"<color=#FFFF00>Note:</color>
 Lua needs to be enabled in the settings menu.",
                     Util.LabelStyle);
-
-            if (GUI.Button(new Rect(windowRect.width - 28, 8, 20, 20),
-                "×", Elements.Buttons.Red))
-                Visible = false;
-
-            GUI.DragWindow(new Rect(0, 0, windowRect.width, GUI.skin.window.padding.top));
         }
     }
 }

@@ -4,57 +4,32 @@ using spaar.ModLoader.UI;
 
 namespace AdvancedControlsMod.UI
 {
-    public class OneKeyAxisEdit : MonoBehaviour
+    public class OneKeyAxisEdit : AxisEdit
     {
-        public bool Visible { get; set; } = true;
-
         public new string name { get { return "Edit One Key Axis window"; } }
 
-        private int windowID = spaar.ModLoader.Util.GetWindowID();
-        private Rect windowRect = new Rect(100, 100, 320, 250);
+        protected override float DesiredWidth { get; } = 320;
+        protected override float DesiredHeight { get; } = 250;
 
-        private OneKeyAxis axis = new OneKeyAxis(KeyCode.None);
+        private new OneKeyAxis axis = new OneKeyAxis(KeyCode.None);
 
-        private void SaveAxis()
+        public override void SaveAxis()
         {
             Visible = false;
-            AdvancedControls.Instance.SaveAxis(axis);
+            axis.Name = axisName;
+            AdvancedControlsMod.AxisList.SaveAxis(axis);
         }
 
-        public void EditAxis(OneKeyAxis axis)
+        public override void EditAxis(Axis axis)
         {
             Visible = true;
-            this.axis = axis;
+            this.axisName = axis.Name;
+            this.axis = (axis as OneKeyAxis).Clone();
         }
 
-        /// <summary>
-        /// Render window.
-        /// </summary>
-        private void OnGUI()
+        protected override void DoWindow(int id)
         {
-            if (Visible)
-            {
-                GUI.skin = Util.Skin;
-                windowRect = GUILayout.Window(windowID, windowRect, DoWindow, "Edit One Key Axis");
-            }
-        }
-
-        private void DoWindow(int id)
-        {
-
-            // Draw save text field and save button
-            GUILayout.BeginHorizontal();
-            axis.Name = GUILayout.TextField(axis.Name,
-                Elements.InputFields.Default);
-
-            if (GUILayout.Button("Save",
-                Elements.Buttons.Default,
-                GUILayout.Width(80))
-                && axis.Name != "")
-            {
-                SaveAxis();
-            }
-            GUILayout.EndHorizontal();
+            base.DoWindow(id);
 
             // Draw graph
             Rect graphRect = new Rect(
@@ -109,12 +84,6 @@ namespace AdvancedControlsMod.UI
             axis.Gravity = GUILayout.HorizontalSlider(axis.Gravity, 0, 10);
 
             GUILayout.EndArea();
-
-            if (GUI.Button(new Rect(windowRect.width - 28, 8, 20, 20),
-                "×", Elements.Buttons.Red))
-                Visible = false;
-
-            GUI.DragWindow(new Rect(0, 0, windowRect.width, GUI.skin.window.padding.top));
         }
     }
 }

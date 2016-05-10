@@ -3,7 +3,7 @@ using LenchScripter;
 
 namespace AdvancedControlsMod
 {
-    public class Axis
+    public abstract class Axis
     {
         public virtual string Name { get; set; } = "new axis";
         public virtual float Input { get; } = 0;
@@ -15,8 +15,8 @@ namespace AdvancedControlsMod
             AdvancedControls.Instance.OnReset += Reset;
         }
 
-        public virtual void Reset(){ }
-        public virtual void Update(){ }
+        public abstract void Reset();
+        public abstract void Update();
     }
 
     public class OneKeyAxis : Axis
@@ -28,9 +28,10 @@ namespace AdvancedControlsMod
         private float speed = 0;
         private float force = 0;
 
-        public OneKeyAxis(KeyCode key, float sensitivity = 1, float gravity = 1) : base()
+        public OneKeyAxis(KeyCode key, string name = "new axis", float sensitivity = 1, float gravity = 1) : base()
         {
             Key = key;
+            Name = name;
             Sensitivity = sensitivity;
             Gravity = gravity;
         }
@@ -58,6 +59,11 @@ namespace AdvancedControlsMod
             if (Output == 0 || Output == 1)
                 speed = 0;
         }
+
+        public OneKeyAxis Clone()
+        {
+            return new OneKeyAxis(Key, Name, Sensitivity, Gravity);
+        }
     }
 
     public class TwoKeyAxis : Axis
@@ -73,10 +79,11 @@ namespace AdvancedControlsMod
         private float force = 0;
         private float last = 0;
 
-        public TwoKeyAxis(KeyCode positiveKey, KeyCode negativeKey, float sensitivity = 1, float gravity = 1, bool snap = false, bool invert = false) : base()
+        public TwoKeyAxis(KeyCode positiveKey, KeyCode negativeKey, string name = "new axis", float sensitivity = 1, float gravity = 1, bool snap = false, bool invert = false) : base()
         {
             PositiveKey = positiveKey;
             NegativeKey = negativeKey;
+            Name = name;
             Sensitivity = sensitivity;
             Gravity = gravity;
             Snap = snap;
@@ -120,6 +127,11 @@ namespace AdvancedControlsMod
             if (Output == -1 || Output == 1)
                 speed = 0;
         }
+
+        public TwoKeyAxis Clone()
+        {
+            return new TwoKeyAxis(PositiveKey, NegativeKey, Name, Sensitivity, Gravity, Snap, Invert);
+        }
     }
 
     public class ControllerAxis : Axis
@@ -130,9 +142,10 @@ namespace AdvancedControlsMod
         public bool Invert { get; set; }
         public string Axis { get; set; }
 
-        public ControllerAxis(string axis, float sensitivity = 1, float curvature = 1, float deadzone = 0, bool invert = false)
+        public ControllerAxis(string axis, string name = "new axis", float sensitivity = 1, float curvature = 1, float deadzone = 0, bool invert = false)
         {
             Axis = axis;
+            Name = name;
             Sensitivity = sensitivity;
             Curvature = curvature;
             Deadzone = deadzone;
@@ -190,6 +203,15 @@ namespace AdvancedControlsMod
             value = value > 0 ? Mathf.Pow(value, Curvature) : - Mathf.Pow(-value, Curvature);
             return Mathf.Clamp(value, -1, 1);
         }
+
+        public ControllerAxis Clone()
+        {
+            return new ControllerAxis(Axis, Name, Sensitivity, Curvature, Deadzone, Invert);
+        }
+
+        public override void Reset(){}
+
+        public override void Update(){}
     }
 
     public class CustomAxis : Axis
@@ -203,6 +225,13 @@ namespace AdvancedControlsMod
 axis_value = Mathf.Sin(time)
 return axis_value";
 
+        public CustomAxis(string name = "new axis", string init = "", string update = "")
+        {
+            Name = name;
+            InitialisationCode = init;
+            UpdateCode = update;
+        }
+
         public override void Update()
         {
             if (!Lua.IsActive) return;
@@ -213,6 +242,11 @@ return axis_value";
         {
             if (!Lua.IsActive) return;
             Lua.Evaluate(InitialisationCode);
+        }
+
+        public CustomAxis Clone()
+        {
+            return new CustomAxis(Name, InitialisationCode, UpdateCode);
         }
 
     }
