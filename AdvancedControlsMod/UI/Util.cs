@@ -1,14 +1,12 @@
 ﻿using UnityEngine;
 using spaar.ModLoader.UI;
 
-namespace AdvancedControlsMod.UI
+namespace AdvancedControls.UI
 {
     public static class Util
     {
-
         private static Texture2D _rectTexture = new Texture2D(1, 1);
         private static GUIStyle _rectStyle = new GUIStyle();
-
         private static Color _currentColor = new Color();
 
         public static GUIStyle LabelStyle

@@ -4,9 +4,9 @@ using UnityEngine;
 using LenchScripter;
 using LenchScripter.Blocks;
 
-using AdvancedControlsMod.UI;
+using AdvancedControls.UI;
 
-namespace AdvancedControlsMod
+namespace AdvancedControls
 {
 
     public class AdvancedControlsMod : Mod
@@ -29,25 +29,25 @@ namespace AdvancedControlsMod
 
         public override void OnLoad()
         {
-            UnityEngine.Object.DontDestroyOnLoad(AdvancedControls.Instance);
-            Game.OnSimulationToggle += AdvancedControls.Instance.OnSimulationToggle;
+            UnityEngine.Object.DontDestroyOnLoad(ADVControls.Instance);
+            Game.OnSimulationToggle += ADVControls.Instance.OnSimulationToggle;
 
-            ControllerAxisEdit = AdvancedControls.Instance.gameObject.AddComponent<ControllerAxisEdit>();
-            OneKeyAxisEdit = AdvancedControls.Instance.gameObject.AddComponent<OneKeyAxisEdit>();
-            TwoKeyAxisEdit = AdvancedControls.Instance.gameObject.AddComponent<TwoKeyAxisEdit>();
-            CustomAxisEdit = AdvancedControls.Instance.gameObject.AddComponent<CustomAxisEdit>();
-            AxisList = AdvancedControls.Instance.gameObject.AddComponent<AxisList>();
+            ControllerAxisEdit = ADVControls.Instance.gameObject.AddComponent<ControllerAxisEdit>();
+            OneKeyAxisEdit = ADVControls.Instance.gameObject.AddComponent<OneKeyAxisEdit>();
+            TwoKeyAxisEdit = ADVControls.Instance.gameObject.AddComponent<TwoKeyAxisEdit>();
+            CustomAxisEdit = ADVControls.Instance.gameObject.AddComponent<CustomAxisEdit>();
+            AxisList = ADVControls.Instance.gameObject.AddComponent<AxisList>();
         }
 
         public override void OnUnload()
         {
-            Game.OnSimulationToggle -= AdvancedControls.Instance.OnSimulationToggle;
-            AdvancedControls.Instance.OnSimulationToggle(false);
-            UnityEngine.Object.Destroy(AdvancedControls.Instance);
+            Game.OnSimulationToggle -= ADVControls.Instance.OnSimulationToggle;
+            ADVControls.Instance.OnSimulationToggle(false);
+            UnityEngine.Object.Destroy(ADVControls.Instance);
         }
     }
 
-    public class AdvancedControls : SingleInstance<AdvancedControls>
+    public class ADVControls : SingleInstance<ADVControls>
     {
         public override string Name { get { return "Advanced Controls"; } }
 

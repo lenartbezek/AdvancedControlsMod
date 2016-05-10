@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace AdvancedControlsMod.Axes
+namespace AdvancedControls.Axes
 {
     public class ControllerAxis : Axis
     {

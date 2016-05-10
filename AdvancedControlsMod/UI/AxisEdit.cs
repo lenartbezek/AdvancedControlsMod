@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using spaar.ModLoader.UI;
 
-namespace AdvancedControlsMod.UI
+namespace AdvancedControls.UI
 {
     public abstract class AxisEdit : MonoBehaviour
     {
@@ -16,11 +16,11 @@ namespace AdvancedControlsMod.UI
         protected virtual float DesiredHeight { get; } = 100;
 
         protected string axisName = "";
-        protected Axis axis;
+        protected Axes.Axis axis;
 
         public abstract void SaveAxis();
 
-        public abstract void EditAxis(Axis axis);
+        public abstract void EditAxis(Axes.Axis axis);
 
         /// <summary>
         /// Render window.

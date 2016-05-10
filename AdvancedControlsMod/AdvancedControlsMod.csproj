@@ -7,7 +7,7 @@
     <ProjectGuid>{6A16F1F7-31C2-4CAE-9FD3-0C56BBD29757}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>AdvancedControlsMod</RootNamespace>
+    <RootNamespace>AdvancedControls</RootNamespace>
     <AssemblyName>AdvancedControlsMod</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
@@ -75,7 +75,10 @@
     <Compile Include="Axes\CustomAxis.cs" />
     <Compile Include="Axes\OneKeyAxis.cs" />
     <Compile Include="Axes\TwoKeyAxis.cs" />
-    <Compile Include="Controls\Interface.cs" />
+    <Compile Include="Controls\Control.cs" />
+    <Compile Include="Controls\InputControl.cs" />
+    <Compile Include="Controls\PositionControl.cs" />
+    <Compile Include="Controls\SliderControl.cs" />
     <Compile Include="UI\AxisEdit.cs" />
     <Compile Include="UI\AxisList.cs" />
     <Compile Include="UI\ControllerAxisEdit.cs" />

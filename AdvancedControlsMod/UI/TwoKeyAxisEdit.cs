@@ -1,8 +1,9 @@
 ﻿using System;
 using UnityEngine;
 using spaar.ModLoader.UI;
+using AdvancedControls.Axes;
 
-namespace AdvancedControlsMod.UI
+namespace AdvancedControls.UI
 {
     public class TwoKeyAxisEdit : AxisEdit
     {
@@ -20,7 +21,7 @@ namespace AdvancedControlsMod.UI
             AdvancedControlsMod.AxisList.SaveAxis(axis);
         }
 
-        public override void EditAxis(Axis axis)
+        public override void EditAxis(Axes.Axis axis)
         {
             Visible = true;
             this.axisName = axis.Name;

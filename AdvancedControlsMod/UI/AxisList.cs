@@ -1,8 +1,9 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 using spaar.ModLoader.UI;
+using AdvancedControls.Axes;
 
-namespace AdvancedControlsMod.UI
+namespace AdvancedControls.UI
 {
     public class AxisList : MonoBehaviour
     {
@@ -14,19 +15,19 @@ namespace AdvancedControlsMod.UI
         private Rect windowRect = new Rect(100, 100, 320, 440);
         private Vector2 scrollPosition = Vector2.zero;
 
-        private Dictionary<string, Axis> SavedAxes = new Dictionary<string, Axis>();
+        private Dictionary<string, Axes.Axis> SavedAxes = new Dictionary<string, Axes.Axis>();
 
         public void SelectAxis()
         {
             Visible = true;
         }
 
-        private void ReturnAxis(Axis axis)
+        private void ReturnAxis(Axes.Axis axis)
         {
             Visible = false;
         }
 
-        private void EditAxis(Axis axis)
+        private void EditAxis(Axes.Axis axis)
         {
             if (axis as OneKeyAxis != null)
                 AdvancedControlsMod.OneKeyAxisEdit.EditAxis(axis);
@@ -38,7 +39,7 @@ namespace AdvancedControlsMod.UI
                 AdvancedControlsMod.CustomAxisEdit.EditAxis(axis);
         }
 
-        public void SaveAxis(Axis axis)
+        public void SaveAxis(Axes.Axis axis)
         {
             if (SavedAxes.ContainsKey(axis.Name))
                 SavedAxes[axis.Name] = axis;
@@ -63,7 +64,7 @@ namespace AdvancedControlsMod.UI
 
             string toBeRemoved = null;
 
-            foreach(KeyValuePair<string, Axis> entry in SavedAxes)
+            foreach(KeyValuePair<string, Axes.Axis> entry in SavedAxes)
             {
                 var name = entry.Key;
                 var axis = entry.Value;

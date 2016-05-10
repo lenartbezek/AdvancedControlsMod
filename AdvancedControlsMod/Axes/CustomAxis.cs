@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using LenchScripter;
 
-namespace AdvancedControlsMod.Axes
+namespace AdvancedControls.Axes
 {
     public class CustomAxis : Axis
     {

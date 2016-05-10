@@ -1,4 +1,4 @@
-﻿namespace AdvancedControlsMod
+﻿namespace AdvancedControls.Axes
 {
     public abstract class Axis
     {
@@ -8,8 +8,8 @@
 
         public Axis()
         {
-            AdvancedControls.Instance.OnUpdate += Update;
-            AdvancedControls.Instance.OnReset += Reset;
+            ADVControls.Instance.OnUpdate += Update;
+            ADVControls.Instance.OnReset += Reset;
         }
 
         public abstract void Reset();
