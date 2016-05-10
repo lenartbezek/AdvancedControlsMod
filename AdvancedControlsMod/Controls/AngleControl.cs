@@ -1,45 +1,38 @@
 ﻿using System;
-using LenchScripter.Blocks;
 using UnityEngine;
+using LenchScripter.Blocks;
 
 namespace AdvancedControls.Controls
 {
-    public class InputControl : Control
+    public class AngleControl : Control
     {
-        private Cog cog;
         private Steering steering;
-        private Spring spring;
 
-        public InputControl(string guid) : base(guid){}
+        public AngleControl(string guid) : base(guid){}
 
-        public bool PositiveOnly { get; set; }
+        public override float Min { get; set; } = -45;
+        public override float Max { get; set; } = 45;
 
         public override Block Block
         {
             get
             {
-                if (cog != null) return cog;
                 if (steering != null) return steering;
-                if (spring != null) return spring;
                 return null;
             }
             set
             {
-                cog = value as Cog;
                 steering = value as Steering;
-                spring = value as Spring;
             }
         }
 
         public override void Apply(float value)
         {
-            if (PositiveOnly)
-                value = Mathf.Lerp(Min, Max, value);
-            else if (value > 0)
+            if (value > 0)
                 value = Mathf.Lerp(Center, Max, value);
             else
                 value = Mathf.Lerp(Center, Min, -value);
-            spring?.SetInput(value);
+            steering?.SetAngle(value);
         }
 
         public override void Draw()

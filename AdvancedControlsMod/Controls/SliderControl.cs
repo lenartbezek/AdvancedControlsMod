@@ -5,7 +5,9 @@ namespace AdvancedControls.Controls
 {
     public class SliderControl : Control
     {
-        public bool PositiveOnly { get; }
+        public SliderControl(string guid) : base(guid){}
+
+        public bool PositiveOnly { get; set; }
         public string Slider { get; set; }
 
         public override float Min

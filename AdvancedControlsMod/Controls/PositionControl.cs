@@ -1,6 +1,6 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using LenchScripter.Blocks;
-using System;
 
 namespace AdvancedControls.Controls
 {
@@ -8,6 +8,8 @@ namespace AdvancedControls.Controls
     public class PositionControl : Control
     {
         private Piston piston;
+
+        public PositionControl(string guid) : base(guid){}
 
         public override Block Block
         {

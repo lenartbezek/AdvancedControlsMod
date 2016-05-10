@@ -75,12 +75,15 @@
     <Compile Include="Axes\CustomAxis.cs" />
     <Compile Include="Axes\OneKeyAxis.cs" />
     <Compile Include="Axes\TwoKeyAxis.cs" />
+    <Compile Include="Controls\AngleControl.cs" />
     <Compile Include="Controls\Control.cs" />
+    <Compile Include="Controls\ControlManager.cs" />
     <Compile Include="Controls\InputControl.cs" />
     <Compile Include="Controls\PositionControl.cs" />
     <Compile Include="Controls\SliderControl.cs" />
     <Compile Include="UI\AxisEdit.cs" />
     <Compile Include="UI\AxisList.cs" />
+    <Compile Include="UI\ControlMapper.cs" />
     <Compile Include="UI\ControllerAxisEdit.cs" />
     <Compile Include="Mod.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

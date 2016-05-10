@@ -26,6 +26,7 @@ namespace AdvancedControls
         internal static TwoKeyAxisEdit TwoKeyAxisEdit;
         internal static CustomAxisEdit CustomAxisEdit;
         internal static AxisList AxisList;
+        internal static ControlMapper ControlMapper;
 
         public override void OnLoad()
         {
@@ -37,6 +38,9 @@ namespace AdvancedControls
             TwoKeyAxisEdit = ADVControls.Instance.gameObject.AddComponent<TwoKeyAxisEdit>();
             CustomAxisEdit = ADVControls.Instance.gameObject.AddComponent<CustomAxisEdit>();
             AxisList = ADVControls.Instance.gameObject.AddComponent<AxisList>();
+            ControlMapper = ADVControls.Instance.gameObject.AddComponent<ControlMapper>();
+
+            Keybindings.AddKeybinding("Control Mapper", new Key(KeyCode.LeftShift, KeyCode.M));
         }
 
         public override void OnUnload()
@@ -61,6 +65,12 @@ namespace AdvancedControls
 
         private void Update()
         {
+            if (Keybindings.Get("Control Mapper").IsDown())
+            {
+                var hoveredBlock = Game.AddPiece.HoveredBlock;
+                if (hoveredBlock != null) GetComponent<ControlMapper>().ShowBlockControls(hoveredBlock);
+            }
+
             OnUpdate?.Invoke();
         }
 
@@ -71,9 +81,9 @@ namespace AdvancedControls
 
         private void OnSimulationStop()
         {
-            
+
         }
-        
+
         internal void OnSimulationToggle(bool isSimulating)
         {
             this.isSimulating = isSimulating;
