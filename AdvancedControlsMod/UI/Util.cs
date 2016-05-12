@@ -46,14 +46,6 @@ namespace AdvancedControls.UI
             }
         }
 
-        public static float DrawNumberField(float number)
-        {
-            string s = GUILayout.TextField((Mathf.Round(number * 100) / 100).ToString());
-            if (s.EndsWith(".")) return number;
-            float.TryParse(s, out number);
-            return number;
-        }
-
         public static void DrawRect(Rect position, Color color)
         {
             if (color != _currentColor)

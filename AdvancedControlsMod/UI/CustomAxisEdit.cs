@@ -58,6 +58,11 @@ namespace AdvancedControls.UI
 @"<color=#FFFF00>Note:</color>
 Lua needs to be enabled in the settings menu.",
                     Util.LabelStyle);
+
+            if (axis.Exception != null)
+                GUILayout.Label(
+@"<color=#FF0000>Exception:</color>
+" + axis.Exception.Message);
         }
     }
 }
