@@ -6,13 +6,12 @@ namespace AdvancedControls.Controls
 {
     public class InputControl : Control
     {
+        public override string Name { get; set; } = "Input";
         private Cog cog;
         private Steering steering;
         private Spring spring;
 
         public InputControl(string guid) : base(guid){}
-
-        public bool PositiveOnly { get; set; }
 
         public override Block Block
         {
@@ -40,11 +39,6 @@ namespace AdvancedControls.Controls
             else
                 value = Mathf.Lerp(Center, Min, -value);
             spring?.SetInput(value);
-        }
-
-        public override void Draw()
-        {
-            throw new NotImplementedException();
         }
     }
 }

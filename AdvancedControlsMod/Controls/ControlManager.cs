@@ -49,7 +49,8 @@ namespace AdvancedControls.Controls
                         {
                             { "Angle", new AngleControl(GUID) },
                             { "Input", new InputControl(GUID) }
-                        }
+                        },
+                        Enabled = "Angle"
                     },
                     new SliderControl(GUID) { Slider = "SPEED" }
                 };
@@ -132,7 +133,7 @@ namespace AdvancedControls.Controls
                 };
             }
 
-            return null;
+            return new List<Control>();
         }
 
     }

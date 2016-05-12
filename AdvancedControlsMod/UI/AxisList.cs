@@ -2,6 +2,7 @@
 using UnityEngine;
 using spaar.ModLoader.UI;
 using AdvancedControls.Axes;
+using AdvancedControls.Controls;
 
 namespace AdvancedControls.UI
 {
@@ -17,14 +18,18 @@ namespace AdvancedControls.UI
 
         private Dictionary<string, Axes.Axis> SavedAxes = new Dictionary<string, Axes.Axis>();
 
-        public void SelectAxis()
+        private Control control;
+
+        public void SelectAxis(Control control)
         {
+            this.control = control;
             Visible = true;
         }
 
         private void ReturnAxis(Axes.Axis axis)
         {
             Visible = false;
+            control.Axis = axis;
         }
 
         private void EditAxis(Axes.Axis axis)

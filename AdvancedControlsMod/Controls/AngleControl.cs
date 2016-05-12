@@ -6,6 +6,8 @@ namespace AdvancedControls.Controls
 {
     public class AngleControl : Control
     {
+        public override string Name { get; set; } = "Angle";
+
         private Steering steering;
 
         public AngleControl(string guid) : base(guid){}
@@ -33,11 +35,6 @@ namespace AdvancedControls.Controls
             else
                 value = Mathf.Lerp(Center, Min, -value);
             steering?.SetAngle(value);
-        }
-
-        public override void Draw()
-        {
-            throw new NotImplementedException();
         }
     }
 }

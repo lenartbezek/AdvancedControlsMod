@@ -5,7 +5,7 @@ namespace AdvancedControls.Axes
 {
     public class CustomAxis : Axis
     {
-
+        private bool initialised = false;
         public CustomAxis() : base() { }
 
         public string InitialisationCode { get; set; } = @"time = 0";
@@ -23,14 +23,23 @@ return axis_value";
 
         public override void Update()
         {
-            if (!Lua.IsActive) return;
-            Output = Mathf.Clamp((float)Lua.Evaluate(@UpdateCode)[0], -1, 1);
+            if (Lua.IsActive && initialised)
+            {
+                Output = Mathf.Clamp((float)Lua.Evaluate(@UpdateCode)[0], -1, 1);
+            }
         }
 
         public override void Reset()
         {
-            if (!Lua.IsActive) return;
-            Lua.Evaluate(InitialisationCode);
+            if (Lua.IsActive)
+            {
+                Lua.Evaluate(InitialisationCode);
+                initialised = true;
+            }
+            else
+            {
+                initialised = false;
+            }
         }
 
         public CustomAxis Clone()

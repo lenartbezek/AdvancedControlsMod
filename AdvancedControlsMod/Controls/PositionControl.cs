@@ -7,6 +7,7 @@ namespace AdvancedControls.Controls
 
     public class PositionControl : Control
     {
+        public override string Name { get; set; } = "Position";
         private Piston piston;
 
         public PositionControl(string guid) : base(guid){}
@@ -47,11 +48,6 @@ namespace AdvancedControls.Controls
         public override void Apply(float value)
         {
             piston?.SetPosition(Mathf.Lerp(Min, Max, value));
-        }
-
-        public override void Draw()
-        {
-            throw new NotImplementedException();
         }
     }
 }

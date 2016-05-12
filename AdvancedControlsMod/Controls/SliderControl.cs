@@ -7,8 +7,20 @@ namespace AdvancedControls.Controls
     {
         public SliderControl(string guid) : base(guid){}
 
-        public bool PositiveOnly { get; set; }
-        public string Slider { get; set; }
+        public override string Name { get; set; } = "Slider";
+
+        private string slider;
+        public string Slider {
+            get
+            {
+                return slider;
+            }
+            set
+            {
+                slider = value;
+                Name = slider;
+            }
+        }
 
         public override float Min
         {
@@ -29,11 +41,6 @@ namespace AdvancedControls.Controls
             else
                 value = Mathf.Lerp(Center, Min, -value);
             Block.setSliderValue(Slider, value);
-        }
-
-        public override void Draw()
-        {
-            throw new NotImplementedException();
         }
     }
 }

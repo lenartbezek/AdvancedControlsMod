@@ -56,6 +56,7 @@ namespace AdvancedControls
         public override string Name { get { return "Advanced Controls"; } }
 
         private bool isSimulating;
+        public bool IsSimulating { get { return isSimulating; } }
 
         public delegate void UpdateEventHandler();
         public event UpdateEventHandler OnUpdate;

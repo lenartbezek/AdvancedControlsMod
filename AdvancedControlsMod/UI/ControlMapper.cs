@@ -1,5 +1,7 @@
 ﻿using UnityEngine;
 using spaar.ModLoader.UI;
+using AdvancedControls.Controls;
+using System.Collections.Generic;
 
 namespace AdvancedControls.UI
 {
@@ -20,6 +22,7 @@ namespace AdvancedControls.UI
         public void ShowBlockControls(GenericBlock block)
         { 
             Visible = true;
+            this.block = block;
         }
 
         /// <summary>
@@ -38,8 +41,19 @@ namespace AdvancedControls.UI
 
         private void DoWindow(int id)
         {
-            // Draw GUID Text field
+            var controls = ControlManager.GetBlockControls(block.GetBlockID(), block.Guid.ToString());
 
+            foreach(Control c in controls)
+            {
+                c.Draw();
+                GUILayout.Label(" ");
+            }
+
+            if (controls.Count == 0)
+                GUILayout.Label("This block has no available controls.");
+
+            // Drag window
+            GUI.DragWindow(new Rect(0, 0, windowRect.width, GUI.skin.window.padding.top));
         }
     }
 }
