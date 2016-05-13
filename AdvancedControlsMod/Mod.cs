@@ -30,8 +30,9 @@ namespace AdvancedControls
         public override void OnLoad()
         {
             UnityEngine.Object.DontDestroyOnLoad(ADVControls.Instance);
-            Game.OnSimulationToggle += ADVControls.Instance.OnSimulationToggle;
             BlockHandlers.OnInitialisation += ADVControls.Instance.Initialise;
+            Game.OnSimulationToggle += ADVControls.Instance.OnSimulationToggle;
+            Game.OnKeymapperOpen += ADVControls.Instance.ShowControlMapper;
 
             ControllerAxisEdit = ADVControls.Instance.gameObject.AddComponent<ControllerAxisEdit>();
             OneKeyAxisEdit = ADVControls.Instance.gameObject.AddComponent<OneKeyAxisEdit>();
@@ -40,15 +41,14 @@ namespace AdvancedControls
             AxisList = ADVControls.Instance.gameObject.AddComponent<AxisList>();
             ControlMapper = ADVControls.Instance.gameObject.AddComponent<ControlMapper>();
 
-            Keybindings.AddKeybinding("Control Mapper", new Key(KeyCode.LeftShift, KeyCode.M));
         }
 
         public override void OnUnload()
         {
-            Game.OnSimulationToggle -= ADVControls.Instance.OnSimulationToggle;
             BlockHandlers.OnInitialisation -= ADVControls.Instance.Initialise;
+            Game.OnSimulationToggle -= ADVControls.Instance.OnSimulationToggle;
+            Game.OnKeymapperOpen -= ADVControls.Instance.ShowControlMapper;
 
-            ADVControls.Instance.OnSimulationToggle(false);
             UnityEngine.Object.Destroy(ADVControls.Instance);
         }
     }
@@ -57,8 +57,8 @@ namespace AdvancedControls
     {
         public override string Name { get { return "Advanced Controls"; } }
 
-        private bool isSimulating;
         public bool IsSimulating { get { return isSimulating; } }
+        private bool isSimulating = false;
 
         public delegate void UpdateEventHandler();
         public event UpdateEventHandler OnUpdate;
@@ -66,15 +66,14 @@ namespace AdvancedControls
         public delegate void InitialiseEventHandler();
         public event InitialiseEventHandler OnInitialisation;
 
-        private void Update()
+        public void ShowControlMapper()
         {
+            var hoveredBlock = Game.AddPiece.HoveredBlock;
+            if (hoveredBlock != null) GetComponent<ControlMapper>().ShowBlockControls(hoveredBlock);
+        }
 
-            if (Keybindings.Get("Control Mapper").IsDown())
-            {
-                var hoveredBlock = Game.AddPiece.HoveredBlock;
-                if (hoveredBlock != null) GetComponent<ControlMapper>().ShowBlockControls(hoveredBlock);
-            }
-
+        internal void Update()
+        {
             OnUpdate?.Invoke();
         }
 
@@ -83,23 +82,9 @@ namespace AdvancedControls
             OnInitialisation?.Invoke();
         }
 
-        private void OnSimulationStart()
+        internal void OnSimulationToggle(bool s)
         {
-            
-        }
-
-        private void OnSimulationStop()
-        {
-
-        }
-
-        internal void OnSimulationToggle(bool isSimulating)
-        {
-            this.isSimulating = isSimulating;
-            if (isSimulating)
-                OnSimulationStart();
-            else
-                OnSimulationStop();
+            isSimulating = s;
         }
     }
 }

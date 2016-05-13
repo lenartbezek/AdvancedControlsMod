@@ -10,11 +10,15 @@ namespace AdvancedControls.Controls
 {
     public class ControlGroup : Control
     {
-        public ControlGroup(string guid) : base(guid) { }
+        public ControlGroup(string guid) : base(guid)
+        {
+            base.Enabled = true;
+        }
 
         public Dictionary<string, Control> Controls { get; set; } = new Dictionary<string, Control>();
 
         private string enabled;
+
         public new string Enabled
         {
             get { return enabled; }

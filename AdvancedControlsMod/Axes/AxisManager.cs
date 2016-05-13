@@ -37,5 +37,18 @@ namespace AdvancedControls.Axes
         {
             Axes.Remove(name);
         }
+
+        public static List<Axis> GetActiveAxes(List<Control> controls)
+        {
+            var list = new List<Axis>();
+            foreach (Control c in controls)
+            {
+                if (c.Enabled && Get(c.Axis) != null)
+                {
+                    list.Add(Get(c.Axis));
+                }
+            }
+            return list;
+        }
     }
 }

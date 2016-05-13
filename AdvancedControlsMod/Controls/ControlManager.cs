@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
+using AdvancedControls.Axes;
 
 namespace AdvancedControls.Controls
 {
@@ -134,6 +135,32 @@ namespace AdvancedControls.Controls
             }
 
             return new List<Control>();
+        }
+
+        public static List<Control> GetActiveBlockControls(string GUID)
+        {
+            var list = new List<Control>();
+            if (Blocks.ContainsKey(GUID))
+            {
+                foreach (Control c in Blocks[GUID])
+                {
+                    if (c.Enabled && AxisManager.Get(c.Axis) != null)
+                    {
+                        list.Add(c);
+                    }
+                }
+            }
+            return list;
+        }
+
+        public static List<Control> GetActiveControls()
+        {
+            var list = new List<Control>();
+            foreach(string guid in Blocks.Keys)
+            {
+                list.AddRange(GetActiveBlockControls(guid));
+            }
+            return list;
         }
 
     }
