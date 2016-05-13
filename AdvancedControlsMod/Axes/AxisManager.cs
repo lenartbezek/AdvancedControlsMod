@@ -45,7 +45,7 @@ namespace AdvancedControls.Axes
             {
                 if (c.Enabled && Get(c.Axis) != null)
                 {
-                    list.Add(Get(c.Axis));
+                    if (!list.Contains(Get(c.Axis))) list.Add(Get(c.Axis));
                 }
             }
             return list;

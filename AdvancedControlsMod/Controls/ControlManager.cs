@@ -7,9 +7,9 @@ namespace AdvancedControls.Controls
 {
     public static class ControlManager
     {
-        public static Dictionary<string, List<Control>> Blocks = new Dictionary<string, List<Control>>();
+        public static Dictionary<Guid, List<Control>> Blocks = new Dictionary<Guid, List<Control>>();
         
-        public static List<Control> GetBlockControls(int BlockID, string GUID)
+        public static List<Control> GetBlockControls(int BlockID, Guid GUID)
         {
             if (Blocks.ContainsKey(GUID)) return Blocks[GUID];
             var controls = CreateBlockControls(BlockID, GUID);
@@ -17,7 +17,14 @@ namespace AdvancedControls.Controls
             return controls;
         }
 
-        public static List<Control> CreateBlockControls(int BlockID, string GUID)
+        public static Control GetBlockControl(int BlockID, Guid GUID, string name)
+        {
+            foreach (Control c in GetBlockControls(BlockID, GUID))
+                if (c.Name == name) return c;
+            return null;
+        }
+
+        public static List<Control> CreateBlockControls(int BlockID, Guid GUID)
         {
             if (BlockID == (int)BlockType.Wheel ||
                 BlockID == (int)BlockType.LargeWheel ||
@@ -72,6 +79,14 @@ namespace AdvancedControls.Controls
                 return new List<Control>()
                 {
                     new SliderControl(GUID){ Slider = "SPRING", PositiveOnly = true }
+                };
+            }
+
+            if (BlockID == (int)BlockType.SpinningBlock)
+            {
+                return new List<Control>()
+                {
+                    new SliderControl(GUID){ Slider = "SPEED"}
                 };
             }
 
@@ -137,7 +152,7 @@ namespace AdvancedControls.Controls
             return new List<Control>();
         }
 
-        public static List<Control> GetActiveBlockControls(string GUID)
+        public static List<Control> GetActiveBlockControls(Guid GUID)
         {
             var list = new List<Control>();
             if (Blocks.ContainsKey(GUID))
@@ -156,7 +171,7 @@ namespace AdvancedControls.Controls
         public static List<Control> GetActiveControls()
         {
             var list = new List<Control>();
-            foreach(string guid in Blocks.Keys)
+            foreach(Guid guid in Blocks.Keys)
             {
                 list.AddRange(GetActiveBlockControls(guid));
             }

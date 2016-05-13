@@ -14,5 +14,8 @@
 
         public abstract void Initialise();
         public abstract void Update();
+
+        public abstract void Load(MachineInfo machineInfo);
+        public abstract void Save(MachineInfo machineInfo);
     }
 }

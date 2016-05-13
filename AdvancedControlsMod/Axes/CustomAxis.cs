@@ -29,7 +29,7 @@ return axis_value";
             {
                 try
                 {
-                    var result = Lua.Evaluate(@UpdateCode)[0] as double?;
+                    var result = Lua.Evaluate(UpdateCode)[0] as double?;
                     OutputValue = Mathf.Clamp((float)result, -1, 1);
                 }
                 catch (Exception e)
@@ -66,6 +66,19 @@ return axis_value";
         public CustomAxis Clone()
         {
             return new CustomAxis(Name, InitialisationCode, UpdateCode);
+        }
+
+        public override void Load(MachineInfo machineInfo)
+        {
+            InitialisationCode = @machineInfo.MachineData.ReadString("AC-Axis-" + Name + "-InitialisationCode");
+            UpdateCode = @machineInfo.MachineData.ReadString("AC-Axis-" + Name + "-UpdateCode");
+        }
+
+        public override void Save(MachineInfo machineInfo)
+        {
+            machineInfo.MachineData.Write("AC-Axis-" + Name + "-Type", "Custom");
+            machineInfo.MachineData.Write("AC-Axis-" + Name + "-InitialisationCode", InitialisationCode);
+            machineInfo.MachineData.Write("AC-Axis-" + Name + "-UpdateCode", UpdateCode);
         }
     }
 }

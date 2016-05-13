@@ -33,6 +33,8 @@ namespace AdvancedControls
             BlockHandlers.OnInitialisation += ADVControls.Instance.Initialise;
             Game.OnSimulationToggle += ADVControls.Instance.OnSimulationToggle;
             Game.OnKeymapperOpen += ADVControls.Instance.ShowControlMapper;
+            XmlSaver.OnSave += MachineData.SaveData;
+            XmlLoader.OnLoad += MachineData.LoadData;
 
             ControllerAxisEdit = ADVControls.Instance.gameObject.AddComponent<ControllerAxisEdit>();
             OneKeyAxisEdit = ADVControls.Instance.gameObject.AddComponent<OneKeyAxisEdit>();
@@ -40,7 +42,6 @@ namespace AdvancedControls
             CustomAxisEdit = ADVControls.Instance.gameObject.AddComponent<CustomAxisEdit>();
             AxisList = ADVControls.Instance.gameObject.AddComponent<AxisList>();
             ControlMapper = ADVControls.Instance.gameObject.AddComponent<ControlMapper>();
-
         }
 
         public override void OnUnload()
@@ -48,6 +49,8 @@ namespace AdvancedControls
             BlockHandlers.OnInitialisation -= ADVControls.Instance.Initialise;
             Game.OnSimulationToggle -= ADVControls.Instance.OnSimulationToggle;
             Game.OnKeymapperOpen -= ADVControls.Instance.ShowControlMapper;
+            XmlSaver.OnSave -= MachineData.SaveData;
+            XmlLoader.OnLoad -= MachineData.LoadData;
 
             UnityEngine.Object.Destroy(ADVControls.Instance);
         }

@@ -83,6 +83,7 @@
     <Compile Include="Controls\InputControl.cs" />
     <Compile Include="Controls\PositionControl.cs" />
     <Compile Include="Controls\SliderControl.cs" />
+    <Compile Include="MachineData.cs" />
     <Compile Include="UI\AxisEdit.cs" />
     <Compile Include="UI\AxisList.cs" />
     <Compile Include="UI\ControlMapper.cs" />

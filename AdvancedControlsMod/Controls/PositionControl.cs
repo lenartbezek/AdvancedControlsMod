@@ -12,7 +12,7 @@ namespace AdvancedControls.Controls
 
         private Piston piston;
 
-        public PositionControl(string guid) : base(guid){}
+        public PositionControl(Guid guid) : base(guid){}
 
         public override Block Block
         {

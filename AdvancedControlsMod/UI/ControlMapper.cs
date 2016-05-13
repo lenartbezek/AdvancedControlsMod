@@ -40,7 +40,7 @@ namespace AdvancedControls.UI
 
         private void DoWindow(int id)
         {
-            var controls = ControlManager.GetBlockControls(block.GetBlockID(), block.Guid.ToString());
+            var controls = ControlManager.GetBlockControls(block.GetBlockID(), block.Guid);
 
             foreach(Control c in controls)
             {

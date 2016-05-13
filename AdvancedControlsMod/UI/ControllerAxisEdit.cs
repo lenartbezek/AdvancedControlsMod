@@ -8,7 +8,7 @@ namespace AdvancedControls.UI
     {
         public new string name { get { return "Edit Controller Axis window"; } }
 
-        protected new ControllerAxis axis = new ControllerAxis("Vertical");
+        protected new ControllerAxis axis = new ControllerAxis();
 
         protected override float DesiredWidth { get; } = 320;
         protected override float DesiredHeight { get; } = 611;

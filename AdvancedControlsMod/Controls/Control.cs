@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using LenchScripter;
 using LenchScripter.Blocks;
 using AdvancedControls.UI;
@@ -17,13 +18,13 @@ namespace AdvancedControls.Controls
         public virtual bool PositiveOnly { get; set; } = false;
         public virtual string Axis { get; set; }
         public virtual Block Block { get; set; }
-        public virtual string BlockGUID { get; set; }
+        public virtual Guid BlockGUID { get; set; }
 
         private string min;
         private string cen;
         private string max;
 
-        public Control(string guid)
+        public Control(Guid guid)
         {
             BlockGUID = guid;
             ADVControls.Instance.OnUpdate += Update;
@@ -131,6 +132,25 @@ namespace AdvancedControls.Controls
                 GUILayout.EndVertical();
             }
             GUILayout.EndHorizontal();
+        }
+
+        public virtual void Load(BlockInfo blockInfo)
+        {
+            Axis = blockInfo.BlockData.ReadString("AC-Control-" + Name + "-Axis");
+            Min = blockInfo.BlockData.ReadFloat("AC-Control-" + Name + "-Min");
+            if (!PositiveOnly)
+                Center = blockInfo.BlockData.ReadFloat("AC-Control-" + Name + "-Center");
+            Max = blockInfo.BlockData.ReadFloat("AC-Control-" + Name + "-Max");
+            Enabled = true;
+        }
+
+        public virtual void Save(BlockInfo blockInfo)
+        {
+            blockInfo.BlockData.Write("AC-Control-" + Name + "-Axis", Axis);
+            blockInfo.BlockData.Write("AC-Control-" + Name + "-Min", Min);
+            if (!PositiveOnly)
+                blockInfo.BlockData.Write("AC-Control-" + Name + "-Center", Center);
+            blockInfo.BlockData.Write("AC-Control-" + Name + "-Max", Max);
         }
     }
 }

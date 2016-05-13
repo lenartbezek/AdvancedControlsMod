@@ -11,7 +11,9 @@ namespace AdvancedControls.Axes
         private float speed = 0;
         private float force = 0;
 
-        public OneKeyAxis(KeyCode key, string name = "new axis", float sensitivity = 1, float gravity = 1) : base()
+        public OneKeyAxis(KeyCode key = KeyCode.None,
+            string name = "new axis",
+            float sensitivity = 1, float gravity = 1) : base()
         {
             Key = key;
             Name = name;
@@ -23,7 +25,7 @@ namespace AdvancedControls.Axes
         {
             get
             {
-                return UnityEngine.Input.GetKey(Key) ? 1 : 0;
+                return Input.GetKey(Key) ? 1 : 0;
             }
         }
 
@@ -46,6 +48,21 @@ namespace AdvancedControls.Axes
         public OneKeyAxis Clone()
         {
             return new OneKeyAxis(Key, Name, Sensitivity, Gravity);
+        }
+
+        public override void Load(MachineInfo machineInfo)
+        {
+            Sensitivity = machineInfo.MachineData.ReadFloat("AC-Axis-" + Name + "-Sensitivity");
+            Gravity = machineInfo.MachineData.ReadFloat("AC-Axis-" + Name + "-Gravity");
+            Key = (KeyCode)System.Enum.Parse(typeof(KeyCode), machineInfo.MachineData.ReadString("AC-Axis-" + Name + "-Key"));
+        }
+
+        public override void Save(MachineInfo machineInfo)
+        {
+            machineInfo.MachineData.Write("AC-Axis-" + Name + "-Type", "OneKey");
+            machineInfo.MachineData.Write("AC-Axis-" + Name + "-Sensitivity", Sensitivity);
+            machineInfo.MachineData.Write("AC-Axis-" + Name + "-Gravity", Gravity);
+            machineInfo.MachineData.Write("AC-Axis-" + Name + "-Key", Key.ToString());
         }
     }
 }

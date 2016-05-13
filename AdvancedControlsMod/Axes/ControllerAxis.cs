@@ -9,9 +9,9 @@ namespace AdvancedControls.Axes
         public float Deadzone { get; set; }
         public bool Invert { get; set; }
         public bool Raw { get; set; }
-        public string Axis { get; set; }
+        public string Axis { get; set; } = "Vertical";
 
-        public ControllerAxis(string axis, string name = "new axis", float sensitivity = 1, float curvature = 1, float deadzone = 0, bool invert = false)
+        public ControllerAxis(string axis = "Vertical", string name = "new axis", float sensitivity = 1, float curvature = 1, float deadzone = 0, bool invert = false)
         {
             Axis = axis;
             Name = name;
@@ -81,6 +81,27 @@ namespace AdvancedControls.Axes
         public ControllerAxis Clone()
         {
             return new ControllerAxis(Axis, Name, Sensitivity, Curvature, Deadzone, Invert);
+        }
+
+        public override void Load(MachineInfo machineInfo)
+        {
+            Sensitivity = machineInfo.MachineData.ReadFloat("AC-Axis-" + Name + "-Sensitivity");
+            Curvature = machineInfo.MachineData.ReadFloat("AC-Axis-" + Name + "-Curvature");
+            Deadzone = machineInfo.MachineData.ReadFloat("AC-Axis-" + Name + "-Deadzone");
+            Invert = machineInfo.MachineData.ReadBool("AC-Axis-" + Name + "-Invert");
+            Raw = machineInfo.MachineData.ReadBool("AC-Axis-" + Name + "-Raw");
+            Axis = machineInfo.MachineData.ReadString("AC-Axis-" + Name + "-Axis");
+        }
+
+        public override void Save(MachineInfo machineInfo)
+        {
+            machineInfo.MachineData.Write("AC-Axis-" + Name + "-Type", "Controller");
+            machineInfo.MachineData.Write("AC-Axis-" + Name + "-Sensitivity", Sensitivity);
+            machineInfo.MachineData.Write("AC-Axis-" + Name + "-Curvature", Curvature);
+            machineInfo.MachineData.Write("AC-Axis-" + Name + "-Deadzone", Deadzone);
+            machineInfo.MachineData.Write("AC-Axis-" + Name + "-Invert", Invert);
+            machineInfo.MachineData.Write("AC-Axis-" + Name + "-Raw", Raw);
+            machineInfo.MachineData.Write("AC-Axis-" + Name + "-Axis", Axis);
         }
 
         public override void Initialise() { }

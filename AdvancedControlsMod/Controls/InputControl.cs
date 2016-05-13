@@ -12,7 +12,7 @@ namespace AdvancedControls.Controls
         private Steering steering;
         private Spring spring;
 
-        public InputControl(string guid) : base(guid){}
+        public InputControl(Guid guid) : base(guid){}
 
         public override Block Block
         {

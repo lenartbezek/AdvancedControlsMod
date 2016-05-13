@@ -10,7 +10,9 @@ namespace AdvancedControls.Controls
 {
     public class ControlGroup : Control
     {
-        public ControlGroup(string guid) : base(guid)
+        public override string Name { get; set; } = "Group";
+
+        public ControlGroup(Guid guid) : base(guid)
         {
             base.Enabled = true;
         }
@@ -45,7 +47,7 @@ namespace AdvancedControls.Controls
             }
         }
 
-        public override string BlockGUID
+        public override Guid BlockGUID
         {
             get { return base.BlockGUID; }
             set
@@ -74,6 +76,23 @@ namespace AdvancedControls.Controls
             }
             GUILayout.EndHorizontal();
             enabled?.Draw();
+        }
+
+        public override void Load(BlockInfo blockInfo)
+        {
+            foreach (KeyValuePair<string, Control> c in Controls)
+            {
+                try {
+                    c.Value.Load(blockInfo);
+                    Enabled = c.Key;
+                }
+                catch (Exception) { } //pass
+            }
+        }
+
+        public override void Save(BlockInfo blockInfo)
+        {
+            Controls[Enabled].Save(blockInfo);
         }
     }
 }
