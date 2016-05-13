@@ -2,7 +2,6 @@
 using spaar.ModLoader;
 using UnityEngine;
 using LenchScripter;
-using LenchScripter.Blocks;
 
 using AdvancedControls.UI;
 
@@ -32,6 +31,7 @@ namespace AdvancedControls
         {
             UnityEngine.Object.DontDestroyOnLoad(ADVControls.Instance);
             Game.OnSimulationToggle += ADVControls.Instance.OnSimulationToggle;
+            BlockHandlers.OnInitialisation += ADVControls.Instance.Initialise;
 
             ControllerAxisEdit = ADVControls.Instance.gameObject.AddComponent<ControllerAxisEdit>();
             OneKeyAxisEdit = ADVControls.Instance.gameObject.AddComponent<OneKeyAxisEdit>();
@@ -46,6 +46,8 @@ namespace AdvancedControls
         public override void OnUnload()
         {
             Game.OnSimulationToggle -= ADVControls.Instance.OnSimulationToggle;
+            BlockHandlers.OnInitialisation -= ADVControls.Instance.Initialise;
+
             ADVControls.Instance.OnSimulationToggle(false);
             UnityEngine.Object.Destroy(ADVControls.Instance);
         }
@@ -61,11 +63,12 @@ namespace AdvancedControls
         public delegate void UpdateEventHandler();
         public event UpdateEventHandler OnUpdate;
 
-        public delegate void ResetEventHandler();
-        public event ResetEventHandler OnReset;
+        public delegate void InitialiseEventHandler();
+        public event InitialiseEventHandler OnInitialisation;
 
         private void Update()
         {
+
             if (Keybindings.Get("Control Mapper").IsDown())
             {
                 var hoveredBlock = Game.AddPiece.HoveredBlock;
@@ -75,9 +78,14 @@ namespace AdvancedControls
             OnUpdate?.Invoke();
         }
 
+        internal void Initialise()
+        {
+            OnInitialisation?.Invoke();
+        }
+
         private void OnSimulationStart()
         {
-            OnReset?.Invoke();
+            
         }
 
         private void OnSimulationStop()

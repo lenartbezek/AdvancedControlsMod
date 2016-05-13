@@ -8,6 +8,7 @@ namespace AdvancedControls.Controls
         public SliderControl(string guid) : base(guid){}
 
         public override string Name { get; set; } = "Slider";
+        public override bool PositiveOnly { get; set; } = false;
 
         private string slider;
         public string Slider {
@@ -40,7 +41,7 @@ namespace AdvancedControls.Controls
                 value = Mathf.Lerp(Center, Max, value);
             else
                 value = Mathf.Lerp(Center, Min, -value);
-            Block.setSliderValue(Slider, value);
+            Block?.setSliderValue(Slider, value);
         }
     }
 }

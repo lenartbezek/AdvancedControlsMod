@@ -1,9 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using LenchScripter;
 using LenchScripter.Blocks;
 using AdvancedControls.UI;
+using AdvancedControls.Axes;
 using spaar.ModLoader.UI;
 
 namespace AdvancedControls.Controls
@@ -16,7 +15,7 @@ namespace AdvancedControls.Controls
         public virtual float Center { get; set; } = 0;
         public virtual bool Enabled { get; set; } = false;
         public virtual bool PositiveOnly { get; set; } = false;
-        public virtual Axes.Axis Axis { get; set; }
+        public virtual string Axis { get; set; }
         public virtual Block Block { get; set; }
         public virtual string BlockGUID { get; set; }
 
@@ -28,32 +27,39 @@ namespace AdvancedControls.Controls
         {
             BlockGUID = guid;
             ADVControls.Instance.OnUpdate += Update;
-            ADVControls.Instance.OnReset += Reset;
+            ADVControls.Instance.OnInitialisation += Initialise;
+
             min = (Mathf.Round(Min * 100) / 100).ToString();
             cen = (Mathf.Round(Center * 100) / 100).ToString();
             max = (Mathf.Round(Max * 100) / 100).ToString();
         }
 
-        public virtual void Reset()
+        public virtual void Initialise()
         {
-            
+            try
+            {
+                Block = BlockHandlers.GetBlock(BlockGUID);
+            }
+            catch (BlockNotFoundException)
+            {
+                ControlManager.Blocks.Remove(BlockGUID);
+            }
         }
 
         public virtual void Update()
         {
             if (ADVControls.Instance.IsSimulating)
             {
-                if (Block == null) Block = BlockHandlers.GetBlock(BlockGUID);
-                if (Enabled && Axis != null)
-                    Apply(Axis.Output);
-            }
-            else
-            {
-                Block = null;
+                var a = AxisManager.Get(Axis);
+                if (Enabled && Block != null && a != null)
+                {
+                    Apply(a.OutputValue);
+                }
             }
         }
 
         public abstract void Apply(float value);
+
         public virtual void Draw()
         {
             GUILayout.BeginHorizontal();
@@ -64,14 +70,15 @@ namespace AdvancedControls.Controls
             {
                 if (GUILayout.Button("+", GUILayout.Width(30)))
                 {
+                    Enabled = true;
                     AdvancedControlsMod.AxisList.SelectAxis(this);
                 }
             }
             else
             {
-                if (GUILayout.Button(Axis.Name))
+                var a = AxisManager.Get(Axis);
+                if (GUILayout.Button(Axis, a != null ? Elements.Buttons.Default : Elements.Buttons.Red))
                 {
-                    Enabled = true;
                     AdvancedControlsMod.AxisList.SelectAxis(this);
                 }
                 if (GUILayout.Button("×", Elements.Buttons.Red, GUILayout.Width(30)))
@@ -124,71 +131,6 @@ namespace AdvancedControls.Controls
                 GUILayout.EndVertical();
             }
             GUILayout.EndHorizontal();
-        }
-    }
-
-    public class ControlGroup : Control
-    {
-        public ControlGroup(string guid) : base(guid){}
-
-        public Dictionary<string, Control> Controls { get; set; } = new Dictionary<string, Control>();
-
-        private string enabled;
-        public new string Enabled
-        {
-            get { return enabled; }
-            set
-            {
-                foreach (KeyValuePair<string, Control> c in Controls)
-                {
-                    c.Value.Enabled = c.Key == value;
-                }
-                enabled = value;
-            }
-        }
-
-        public override Block Block
-        {
-            get { return base.Block; }
-            set
-            {
-                foreach(KeyValuePair<string, Control> c in Controls)
-                {
-                    c.Value.Block = Block;
-                }
-                base.Block = value;
-            }
-        }
-
-        public override string BlockGUID
-        {
-            get { return base.BlockGUID; }
-            set
-            {
-                foreach (KeyValuePair<string, Control> c in Controls)
-                {
-                    c.Value.BlockGUID = value;
-                }
-                base.BlockGUID = value;
-            }
-        }
-
-        public override void Apply(float value){ }
-
-        public override void Draw()
-        {
-            Control enabled = null;
-            GUILayout.BeginHorizontal();
-            foreach (KeyValuePair<string, Control> c in Controls)
-            {
-                if (GUILayout.Button(c.Value.Name, c.Value.Enabled ? Elements.Buttons.Default : Elements.Buttons.Disabled))
-                {
-                    Enabled = c.Key;
-                }
-                if (c.Value.Enabled) enabled = c.Value;
-            }
-            GUILayout.EndHorizontal();
-            enabled?.Draw();
         }
     }
 }

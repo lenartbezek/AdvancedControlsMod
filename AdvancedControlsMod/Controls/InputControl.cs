@@ -7,6 +7,7 @@ namespace AdvancedControls.Controls
     public class InputControl : Control
     {
         public override string Name { get; set; } = "Input";
+
         private Cog cog;
         private Steering steering;
         private Spring spring;
@@ -38,6 +39,8 @@ namespace AdvancedControls.Controls
                 value = Mathf.Lerp(Center, Max, value);
             else
                 value = Mathf.Lerp(Center, Min, -value);
+            cog?.SetInput(value);
+            steering?.SetInput(value);
             spring?.SetInput(value);
         }
     }

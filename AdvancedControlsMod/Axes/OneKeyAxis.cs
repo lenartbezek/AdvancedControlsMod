@@ -19,7 +19,7 @@ namespace AdvancedControls.Axes
             Gravity = gravity;
         }
 
-        public override float Input
+        public override float InputValue
         {
             get
             {
@@ -27,19 +27,19 @@ namespace AdvancedControls.Axes
             }
         }
 
-        public override void Reset()
+        public override void Initialise()
         {
             speed = 0;
             force = 0;
-            Output = 0;
+            OutputValue = 0;
         }
 
         public override void Update()
         {
-            force = Input != 0 ? Input * Sensitivity : -Gravity;
+            force = InputValue != 0 ? InputValue * Sensitivity : -Gravity;
             speed += force * Time.deltaTime;
-            Output = Mathf.Clamp(Output + speed * Time.deltaTime, 0, 1);
-            if (Output == 0 || Output == 1)
+            OutputValue = Mathf.Clamp(OutputValue + speed * Time.deltaTime, 0, 1);
+            if (OutputValue == 0 || OutputValue == 1)
                 speed = 0;
         }
 

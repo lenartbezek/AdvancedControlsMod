@@ -16,8 +16,6 @@ namespace AdvancedControls.UI
         private Rect windowRect = new Rect(100, 100, 320, 440);
         private Vector2 scrollPosition = Vector2.zero;
 
-        private Dictionary<string, Axes.Axis> SavedAxes = new Dictionary<string, Axes.Axis>();
-
         private Control control;
 
         public void SelectAxis(Control control)
@@ -29,7 +27,7 @@ namespace AdvancedControls.UI
         private void ReturnAxis(Axes.Axis axis)
         {
             Visible = false;
-            control.Axis = axis;
+            control.Axis = axis.Name;
         }
 
         private void EditAxis(Axes.Axis axis)
@@ -46,10 +44,7 @@ namespace AdvancedControls.UI
 
         public void SaveAxis(Axes.Axis axis)
         {
-            if (SavedAxes.ContainsKey(axis.Name))
-                SavedAxes[axis.Name] = axis;
-            else
-                SavedAxes.Add(axis.Name, axis);
+            AxisManager.Put(axis.Name, axis);
         }
 
         private void OnGUI()
@@ -69,7 +64,7 @@ namespace AdvancedControls.UI
 
             string toBeRemoved = null;
 
-            foreach(KeyValuePair<string, Axes.Axis> entry in SavedAxes)
+            foreach(KeyValuePair<string, Axes.Axis> entry in AxisManager.Axes)
             {
                 var name = entry.Key;
                 var axis = entry.Value;
@@ -87,7 +82,7 @@ namespace AdvancedControls.UI
 
             if (toBeRemoved != null)
             {
-                SavedAxes.Remove(toBeRemoved);
+                AxisManager.Remove(toBeRemoved);
                 toBeRemoved = null;
             }
 

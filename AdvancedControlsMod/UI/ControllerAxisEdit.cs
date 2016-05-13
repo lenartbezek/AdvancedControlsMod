@@ -73,7 +73,7 @@ namespace AdvancedControls.UI
                 windowRect.width - GUI.skin.window.padding.left - GUI.skin.window.padding.right,
                 windowRect.width - GUI.skin.window.padding.left - GUI.skin.window.padding.right);
 
-            Util.DrawRect(new Rect(graphRect.x + graphRect.width / 2 + graphRect.width / 2 * axis.Input,
+            Util.DrawRect(new Rect(graphRect.x + graphRect.width / 2 + graphRect.width / 2 * axis.InputValue,
                               graphRect.y,
                               1,
                               graphRect.height),
@@ -105,7 +105,7 @@ namespace AdvancedControls.UI
 
             // Draw Sensitivity slider
             GUILayout.BeginHorizontal();
-            GUILayout.Label("Sensitivity ", Util.LabelStyle);
+            GUILayout.Label("Sensitivity", Util.LabelStyle);
             GUILayout.Label((Mathf.Round(axis.Sensitivity * 100) / 100).ToString(),
                 Util.LabelStyle,
                 GUILayout.Width(60));
@@ -115,7 +115,7 @@ namespace AdvancedControls.UI
 
             // Draw Curvature slider
             GUILayout.BeginHorizontal();
-            GUILayout.Label("Curvature ", Util.LabelStyle);
+            GUILayout.Label("Curvature", Util.LabelStyle);
             GUILayout.Label((Mathf.Round(axis.Curvature * 100) / 100).ToString(),
                 Util.LabelStyle,
                 GUILayout.Width(60));
@@ -125,7 +125,7 @@ namespace AdvancedControls.UI
             
             // Draw Deadzone slider
             GUILayout.BeginHorizontal();
-            GUILayout.Label("Deadzone ", Util.LabelStyle);
+            GUILayout.Label("Deadzone", Util.LabelStyle);
             GUILayout.Label((Mathf.Round(axis.Deadzone * 100) / 100).ToString(),
                 Util.LabelStyle,
                 GUILayout.Width(60));
@@ -133,15 +133,26 @@ namespace AdvancedControls.UI
 
             axis.Deadzone = GUILayout.HorizontalSlider(axis.Deadzone, 0, 0.5f);
             
-            // Draw Invert toggle
             GUILayout.BeginHorizontal();
+
+            // Draw Invert toggle
             axis.Invert = GUILayout.Toggle(axis.Invert, "",
                 Util.ToggleStyle,
                 GUILayout.Width(20),
                 GUILayout.Height(20));
 
-            GUILayout.Label("Invert ",
+            GUILayout.Label("Invert",
                 new GUIStyle(Elements.Labels.Default) { margin = new RectOffset(0, 0, 14, 0) });
+
+            // Draw Raw toggle
+            axis.Raw = GUILayout.Toggle(axis.Raw, "",
+                Util.ToggleStyle,
+                GUILayout.Width(20),
+                GUILayout.Height(20));
+
+            GUILayout.Label("Raw",
+                new GUIStyle(Elements.Labels.Default) { margin = new RectOffset(0, 0, 14, 0) });
+
             GUILayout.EndHorizontal();
 
             GUILayout.EndArea();

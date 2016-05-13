@@ -40,7 +40,7 @@ namespace AdvancedControls.UI
                 20);
 
             Util.DrawRect(new Rect(
-                graphRect.x + graphRect.width / 2 - 10 + axis.Output * (graphRect.width - 20) / 2,
+                graphRect.x + graphRect.width / 2 - 10 + axis.OutputValue * (graphRect.width - 20) / 2,
                 graphRect.y,
                 20, 20), Color.yellow);
 
@@ -58,7 +58,7 @@ namespace AdvancedControls.UI
             if (GUI.tooltip == "Key Mapper Negative")
             {
                 foreach (KeyCode key in Enum.GetValues(typeof(KeyCode)))
-                    if (Input.GetKey(key))
+                    if (UnityEngine.Input.GetKey(key))
                     {
                         axis.NegativeKey = key == KeyCode.Backspace ? KeyCode.None : key;
                         break;
@@ -68,7 +68,7 @@ namespace AdvancedControls.UI
             if (GUI.tooltip == "Key Mapper Positive")
             {
                 foreach (KeyCode key in Enum.GetValues(typeof(KeyCode)))
-                    if (Input.GetKey(key))
+                    if (UnityEngine.Input.GetKey(key))
                     {
                         axis.PositiveKey = key == KeyCode.Backspace ? KeyCode.None : key;
                         break;

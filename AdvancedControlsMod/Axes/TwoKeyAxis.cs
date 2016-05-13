@@ -26,7 +26,7 @@ namespace AdvancedControls.Axes
             Invert = invert;
         }
 
-        public override float Input
+        public override float InputValue
         {
             get
             {
@@ -36,31 +36,31 @@ namespace AdvancedControls.Axes
             }
         }
 
-        public override void Reset()
+        public override void Initialise()
         {
             speed = 0;
             force = 0;
-            Output = 0;
+            OutputValue = 0;
         }
 
         public override void Update()
         {
-            float g_force = Output > 0 ? -Gravity : Gravity;
-            force = Input != 0 ? Input * Sensitivity : g_force;
+            float g_force = OutputValue > 0 ? -Gravity : Gravity;
+            force = InputValue != 0 ? InputValue * Sensitivity : g_force;
             speed += force * Time.deltaTime;
-            Output = Mathf.Clamp(Output + speed * Time.deltaTime, -1, 1);
-            if (Snap && Mathf.Abs(Output - Input) > 1)
+            OutputValue = Mathf.Clamp(OutputValue + speed * Time.deltaTime, -1, 1);
+            if (Snap && Mathf.Abs(OutputValue - InputValue) > 1)
             {
                 speed = 0;
-                Output = 0;
+                OutputValue = 0;
             }
-            if (Input == 0 && (last > 0 != Output > 0))
+            if (InputValue == 0 && (last > 0 != OutputValue > 0))
             {
                 speed = 0;
-                Output = 0;
+                OutputValue = 0;
             }
-            last = Output;
-            if (Output == -1 || Output == 1)
+            last = OutputValue;
+            if (OutputValue == -1 || OutputValue == 1)
                 speed = 0;
         }
 

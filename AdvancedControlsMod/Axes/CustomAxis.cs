@@ -7,7 +7,6 @@ namespace AdvancedControls.Axes
     public class CustomAxis : Axis
     {
         private bool initialised = false;
-        private bool error = false;
         public CustomAxis() : base() { }
 
         public string InitialisationCode { get; set; } = @"time = 0";
@@ -31,7 +30,7 @@ return axis_value";
                 try
                 {
                     var result = Lua.Evaluate(@UpdateCode)[0] as double?;
-                    Output = Mathf.Clamp((float)result, -1, 1);
+                    OutputValue = Mathf.Clamp((float)result, -1, 1);
                 }
                 catch (Exception e)
                 {
@@ -40,11 +39,11 @@ return axis_value";
             }
             else if (Lua.IsActive && Exception == null)
             {
-                Reset();
+                Initialise();
             }
         }
 
-        public override void Reset()
+        public override void Initialise()
         {
             initialised = false;
             if (Lua.IsActive)

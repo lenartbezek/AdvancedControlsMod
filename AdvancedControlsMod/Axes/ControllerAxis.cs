@@ -8,6 +8,7 @@ namespace AdvancedControls.Axes
         public float Curvature { get; set; }
         public float Deadzone { get; set; }
         public bool Invert { get; set; }
+        public bool Raw { get; set; }
         public string Axis { get; set; }
 
         public ControllerAxis(string axis, string name = "new axis", float sensitivity = 1, float curvature = 1, float deadzone = 0, bool invert = false)
@@ -44,19 +45,24 @@ namespace AdvancedControls.Axes
             }
         }
 
-        public override float Input
+        public override float InputValue
         {
             get
             {
-                return UnityEngine.Input.GetAxisRaw(Axis);
+                if (Raw)
+                    return Input.GetAxisRaw(Axis);
+                else
+                {
+                    return Input.GetAxis(Axis);
+                }
             }
         }
 
-        public override float Output
+        public override float OutputValue
         {
             get
             {
-                return Process(Input);
+                return Process(InputValue);
             }
         }
 
@@ -77,7 +83,7 @@ namespace AdvancedControls.Axes
             return new ControllerAxis(Axis, Name, Sensitivity, Curvature, Deadzone, Invert);
         }
 
-        public override void Reset() { }
+        public override void Initialise() { }
 
         public override void Update() { }
     }

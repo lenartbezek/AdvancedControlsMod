@@ -71,12 +71,14 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Axes\Axis.cs" />
+    <Compile Include="Axes\AxisManager.cs" />
     <Compile Include="Axes\ControllerAxis.cs" />
     <Compile Include="Axes\CustomAxis.cs" />
     <Compile Include="Axes\OneKeyAxis.cs" />
     <Compile Include="Axes\TwoKeyAxis.cs" />
     <Compile Include="Controls\AngleControl.cs" />
     <Compile Include="Controls\Control.cs" />
+    <Compile Include="Controls\ControlGroup.cs" />
     <Compile Include="Controls\ControlManager.cs" />
     <Compile Include="Controls\InputControl.cs" />
     <Compile Include="Controls\PositionControl.cs" />
@@ -92,6 +94,7 @@
     <Compile Include="UI\TwoKeyAxisEdit.cs" />
     <Compile Include="UI\Util.cs" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>copy /Y "$(TargetPath)" "%25BESIEGE_LOCATION%25Besiege_Data\Mods\$(TargetName).dll"</PostBuildEvent>

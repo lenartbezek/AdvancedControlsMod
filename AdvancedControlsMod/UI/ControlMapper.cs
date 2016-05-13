@@ -1,7 +1,6 @@
 ﻿using UnityEngine;
 using spaar.ModLoader.UI;
 using AdvancedControls.Controls;
-using System.Collections.Generic;
 
 namespace AdvancedControls.UI
 {
@@ -14,7 +13,7 @@ namespace AdvancedControls.UI
         private int windowID = spaar.ModLoader.Util.GetWindowID();
         private Rect windowRect = new Rect(100, 100, 100, 100);
 
-        private float DesiredWidth { get; } = 400;
+        private float DesiredWidth { get; } = 320;
         private float DesiredHeight { get; } = 100;
 
         private GenericBlock block;
@@ -33,7 +32,7 @@ namespace AdvancedControls.UI
             if (Visible && block != null)
             {
                 GUI.skin = Util.Skin;
-                windowRect = GUILayout.Window(windowID, windowRect, DoWindow, block.MyBlockInfo.name,
+                windowRect = GUILayout.Window(windowID, windowRect, DoWindow, block.MyBlockInfo.blockName,
                     GUILayout.Width(DesiredWidth),
                     GUILayout.Height(DesiredHeight));
             }
@@ -51,6 +50,11 @@ namespace AdvancedControls.UI
 
             if (controls.Count == 0)
                 GUILayout.Label("This block has no available controls.");
+
+            // Draw close button
+            if (GUI.Button(new Rect(windowRect.width - 28, 8, 20, 20),
+                "×", Elements.Buttons.Red))
+                Visible = false;
 
             // Drag window
             GUI.DragWindow(new Rect(0, 0, windowRect.width, GUI.skin.window.padding.top));
