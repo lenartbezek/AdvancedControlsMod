@@ -32,7 +32,7 @@ namespace AdvancedControls.UI
             if (Visible && block != null)
             {
                 GUI.skin = Util.Skin;
-                windowRect = GUILayout.Window(windowID, windowRect, DoWindow, block.MyBlockInfo.blockName,
+                windowRect = GUILayout.Window(windowID, windowRect, DoWindow, block.MyBlockInfo.blockName.ToUpper(),
                     GUILayout.Width(DesiredWidth),
                     GUILayout.Height(DesiredHeight));
             }

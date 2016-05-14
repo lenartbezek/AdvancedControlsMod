@@ -7,7 +7,7 @@ namespace AdvancedControls.Controls
 
     public class PositionControl : Control
     {
-        public override string Name { get; set; } = "Position";
+        public override string Name { get; set; } = "POSITION";
         public override bool PositiveOnly { get; set; } = true;
 
         private Piston piston;

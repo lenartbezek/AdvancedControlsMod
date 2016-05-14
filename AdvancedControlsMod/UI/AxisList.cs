@@ -28,6 +28,7 @@ namespace AdvancedControls.UI
         {
             Visible = false;
             control.Axis = axis.Name;
+            control.Enabled = true;
         }
 
         private void EditAxis(Axes.Axis axis)

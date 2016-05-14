@@ -6,7 +6,7 @@ namespace AdvancedControls.Controls
 {
     public class InputControl : Control
     {
-        public override string Name { get; set; } = "Input";
+        public override string Name { get; set; } = "INPUT";
 
         private Cog cog;
         private Steering steering;

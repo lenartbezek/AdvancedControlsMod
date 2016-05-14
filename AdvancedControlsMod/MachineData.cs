@@ -46,7 +46,6 @@ namespace AdvancedControls
                             if (name == c.Name)
                                 c.Load(blockInfo);
                         }
-                            
                     }
                 }
             }
@@ -59,10 +58,8 @@ namespace AdvancedControls
 
         public static void SaveData(MachineInfo machineInfo)
         {
-            machineInfo.MachineData.EraseCustomData();
-            machineInfo.MachineData.Write("AdvancedControls-Version", "v1.0.0");
-
             var axes = AxisManager.GetActiveAxes(ControlManager.GetActiveControls());
+            if (axes.Count == 0) return;
             var axis_names = new List<string>();
             foreach (Axes.Axis axis in axes)
             {
@@ -76,6 +73,7 @@ namespace AdvancedControls
                 if (ControlManager.Blocks.ContainsKey(blockInfo.Guid))
                 {
                     var controls = ControlManager.GetActiveBlockControls(blockInfo.Guid);
+                    if (controls.Count == 0) continue;
                     var control_names = new List<string>();
                     foreach (Control c in controls)
                     {
@@ -85,6 +83,9 @@ namespace AdvancedControls
                     blockInfo.BlockData.Write("AC-ControlList", control_names.ToArray());
                 }
             }
+
+            machineInfo.MachineData.EraseCustomData();
+            machineInfo.MachineData.Write("AdvancedControls-Version", "v1.0.0");
         }
     }
 }

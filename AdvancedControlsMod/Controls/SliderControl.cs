@@ -7,7 +7,7 @@ namespace AdvancedControls.Controls
     {
         public SliderControl(Guid guid) : base(guid){}
 
-        public override string Name { get; set; } = "Slider";
+        public override string Name { get; set; } = "SLIDER";
         public override bool PositiveOnly { get; set; } = false;
 
         private string slider;

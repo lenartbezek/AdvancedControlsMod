@@ -6,7 +6,7 @@ namespace AdvancedControls.Controls
 {
     public class AngleControl : Control
     {
-        public override string Name { get; set; } = "Angle";
+        public override string Name { get; set; } = "ANGLE";
 
         private Steering steering;
 

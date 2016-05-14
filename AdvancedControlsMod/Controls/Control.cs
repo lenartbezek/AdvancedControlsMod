@@ -63,15 +63,15 @@ namespace AdvancedControls.Controls
 
         public virtual void Draw()
         {
-            GUILayout.BeginHorizontal();
 
-            GUILayout.Label(Name, Elements.InputFields.Default, GUILayout.Width(120));
+            GUILayout.Label(Name, Elements.Labels.Title);
+
+            GUILayout.BeginHorizontal();
 
             if (Axis == null)
             {
-                if (GUILayout.Button("+", GUILayout.Width(30)))
+                if (GUILayout.Button("Select Input Axis", Elements.Buttons.Disabled))
                 {
-                    Enabled = true;
                     AdvancedControlsMod.AxisList.SelectAxis(this);
                 }
             }
@@ -84,54 +84,58 @@ namespace AdvancedControls.Controls
                 }
                 if (GUILayout.Button("×", Elements.Buttons.Red, GUILayout.Width(30)))
                 {
+                    Enabled = false;
                     Axis = null;
                 }
             }
 
             GUILayout.EndHorizontal();
 
-            GUILayout.BeginHorizontal();
+            if (Enabled)
             {
-                GUILayout.BeginVertical();
-                GUILayout.Label("Mininum");
-                float min_parsed = Min;
-                min = GUILayout.TextField(min);
-                if (!min.EndsWith(".") && !min.EndsWith("-"))
-                {
-                    float.TryParse(min, out min_parsed);
-                    Min = min_parsed;
-                    min = (Mathf.Round(Min * 100) /100).ToString();
-                }
-                GUILayout.EndVertical();
-
-                if (!PositiveOnly)
+                GUILayout.BeginHorizontal();
                 {
                     GUILayout.BeginVertical();
-                    GUILayout.Label("Center");
-                    float cen_parsed = Center;
-                    cen = GUILayout.TextField(cen);
-                    if (!cen.EndsWith(".") && !cen.EndsWith("-"))
+                    GUILayout.Label("Mininum");
+                    float min_parsed = Min;
+                    min = GUILayout.TextField(min);
+                    if (!min.EndsWith(".") && !min.EndsWith("-"))
                     {
-                        float.TryParse(cen, out cen_parsed);
-                        Center = cen_parsed;
-                        cen = (Mathf.Round(Center * 100) / 100).ToString();
+                        float.TryParse(min, out min_parsed);
+                        Min = min_parsed;
+                        min = (Mathf.Round(Min * 100) / 100).ToString();
+                    }
+                    GUILayout.EndVertical();
+
+                    if (!PositiveOnly)
+                    {
+                        GUILayout.BeginVertical();
+                        GUILayout.Label("Center");
+                        float cen_parsed = Center;
+                        cen = GUILayout.TextField(cen);
+                        if (!cen.EndsWith(".") && !cen.EndsWith("-"))
+                        {
+                            float.TryParse(cen, out cen_parsed);
+                            Center = cen_parsed;
+                            cen = (Mathf.Round(Center * 100) / 100).ToString();
+                        }
+                        GUILayout.EndVertical();
+                    }
+
+                    GUILayout.BeginVertical();
+                    GUILayout.Label("Maximum");
+                    float max_parsed = Max;
+                    max = GUILayout.TextField(max);
+                    if (!max.EndsWith(".") && !max.EndsWith("-"))
+                    {
+                        float.TryParse(max, out max_parsed);
+                        Max = max_parsed;
+                        max = (Mathf.Round(Max * 100) / 100).ToString();
                     }
                     GUILayout.EndVertical();
                 }
-
-                GUILayout.BeginVertical();
-                GUILayout.Label("Maximum");
-                float max_parsed = Max;
-                max = GUILayout.TextField(max);
-                if (!max.EndsWith(".") && !max.EndsWith("-"))
-                {
-                    float.TryParse(max, out max_parsed);
-                    Max = max_parsed;
-                    max = (Mathf.Round(Max * 100) / 100).ToString();
-                }
-                GUILayout.EndVertical();
+                GUILayout.EndHorizontal();
             }
-            GUILayout.EndHorizontal();
         }
 
         public virtual void Load(BlockInfo blockInfo)
