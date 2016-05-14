@@ -78,7 +78,6 @@
     <Compile Include="Axes\TwoKeyAxis.cs" />
     <Compile Include="Controls\AngleControl.cs" />
     <Compile Include="Controls\Control.cs" />
-    <Compile Include="Controls\ControlGroup.cs" />
     <Compile Include="Controls\ControlManager.cs" />
     <Compile Include="Controls\InputControl.cs" />
     <Compile Include="Controls\PositionControl.cs" />

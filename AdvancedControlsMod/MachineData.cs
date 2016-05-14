@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using AdvancedControls.Axes;
 using AdvancedControls.Controls;
 using UnityEngine;
@@ -41,8 +42,11 @@ namespace AdvancedControls
                     foreach (string name in control_names)
                     {
                         foreach (Control c in control_list)
-                            if (name == c.Name || c as ControlGroup != null)
+                        {
+                            if (name == c.Name)
                                 c.Load(blockInfo);
+                        }
+                            
                     }
                 }
             }
@@ -59,28 +63,26 @@ namespace AdvancedControls
             machineInfo.MachineData.Write("AdvancedControls-Version", "v1.0.0");
 
             var axes = AxisManager.GetActiveAxes(ControlManager.GetActiveControls());
-            var axis_names = new string[axes.Count];
-            int i = 0;
+            var axis_names = new List<string>();
             foreach (Axes.Axis axis in axes)
             {
-                axis_names[i] = axis.Name; i++;
+                axis_names.Add(axis.Name);
                 axis.Save(machineInfo);
             }
-            machineInfo.MachineData.Write("AC-AxisList", axis_names);
+            machineInfo.MachineData.Write("AC-AxisList", axis_names.ToArray());
 
             foreach (BlockInfo blockInfo in machineInfo.Blocks)
             {
                 if (ControlManager.Blocks.ContainsKey(blockInfo.Guid))
                 {
                     var controls = ControlManager.GetActiveBlockControls(blockInfo.Guid);
-                    var control_names = new string[controls.Count];
-                    int j = 0;
+                    var control_names = new List<string>();
                     foreach (Control c in controls)
                     {
-                        control_names[j] = c.Name; j++;
+                        control_names.Add(c.Name);
                         c.Save(blockInfo);
                     }
-                    blockInfo.BlockData.Write("AC-ControlList", control_names);
+                    blockInfo.BlockData.Write("AC-ControlList", control_names.ToArray());
                 }
             }
         }

@@ -51,16 +51,9 @@ namespace AdvancedControls.Controls
             {
                 return new List<Control>()
                 {
-                    new ControlGroup(GUID)
-                    {
-                        Controls = new Dictionary<string, Control>()
-                        {
-                            { "Angle", new AngleControl(GUID) },
-                            { "Input", new InputControl(GUID) }
-                        },
-                        Enabled = "Angle"
-                    },
-                    new SliderControl(GUID) { Slider = "SPEED" }
+                    new AngleControl(GUID),
+                    new InputControl(GUID),
+                    new SliderControl(GUID) { Slider = "ROTATION SPEED" }
                 };
             }
 
