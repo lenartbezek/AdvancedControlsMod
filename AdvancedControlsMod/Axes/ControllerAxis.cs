@@ -12,16 +12,15 @@ namespace AdvancedControls.Axes
         public bool Raw { get; set; }
         public string Axis { get; set; } = "Vertical";
 
-        public ControllerAxis(string axis = "Vertical", string name = "new controller axis", float sensitivity = 1, float curvature = 1, float deadzone = 0, bool invert = false)
+        public ControllerAxis(string name, string axis = "Vertical", float sensitivity = 1, float curvature = 1, float deadzone = 0, bool invert = false, bool raw = false) : base(name)
         {
             Axis = axis;
-            Name = name;
             Sensitivity = sensitivity;
             Curvature = curvature;
             Deadzone = deadzone;
             Invert = invert;
-            editor = new UI.ConrollerAxisEditor();
-            editor.SetAxis(this);
+            Raw = raw;
+            editor = new UI.ControllerAxisEditor(this);
         }
 
         public struct Param
@@ -83,7 +82,7 @@ namespace AdvancedControls.Axes
 
         public override InputAxis Clone()
         {
-            return new ControllerAxis(Axis, Name, Sensitivity, Curvature, Deadzone, Invert);
+            return new ControllerAxis(Name, Axis, Sensitivity, Curvature, Deadzone, Invert, Raw);
         }
 
         public override void Load(MachineInfo machineInfo)

@@ -6,24 +6,25 @@ namespace AdvancedControls.Axes
 {
     public class CustomAxis : InputAxis
     {
-        public override string Name { get; set; } = "new custom axis";
-        private bool initialised = false;
-        public CustomAxis() : base() { }
-
-        public string InitialisationCode { get; set; } = @"time = 0";
-        public string UpdateCode { get; set; } =
+        private const string DefaultInitialisationCode =
+@"time = 0";
+        private const string DefaultUpdateCode =
 @"time = time + Time.deltaTime
 axis_value = Mathf.Sin(time)
 return axis_value";
+
+        public override string Name { get; set; } = "new custom axis";
+        private bool initialised = false;
+
+        public string InitialisationCode { get; set; }
+        public string UpdateCode { get; set; }
         public Exception Exception { get; set; } = null;
 
-        public CustomAxis(string name = "new custom axis", string init = "", string update = "")
+        public CustomAxis(string name, string init = DefaultInitialisationCode, string update = DefaultUpdateCode) : base(name)
         {
-            Name = name;
             InitialisationCode = init;
             UpdateCode = update;
-            editor = new UI.CustomAxisEditor();
-            editor.SetAxis(this);
+            editor = new UI.CustomAxisEditor(this);
         }
 
         public override void Update()

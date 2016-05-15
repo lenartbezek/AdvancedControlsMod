@@ -19,16 +19,16 @@ namespace AdvancedControls
                 var axis_names = machineInfo.MachineData.ReadStringArray("AC-AxisList");
                 foreach (string name in axis_names)
                 {
-                    Axes.InputAxis axis = null;
+                    InputAxis axis = null;
                     var type = machineInfo.MachineData.ReadString("AC-Axis-" + name + "-Type");
                     if (type == "Controller")
-                        axis = new ControllerAxis() { Name = name };
+                        axis = new ControllerAxis(name);
                     if (type == "Custom")
-                        axis = new CustomAxis() { Name = name };
+                        axis = new CustomAxis(name);
                     if (type == "OneKey")
-                        axis = new OneKeyAxis() { Name = name };
+                        axis = new OneKeyAxis(name);
                     if (type == "TwoKey")
-                        axis = new TwoKeyAxis() { Name = name };
+                        axis = new TwoKeyAxis(name);
                     if (axis == null) continue;
                     axis.Load(machineInfo);
                     AxisManager.Put(name, axis);
@@ -58,15 +58,7 @@ namespace AdvancedControls
 
         public static void SaveData(MachineInfo machineInfo)
         {
-            var axes = AxisManager.GetActiveAxes(ControlManager.GetActiveControls());
-            if (axes.Count == 0) return;
-            var axis_names = new List<string>();
-            foreach (Axes.InputAxis axis in axes)
-            {
-                axis_names.Add(axis.Name);
-                axis.Save(machineInfo);
-            }
-            machineInfo.MachineData.Write("AC-AxisList", axis_names.ToArray());
+            var all_controls = new List<Control>();
 
             foreach (BlockInfo blockInfo in machineInfo.Blocks)
             {
@@ -77,6 +69,8 @@ namespace AdvancedControls
                     var control_names = new List<string>();
                     foreach (Control c in controls)
                     {
+                        Debug.Log("Saving control: " + c.Name);
+                        all_controls.Add(c);
                         control_names.Add(c.Name);
                         c.Save(blockInfo);
                     }
@@ -84,8 +78,18 @@ namespace AdvancedControls
                 }
             }
 
-            machineInfo.MachineData.EraseCustomData();
             machineInfo.MachineData.Write("AdvancedControls-Version", "v1.0.0");
+
+            var axes = AxisManager.GetActiveAxes(all_controls);
+            if (axes.Count == 0) return;
+            var axis_names = new List<string>();
+            foreach (InputAxis axis in axes)
+            {
+                Debug.Log("Saving axis: " + axis.Name);
+                axis_names.Add(axis.Name);
+                axis.Save(machineInfo);
+            }
+            machineInfo.MachineData.Write("AC-AxisList", axis_names.ToArray());
         }
     }
 }

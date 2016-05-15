@@ -4,8 +4,13 @@ using AdvancedControls.Axes;
 
 namespace AdvancedControls.UI
 {
-    public class ConrollerAxisEditor : AxisEdit
+    public class ControllerAxisEditor : AxisEditor
     {
+        public ControllerAxisEditor(InputAxis axis)
+        {
+            Axis = axis as ControllerAxis;
+        }
+
         private ControllerAxis Axis;
 
         private Rect graphRect;
@@ -15,11 +20,6 @@ namespace AdvancedControls.UI
         private ControllerAxis.Param last_parameters;
 
         private bool vertical = true;
-
-        public override void SetAxis(InputAxis axis)
-        {
-            Axis = axis as ControllerAxis;
-        }
 
         private void DrawGraph()
         {
@@ -46,7 +46,7 @@ namespace AdvancedControls.UI
             GUILayout.Box(graphTex);
         }
 
-        public override void DrawAxis(Rect windowRect)
+        public void DrawAxis(Rect windowRect)
         {
             // Draw graph
             graphRect = new Rect(

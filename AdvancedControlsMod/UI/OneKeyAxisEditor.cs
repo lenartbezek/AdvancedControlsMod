@@ -5,16 +5,16 @@ using AdvancedControls.Axes;
 
 namespace AdvancedControls.UI
 {
-    public class OneKeyAxisEditor : AxisEdit
+    public class OneKeyAxisEditor : AxisEditor
     {
-        private OneKeyAxis Axis;
-
-        public override void SetAxis(InputAxis axis)
+        public OneKeyAxisEditor(InputAxis axis)
         {
             Axis = axis as OneKeyAxis;
         }
 
-        public override void DrawAxis(Rect windowRect)
+        private OneKeyAxis Axis;
+
+        public void DrawAxis(Rect windowRect)
         {
             // Draw graph
             Rect graphRect = new Rect(

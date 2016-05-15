@@ -6,10 +6,11 @@
         public virtual float InputValue { get; } = 0;
         public virtual float OutputValue { get; set; } = 0;
 
-        protected UI.AxisEdit editor;
+        protected UI.AxisEditor editor;
 
-        public InputAxis()
+        public InputAxis(string name)
         {
+            Name = name;
             ADVControls.Instance.OnUpdate += Update;
             ADVControls.Instance.OnInitialisation += Initialise;
         }
@@ -17,7 +18,7 @@
         public abstract void Initialise();
         public abstract void Update();
 
-        public virtual UI.AxisEdit GetEditor()
+        public virtual UI.AxisEditor GetEditor()
         {
             return editor;
         }

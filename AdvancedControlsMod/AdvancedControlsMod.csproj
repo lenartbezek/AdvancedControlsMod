@@ -82,7 +82,7 @@
     <Compile Include="MachineData.cs" />
     <Compile Include="UI\AxisEditorWindow.cs" />
     <Compile Include="UI\ControlMapperWindow.cs" />
-    <Compile Include="UI\ConrollerAxisEditor.cs" />
+    <Compile Include="UI\ControllerAxisEditor.cs" />
     <Compile Include="Mod.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="UI\CustomAxisEditor.cs" />

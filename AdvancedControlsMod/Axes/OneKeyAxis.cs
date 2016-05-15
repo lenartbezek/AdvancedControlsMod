@@ -12,16 +12,13 @@ namespace AdvancedControls.Axes
         private float speed = 0;
         private float force = 0;
 
-        public OneKeyAxis(KeyCode key = KeyCode.None,
-            string name = "new one key axis",
-            float sensitivity = 1, float gravity = 1) : base()
+        public OneKeyAxis(string name, KeyCode key = KeyCode.None,
+            float sensitivity = 1, float gravity = 1) : base(name)
         {
             Key = key;
-            Name = name;
             Sensitivity = sensitivity;
             Gravity = gravity;
-            editor = new UI.OneKeyAxisEditor();
-            editor.SetAxis(this);
+            editor = new UI.OneKeyAxisEditor(this);
         }
 
         public override float InputValue
@@ -50,7 +47,7 @@ namespace AdvancedControls.Axes
 
         public override InputAxis Clone()
         {
-            return new OneKeyAxis(Key, Name, Sensitivity, Gravity);
+            return new OneKeyAxis(Name, Key, Sensitivity, Gravity);
         }
 
         public override void Load(MachineInfo machineInfo)

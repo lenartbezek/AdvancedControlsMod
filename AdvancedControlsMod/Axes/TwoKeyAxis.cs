@@ -16,19 +16,16 @@ namespace AdvancedControls.Axes
         private float force = 0;
         private float last = 0;
 
-        public TwoKeyAxis(KeyCode positiveKey = KeyCode.None, KeyCode negativeKey = KeyCode.None,
-            string name = "new two key axis",
-            float sensitivity = 1, float gravity = 1, bool snap = false, bool invert = false) : base()
+        public TwoKeyAxis(string name, KeyCode positiveKey = KeyCode.None, KeyCode negativeKey = KeyCode.None,
+            float sensitivity = 1, float gravity = 1, bool snap = false, bool invert = false) : base(name)
         {
             PositiveKey = positiveKey;
             NegativeKey = negativeKey;
-            Name = name;
             Sensitivity = sensitivity;
             Gravity = gravity;
             Snap = snap;
             Invert = invert;
-            editor = new UI.TwoKeyAxisEditor();
-            editor.SetAxis(this);
+            editor = new UI.TwoKeyAxisEditor(this);
         }
 
         public override float InputValue
@@ -71,7 +68,7 @@ namespace AdvancedControls.Axes
 
         public override InputAxis Clone()
         {
-            return new TwoKeyAxis(PositiveKey, NegativeKey, Name, Sensitivity, Gravity, Snap, Invert);
+            return new TwoKeyAxis(Name, PositiveKey, NegativeKey, Sensitivity, Gravity, Snap, Invert);
         }
 
         public override void Load(MachineInfo machineInfo)

@@ -5,10 +5,9 @@ using AdvancedControls.Controls;
 
 namespace AdvancedControls.UI
 {
-    public abstract class AxisEdit
+    public interface AxisEditor
     {
-        public abstract void SetAxis(InputAxis axis);
-        public abstract void DrawAxis(Rect windowRect);
+        void DrawAxis(Rect windowRect);
     }
 
     public class AxisEditorWindow : MonoBehaviour
@@ -77,25 +76,25 @@ namespace AdvancedControls.UI
 
                 if (GUILayout.Button("Controller"))
                 {
-                    Axis = new ControllerAxis();
+                    Axis = new ControllerAxis("new controller axis");
                     WindowName = "Create new controller axis";
                     SaveName = Axis.Name;
                 }
                 if (GUILayout.Button("One Key"))
                 {
-                    Axis = new OneKeyAxis();
+                    Axis = new OneKeyAxis("new one key axis");
                     WindowName = "Create new one key axis";
                     SaveName = Axis.Name;
                 }
                 if (GUILayout.Button("Two Key"))
                 {
-                    Axis = new TwoKeyAxis();
+                    Axis = new TwoKeyAxis("new two key axis");
                     WindowName = "Create two key axis";
                     SaveName = Axis.Name;
                 }
                 if (GUILayout.Button("Custom"))
                 {
-                    Axis = new CustomAxis();
+                    Axis = new CustomAxis("new custom axis");
                     WindowName = "Create new custom axis";
                     SaveName = Axis.Name;
                 }

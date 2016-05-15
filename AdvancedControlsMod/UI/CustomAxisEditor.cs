@@ -5,19 +5,19 @@ using spaar.ModLoader.UI;
 
 namespace AdvancedControls.UI
 {
-    public class CustomAxisEditor : AxisEdit
+    public class CustomAxisEditor : AxisEditor
     {
+        public CustomAxisEditor(InputAxis axis)
+        {
+            Axis = axis as CustomAxis;
+        }
+
         private CustomAxis Axis;
 
         private Vector2 initialisationScrollPosition = Vector2.zero;
         private Vector2 updateScrollPosition = Vector2.zero;
 
-        public override void SetAxis(InputAxis axis)
-        {
-            Axis = axis as CustomAxis;
-        }
-
-        public override void DrawAxis(Rect windowRect)
+        public void DrawAxis(Rect windowRect)
         {
             // Draw initialisation code text area
             GUILayout.Label("Initialisation code ",
