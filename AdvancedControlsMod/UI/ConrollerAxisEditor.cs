@@ -4,47 +4,32 @@ using AdvancedControls.Axes;
 
 namespace AdvancedControls.UI
 {
-    public class ControllerAxisEdit : AxisEdit
+    public class ConrollerAxisEditor : AxisEdit
     {
-        public new string name { get { return "Edit Controller Axis window"; } }
-
-        protected new ControllerAxis axis = new ControllerAxis();
-
-        protected override float DesiredWidth { get; } = 320;
-        protected override float DesiredHeight { get; } = 611;
-
-        public override void SaveAxis()
-        {
-            Visible = false;
-            axis.Name = axisName;
-            AdvancedControlsMod.AxisList.SaveAxis(axis);
-        }
-
-        public override void EditAxis(Axes.Axis axis)
-        {
-            Visible = true;
-            this.axisName = axis.Name;
-            this.axis = (axis as ControllerAxis).Clone();
-        }
+        private ControllerAxis Axis;
 
         private Rect graphRect;
         private Rect last_graphRect;
-        private GUIStyle graphStyle = new GUIStyle();
         private Texture2D graphTex;
 
         private ControllerAxis.Param last_parameters;
 
         private bool vertical = true;
 
+        public override void SetAxis(InputAxis axis)
+        {
+            Axis = axis as ControllerAxis;
+        }
+
         private void DrawGraph()
         {
             if (graphTex == null || graphRect != last_graphRect)
                 graphTex = new Texture2D((int)graphRect.width, (int)graphRect.height);
-            if (!axis.Parameters.Equals(last_parameters) || graphRect != last_graphRect)
+            if (!Axis.Parameters.Equals(last_parameters) || graphRect != last_graphRect)
             {
                 for (int i = 0; i < graphRect.width; i++)
                 {
-                    var value = axis.Process((i - graphRect.width / 2) / (graphRect.width / 2));
+                    var value = Axis.Process((i - graphRect.width / 2) / (graphRect.width / 2));
                     var point = graphRect.height / 2 - (graphRect.height-1) / 2 * value;
                     for (int j = 0; j < graphRect.height; j++)
                     {
@@ -56,16 +41,13 @@ namespace AdvancedControls.UI
                 }
                 graphTex.Apply();
                 last_graphRect = graphRect;
-                last_parameters = axis.Parameters;
+                last_parameters = Axis.Parameters;
             }
-            graphStyle.normal.background = graphTex;
-            GUI.Box(graphRect, GUIContent.none, graphStyle);
+            GUILayout.Box(graphTex);
         }
 
-        protected override void DoWindow(int id)
+        public override void DrawAxis(Rect windowRect)
         {
-            base.DoWindow(id);
-
             // Draw graph
             graphRect = new Rect(
                 GUI.skin.window.padding.left,
@@ -73,20 +55,17 @@ namespace AdvancedControls.UI
                 windowRect.width - GUI.skin.window.padding.left - GUI.skin.window.padding.right,
                 windowRect.width - GUI.skin.window.padding.left - GUI.skin.window.padding.right);
 
-            Util.DrawRect(new Rect(graphRect.x + graphRect.width / 2 + graphRect.width / 2 * axis.InputValue,
+            DrawGraph();
+
+            graphRect = GUILayoutUtility.GetLastRect();
+
+            Util.DrawRect(new Rect(graphRect.x + graphRect.width / 2 + graphRect.width / 2 * Axis.InputValue,
                               graphRect.y,
                               1,
                               graphRect.height),
                      Color.yellow);
 
-            DrawGraph();
-
             // Draw axis controls
-            GUILayout.BeginArea(new Rect(
-                GUI.skin.window.padding.left,
-                graphRect.y + graphRect.height + GUI.skin.window.padding.bottom,
-                windowRect.width - GUI.skin.window.padding.left - GUI.skin.window.padding.right,
-                400));
 
             GUILayout.BeginHorizontal();
             if (GUILayout.Button("Vertical",
@@ -100,43 +79,43 @@ namespace AdvancedControls.UI
             {
                 vertical = false;
             }
-            axis.Axis = vertical ? "Vertical" : "Horizontal";
+            Axis.Axis = vertical ? "Vertical" : "Horizontal";
             GUILayout.EndHorizontal();
 
             // Draw Sensitivity slider
             GUILayout.BeginHorizontal();
             GUILayout.Label("Sensitivity", Util.LabelStyle);
-            GUILayout.Label((Mathf.Round(axis.Sensitivity * 100) / 100).ToString(),
+            GUILayout.Label((Mathf.Round(Axis.Sensitivity * 100) / 100).ToString(),
                 Util.LabelStyle,
                 GUILayout.Width(60));
             GUILayout.EndHorizontal();
 
-            axis.Sensitivity = GUILayout.HorizontalSlider(axis.Sensitivity, 0, 5);
+            Axis.Sensitivity = GUILayout.HorizontalSlider(Axis.Sensitivity, 0, 5);
 
             // Draw Curvature slider
             GUILayout.BeginHorizontal();
             GUILayout.Label("Curvature", Util.LabelStyle);
-            GUILayout.Label((Mathf.Round(axis.Curvature * 100) / 100).ToString(),
+            GUILayout.Label((Mathf.Round(Axis.Curvature * 100) / 100).ToString(),
                 Util.LabelStyle,
                 GUILayout.Width(60));
             GUILayout.EndHorizontal();
 
-            axis.Curvature = GUILayout.HorizontalSlider(axis.Curvature, 0, 3);
+            Axis.Curvature = GUILayout.HorizontalSlider(Axis.Curvature, 0, 3);
             
             // Draw Deadzone slider
             GUILayout.BeginHorizontal();
             GUILayout.Label("Deadzone", Util.LabelStyle);
-            GUILayout.Label((Mathf.Round(axis.Deadzone * 100) / 100).ToString(),
+            GUILayout.Label((Mathf.Round(Axis.Deadzone * 100) / 100).ToString(),
                 Util.LabelStyle,
                 GUILayout.Width(60));
             GUILayout.EndHorizontal();
 
-            axis.Deadzone = GUILayout.HorizontalSlider(axis.Deadzone, 0, 0.5f);
+            Axis.Deadzone = GUILayout.HorizontalSlider(Axis.Deadzone, 0, 0.5f);
             
             GUILayout.BeginHorizontal();
 
             // Draw Invert toggle
-            axis.Invert = GUILayout.Toggle(axis.Invert, "",
+            Axis.Invert = GUILayout.Toggle(Axis.Invert, "",
                 Util.ToggleStyle,
                 GUILayout.Width(20),
                 GUILayout.Height(20));
@@ -145,7 +124,7 @@ namespace AdvancedControls.UI
                 new GUIStyle(Elements.Labels.Default) { margin = new RectOffset(0, 0, 14, 0) });
 
             // Draw Raw toggle
-            axis.Raw = GUILayout.Toggle(axis.Raw, "",
+            Axis.Raw = GUILayout.Toggle(Axis.Raw, "",
                 Util.ToggleStyle,
                 GUILayout.Width(20),
                 GUILayout.Height(20));
@@ -154,8 +133,6 @@ namespace AdvancedControls.UI
                 new GUIStyle(Elements.Labels.Default) { margin = new RectOffset(0, 0, 14, 0) });
 
             GUILayout.EndHorizontal();
-
-            GUILayout.EndArea();
         }
     }
 }

@@ -4,8 +4,9 @@ using LenchScripter;
 
 namespace AdvancedControls.Axes
 {
-    public class CustomAxis : Axis
+    public class CustomAxis : InputAxis
     {
+        public override string Name { get; set; } = "new custom axis";
         private bool initialised = false;
         public CustomAxis() : base() { }
 
@@ -14,13 +15,15 @@ namespace AdvancedControls.Axes
 @"time = time + Time.deltaTime
 axis_value = Mathf.Sin(time)
 return axis_value";
-        public Exception Exception { get; set; }
+        public Exception Exception { get; set; } = null;
 
-        public CustomAxis(string name = "new axis", string init = "", string update = "")
+        public CustomAxis(string name = "new custom axis", string init = "", string update = "")
         {
             Name = name;
             InitialisationCode = init;
             UpdateCode = update;
+            editor = new UI.CustomAxisEditor();
+            editor.SetAxis(this);
         }
 
         public override void Update()
@@ -63,7 +66,7 @@ return axis_value";
             }
         }
 
-        public CustomAxis Clone()
+        public override InputAxis Clone()
         {
             return new CustomAxis(Name, InitialisationCode, UpdateCode);
         }

@@ -19,7 +19,7 @@ namespace AdvancedControls
                 var axis_names = machineInfo.MachineData.ReadStringArray("AC-AxisList");
                 foreach (string name in axis_names)
                 {
-                    Axes.Axis axis = null;
+                    Axes.InputAxis axis = null;
                     var type = machineInfo.MachineData.ReadString("AC-Axis-" + name + "-Type");
                     if (type == "Controller")
                         axis = new ControllerAxis() { Name = name };
@@ -61,7 +61,7 @@ namespace AdvancedControls
             var axes = AxisManager.GetActiveAxes(ControlManager.GetActiveControls());
             if (axes.Count == 0) return;
             var axis_names = new List<string>();
-            foreach (Axes.Axis axis in axes)
+            foreach (Axes.InputAxis axis in axes)
             {
                 axis_names.Add(axis.Name);
                 axis.Save(machineInfo);

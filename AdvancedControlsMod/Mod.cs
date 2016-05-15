@@ -1,6 +1,5 @@
 ﻿using System;
 using spaar.ModLoader;
-using UnityEngine;
 using LenchScripter;
 
 using AdvancedControls.UI;
@@ -20,12 +19,8 @@ namespace AdvancedControls
         public override bool CanBeUnloaded { get; } = true;
         public override bool Preload { get; } = false;
 
-        internal static ControllerAxisEdit ControllerAxisEdit;
-        internal static OneKeyAxisEdit OneKeyAxisEdit;
-        internal static TwoKeyAxisEdit TwoKeyAxisEdit;
-        internal static CustomAxisEdit CustomAxisEdit;
-        internal static AxisList AxisList;
-        internal static ControlMapper ControlMapper;
+        internal static ControlMapperWindow ControlMapper;
+        internal static AxisEditorWindow AxisEditor;
 
         public override void OnLoad()
         {
@@ -36,12 +31,8 @@ namespace AdvancedControls
             XmlSaver.OnSave += MachineData.SaveData;
             XmlLoader.OnLoad += MachineData.LoadData;
 
-            ControllerAxisEdit = ADVControls.Instance.gameObject.AddComponent<ControllerAxisEdit>();
-            OneKeyAxisEdit = ADVControls.Instance.gameObject.AddComponent<OneKeyAxisEdit>();
-            TwoKeyAxisEdit = ADVControls.Instance.gameObject.AddComponent<TwoKeyAxisEdit>();
-            CustomAxisEdit = ADVControls.Instance.gameObject.AddComponent<CustomAxisEdit>();
-            AxisList = ADVControls.Instance.gameObject.AddComponent<AxisList>();
-            ControlMapper = ADVControls.Instance.gameObject.AddComponent<ControlMapper>();
+            AxisEditor = ADVControls.Instance.gameObject.AddComponent<AxisEditorWindow>();
+            ControlMapper = ADVControls.Instance.gameObject.AddComponent<ControlMapperWindow>();
         }
 
         public override void OnUnload()
@@ -72,7 +63,7 @@ namespace AdvancedControls
         public void ShowControlMapper()
         {
             var hoveredBlock = Game.AddPiece.HoveredBlock;
-            if (hoveredBlock != null) GetComponent<ControlMapper>().ShowBlockControls(hoveredBlock);
+            if (hoveredBlock != null) GetComponent<ControlMapperWindow>().ShowBlockControls(hoveredBlock);
         }
 
         internal void Update()

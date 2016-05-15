@@ -20,9 +20,9 @@ namespace AdvancedControls.Controls
         public virtual Block Block { get; set; }
         public virtual Guid BlockGUID { get; set; }
 
-        private string min;
-        private string cen;
-        private string max;
+        internal string min;
+        internal string cen;
+        internal string max;
 
         public Control(Guid guid)
         {
@@ -60,83 +60,6 @@ namespace AdvancedControls.Controls
         }
 
         public abstract void Apply(float value);
-
-        public virtual void Draw()
-        {
-
-            GUILayout.Label(Name, Elements.Labels.Title);
-
-            GUILayout.BeginHorizontal();
-
-            if (Axis == null)
-            {
-                if (GUILayout.Button("Select Input Axis", Elements.Buttons.Disabled))
-                {
-                    AdvancedControlsMod.AxisList.SelectAxis(this);
-                }
-            }
-            else
-            {
-                var a = AxisManager.Get(Axis);
-                if (GUILayout.Button(Axis, a != null ? Elements.Buttons.Default : Elements.Buttons.Red))
-                {
-                    AdvancedControlsMod.AxisList.SelectAxis(this);
-                }
-                if (GUILayout.Button("×", Elements.Buttons.Red, GUILayout.Width(30)))
-                {
-                    Enabled = false;
-                    Axis = null;
-                }
-            }
-
-            GUILayout.EndHorizontal();
-
-            if (Enabled)
-            {
-                GUILayout.BeginHorizontal();
-                {
-                    GUILayout.BeginVertical();
-                    GUILayout.Label("Mininum");
-                    float min_parsed = Min;
-                    min = GUILayout.TextField(min);
-                    if (!min.EndsWith(".") && !min.EndsWith("-"))
-                    {
-                        float.TryParse(min, out min_parsed);
-                        Min = min_parsed;
-                        min = (Mathf.Round(Min * 100) / 100).ToString();
-                    }
-                    GUILayout.EndVertical();
-
-                    if (!PositiveOnly)
-                    {
-                        GUILayout.BeginVertical();
-                        GUILayout.Label("Center");
-                        float cen_parsed = Center;
-                        cen = GUILayout.TextField(cen);
-                        if (!cen.EndsWith(".") && !cen.EndsWith("-"))
-                        {
-                            float.TryParse(cen, out cen_parsed);
-                            Center = cen_parsed;
-                            cen = (Mathf.Round(Center * 100) / 100).ToString();
-                        }
-                        GUILayout.EndVertical();
-                    }
-
-                    GUILayout.BeginVertical();
-                    GUILayout.Label("Maximum");
-                    float max_parsed = Max;
-                    max = GUILayout.TextField(max);
-                    if (!max.EndsWith(".") && !max.EndsWith("-"))
-                    {
-                        float.TryParse(max, out max_parsed);
-                        Max = max_parsed;
-                        max = (Mathf.Round(Max * 100) / 100).ToString();
-                    }
-                    GUILayout.EndVertical();
-                }
-                GUILayout.EndHorizontal();
-            }
-        }
 
         public virtual void Load(BlockInfo blockInfo)
         {

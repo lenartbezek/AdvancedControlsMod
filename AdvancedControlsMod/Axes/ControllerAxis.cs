@@ -2,8 +2,9 @@
 
 namespace AdvancedControls.Axes
 {
-    public class ControllerAxis : Axis
+    public class ControllerAxis : InputAxis
     {
+        public override string Name { get; set; } = "new controller axis";
         public float Sensitivity { get; set; }
         public float Curvature { get; set; }
         public float Deadzone { get; set; }
@@ -11,7 +12,7 @@ namespace AdvancedControls.Axes
         public bool Raw { get; set; }
         public string Axis { get; set; } = "Vertical";
 
-        public ControllerAxis(string axis = "Vertical", string name = "new axis", float sensitivity = 1, float curvature = 1, float deadzone = 0, bool invert = false)
+        public ControllerAxis(string axis = "Vertical", string name = "new controller axis", float sensitivity = 1, float curvature = 1, float deadzone = 0, bool invert = false)
         {
             Axis = axis;
             Name = name;
@@ -19,6 +20,8 @@ namespace AdvancedControls.Axes
             Curvature = curvature;
             Deadzone = deadzone;
             Invert = invert;
+            editor = new UI.ConrollerAxisEditor();
+            editor.SetAxis(this);
         }
 
         public struct Param
@@ -78,7 +81,7 @@ namespace AdvancedControls.Axes
             return Mathf.Clamp(value, -1, 1);
         }
 
-        public ControllerAxis Clone()
+        public override InputAxis Clone()
         {
             return new ControllerAxis(Axis, Name, Sensitivity, Curvature, Deadzone, Invert);
         }
