@@ -103,7 +103,7 @@ namespace AdvancedControls.Controls
             {
                 return new List<Control>()
                 {
-                    new SliderControl(GUID){ Slider = "SPEED", PositiveOnly = true }
+                    new SliderControl(GUID){ Slider = "POWER", PositiveOnly = true }
                 };
             }
 

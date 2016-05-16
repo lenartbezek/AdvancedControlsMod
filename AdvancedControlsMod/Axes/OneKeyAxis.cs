@@ -15,6 +15,7 @@ namespace AdvancedControls.Axes
         public OneKeyAxis(string name, KeyCode key = KeyCode.None,
             float sensitivity = 1, float gravity = 1) : base(name)
         {
+            Type = AxisType.OneKey;
             Key = key;
             Sensitivity = sensitivity;
             Gravity = gravity;

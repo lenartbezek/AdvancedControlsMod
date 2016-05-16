@@ -22,6 +22,7 @@ return axis_value";
 
         public CustomAxis(string name, string init = DefaultInitialisationCode, string update = DefaultUpdateCode) : base(name)
         {
+            Type = AxisType.Custom;
             InitialisationCode = init;
             UpdateCode = update;
             editor = new UI.CustomAxisEditor(this);

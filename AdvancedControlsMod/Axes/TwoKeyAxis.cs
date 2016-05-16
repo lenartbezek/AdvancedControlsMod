@@ -19,6 +19,7 @@ namespace AdvancedControls.Axes
         public TwoKeyAxis(string name, KeyCode positiveKey = KeyCode.None, KeyCode negativeKey = KeyCode.None,
             float sensitivity = 1, float gravity = 1, bool snap = false, bool invert = false) : base(name)
         {
+            Type = AxisType.TwoKey;
             PositiveKey = positiveKey;
             NegativeKey = negativeKey;
             Sensitivity = sensitivity;
@@ -32,8 +33,8 @@ namespace AdvancedControls.Axes
         {
             get
             {
-                float p = UnityEngine.Input.GetKey(PositiveKey) ? 1 : 0;
-                float n = UnityEngine.Input.GetKey(NegativeKey) ? -1 : 0;
+                float p = Input.GetKey(PositiveKey) ? 1 : 0;
+                float n = Input.GetKey(NegativeKey) ? -1 : 0;
                 return (p + n) * (Invert ? -1 : 1);
             }
         }

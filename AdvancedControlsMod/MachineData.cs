@@ -77,13 +77,12 @@ namespace AdvancedControls
                 }
             }
 
-            machineInfo.MachineData.Write("ac-version", "v1.0.0");
-
             if (axes.Count == 0) return;
             foreach (string axis in axes)
             {
                 AxisManager.Get(axis).Save(machineInfo);
             }
+            machineInfo.MachineData.Write("ac-version", "v1.0.0");
             machineInfo.MachineData.Write("ac-axislist", axes.ToArray());
         }
     }

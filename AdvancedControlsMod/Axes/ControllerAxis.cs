@@ -14,6 +14,7 @@ namespace AdvancedControls.Axes
 
         public ControllerAxis(string name, string axis = "Vertical", float sensitivity = 1, float curvature = 1, float deadzone = 0, bool invert = false, bool raw = false) : base(name)
         {
+            Type = AxisType.Controller;
             Axis = axis;
             Sensitivity = sensitivity;
             Curvature = curvature;
