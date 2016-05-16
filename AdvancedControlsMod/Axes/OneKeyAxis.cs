@@ -52,17 +52,17 @@ namespace AdvancedControls.Axes
 
         public override void Load(MachineInfo machineInfo)
         {
-            Sensitivity = machineInfo.MachineData.ReadFloat("AC-Axis-" + Name + "-Sensitivity");
-            Gravity = machineInfo.MachineData.ReadFloat("AC-Axis-" + Name + "-Gravity");
-            Key = (KeyCode)System.Enum.Parse(typeof(KeyCode), machineInfo.MachineData.ReadString("AC-Axis-" + Name + "-Key"));
+            Sensitivity = machineInfo.MachineData.ReadFloat("ac-axis-" + Name + "-sensitivity");
+            Gravity = machineInfo.MachineData.ReadFloat("ac-axis-" + Name + "-gravity");
+            Key = (KeyCode)System.Enum.Parse(typeof(KeyCode), machineInfo.MachineData.ReadString("ac-axis-" + Name + "-key"));
         }
 
         public override void Save(MachineInfo machineInfo)
         {
-            machineInfo.MachineData.Write("AC-Axis-" + Name + "-Type", "OneKey");
-            machineInfo.MachineData.Write("AC-Axis-" + Name + "-Sensitivity", Sensitivity);
-            machineInfo.MachineData.Write("AC-Axis-" + Name + "-Gravity", Gravity);
-            machineInfo.MachineData.Write("AC-Axis-" + Name + "-Key", Key.ToString());
+            machineInfo.MachineData.Write("ac-axis-" + Name + "-type", "onekey");
+            machineInfo.MachineData.Write("ac-axis-" + Name + "-sensitivity", Sensitivity);
+            machineInfo.MachineData.Write("ac-axis-" + Name + "-gravity", Gravity);
+            machineInfo.MachineData.Write("ac-axis-" + Name + "-key", Key.ToString());
         }
     }
 }

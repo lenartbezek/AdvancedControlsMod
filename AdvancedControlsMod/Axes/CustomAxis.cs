@@ -74,15 +74,15 @@ return axis_value";
 
         public override void Load(MachineInfo machineInfo)
         {
-            InitialisationCode = @machineInfo.MachineData.ReadString("AC-Axis-" + Name + "-InitialisationCode");
-            UpdateCode = @machineInfo.MachineData.ReadString("AC-Axis-" + Name + "-UpdateCode");
+            InitialisationCode = @machineInfo.MachineData.ReadString("ac-axis-" + Name + "-init");
+            UpdateCode = @machineInfo.MachineData.ReadString("ac-axis-" + Name + "-update");
         }
 
         public override void Save(MachineInfo machineInfo)
         {
-            machineInfo.MachineData.Write("AC-Axis-" + Name + "-Type", "Custom");
-            machineInfo.MachineData.Write("AC-Axis-" + Name + "-InitialisationCode", InitialisationCode);
-            machineInfo.MachineData.Write("AC-Axis-" + Name + "-UpdateCode", UpdateCode);
+            machineInfo.MachineData.Write("ac-axis-" + Name + "-type", "custom");
+            machineInfo.MachineData.Write("ac-axis-" + Name + "-init", InitialisationCode);
+            machineInfo.MachineData.Write("ac-axis-" + Name + "-update", UpdateCode);
         }
     }
 }

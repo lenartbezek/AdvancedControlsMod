@@ -13,21 +13,21 @@ namespace AdvancedControls
         {
             try
             {
-                if (!machineInfo.MachineData.HasKey("AdvancedControls-Version")) return;
-                var version = machineInfo.MachineData.ReadString("AdvancedControls-Version");
+                if (!machineInfo.MachineData.HasKey("ac-version")) return;
+                var version = machineInfo.MachineData.ReadString("ac-version");
 
-                var axis_names = machineInfo.MachineData.ReadStringArray("AC-AxisList");
+                var axis_names = machineInfo.MachineData.ReadStringArray("ac-axislist");
                 foreach (string name in axis_names)
                 {
                     InputAxis axis = null;
-                    var type = machineInfo.MachineData.ReadString("AC-Axis-" + name + "-Type");
-                    if (type == "Controller")
+                    var type = machineInfo.MachineData.ReadString("ac-axis-" + name + "-type");
+                    if (type == "controller")
                         axis = new ControllerAxis(name);
-                    if (type == "Custom")
+                    if (type == "custom")
                         axis = new CustomAxis(name);
-                    if (type == "OneKey")
+                    if (type == "onekey")
                         axis = new OneKeyAxis(name);
-                    if (type == "TwoKey")
+                    if (type == "twokey")
                         axis = new TwoKeyAxis(name);
                     if (axis == null) continue;
                     axis.Load(machineInfo);
@@ -36,9 +36,9 @@ namespace AdvancedControls
 
                 foreach (BlockInfo blockInfo in machineInfo.Blocks)
                 {
-                    if (!blockInfo.BlockData.HasKey("AC-ControlList")) continue;
+                    if (!blockInfo.BlockData.HasKey("ac-controllist")) continue;
                     var control_list = ControlManager.GetBlockControls(blockInfo.ID, blockInfo.Guid);
-                    var control_names = blockInfo.BlockData.ReadStringArray("AC-ControlList");
+                    var control_names = blockInfo.BlockData.ReadStringArray("ac-controllist");
                     foreach (string name in control_names)
                     {
                         foreach (Control c in control_list)
@@ -58,7 +58,7 @@ namespace AdvancedControls
 
         public static void SaveData(MachineInfo machineInfo)
         {
-            var all_controls = new List<Control>();
+            var axes = new List<string>();
 
             foreach (BlockInfo blockInfo in machineInfo.Blocks)
             {
@@ -69,27 +69,22 @@ namespace AdvancedControls
                     var control_names = new List<string>();
                     foreach (Control c in controls)
                     {
-                        Debug.Log("Saving control: " + c.Name);
-                        all_controls.Add(c);
+                        axes.Add(c.Axis);
                         control_names.Add(c.Name);
                         c.Save(blockInfo);
                     }
-                    blockInfo.BlockData.Write("AC-ControlList", control_names.ToArray());
+                    blockInfo.BlockData.Write("ac-controllist", control_names.ToArray());
                 }
             }
 
-            machineInfo.MachineData.Write("AdvancedControls-Version", "v1.0.0");
+            machineInfo.MachineData.Write("ac-version", "v1.0.0");
 
-            var axes = AxisManager.GetActiveAxes(all_controls);
             if (axes.Count == 0) return;
-            var axis_names = new List<string>();
-            foreach (InputAxis axis in axes)
+            foreach (string axis in axes)
             {
-                Debug.Log("Saving axis: " + axis.Name);
-                axis_names.Add(axis.Name);
-                axis.Save(machineInfo);
+                AxisManager.Get(axis).Save(machineInfo);
             }
-            machineInfo.MachineData.Write("AC-AxisList", axis_names.ToArray());
+            machineInfo.MachineData.Write("ac-axislist", axes.ToArray());
         }
     }
 }

@@ -1,8 +1,8 @@
 ﻿using System;
 using spaar.ModLoader;
 using LenchScripter;
-
 using AdvancedControls.UI;
+using UnityEngine;
 
 namespace AdvancedControls
 {
@@ -27,7 +27,6 @@ namespace AdvancedControls
             UnityEngine.Object.DontDestroyOnLoad(ADVControls.Instance);
             BlockHandlers.OnInitialisation += ADVControls.Instance.Initialise;
             Game.OnSimulationToggle += ADVControls.Instance.OnSimulationToggle;
-            Game.OnKeymapperOpen += ADVControls.Instance.ShowControlMapper;
             XmlSaver.OnSave += MachineData.SaveData;
             XmlLoader.OnLoad += MachineData.LoadData;
 
@@ -39,7 +38,6 @@ namespace AdvancedControls
         {
             BlockHandlers.OnInitialisation -= ADVControls.Instance.Initialise;
             Game.OnSimulationToggle -= ADVControls.Instance.OnSimulationToggle;
-            Game.OnKeymapperOpen -= ADVControls.Instance.ShowControlMapper;
             XmlSaver.OnSave -= MachineData.SaveData;
             XmlLoader.OnLoad -= MachineData.LoadData;
 
@@ -60,14 +58,20 @@ namespace AdvancedControls
         public delegate void InitialiseEventHandler();
         public event InitialiseEventHandler OnInitialisation;
 
-        public void ShowControlMapper()
-        {
-            var hoveredBlock = Game.AddPiece.HoveredBlock;
-            if (hoveredBlock != null) GetComponent<ControlMapperWindow>().ShowBlockControls(hoveredBlock);
-        }
-
         internal void Update()
         {
+            var blockMapper = FindObjectOfType<BlockMapper>();
+            if (blockMapper != null)
+            {
+                var hoveredBlock = blockMapper.Block.GetComponent<GenericBlock>();
+                if (hoveredBlock != null)
+                    AdvancedControlsMod.ControlMapper.ShowBlockControls(hoveredBlock);
+            }
+            else
+            {
+                AdvancedControlsMod.ControlMapper.Hide();
+            }
+
             OnUpdate?.Invoke();
         }
 

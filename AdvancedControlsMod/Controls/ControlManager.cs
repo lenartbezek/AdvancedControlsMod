@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using UnityEngine;
 using AdvancedControls.Axes;
 
 namespace AdvancedControls.Controls
@@ -28,7 +27,8 @@ namespace AdvancedControls.Controls
         {
             if (BlockID == (int)BlockType.Wheel ||
                 BlockID == (int)BlockType.LargeWheel ||
-                BlockID == (int)BlockType.CogMediumPowered)
+                BlockID == (int)BlockType.CogMediumPowered || 
+                BlockID == (int)BlockType.Drill)
             {
                 return new List<Control>()
                 {
@@ -84,14 +84,6 @@ namespace AdvancedControls.Controls
             }
 
             if (BlockID == (int)BlockType.CircularSaw)
-            {
-                return new List<Control>()
-                {
-                    new SliderControl(GUID){ Slider = "SPEED" }
-                };
-            }
-
-            if (BlockID == (int)BlockType.Drill)
             {
                 return new List<Control>()
                 {

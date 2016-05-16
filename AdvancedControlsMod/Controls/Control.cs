@@ -2,9 +2,7 @@
 using UnityEngine;
 using LenchScripter;
 using LenchScripter.Blocks;
-using AdvancedControls.UI;
 using AdvancedControls.Axes;
-using spaar.ModLoader.UI;
 
 namespace AdvancedControls.Controls
 {
@@ -63,21 +61,21 @@ namespace AdvancedControls.Controls
 
         public virtual void Load(BlockInfo blockInfo)
         {
-            Axis = blockInfo.BlockData.ReadString("AC-Control-" + Name + "-Axis");
-            Min = blockInfo.BlockData.ReadFloat("AC-Control-" + Name + "-Min");
+            Axis = blockInfo.BlockData.ReadString("ac-control" + Name + "-axis");
+            Min = blockInfo.BlockData.ReadFloat("ac-control" + Name + "-min");
             if (!PositiveOnly)
-                Center = blockInfo.BlockData.ReadFloat("AC-Control-" + Name + "-Center");
-            Max = blockInfo.BlockData.ReadFloat("AC-Control-" + Name + "-Max");
+                Center = blockInfo.BlockData.ReadFloat("ac-control-" + Name + "-center");
+            Max = blockInfo.BlockData.ReadFloat("ac-control-" + Name + "-max");
             Enabled = true;
         }
 
         public virtual void Save(BlockInfo blockInfo)
         {
-            blockInfo.BlockData.Write("AC-Control-" + Name + "-Axis", Axis);
-            blockInfo.BlockData.Write("AC-Control-" + Name + "-Min", Min);
+            blockInfo.BlockData.Write("ac-control-" + Name + "-axis", Axis);
+            blockInfo.BlockData.Write("ac-control-" + Name + "-min", Min);
             if (!PositiveOnly)
-                blockInfo.BlockData.Write("AC-Control-" + Name + "-Center", Center);
-            blockInfo.BlockData.Write("AC-Control-" + Name + "-Max", Max);
+                blockInfo.BlockData.Write("ac-control-" + Name + "-center", Center);
+            blockInfo.BlockData.Write("ac-control-" + Name + "-max", Max);
         }
     }
 }

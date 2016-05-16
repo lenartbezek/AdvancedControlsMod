@@ -73,23 +73,23 @@ namespace AdvancedControls.Axes
 
         public override void Load(MachineInfo machineInfo)
         {
-            Sensitivity = machineInfo.MachineData.ReadFloat("AC-Axis-" + Name + "-Sensitivity");
-            Gravity = machineInfo.MachineData.ReadFloat("AC-Axis-" + Name + "-Gravity");
-            Snap = machineInfo.MachineData.ReadBool("AC-Axis-" + Name + "-Snap");
-            Invert = machineInfo.MachineData.ReadBool("AC-Axis-" + Name + "-Invert");
-            PositiveKey = (KeyCode)System.Enum.Parse(typeof(KeyCode), machineInfo.MachineData.ReadString("AC-Axis-" + Name + "-PositiveKey"));
-            NegativeKey = (KeyCode)System.Enum.Parse(typeof(KeyCode), machineInfo.MachineData.ReadString("AC-Axis-" + Name + "-NegativeKey"));
+            Sensitivity = machineInfo.MachineData.ReadFloat("ac-axis-" + Name + "-sensitivity");
+            Gravity = machineInfo.MachineData.ReadFloat("ac-axis-" + Name + "-gravity");
+            Snap = machineInfo.MachineData.ReadBool("ac-axis-" + Name + "-snap");
+            Invert = machineInfo.MachineData.ReadBool("ac-axis-" + Name + "-invert");
+            PositiveKey = (KeyCode)System.Enum.Parse(typeof(KeyCode), machineInfo.MachineData.ReadString("ac-axis-" + Name + "-positivekey"));
+            NegativeKey = (KeyCode)System.Enum.Parse(typeof(KeyCode), machineInfo.MachineData.ReadString("ac-axis-" + Name + "-negativekey"));
         }
 
         public override void Save(MachineInfo machineInfo)
         {
-            machineInfo.MachineData.Write("AC-Axis-" + Name + "-Type", "TwoKey");
-            machineInfo.MachineData.Write("AC-Axis-" + Name + "-Sensitivity", Sensitivity);
-            machineInfo.MachineData.Write("AC-Axis-" + Name + "-Gravity", Gravity);
-            machineInfo.MachineData.Write("AC-Axis-" + Name + "-Snap", Snap);
-            machineInfo.MachineData.Write("AC-Axis-" + Name + "-Invert", Invert);
-            machineInfo.MachineData.Write("AC-Axis-" + Name + "-PositiveKey", PositiveKey.ToString());
-            machineInfo.MachineData.Write("AC-Axis-" + Name + "-NegativeKey", NegativeKey.ToString());
+            machineInfo.MachineData.Write("ac-axis-" + Name + "-type", "twokey");
+            machineInfo.MachineData.Write("ac-axis-" + Name + "-sensitivity", Sensitivity);
+            machineInfo.MachineData.Write("ac-axis-" + Name + "-gravity", Gravity);
+            machineInfo.MachineData.Write("ac-axis-" + Name + "-snap", Snap);
+            machineInfo.MachineData.Write("ac-axis-" + Name + "-invert", Invert);
+            machineInfo.MachineData.Write("ac-axis-" + Name + "-positivekey", PositiveKey.ToString());
+            machineInfo.MachineData.Write("ac-axis-" + Name + "-negativekey", NegativeKey.ToString());
         }
     }
 }

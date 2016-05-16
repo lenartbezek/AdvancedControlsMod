@@ -24,7 +24,6 @@ namespace AdvancedControls.UI
 
         private GenericBlock block;
         private List<Control> controls;
-        private Dictionary<string, Rect> control_buttons; 
 
         internal Control selectedControl;
 
@@ -33,7 +32,13 @@ namespace AdvancedControls.UI
             Visible = true;
             block = b;
             controls = ControlManager.GetBlockControls(block.GetBlockID(), block.Guid);
-            control_buttons = new Dictionary<string, Rect>();
+        }
+
+        public void Hide()
+        {
+            Visible = false;
+            block = null;
+            selectedControl = null;
         }
 
         /// <summary>
@@ -68,11 +73,6 @@ namespace AdvancedControls.UI
 
             if (controls.Count == 0)
                 GUILayout.Label("This block has no available controls.");
-
-            // Draw close button
-            if (GUI.Button(new Rect(windowRect.width - 28, 8, 20, 20),
-                "×", Elements.Buttons.Red))
-                Visible = false;
 
             // Drag window
             GUI.DragWindow(new Rect(0, 0, windowRect.width, GUI.skin.window.padding.top));

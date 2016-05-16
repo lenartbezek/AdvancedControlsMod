@@ -87,23 +87,23 @@ namespace AdvancedControls.Axes
 
         public override void Load(MachineInfo machineInfo)
         {
-            Sensitivity = machineInfo.MachineData.ReadFloat("AC-Axis-" + Name + "-Sensitivity");
-            Curvature = machineInfo.MachineData.ReadFloat("AC-Axis-" + Name + "-Curvature");
-            Deadzone = machineInfo.MachineData.ReadFloat("AC-Axis-" + Name + "-Deadzone");
-            Invert = machineInfo.MachineData.ReadBool("AC-Axis-" + Name + "-Invert");
-            Raw = machineInfo.MachineData.ReadBool("AC-Axis-" + Name + "-Raw");
-            Axis = machineInfo.MachineData.ReadString("AC-Axis-" + Name + "-Axis");
+            Sensitivity = machineInfo.MachineData.ReadFloat("ac-axis-" + Name + "-sensitivity");
+            Curvature = machineInfo.MachineData.ReadFloat("ac-axis-" + Name + "-curvature");
+            Deadzone = machineInfo.MachineData.ReadFloat("ac-axis-" + Name + "-deadzone");
+            Invert = machineInfo.MachineData.ReadBool("ac-axis-" + Name + "-invert");
+            Raw = machineInfo.MachineData.ReadBool("ac-axis-" + Name + "-raw");
+            Axis = machineInfo.MachineData.ReadString("ac-axis" + Name + "-axis");
         }
 
         public override void Save(MachineInfo machineInfo)
         {
-            machineInfo.MachineData.Write("AC-Axis-" + Name + "-Type", "Controller");
-            machineInfo.MachineData.Write("AC-Axis-" + Name + "-Sensitivity", Sensitivity);
-            machineInfo.MachineData.Write("AC-Axis-" + Name + "-Curvature", Curvature);
-            machineInfo.MachineData.Write("AC-Axis-" + Name + "-Deadzone", Deadzone);
-            machineInfo.MachineData.Write("AC-Axis-" + Name + "-Invert", Invert);
-            machineInfo.MachineData.Write("AC-Axis-" + Name + "-Raw", Raw);
-            machineInfo.MachineData.Write("AC-Axis-" + Name + "-Axis", Axis);
+            machineInfo.MachineData.Write("ac-axis-" + Name + "-type", "controller");
+            machineInfo.MachineData.Write("ac-axis-" + Name + "-sensitivity", Sensitivity);
+            machineInfo.MachineData.Write("ac-axis-" + Name + "-curvature", Curvature);
+            machineInfo.MachineData.Write("ac-axis-" + Name + "-deadzone", Deadzone);
+            machineInfo.MachineData.Write("ac-axis-" + Name + "-invert", Invert);
+            machineInfo.MachineData.Write("ac-axis-" + Name + "-raw", Raw);
+            machineInfo.MachineData.Write("ac-axis-" + Name + "-axis", Axis);
         }
 
         public override void Initialise() { }
