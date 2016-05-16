@@ -22,22 +22,22 @@ namespace AdvancedControls.UI
         private float DesiredWidth { get; } = 320;
         private float DesiredHeight { get; } = 50;
 
-        private GenericBlock block;
-        private List<Control> controls;
+        internal GenericBlock Block;
+        internal List<Control> controls;
 
         internal Control selectedControl;
 
         public void ShowBlockControls(GenericBlock b)
         { 
             Visible = true;
-            block = b;
-            controls = ControlManager.GetBlockControls(block.GetBlockID(), block.Guid);
+            Block = b;
+            controls = ControlManager.GetBlockControls(Block.GetBlockID(), Block.Guid);
         }
 
         public void Hide()
         {
             Visible = false;
-            block = null;
+            Block = null;
             selectedControl = null;
         }
 
@@ -46,10 +46,10 @@ namespace AdvancedControls.UI
         /// </summary>
         private void OnGUI()
         {
-            if (Visible && block != null)
+            if (Visible && Block != null)
             {
                 GUI.skin = Util.Skin;
-                windowRect = GUILayout.Window(windowID, windowRect, DoWindow, block.MyBlockInfo.blockName.ToUpper(),
+                windowRect = GUILayout.Window(windowID, windowRect, DoWindow, Block.MyBlockInfo.blockName.ToUpper(),
                     GUILayout.Width(DesiredWidth),
                     GUILayout.Height(DesiredHeight));
                 if (selectedControl != null)

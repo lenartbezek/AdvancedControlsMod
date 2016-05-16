@@ -92,7 +92,7 @@ namespace AdvancedControls.Axes
             Deadzone = machineInfo.MachineData.ReadFloat("ac-axis-" + Name + "-deadzone");
             Invert = machineInfo.MachineData.ReadBool("ac-axis-" + Name + "-invert");
             Raw = machineInfo.MachineData.ReadBool("ac-axis-" + Name + "-raw");
-            Axis = machineInfo.MachineData.ReadString("ac-axis" + Name + "-axis");
+            Axis = machineInfo.MachineData.ReadString("ac-axis-" + Name + "-axis");
         }
 
         public override void Save(MachineInfo machineInfo)

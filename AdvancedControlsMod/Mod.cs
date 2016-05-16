@@ -58,18 +58,22 @@ namespace AdvancedControls
         public delegate void InitialiseEventHandler();
         public event InitialiseEventHandler OnInitialisation;
 
+        private BlockMapper blockMapper;
+
         internal void Update()
         {
-            var blockMapper = FindObjectOfType<BlockMapper>();
+            if (blockMapper == null)
+                blockMapper = FindObjectOfType<BlockMapper>();
             if (blockMapper != null)
             {
                 var hoveredBlock = blockMapper.Block.GetComponent<GenericBlock>();
-                if (hoveredBlock != null)
+                if (hoveredBlock != null && hoveredBlock != AdvancedControlsMod.ControlMapper.Block)
                     AdvancedControlsMod.ControlMapper.ShowBlockControls(hoveredBlock);
             }
             else
             {
-                AdvancedControlsMod.ControlMapper.Hide();
+                if (AdvancedControlsMod.ControlMapper.Visible)
+                    AdvancedControlsMod.ControlMapper.Hide();
             }
 
             OnUpdate?.Invoke();

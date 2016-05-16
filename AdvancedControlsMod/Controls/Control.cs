@@ -61,8 +61,8 @@ namespace AdvancedControls.Controls
 
         public virtual void Load(BlockInfo blockInfo)
         {
-            Axis = blockInfo.BlockData.ReadString("ac-control" + Name + "-axis");
-            Min = blockInfo.BlockData.ReadFloat("ac-control" + Name + "-min");
+            Axis = blockInfo.BlockData.ReadString("ac-control-" + Name + "-axis");
+            Min = blockInfo.BlockData.ReadFloat("ac-control-" + Name + "-min");
             if (!PositiveOnly)
                 Center = blockInfo.BlockData.ReadFloat("ac-control-" + Name + "-center");
             Max = blockInfo.BlockData.ReadFloat("ac-control-" + Name + "-max");
