@@ -30,5 +30,5 @@ Interfacing with blocks is done through LenchScripterMod API. This means you wil
 If you do not want it executing scripts, you can simply toggle Lua off in the settings menu.
 Latest version of the scripting mod is included with the release.
 
-How to use
+## How to use
 Simply use the key mapper tool and click on a block. Advanced controls window will appear beside it.
