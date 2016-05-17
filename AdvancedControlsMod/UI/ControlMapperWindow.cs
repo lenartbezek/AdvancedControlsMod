@@ -31,7 +31,7 @@ namespace AdvancedControls.UI
         { 
             Visible = true;
             Block = b;
-            controls = ControlManager.GetBlockControls(Block.GetBlockID(), Block.Guid);
+            controls = ControlManager.GetBlockControls(Block);
         }
 
         public void Hide()

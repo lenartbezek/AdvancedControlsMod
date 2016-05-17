@@ -16,6 +16,19 @@ namespace AdvancedControls.Controls
             return controls;
         }
 
+        public static List<Control> GetBlockControls(GenericBlock block)
+        {
+            if (Blocks.ContainsKey(block.Guid)) return Blocks[block.Guid];
+            var controls = CreateBlockControls(block.BlockID, block.Guid);
+            if (controls.Count == 0)
+                foreach (MSlider slider in block.Sliders)
+                {
+                    controls.Add(new SliderControl(block.Guid) { Slider = slider.DisplayName.ToUpper() });
+                }
+            Blocks.Add(block.Guid, controls);
+            return controls;
+        }
+
         public static Control GetBlockControl(int BlockID, Guid GUID, string name)
         {
             foreach (Control c in GetBlockControls(BlockID, GUID))
