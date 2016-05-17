@@ -33,9 +33,7 @@ namespace AdvancedControls.Controls
 
         public override void Apply(float value)
         {
-            if (PositiveOnly)
-                value = Mathf.Lerp(Min, Max, value);
-            else if (value > 0)
+            if (value > 0)
                 value = Mathf.Lerp(Center, Max, value);
             else
                 value = Mathf.Lerp(Center, Min, -value);

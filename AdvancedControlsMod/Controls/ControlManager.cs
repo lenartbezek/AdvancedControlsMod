@@ -84,7 +84,7 @@ namespace AdvancedControls.Controls
             {
                 return new List<Control>()
                 {
-                    new SliderControl(GUID){ Slider = "SPRING", PositiveOnly = true }
+                    new SliderControl(GUID){ Slider = "SPRING"}
                 };
             }
 
