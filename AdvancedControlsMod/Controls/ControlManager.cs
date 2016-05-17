@@ -76,7 +76,7 @@ namespace AdvancedControls.Controls
                 return new List<Control>()
                 {
                     new InputControl(GUID){ PositiveOnly = BlockID == (int)BlockType.Spring },
-                    new SliderControl(GUID){ Slider = BlockID == (int)BlockType.Spring ? "STRENGHT" : "SPEED" }
+                    new SliderControl(GUID){ Slider = BlockID == (int)BlockType.Spring ? "STRENGTH" : "SPEED" }
                 };
             }
 

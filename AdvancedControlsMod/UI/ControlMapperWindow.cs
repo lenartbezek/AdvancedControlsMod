@@ -174,7 +174,7 @@ namespace AdvancedControls.UI
                     GUILayout.Label("Mininum");
                     float min_parsed = c.Min;
                     c.min_string = GUILayout.TextField(c.min_string);
-                    if (!c.min_string.EndsWith(".") && !c.min_string.EndsWith("-"))
+                    if (!c.min_string.EndsWith(".") && !c.cen_string.EndsWith(".0") && !c.min_string.EndsWith("-"))
                     {
                         float.TryParse(c.min_string, out min_parsed);
                         c.Min = min_parsed;
@@ -186,7 +186,7 @@ namespace AdvancedControls.UI
                     GUILayout.Label("Center");
                     float cen_parsed = c.Center;
                     c.cen_string = GUILayout.TextField(c.cen_string);
-                    if (!c.cen_string.EndsWith(".") && !c.cen_string.EndsWith("-"))
+                    if (!c.cen_string.EndsWith(".") && !c.cen_string.EndsWith(".0") && !c.cen_string.EndsWith("-"))
                     {
                         float.TryParse(c.cen_string, out cen_parsed);
                         c.Center = cen_parsed;
@@ -198,7 +198,7 @@ namespace AdvancedControls.UI
                     GUILayout.Label("Maximum");
                     float max_parsed = c.Max;
                     c.max_string = GUILayout.TextField(c.max_string);
-                    if (!c.max_string.EndsWith(".") && !c.max_string.EndsWith("-"))
+                    if (!c.max_string.EndsWith(".") && !c.cen_string.EndsWith(".0") && !c.max_string.EndsWith("-"))
                     {
                         float.TryParse(c.max_string, out max_parsed);
                         c.Max = max_parsed;
