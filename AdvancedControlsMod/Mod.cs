@@ -62,7 +62,10 @@ namespace AdvancedControls
         internal void Update()
         {
             if (blockMapper == null)
+            {
                 blockMapper = FindObjectOfType<BlockMapper>();
+            }
+
             if (blockMapper != null)
             {
                 var hoveredBlock = blockMapper.Block.GetComponent<GenericBlock>();

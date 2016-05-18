@@ -28,10 +28,13 @@ namespace AdvancedControls.UI
         internal Control selectedControl;
 
         public void ShowBlockControls(GenericBlock b)
-        { 
-            Visible = true;
+        {
             Block = b;
             controls = ControlManager.GetBlockControls(Block);
+            if (controls.Count > 0)
+                Visible = true;
+            else if (Visible)
+                Hide();
         }
 
         public void Hide()

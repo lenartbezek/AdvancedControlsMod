@@ -20,11 +20,6 @@ namespace AdvancedControls.Controls
         {
             if (Blocks.ContainsKey(block.Guid)) return Blocks[block.Guid];
             var controls = CreateBlockControls(block.BlockID, block.Guid);
-            if (controls.Count == 0)
-                foreach (MSlider slider in block.Sliders)
-                {
-                    controls.Add(new SliderControl(block.Guid) { Slider = slider.DisplayName.ToUpper() });
-                }
             Blocks.Add(block.Guid, controls);
             return controls;
         }
@@ -103,7 +98,7 @@ namespace AdvancedControls.Controls
                     new SliderControl(GUID){ Slider = "SPEED" }
                 };
             }
-
+            
             if (BlockID == (int)BlockType.Flamethrower)
             {
                 return new List<Control>()
