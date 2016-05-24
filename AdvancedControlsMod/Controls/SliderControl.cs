@@ -29,7 +29,7 @@ namespace AdvancedControls.Controls
                 value = Mathf.Lerp(Center, Max, value);
             else
                 value = Mathf.Lerp(Center, Min, -value);
-            Block?.setSliderValue(Slider, value);
+            Block?.SetSliderValue(Slider, value);
         }
     }
 }

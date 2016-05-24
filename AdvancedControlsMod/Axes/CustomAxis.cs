@@ -11,38 +11,45 @@ namespace AdvancedControls.Axes
         private const string DefaultUpdateCode =
 @"time = time + Time.deltaTime
 axis_value = Mathf.Sin(time)
-return axis_value";
+axis_value";
 
         public override string Name { get; set; } = "new custom axis";
         private bool initialised = false;
 
         public string InitialisationCode { get; set; }
         public string UpdateCode { get; set; }
-        public Exception Exception { get; set; } = null;
+        public bool GlobalScope { get; set; }
 
-        public CustomAxis(string name, string init = DefaultInitialisationCode, string update = DefaultUpdateCode) : base(name)
+        public string Error { get; set; }
+
+        private PythonEnvironment python;
+        private Func<object> update;
+        private Func<object> init;
+
+        public CustomAxis(string name, string init = DefaultInitialisationCode, string update = DefaultUpdateCode, bool global = false) : base(name)
         {
             Type = AxisType.Custom;
             InitialisationCode = init;
             UpdateCode = update;
+            GlobalScope = global;
             editor = new UI.CustomAxisEditor(this);
         }
 
         public override void Update()
         {
-            if (Lua.IsActive && initialised && Exception == null)
+            if (!PythonEnvironment.Loaded || Error != null || !ADVControls.Instance.IsSimulating) return;
+            if (initialised)
             {
                 try
                 {
-                    var result = Lua.Evaluate(UpdateCode)[0] as double?;
-                    OutputValue = Mathf.Clamp((float)result, -1, 1);
+                    OutputValue = Mathf.Clamp((float)update.Invoke(), -1, 1);
                 }
                 catch (Exception e)
                 {
-                    Exception = e;
+                    Error = PythonEnvironment.FormatException(e.InnerException);
                 }
             }
-            else if (Lua.IsActive && Exception == null)
+            else
             {
                 Initialise();
             }
@@ -51,32 +58,41 @@ return axis_value";
         public override void Initialise()
         {
             initialised = false;
-            if (Lua.IsActive)
+            if (!PythonEnvironment.Loaded || !ADVControls.Instance.IsSimulating) return;
+            Error = null;
+            if (GlobalScope && PythonEnvironment.Enabled)
+                python = PythonEnvironment.ScripterEnvironment;
+            else
+                python = new PythonEnvironment();
+            if (python == null) return;
+            try
             {
-                Exception = null;
-                try
-                {
-                    Lua.Evaluate(InitialisationCode);
-                    initialised = true;
-                }
-                catch (Exception e)
-                {
-                    Exception = e;
-                    initialised = false;
-                }
+                init = python.Compile(InitialisationCode);
+                update = python.Compile(UpdateCode);
 
+                init.Invoke();
             }
+            catch (Exception e)
+            {
+                Error = PythonEnvironment.FormatException(e.InnerException);
+                return;
+            }
+            initialised = true;
         }
 
         public override InputAxis Clone()
         {
-            return new CustomAxis(Name, InitialisationCode, UpdateCode);
+            return new CustomAxis(Name, InitialisationCode, UpdateCode, GlobalScope);
         }
 
         public override void Load(MachineInfo machineInfo)
         {
-            InitialisationCode = @machineInfo.MachineData.ReadString("ac-axis-" + Name + "-init");
-            UpdateCode = @machineInfo.MachineData.ReadString("ac-axis-" + Name + "-update");
+            if (machineInfo.MachineData.HasKey("ac-axis-" + Name + "-init"))
+                InitialisationCode = machineInfo.MachineData.ReadString("ac-axis-" + Name + "-init");
+            if (machineInfo.MachineData.HasKey("ac-axis-" + Name + "-update"))
+                UpdateCode = machineInfo.MachineData.ReadString("ac-axis-" + Name + "-update");
+            if (machineInfo.MachineData.HasKey("ac-axis-" + Name + "-global"))
+                GlobalScope = machineInfo.MachineData.ReadBool("ac-axis-" + Name + "-global");
         }
 
         public override void Save(MachineInfo machineInfo)
@@ -84,6 +100,7 @@ return axis_value";
             machineInfo.MachineData.Write("ac-axis-" + Name + "-type", "custom");
             machineInfo.MachineData.Write("ac-axis-" + Name + "-init", InitialisationCode);
             machineInfo.MachineData.Write("ac-axis-" + Name + "-update", UpdateCode);
+            machineInfo.MachineData.Write("ac-axis-" + Name + "-global", GlobalScope);
         }
     }
 }
