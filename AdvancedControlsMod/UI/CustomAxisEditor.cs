@@ -21,8 +21,7 @@ namespace AdvancedControls.UI
         {
             if (!PythonEnvironment.Loaded)
             {
-                GUILayout.Label("Python engine not available.\nInstall full LenchScripterMod with Python binaries to enable custom axes.",
-                    Util.LabelStyle);
+                GUILayout.Label("<color=#FFFF00><b>Python engine not available.</b></color>\nInstall full LenchScripterMod with Python binaries to enable custom axes.");
             }
             else
             {

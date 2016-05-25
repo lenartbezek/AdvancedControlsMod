@@ -88,12 +88,18 @@ namespace AdvancedControls.Axes
 
         public override void Load(MachineInfo machineInfo)
         {
-            Sensitivity = machineInfo.MachineData.ReadFloat("ac-axis-" + Name + "-sensitivity");
-            Curvature = machineInfo.MachineData.ReadFloat("ac-axis-" + Name + "-curvature");
-            Deadzone = machineInfo.MachineData.ReadFloat("ac-axis-" + Name + "-deadzone");
-            Invert = machineInfo.MachineData.ReadBool("ac-axis-" + Name + "-invert");
-            Raw = machineInfo.MachineData.ReadBool("ac-axis-" + Name + "-raw");
-            Axis = machineInfo.MachineData.ReadString("ac-axis-" + Name + "-axis");
+            if(machineInfo.MachineData.HasKey("ac-axis-" + Name + "-sensitivity"))
+                Sensitivity = machineInfo.MachineData.ReadFloat("ac-axis-" + Name + "-sensitivity");
+            if (machineInfo.MachineData.HasKey("ac-axis-" + Name + "-curvature"))
+                Curvature = machineInfo.MachineData.ReadFloat("ac-axis-" + Name + "-curvature");
+            if (machineInfo.MachineData.HasKey("ac-axis-" + Name + "-deadzone"))
+                Deadzone = machineInfo.MachineData.ReadFloat("ac-axis-" + Name + "-deadzone");
+            if (machineInfo.MachineData.HasKey("ac-axis-" + Name + "-invert"))
+                Invert = machineInfo.MachineData.ReadBool("ac-axis-" + Name + "-invert");
+            if (machineInfo.MachineData.HasKey("ac-axis-" + Name + "-raw"))
+                Raw = machineInfo.MachineData.ReadBool("ac-axis-" + Name + "-raw");
+            if (machineInfo.MachineData.HasKey("ac-axis-" + Name + "-axis"))
+                Axis = machineInfo.MachineData.ReadString("ac-axis-" + Name + "-axis");
         }
 
         public override void Save(MachineInfo machineInfo)

@@ -42,7 +42,20 @@ axis_value";
             {
                 try
                 {
-                    OutputValue = Mathf.Clamp((float)update.Invoke(), -1, 1);
+                    var result = update.Invoke();
+                    if (result == null)
+                    {
+                        Error = "Update code does not return a value.";
+                    }
+                    else if (result is float || result is int || result is double)
+                    {
+                        OutputValue = Mathf.Clamp((float)result, -1, 1);
+                    }
+                    else
+                    {
+                        Error = "Update code returns "+result.GetType()+"\ninstead of number.";
+                    }
+                        
                 }
                 catch (Exception e)
                 {

@@ -25,10 +25,10 @@ namespace AdvancedControls
                         axis = new ControllerAxis(name);
                     if (type == "custom")
                         axis = new CustomAxis(name);
-                    if (type == "onekey")
-                        axis = new OneKeyAxis(name);
-                    if (type == "twokey")
-                        axis = new TwoKeyAxis(name);
+                    if (type == "inertial" || type == "twokey" || type == "onekey")
+                        axis = new InertialAxis(name);
+                    if (type == "standard")
+                        axis = new StandardAxis(name);
                     if (axis == null) continue;
                     axis.Load(machineInfo);
                     AxisManager.Put(name, axis);

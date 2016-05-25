@@ -80,16 +80,16 @@ namespace AdvancedControls.UI
                     WindowName = "Create new controller axis";
                     SaveName = Axis.Name;
                 }
-                if (GUILayout.Button("One Key"))
+                if (GUILayout.Button("Inertial"))
                 {
-                    Axis = new OneKeyAxis("new one key axis");
-                    WindowName = "Create new one key axis";
+                    Axis = new InertialAxis("new inertial axis");
+                    WindowName = "Create new inertial key axis";
                     SaveName = Axis.Name;
                 }
-                if (GUILayout.Button("Two Key"))
+                if (GUILayout.Button("Standard"))
                 {
-                    Axis = new TwoKeyAxis("new two key axis");
-                    WindowName = "Create two key axis";
+                    Axis = new StandardAxis("new standard axis");
+                    WindowName = "Create new standard axis";
                     SaveName = Axis.Name;
                 }
                 if (GUILayout.Button("Custom"))

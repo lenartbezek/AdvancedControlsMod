@@ -59,7 +59,7 @@ namespace AdvancedControls.UI
 
             graphRect = GUILayoutUtility.GetLastRect();
 
-            Util.DrawRect(new Rect(graphRect.x + graphRect.width / 2 + graphRect.width / 2 * Axis.InputValue,
+            Util.FillRect(new Rect(graphRect.x + graphRect.width / 2 + graphRect.width / 2 * Axis.InputValue,
                               graphRect.y,
                               1,
                               graphRect.height),

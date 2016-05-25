@@ -99,7 +99,7 @@ namespace AdvancedControls.UI
                     selectedControl = null;
                 }
 
-                if (GUILayout.Button("Edit", Elements.Buttons.Default, GUILayout.Width(60)))
+                if (GUILayout.Button("✎", new GUIStyle(Elements.Buttons.Default) { fontSize = 20, padding = new RectOffset(-3, 0, 0, 0) }, GUILayout.Width(30), GUILayout.MaxHeight(28)))
                 {
                     if (!AdvancedControlsMod.AxisEditor.Visible)
                     {

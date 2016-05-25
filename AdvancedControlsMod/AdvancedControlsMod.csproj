@@ -67,12 +67,12 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Axes\InertialAxis.cs" />
     <Compile Include="Axes\InputAxis.cs" />
     <Compile Include="Axes\AxisManager.cs" />
     <Compile Include="Axes\ControllerAxis.cs" />
     <Compile Include="Axes\CustomAxis.cs" />
-    <Compile Include="Axes\OneKeyAxis.cs" />
-    <Compile Include="Axes\TwoKeyAxis.cs" />
+    <Compile Include="Axes\StandardAxis.cs" />
     <Compile Include="Controls\AngleControl.cs" />
     <Compile Include="Controls\Control.cs" />
     <Compile Include="Controls\ControlManager.cs" />
@@ -86,7 +86,6 @@
     <Compile Include="Mod.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="UI\CustomAxisEditor.cs" />
-    <Compile Include="UI\OneKeyAxisEditor.cs" />
     <Compile Include="UI\TwoKeyAxisEditor.cs" />
     <Compile Include="UI\Util.cs" />
   </ItemGroup>

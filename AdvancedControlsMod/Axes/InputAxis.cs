@@ -4,8 +4,8 @@
     {
         Placeholder = 0,
         Controller = 1,
-        OneKey = 2,
-        TwoKey = 3,
+        Inertial = 2,
+        Standard = 3,
         Custom = 4
     }
 

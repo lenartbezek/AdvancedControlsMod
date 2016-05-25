@@ -9,10 +9,10 @@ namespace AdvancedControls.UI
     {
         public TwoKeyAxisEditor(InputAxis axis)
         {
-            Axis = axis as TwoKeyAxis;
+            Axis = axis as StandardAxis;
         }
 
-        private TwoKeyAxis Axis;
+        private StandardAxis Axis;
 
         public void DrawAxis(Rect windowRect)
         {
@@ -25,7 +25,7 @@ namespace AdvancedControls.UI
 
             GUILayout.Box(GUIContent.none, GUILayout.Height(20));
 
-            Util.DrawRect(new Rect(
+            Util.FillRect(new Rect(
                 graphRect.x + graphRect.width / 2 - 10 + Axis.OutputValue * (graphRect.width - 20) / 2,
                 graphRect.y,
                 20, 20), Color.yellow);

@@ -2,24 +2,18 @@
 
 namespace AdvancedControls.Axes
 {
-    public class TwoKeyAxis : InputAxis
+    public class InertialAxis : StandardAxis
     {
-        public override string Name { get; set; } = "new two key axis";
-        public float Gravity { get; set; }
-        public float Sensitivity { get; set; }
-        public bool Snap { get; set; }
-        public bool Invert { get; set; }
-        public KeyCode PositiveKey { get; set; }
-        public KeyCode NegativeKey { get; set; }
+        public override string Name { get; set; } = "new standard axis";
 
         private float speed = 0;
         private float force = 0;
         private float last = 0;
 
-        public TwoKeyAxis(string name, KeyCode positiveKey = KeyCode.None, KeyCode negativeKey = KeyCode.None,
+        public InertialAxis(string name, KeyCode positiveKey = KeyCode.None, KeyCode negativeKey = KeyCode.None,
             float sensitivity = 1, float gravity = 1, bool snap = false, bool invert = false) : base(name)
         {
-            Type = AxisType.TwoKey;
+            Type = AxisType.Inertial;
             PositiveKey = positiveKey;
             NegativeKey = negativeKey;
             Sensitivity = sensitivity;
@@ -27,16 +21,6 @@ namespace AdvancedControls.Axes
             Snap = snap;
             Invert = invert;
             editor = new UI.TwoKeyAxisEditor(this);
-        }
-
-        public override float InputValue
-        {
-            get
-            {
-                float p = Input.GetKey(PositiveKey) ? 1 : 0;
-                float n = Input.GetKey(NegativeKey) ? -1 : 0;
-                return (p + n) * (Invert ? -1 : 1);
-            }
         }
 
         public override void Initialise()
@@ -69,22 +53,12 @@ namespace AdvancedControls.Axes
 
         public override InputAxis Clone()
         {
-            return new TwoKeyAxis(Name, PositiveKey, NegativeKey, Sensitivity, Gravity, Snap, Invert);
-        }
-
-        public override void Load(MachineInfo machineInfo)
-        {
-            Sensitivity = machineInfo.MachineData.ReadFloat("ac-axis-" + Name + "-sensitivity");
-            Gravity = machineInfo.MachineData.ReadFloat("ac-axis-" + Name + "-gravity");
-            Snap = machineInfo.MachineData.ReadBool("ac-axis-" + Name + "-snap");
-            Invert = machineInfo.MachineData.ReadBool("ac-axis-" + Name + "-invert");
-            PositiveKey = (KeyCode)System.Enum.Parse(typeof(KeyCode), machineInfo.MachineData.ReadString("ac-axis-" + Name + "-positivekey"));
-            NegativeKey = (KeyCode)System.Enum.Parse(typeof(KeyCode), machineInfo.MachineData.ReadString("ac-axis-" + Name + "-negativekey"));
+            return new InertialAxis(Name, PositiveKey, NegativeKey, Sensitivity, Gravity, Snap, Invert);
         }
 
         public override void Save(MachineInfo machineInfo)
         {
-            machineInfo.MachineData.Write("ac-axis-" + Name + "-type", "twokey");
+            machineInfo.MachineData.Write("ac-axis-" + Name + "-type", "inertial");
             machineInfo.MachineData.Write("ac-axis-" + Name + "-sensitivity", Sensitivity);
             machineInfo.MachineData.Write("ac-axis-" + Name + "-gravity", Gravity);
             machineInfo.MachineData.Write("ac-axis-" + Name + "-snap", Snap);
