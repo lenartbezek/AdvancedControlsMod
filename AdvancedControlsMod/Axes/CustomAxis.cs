@@ -49,17 +49,19 @@ axis_value";
                     }
                     else if (result is float || result is int || result is double)
                     {
-                        OutputValue = Mathf.Clamp((float)result, -1, 1);
+                        OutputValue = Mathf.Clamp(Convert.ToSingle(result), -1f, 1f);
                     }
                     else
                     {
                         Error = "Update code returns "+result.GetType()+"\ninstead of number.";
                     }
-                        
                 }
                 catch (Exception e)
                 {
-                    Error = PythonEnvironment.FormatException(e.InnerException);
+                    if (e.InnerException != null)
+                        Error = PythonEnvironment.FormatException(e.InnerException);
+                    else
+                        Error = PythonEnvironment.FormatException(e);
                 }
             }
             else
@@ -87,7 +89,10 @@ axis_value";
             }
             catch (Exception e)
             {
-                Error = PythonEnvironment.FormatException(e.InnerException);
+                if (e.InnerException != null)
+                    Error = PythonEnvironment.FormatException(e.InnerException);
+                else
+                    Error = PythonEnvironment.FormatException(e);
                 return;
             }
             initialised = true;
