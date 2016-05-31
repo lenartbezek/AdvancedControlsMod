@@ -47,9 +47,9 @@ namespace AdvancedControls.UI
         public void EditAxis(InputAxis axis)
         {
             Visible = true;
-            WindowName = "Edit " + SaveName;
+            WindowName = "Edit " + axis.Name;
+            SaveName = axis.Name;
             Axis = axis;
-            SaveName = Axis.Name;
         }
 
         /// <summary>

@@ -44,11 +44,8 @@ namespace AdvancedControls
                         foreach (Control c in control_list)
                         {
                             if (name == c.Name)
-                            {
                                 c.Load(blockInfo);
-                                Debug.Log("loaded " + c.Name);
-                                Debug.Log(c.Min + ", " + c.Center + ", " + c.Max);
-                            }
+
                         }
                     }
                 }
@@ -73,7 +70,7 @@ namespace AdvancedControls
                     var control_names = new List<string>();
                     foreach (Control c in controls)
                     {
-                        axes.Add(c.Axis);
+                        if (!axes.Contains(c.Axis)) axes.Add(c.Axis);
                         control_names.Add(c.Name);
                         c.Save(blockInfo);
                     }

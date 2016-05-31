@@ -38,17 +38,15 @@ namespace AdvancedControls.Axes
             Axes.Remove(name);
         }
 
-        public static List<InputAxis> GetActiveAxes(List<Control> controls)
+        public static Dictionary<string, InputAxis> GetActiveAxes(List<Control> controls)
         {
-            var list = new List<InputAxis>();
+            var dict = new Dictionary<string, InputAxis>();
             foreach (Control c in controls)
             {
                 if (c.Enabled && Get(c.Axis) != null)
-                {
-                    if (!list.Contains(Get(c.Axis))) list.Add(Get(c.Axis));
-                }
+                    dict[c.Axis] = Get(c.Axis);
             }
-            return list;
+            return dict;
         }
     }
 }
