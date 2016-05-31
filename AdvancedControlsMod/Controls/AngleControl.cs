@@ -10,10 +10,12 @@ namespace AdvancedControls.Controls
 
         private Steering steering;
 
-        public AngleControl(Guid guid) : base(guid){}
-
-        public override float Min { get; set; } = -45;
-        public override float Max { get; set; } = 45;
+        public AngleControl(Guid guid) : base(guid)
+        {
+            Min = -45;
+            Center = 0;
+            Max = 45;
+        }
 
         public override Block Block
         {

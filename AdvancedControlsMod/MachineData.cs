@@ -44,7 +44,11 @@ namespace AdvancedControls
                         foreach (Control c in control_list)
                         {
                             if (name == c.Name)
+                            {
                                 c.Load(blockInfo);
+                                Debug.Log("loaded " + c.Name);
+                                Debug.Log(c.Min + ", " + c.Center + ", " + c.Max);
+                            }
                         }
                     }
                 }

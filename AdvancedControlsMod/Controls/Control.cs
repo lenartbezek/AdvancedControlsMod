@@ -8,8 +8,6 @@ namespace AdvancedControls.Controls
 {
     public abstract class Control
     {
-
-
         public virtual string Name { get; set; } = "Control";
         public virtual bool Enabled { get; set; } = false;
         public virtual bool PositiveOnly { get; set; } = false;
@@ -20,19 +18,31 @@ namespace AdvancedControls.Controls
         public virtual float Min
         {
             get { return min; }
-            set { min = PositiveOnly && value < 0 ? 0 : value; }
+            set
+            {
+                min = PositiveOnly && value < 0 ? 0 : value;
+                min_string = (Mathf.Round(min * 100) / 100).ToString();
+            }
         }
 
         public virtual float Center
         {
             get { return cen; }
-            set { cen = PositiveOnly && value < 0 ? 0 : value; }
+            set
+            {
+                cen = PositiveOnly && value < 0 ? 0 : value;
+                cen_string = (Mathf.Round(cen * 100) / 100).ToString();
+            }
         }
 
         public virtual float Max
         {
             get { return max; }
-            set { max = PositiveOnly && value < 0 ? 0 : value; }
+            set
+            {
+                max = PositiveOnly && value < 0 ? 0 : value;
+                max_string = (Mathf.Round(max * 100) / 100).ToString();
+            }
         }
 
         private float min = -1;
