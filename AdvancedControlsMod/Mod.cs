@@ -11,15 +11,16 @@ namespace AdvancedControls
         public override string Name { get; } = "Advanced Controls Mod";
         public override string DisplayName { get; } = "Advanced Controls Mod";
         public override string Author { get; } = "Lench";
-        public override Version Version { get; } = new Version(1, 1, 1);
+        public override Version Version { get; } = new Version(1, 2, 0);
         
-        public override string VersionExtra { get; } = "";
-        public override string BesiegeVersion { get; } = "v0.27";
+        public override string VersionExtra { get; } = "beta";
+        public override string BesiegeVersion { get; } = "v0.3";
         public override bool CanBeUnloaded { get; } = true;
         public override bool Preload { get; } = false;
 
         internal static ControlMapperWindow ControlMapper;
         internal static AxisEditorWindow AxisEditor;
+        internal static Input.EventManager InputManager;
 
         public override void OnLoad()
         {
@@ -31,6 +32,7 @@ namespace AdvancedControls
 
             AxisEditor = ADVControls.Instance.gameObject.AddComponent<AxisEditorWindow>();
             ControlMapper = ADVControls.Instance.gameObject.AddComponent<ControlMapperWindow>();
+            InputManager = ADVControls.Instance.gameObject.AddComponent<Input.EventManager>();
         }
 
         public override void OnUnload()
@@ -61,6 +63,7 @@ namespace AdvancedControls
 
         internal void Update()
         {
+
             if (blockMapper == null)
             {
                 blockMapper = FindObjectOfType<BlockMapper>();

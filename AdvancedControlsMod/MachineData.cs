@@ -83,7 +83,7 @@ namespace AdvancedControls
             {
                 AxisManager.Get(axis).Save(machineInfo);
             }
-            machineInfo.MachineData.Write("ac-version", "v1.0.0");
+            machineInfo.MachineData.Write("ac-version", "v1.1.2");
             machineInfo.MachineData.Write("ac-axislist", axes.ToArray());
         }
     }

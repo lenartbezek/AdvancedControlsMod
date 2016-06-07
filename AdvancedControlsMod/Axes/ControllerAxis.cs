@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using AdvancedControls.Input;
+using UnityEngine;
 
 namespace AdvancedControls.Axes
 {
@@ -9,24 +10,27 @@ namespace AdvancedControls.Axes
         public float Curvature { get; set; }
         public float Deadzone { get; set; }
         public bool Invert { get; set; }
-        public bool Raw { get; set; }
-        public string Axis { get; set; } = "Vertical";
+        public bool Smooth { get; set; }
+        public int AxisID { get; set; }
+        public int ControllerID { get; set; }
 
-        public ControllerAxis(string name, string axis = "Vertical", float sensitivity = 1, float curvature = 1, float deadzone = 0, bool invert = false, bool raw = false) : base(name)
+        public ControllerAxis(string name, int axis = 0, int controller = 0, float sensitivity = 1, float curvature = 1, float deadzone = 0, bool invert = false, bool raw = false) : base(name)
         {
             Type = AxisType.Controller;
-            Axis = axis;
+            AxisID = axis;
+            ControllerID = controller;
             Sensitivity = sensitivity;
             Curvature = curvature;
             Deadzone = deadzone;
             Invert = invert;
-            Raw = raw;
+            Smooth = raw;
             editor = new UI.ControllerAxisEditor(this);
         }
 
         public struct Param
         {
-            public string axis;
+            public int axis;
+            public int controller;
             public float sens;
             public float curv;
             public float dead;
@@ -39,7 +43,8 @@ namespace AdvancedControls.Axes
             {
                 return new Param()
                 {
-                    axis = Axis,
+                    axis = AxisID,
+                    controller = ControllerID,
                     sens = Sensitivity,
                     curv = Curvature,
                     dead = Deadzone,
@@ -52,12 +57,10 @@ namespace AdvancedControls.Axes
         {
             get
             {
-                if (Raw)
-                    return Input.GetAxisRaw(Axis);
+                if (Smooth)
+                    return Controller.Get(ControllerID).GetAxisSmooth(AxisID);
                 else
-                {
-                    return Input.GetAxis(Axis);
-                }
+                    return Controller.Get(ControllerID).GetAxis(AxisID);
             }
         }
 
@@ -73,7 +76,7 @@ namespace AdvancedControls.Axes
         {
             float value;
             if (Mathf.Abs(input) < Deadzone)
-                value = 0;
+                return 0;
             else
                 value = input > 0 ? input - Deadzone : input + Deadzone;
             value *= Sensitivity * (Invert ? -1 : 1);
@@ -83,7 +86,7 @@ namespace AdvancedControls.Axes
 
         public override InputAxis Clone()
         {
-            return new ControllerAxis(Name, Axis, Sensitivity, Curvature, Deadzone, Invert, Raw);
+            return new ControllerAxis(Name, AxisID, ControllerID, Sensitivity, Curvature, Deadzone, Invert, Smooth);
         }
 
         public override void Load(MachineInfo machineInfo)
@@ -97,9 +100,11 @@ namespace AdvancedControls.Axes
             if (machineInfo.MachineData.HasKey("ac-axis-" + Name + "-invert"))
                 Invert = machineInfo.MachineData.ReadBool("ac-axis-" + Name + "-invert");
             if (machineInfo.MachineData.HasKey("ac-axis-" + Name + "-raw"))
-                Raw = machineInfo.MachineData.ReadBool("ac-axis-" + Name + "-raw");
+                Smooth = machineInfo.MachineData.ReadBool("ac-axis-" + Name + "-smooth");
             if (machineInfo.MachineData.HasKey("ac-axis-" + Name + "-axis"))
-                Axis = machineInfo.MachineData.ReadString("ac-axis-" + Name + "-axis");
+                AxisID = machineInfo.MachineData.ReadInt("ac-axis-" + Name + "-axis");
+            if (machineInfo.MachineData.HasKey("ac-axis-" + Name + "-controller"))
+                ControllerID = machineInfo.MachineData.ReadInt("ac-axis-" + Name + "-controller");
         }
 
         public override void Save(MachineInfo machineInfo)
@@ -109,8 +114,8 @@ namespace AdvancedControls.Axes
             machineInfo.MachineData.Write("ac-axis-" + Name + "-curvature", Curvature);
             machineInfo.MachineData.Write("ac-axis-" + Name + "-deadzone", Deadzone);
             machineInfo.MachineData.Write("ac-axis-" + Name + "-invert", Invert);
-            machineInfo.MachineData.Write("ac-axis-" + Name + "-raw", Raw);
-            machineInfo.MachineData.Write("ac-axis-" + Name + "-axis", Axis);
+            machineInfo.MachineData.Write("ac-axis-" + Name + "-smooth", Smooth);
+            machineInfo.MachineData.Write("ac-axis-" + Name + "-axis", AxisID);
         }
 
         public override void Initialise() { }

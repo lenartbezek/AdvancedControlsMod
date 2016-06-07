@@ -37,7 +37,7 @@ namespace AdvancedControls.UI
             if (GUI.tooltip == "Key Mapper Negative")
             {
                 foreach (KeyCode key in Enum.GetValues(typeof(KeyCode)))
-                    if (Input.GetKey(key))
+                    if (UnityEngine.Input.GetKey(key))
                     {
                         Axis.NegativeKey = key == KeyCode.Backspace ? KeyCode.None : key;
                         break;
@@ -47,7 +47,7 @@ namespace AdvancedControls.UI
             if (GUI.tooltip == "Key Mapper Positive")
             {
                 foreach (KeyCode key in Enum.GetValues(typeof(KeyCode)))
-                    if (Input.GetKey(key))
+                    if (UnityEngine.Input.GetKey(key))
                     {
                         Axis.PositiveKey = key == KeyCode.Backspace ? KeyCode.None : key;
                         break;

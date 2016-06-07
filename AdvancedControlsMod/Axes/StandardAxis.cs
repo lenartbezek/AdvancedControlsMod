@@ -31,8 +31,8 @@ namespace AdvancedControls.Axes
         {
             get
             {
-                float p = Input.GetKey(PositiveKey) ? 1 : 0;
-                float n = Input.GetKey(NegativeKey) ? -1 : 0;
+                float p = UnityEngine.Input.GetKey(PositiveKey) ? 1 : 0;
+                float n = UnityEngine.Input.GetKey(NegativeKey) ? -1 : 0;
                 return (p + n) * (Invert ? -1 : 1);
             }
         }
