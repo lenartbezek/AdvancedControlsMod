@@ -13,59 +13,66 @@ namespace AdvancedControls.Input
 
         private float[] axis_values_raw;
         private float[] axis_values_smooth;
+        private float[,] ball_values_raw;
+        private float[,] ball_values_smooth;
 
         public readonly List<string> AxisNames;
         public readonly List<string> BallNames;
         public readonly List<string> HatNames;
         public readonly List<string> ButtonNames;
 
+        public readonly List<Button> Buttons;
+
         public int Index { get { return SDL.SDL_JoystickInstanceID(device_pointer); } }
         public string Name { get { return SDL.SDL_JoystickName(device_pointer); } }
         public Guid GUID { get { return SDL.SDL_JoystickGetGUID(device_pointer); } }
         public bool Connected { get { return SDL.SDL_JoystickGetAttached(device_pointer) == SDL.SDL_bool.SDL_TRUE; } }
+        public bool IsGameController { get { return is_game_controller; } }
 
         public int NumAxes { get { return SDL.SDL_JoystickNumAxes(device_pointer); } }
         public int NumBalls { get { return SDL.SDL_JoystickNumBalls(device_pointer); } }
         public int NumHats { get { return SDL.SDL_JoystickNumHats(device_pointer); } }
         public int NumButtons { get { return SDL.SDL_JoystickNumButtons(device_pointer); } }
 
-        private static List<Controller> controllers = new List<Controller>();
+        public static List<Controller> Devices = new List<Controller>();
 
-        public static int NumControllers { get { return controllers.Count;}}
+        public static int NumDevices { get { return Devices.Count;}}
 
-        public static void Add(int index)
+        public static void AddJoystick(int index)
         {
-            controllers.Insert(index, new Controller(index));
+            Devices.Insert(index, new Controller(index, false));
         }
 
-        public static void Remove(int index)
+        public static void AddController(int index)
         {
-            controllers[index].Dispose();
-            controllers.RemoveAt(index);
+            Devices.Insert(index, new Controller(index, true));
         }
 
         public static void RemoveDisconnected()
         {
             var remove = new List<Controller>();
 
-            foreach (Controller c in controllers)
+            foreach (Controller c in Devices)
                 if (!c.Connected) remove.Add(c);
 
             foreach (Controller c in remove)
-                controllers.Remove(c);
+            {
+                c.Dispose();
+                Devices.Remove(c);
+            }
         }
 
         public static Controller Get(int index)
         {
-            return controllers[index];
+            return Devices[index];
         }
 
-        private Controller(int index)
+        private Controller(int index, bool is_game_controller)
         {
             if (index > SDL.SDL_NumJoysticks())
                 throw new InvalidOperationException("Cannot open controller " + index + " when only " + SDL.SDL_NumJoysticks()+" are connected.");
 
-            is_game_controller = SDL.SDL_IsGameController(index) == SDL.SDL_bool.SDL_TRUE;
+            this.is_game_controller = is_game_controller;
 
             if (is_game_controller)
             {
@@ -76,6 +83,8 @@ namespace AdvancedControls.Input
             {
                 device_pointer = SDL.SDL_JoystickOpen(index);
             }
+
+            Buttons = new List<Button>();
 
             AxisNames = new List<string>();
             axis_values_raw = new float[SDL.SDL_JoystickNumAxes(device_pointer)];
@@ -95,12 +104,20 @@ namespace AdvancedControls.Input
             }
 
             BallNames = new List<string>();
+            ball_values_raw = new float[SDL.SDL_JoystickNumBalls(device_pointer), 2];
+            ball_values_smooth = new float[SDL.SDL_JoystickNumBalls(device_pointer), 2];
             for (int i = 0; i < SDL.SDL_JoystickNumBalls(device_pointer); i++)
                 BallNames.Add("Ball " + (i + 1));
 
             HatNames = new List<string>();
             for (int i = 0; i < SDL.SDL_JoystickNumHats(device_pointer); i++)
+            {
                 HatNames.Add("Hat " + (i + 1));
+                Buttons.Add(new HatButton(this, i, SDL.SDL_HAT_UP));
+                Buttons.Add(new HatButton(this, i, SDL.SDL_HAT_DOWN));
+                Buttons.Add(new HatButton(this, i, SDL.SDL_HAT_LEFT));
+                Buttons.Add(new HatButton(this, i, SDL.SDL_HAT_RIGHT));
+            }
 
             ButtonNames = new List<string>();
             for (int i = 0; i < SDL.SDL_JoystickNumButtons(device_pointer); i++)
@@ -111,40 +128,37 @@ namespace AdvancedControls.Input
                 if (!is_game_controller || name == null)
                     name = "Button " + (i + 1);
                 ButtonNames.Add(name);
+                Buttons.Add(new JoystickButton(this, i));
             }
 
-            AdvancedControlsMod.InputManager.OnAxisMotion += UpdateAxis;
+            AdvancedControlsMod.EventManager.OnAxisMotion += UpdateAxis;
+            AdvancedControlsMod.EventManager.OnBallMotion += UpdateBall;
             ADVControls.Instance.OnUpdate += Update;
-
 
             // Debug
             if (is_game_controller)
                 Debug.Log("Game controller connected: " + Name);
             else
                 Debug.Log("Joystick connected: " + Name);
-
+            Debug.Log("\tGuid: " + GUID);
             Debug.Log("\tNumber of axes: " + NumAxes);
-            foreach (string name in AxisNames)
-                Debug.Log("\t\t" + name);
             Debug.Log("\tNumber of balls: " + NumBalls);
-            foreach (string name in BallNames)
-                Debug.Log("\t\t" + name);
             Debug.Log("\tNumber of hats: " + NumHats);
-            foreach (string name in HatNames)
-                Debug.Log("\t\t" + name);
             Debug.Log("\tNumber of buttons: " + NumButtons);
-            foreach (string name in ButtonNames)
-                Debug.Log("\t\t" + name);
         }
 
         private void Update()
         {
+            var d = Mathf.Clamp(Time.deltaTime * 12, 0, 1);
             for (int i = 0; i < NumAxes; i++)
             {
-                var d = Mathf.Clamp(Time.deltaTime * 12, 0, 1);
                 axis_values_smooth[i] = axis_values_smooth[i] * (1 - d) + axis_values_raw[i] * d;
             }
-            
+            for (int i = 0; i < NumBalls; i++)
+            {
+                ball_values_smooth[i, 0] = ball_values_smooth[i, 0] * (1 - d) + ball_values_raw[i, 0] * d;
+                ball_values_smooth[i, 1] = ball_values_smooth[i, 1] * (1 - d) + ball_values_raw[i, 1] * d;
+            }
         }
 
         private void UpdateAxis(SDL.SDL_Event e)
@@ -152,6 +166,14 @@ namespace AdvancedControls.Input
             if (e.jdevice.which == Index)
             {
                 axis_values_raw[e.jaxis.axis] = e.jaxis.axisValue / 32767.0f;
+            }
+        }
+
+        private void UpdateBall(SDL.SDL_Event e)
+        {
+            if (e.jdevice.which == Index)
+            {
+               ball_values_raw[e.jball.ball, 0] = e.jball.xrel / 32767.0f;
             }
         }
 
@@ -176,7 +198,10 @@ namespace AdvancedControls.Input
                 var text = System.IO.File.ReadAllText(Application.dataPath + @"\Mods\Resources\AdvancedControls\GameControllerMappings.txt");
                 SDL.SDL_GameControllerAddMapping(text);
             }
-            catch { }
+            catch
+            {
+                // pass
+            }
         }
 
         public void Dispose()
@@ -185,7 +210,7 @@ namespace AdvancedControls.Input
                 SDL.SDL_GameControllerClose(game_controller);
             SDL.SDL_JoystickClose(device_pointer);
 
-            AdvancedControlsMod.InputManager.OnAxisMotion -= UpdateAxis;
+            AdvancedControlsMod.EventManager.OnAxisMotion -= UpdateAxis;
             ADVControls.Instance.OnUpdate -= Update;
         }
 

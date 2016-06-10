@@ -53,6 +53,26 @@ namespace AdvancedControls.Input
                     case SDL.SDL_EventType.SDL_KEYUP:
                         OnKey?.Invoke(e, false);
                         break;
+                    case SDL.SDL_EventType.SDL_CONTROLLERAXISMOTION:
+                        OnAxisMotion?.Invoke(e);
+                        break;
+                    case SDL.SDL_EventType.SDL_CONTROLLERBUTTONDOWN:
+                        OnButton?.Invoke(e, true);
+                        break;
+                    case SDL.SDL_EventType.SDL_CONTROLLERBUTTONUP:
+                        OnButton?.Invoke(e, false);
+                        break;
+                    case SDL.SDL_EventType.SDL_CONTROLLERDEVICEADDED:
+                        Controller.AddController(e.cdevice.which);
+                        OnDeviceAdded?.Invoke(e);
+                        break;
+                    case SDL.SDL_EventType.SDL_CONTROLLERDEVICEREMOVED:
+                        Controller.RemoveDisconnected();
+                        OnDeviceRemoved?.Invoke(e);
+                        break;
+                    case SDL.SDL_EventType.SDL_CONTROLLERDEVICEREMAPPED:
+                        OnDeviceRemapped?.Invoke(e);
+                        break;
                     case SDL.SDL_EventType.SDL_JOYAXISMOTION:
                         OnAxisMotion?.Invoke(e);
                         break;
@@ -69,32 +89,12 @@ namespace AdvancedControls.Input
                         OnButton?.Invoke(e, false);
                         break;
                     case SDL.SDL_EventType.SDL_JOYDEVICEADDED:
-                        Controller.Add(e.jdevice.which);
+                        Controller.AddJoystick(e.jdevice.which);
                         OnDeviceAdded?.Invoke(e);
                         break;
                     case SDL.SDL_EventType.SDL_JOYDEVICEREMOVED:
                         Controller.RemoveDisconnected();
                         OnDeviceRemoved?.Invoke(e);
-                        break;
-                    case SDL.SDL_EventType.SDL_CONTROLLERAXISMOTION:
-                        OnAxisMotion?.Invoke(e);
-                        break;
-                    case SDL.SDL_EventType.SDL_CONTROLLERBUTTONDOWN:
-                        OnButton?.Invoke(e, true);
-                        break;
-                    case SDL.SDL_EventType.SDL_CONTROLLERBUTTONUP:
-                        OnButton?.Invoke(e, false);
-                        break;
-                    case SDL.SDL_EventType.SDL_CONTROLLERDEVICEADDED:
-                        Controller.Add(e.jdevice.which);
-                        OnDeviceAdded?.Invoke(e);
-                        break;
-                    case SDL.SDL_EventType.SDL_CONTROLLERDEVICEREMOVED:
-                        Controller.RemoveDisconnected();
-                        OnDeviceRemoved?.Invoke(e);
-                        break;
-                    case SDL.SDL_EventType.SDL_CONTROLLERDEVICEREMAPPED:
-                        OnDeviceRemapped?.Invoke(e);
                         break;
                     default:
                         break;

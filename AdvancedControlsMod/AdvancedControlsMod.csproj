@@ -81,8 +81,12 @@
     <Compile Include="Controls\InputControl.cs" />
     <Compile Include="Controls\PositionControl.cs" />
     <Compile Include="Controls\SliderControl.cs" />
+    <Compile Include="Input\Button.cs" />
     <Compile Include="Input\Controller.cs" />
     <Compile Include="Input\EventManager.cs" />
+    <Compile Include="Input\HatButton.cs" />
+    <Compile Include="Input\JoystickButton.cs" />
+    <Compile Include="Input\Key.cs" />
     <Compile Include="MachineData.cs" />
     <Compile Include="Input\LPUtf8StrMarshaler.cs" />
     <Compile Include="Input\SDL2.cs" />
@@ -94,9 +98,6 @@
     <Compile Include="UI\CustomAxisEditor.cs" />
     <Compile Include="UI\TwoKeyAxisEditor.cs" />
     <Compile Include="UI\Util.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Input\SDL2.NET.dll.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

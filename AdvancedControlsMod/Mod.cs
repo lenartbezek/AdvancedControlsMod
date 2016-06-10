@@ -2,6 +2,7 @@
 using spaar.ModLoader;
 using LenchScripter;
 using AdvancedControls.UI;
+using AdvancedControls.Input;
 
 namespace AdvancedControls
 {
@@ -20,7 +21,7 @@ namespace AdvancedControls
 
         internal static ControlMapperWindow ControlMapper;
         internal static AxisEditorWindow AxisEditor;
-        internal static Input.EventManager InputManager;
+        internal static EventManager EventManager;
 
         public override void OnLoad()
         {
@@ -32,7 +33,7 @@ namespace AdvancedControls
 
             AxisEditor = ADVControls.Instance.gameObject.AddComponent<AxisEditorWindow>();
             ControlMapper = ADVControls.Instance.gameObject.AddComponent<ControlMapperWindow>();
-            InputManager = ADVControls.Instance.gameObject.AddComponent<Input.EventManager>();
+            EventManager = ADVControls.Instance.gameObject.AddComponent<EventManager>();
         }
 
         public override void OnUnload()

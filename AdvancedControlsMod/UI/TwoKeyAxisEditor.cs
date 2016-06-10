@@ -2,6 +2,7 @@
 using UnityEngine;
 using spaar.ModLoader.UI;
 using AdvancedControls.Axes;
+using AdvancedControls.Input;
 
 namespace AdvancedControls.UI
 {
@@ -33,25 +34,39 @@ namespace AdvancedControls.UI
             // Draw key mappers
             GUILayout.BeginHorizontal();
 
-            GUILayout.Button(new GUIContent(Axis.NegativeKey.ToString(), "Key Mapper Negative"), Elements.Buttons.Red);
+            GUILayout.Button(new GUIContent(Axis.NegativeBind != null ? Axis.NegativeBind.Name : "None", "Key Mapper Negative"), Elements.Buttons.Red);
             if (GUI.tooltip == "Key Mapper Negative")
             {
+                foreach (Controller c in Controller.Devices)
+                    foreach (Button b in c.Buttons)
+                        if (b.IsDown) Axis.NegativeBind = b;
                 foreach (KeyCode key in Enum.GetValues(typeof(KeyCode)))
+                {
+                    if (key >= KeyCode.JoystickButton0 && key <= KeyCode.Joystick8Button19)
+                        continue;
                     if (UnityEngine.Input.GetKey(key))
                     {
-                        Axis.NegativeKey = key == KeyCode.Backspace ? KeyCode.None : key;
+                        Axis.NegativeBind = key == KeyCode.Backspace ? null : new Key(key);
                         break;
                     }
+                }
             }
-            GUILayout.Button(new GUIContent(Axis.PositiveKey.ToString(), "Key Mapper Positive"), Elements.Buttons.Red);
+            GUILayout.Button(new GUIContent(Axis.PositiveBind != null ? Axis.PositiveBind.Name : "None", "Key Mapper Positive"), Elements.Buttons.Red);
             if (GUI.tooltip == "Key Mapper Positive")
             {
+                foreach (Controller c in Controller.Devices)
+                    foreach (Button b in c.Buttons)
+                        if (b.IsDown) Axis.PositiveBind = b;
                 foreach (KeyCode key in Enum.GetValues(typeof(KeyCode)))
+                {
+                    if (key >= KeyCode.JoystickButton0 && key <= KeyCode.Joystick8Button19)
+                        continue;
                     if (UnityEngine.Input.GetKey(key))
                     {
-                        Axis.PositiveKey = key == KeyCode.Backspace ? KeyCode.None : key;
+                        Axis.PositiveBind = key == KeyCode.Backspace ? null : new Key(key);
                         break;
                     }
+                }   
             }
 
             GUILayout.EndHorizontal();

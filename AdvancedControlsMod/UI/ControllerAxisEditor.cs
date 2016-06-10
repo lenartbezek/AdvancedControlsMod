@@ -47,7 +47,7 @@ namespace AdvancedControls.UI
 
         public void DrawAxis(Rect windowRect)
         {
-            if (Controller.NumControllers == 0)
+            if (Controller.NumDevices == 0)
             {
                 GUILayout.Label("<color=#FFFF00><b>No controllers connected.</b></color>\nYou must connect a joystick or controller to use this axis.");
             }
@@ -71,7 +71,7 @@ namespace AdvancedControls.UI
                          Color.yellow);
 
                 // Draw controller selection
-                Axis.ControllerID = Axis.ControllerID % Controller.NumControllers;
+                Axis.ControllerID = Axis.ControllerID % Controller.NumDevices;
 
                 GUILayout.BeginHorizontal();
                 if (GUILayout.Button("<", Axis.ControllerID > 0 ? Elements.Buttons.Default : Elements.Buttons.Disabled, GUILayout.Width(30)) 
@@ -80,8 +80,8 @@ namespace AdvancedControls.UI
 
                 GUILayout.Label(Controller.Get(Axis.ControllerID).Name, Elements.InputFields.Default);
 
-                if (GUILayout.Button(">", Axis.ControllerID < Controller.NumControllers - 1 ? Elements.Buttons.Default : Elements.Buttons.Disabled, GUILayout.Width(30)) 
-                    && Axis.ControllerID < Controller.NumControllers - 1)
+                if (GUILayout.Button(">", Axis.ControllerID < Controller.NumDevices - 1 ? Elements.Buttons.Default : Elements.Buttons.Disabled, GUILayout.Width(30)) 
+                    && Axis.ControllerID < Controller.NumDevices - 1)
                     Axis.ControllerID++;
 
                 GUILayout.EndHorizontal();

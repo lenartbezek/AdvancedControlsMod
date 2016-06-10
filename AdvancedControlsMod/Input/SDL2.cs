@@ -31,7 +31,7 @@ using System;
 using System.Runtime.InteropServices;
 #endregion
 
-namespace AdvancedControls
+namespace AdvancedControls.Input
 {
     /// <summary>
     /// Entry point for all SDL-related (non-extension) types and methods
@@ -43,7 +43,7 @@ namespace AdvancedControls
         /// <summary>
         /// Used by DllImport to load the native library.
         /// </summary>
-        private const string nativeLibName = "SDL2.dll";
+        private const string nativeLibName = "Besiege_Data/Mods/Resources/AdvancedControls/lib/SDL2.dll";
 
         #endregion
 
