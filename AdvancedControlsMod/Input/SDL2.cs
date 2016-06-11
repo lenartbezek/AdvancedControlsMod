@@ -43,7 +43,14 @@ namespace AdvancedControls.Input
         /// <summary>
         /// Used by DllImport to load the native library.
         /// </summary>
+
+#if windows
         private const string nativeLibName = "Besiege_Data/Mods/Resources/AdvancedControls/lib/SDL2.dll";
+#elif linux
+        private const string nativeLibName = "libSDL2-2.0.so.0";
+#elif osx
+        private const string nativeLibName = "libSDL2-2.0.0.dylib";
+#endif
 
         #endregion
 

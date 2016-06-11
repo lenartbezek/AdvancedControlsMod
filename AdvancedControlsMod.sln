@@ -7,14 +7,17 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AdvancedControlsMod", "Adva
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
-		Debug|Any CPU = Debug|Any CPU
-		Release|Any CPU = Release|Any CPU
+		linux|Any CPU = linux|Any CPU
+		osx|Any CPU = osx|Any CPU
+		windows|Any CPU = windows|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{6A16F1F7-31C2-4CAE-9FD3-0C56BBD29757}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{6A16F1F7-31C2-4CAE-9FD3-0C56BBD29757}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{6A16F1F7-31C2-4CAE-9FD3-0C56BBD29757}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{6A16F1F7-31C2-4CAE-9FD3-0C56BBD29757}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6A16F1F7-31C2-4CAE-9FD3-0C56BBD29757}.linux|Any CPU.ActiveCfg = linux|Any CPU
+		{6A16F1F7-31C2-4CAE-9FD3-0C56BBD29757}.linux|Any CPU.Build.0 = linux|Any CPU
+		{6A16F1F7-31C2-4CAE-9FD3-0C56BBD29757}.osx|Any CPU.ActiveCfg = osx|Any CPU
+		{6A16F1F7-31C2-4CAE-9FD3-0C56BBD29757}.osx|Any CPU.Build.0 = osx|Any CPU
+		{6A16F1F7-31C2-4CAE-9FD3-0C56BBD29757}.windows|Any CPU.ActiveCfg = Debug|Any CPU
+		{6A16F1F7-31C2-4CAE-9FD3-0C56BBD29757}.windows|Any CPU.Build.0 = Debug|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -1,20 +1,59 @@
 ﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace AdvancedControls.Axes
 {
     public class ChainAxis : InputAxis
     {
-        public string SubAxis1 { get; set; }
-        public string SubAxis2 { get; set; }
+        private string sub_axis1;
+        public string SubAxis1
+        {
+            get
+            {
+                return sub_axis1;
+            }
+            set
+            {
+                sub_axis1 = value;
+                var axis = AxisManager.Get(value) as ChainAxis;
+                if (axis != null && axis.CheckCycle(new List<string>() { }))
+                {
+                    sub_axis1 = null;
+                    throw new InvalidOperationException("Cannot create a cycle from chaining axes.");
+                }
+            }
+        }
+
+        private string sub_axis2;
+        public string SubAxis2
+        {
+            get
+            {
+                return sub_axis2;
+            }
+            set
+            {
+                sub_axis2 = value;
+                var axis = AxisManager.Get(sub_axis2) as ChainAxis;
+                if (axis != null && axis.CheckCycle(new List<string>() { }))
+                {
+                    sub_axis2 = null;
+                    throw new InvalidOperationException("Cannot create a cycle from chaining axes.");
+                }
+            }
+        }
+
         public ChainMethod Method { get; set; }
 
         public enum ChainMethod
         {
             Sum = 0,
-            Multiply = 1,
-            Maximum = 2,
-            Minimum = 3
+            Subtract = 1,
+            Average = 2,
+            Multiply = 3,
+            Maximum = 4,
+            Minimum = 5
         }
 
         public override float OutputValue {
@@ -26,6 +65,10 @@ namespace AdvancedControls.Axes
                 float b = axis_b != null ? axis_b.OutputValue : 0;
                 if (Method == ChainMethod.Sum)
                     return Mathf.Clamp(a + b, -1, 1);
+                if (Method == ChainMethod.Subtract)
+                    return Mathf.Clamp(a - b, -1, 1);
+                if (Method == ChainMethod.Average)
+                    return Mathf.Clamp((a + b) / 2, -1, 1);
                 if (Method == ChainMethod.Multiply)
                     return Mathf.Clamp(a * b, -1, 1);
                 if (Method == ChainMethod.Maximum)
@@ -42,6 +85,30 @@ namespace AdvancedControls.Axes
             SubAxis2 = b;
             Method = m;
             editor = new UI.ChainAxisEditor(this);
+        }
+
+        private bool CheckCycle(List<string> path)
+        {
+            if (path.Contains(Name))
+                return true;
+            var sub1 = AxisManager.Get(SubAxis1) as ChainAxis;
+            var sub2 = AxisManager.Get(SubAxis2) as ChainAxis;
+            bool cycle = false;
+            if (sub1 != null)
+            {
+                var new_path = new List<string>();
+                new_path.AddRange(path);
+                new_path.Add(Name);
+                cycle |= sub1.CheckCycle(new_path);
+            }
+            if (sub2 != null)
+            {
+                var new_path = new List<string>();
+                new_path.AddRange(path);
+                new_path.Add(Name);
+                cycle |= sub2.CheckCycle(new_path);
+            }
+            return cycle;
         }
 
         public override InputAxis Clone()

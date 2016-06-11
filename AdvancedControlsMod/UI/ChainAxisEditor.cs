@@ -14,6 +14,7 @@ namespace AdvancedControls.UI
         }
 
         private ChainAxis Axis;
+        private string Error;
 
         private AxisEditorWindow.SelectAxis Select;
 
@@ -47,6 +48,47 @@ namespace AdvancedControls.UI
             float a = axis_a != null ? axis_a.OutputValue : 0;
             float b = axis_b != null ? axis_b.OutputValue : 0;
 
+            // Draw axis value
+            GUILayout.Label("  <color=#808080><b>" + Axis.OutputValue.ToString("0.00") + "</b></color>",
+                new GUIStyle(Elements.Labels.Default) { richText = true, alignment = TextAnchor.MiddleLeft },
+                GUILayout.Height(20));
+
+            // Draw method select
+
+            int i = (int)Axis.Method;
+            int num_methods = Enum.GetValues(typeof(ChainAxis.ChainMethod)).Length;
+
+            GUILayout.BeginHorizontal();
+            if (GUILayout.Button("<", Elements.Buttons.Default, GUILayout.Width(30)))
+                i--;
+            if (i < 0) i += num_methods;
+
+            GUILayout.Label(Enum.GetNames(typeof(ChainAxis.ChainMethod))[i], new GUIStyle(Elements.InputFields.Default) { alignment = TextAnchor.MiddleCenter });
+
+            if (GUILayout.Button(">", Elements.Buttons.Default, GUILayout.Width(30)))
+                i++;
+            if (i == num_methods) i = 0;
+
+            Axis.Method = (ChainAxis.ChainMethod)i;
+
+            GUILayout.EndHorizontal();
+
+            // Draw sub axis values
+            GUILayout.BeginHorizontal(GUILayout.Height(20));
+
+            GUILayout.Label("  <color=#808080><b>" + a.ToString("0.00") + "</b></color>",
+                new GUIStyle(Elements.Labels.Default) { richText = true, alignment = TextAnchor.MiddleLeft },
+                GUILayout.MinWidth(leftGraphRect.width),
+                GUILayout.Height(20));
+
+            GUILayout.Label("  <color=#808080><b>" + b.ToString("0.00") + "</b></color>",
+                new GUIStyle(Elements.Labels.Default) { richText = true, alignment = TextAnchor.MiddleLeft, margin = new RectOffset(8, 0, 0, 0) },
+                GUILayout.MinWidth(rightGraphRect.width),
+                GUILayout.Height(20));
+
+            GUILayout.EndHorizontal();
+
+            // Draw yellow squares
             Util.FillRect(new Rect(
                 graphRect.x + graphRect.width / 2 - 10 + Axis.OutputValue * (graphRect.width - 20) / 2,
                 graphRect.y,
@@ -62,57 +104,94 @@ namespace AdvancedControls.UI
                 rightGraphRect.y,
                 20, 20), Color.yellow);
 
-            GUILayout.Box(GUIContent.none, GUILayout.Height(20));
-
-            // Draw method select
-
-            int i = (int)Axis.Method;
-            int num_methods = Enum.GetValues(typeof(ChainAxis.ChainMethod)).Length;
-
-            GUILayout.BeginHorizontal();
-            if (GUILayout.Button("<", Elements.Buttons.Default, GUILayout.Width(30)))
-                i--;
-            if (i < 0) i += num_methods;
-
-            GUILayout.Box("Chain method: "+Enum.GetNames(typeof(ChainAxis.ChainMethod))[i], new GUIStyle(Elements.InputFields.Default) { wordWrap = true });
-
-            if (GUILayout.Button(">", Elements.Buttons.Default, GUILayout.Width(30)))
-                i++;
-            if (i == num_methods) i = 0;
-
-            Axis.Method = (ChainAxis.ChainMethod)i;
-
-            GUILayout.EndHorizontal();
-
-            GUILayout.Box(GUIContent.none, GUILayout.Height(20));
-
             // Draw axis select buttons
             GUILayout.BeginHorizontal();
 
             if (Axis.SubAxis1 == null)
             {
-                if (GUILayout.Button("Select Input Axis", Elements.Buttons.Disabled))
-                    Select = new AxisEditorWindow.SelectAxis((InputAxis axis) => { Axis.SubAxis1 = axis.Name; });
+                if (GUILayout.Button("Select Input Axis", Elements.Buttons.Disabled, GUILayout.MaxWidth(leftGraphRect.width)))
+                {
+                    Error = null;
+                    Select = new AxisEditorWindow.SelectAxis((InputAxis axis) =>
+                    {
+                        try
+                        {
+                            Axis.SubAxis1 = axis.Name;
+                        }
+                        catch (InvalidOperationException)
+                        {
+                            Select = null;
+                            Error = "'" + axis.Name + "' is already in the axis chain.\nAdding it here would create a cycle.";
+                        }
+                    });
+                }
             }
             else
             {
-                if (GUILayout.Button(Axis.SubAxis1, AxisManager.Get(Axis.SubAxis1) != null ? Elements.Buttons.Default : Elements.Buttons.Red))
-                    Select = new AxisEditorWindow.SelectAxis((InputAxis axis) => { Axis.SubAxis1 = axis.Name; });
+                if (GUILayout.Button(Axis.SubAxis1, AxisManager.Get(Axis.SubAxis1) != null ? Elements.Buttons.Default : Elements.Buttons.Red, GUILayout.MaxWidth(leftGraphRect.width)))
+                {
+                    Error = null;
+                    Select = new AxisEditorWindow.SelectAxis((InputAxis axis) =>
+                    {
+                        try
+                        {
+                            Axis.SubAxis1 = axis.Name;
+                        }
+                        catch (InvalidOperationException)
+                        {
+                            Select = null;
+                            Error = "'" + axis.Name + "' is already in the axis chain.\nAdding it here would create a cycle.";
+                        }
+                    });
+                }
             }
 
             if (Axis.SubAxis2 == null)
             {
-                if (GUILayout.Button("Select Input Axis", Elements.Buttons.Disabled))
-                    Select = new AxisEditorWindow.SelectAxis((InputAxis axis) => { Axis.SubAxis2 = axis.Name; });
+                if (GUILayout.Button("Select Input Axis", Elements.Buttons.Disabled, GUILayout.MaxWidth(rightGraphRect.width)))
+                {
+                    Error = null;
+                    Select = new AxisEditorWindow.SelectAxis((InputAxis axis) =>
+                    {
+                        try
+                        {
+                            Axis.SubAxis2 = axis.Name;
+                        }
+                        catch (InvalidOperationException)
+                        {
+                            Select = null;
+                            Error = "'"+axis.Name + "' is already in the axis chain.\nAdding it here would create a cycle.";
+                        }
+                    });
+                }
             }
             else
             {
-                if (GUILayout.Button(Axis.SubAxis2, AxisManager.Get(Axis.SubAxis2) != null ? Elements.Buttons.Default : Elements.Buttons.Red))
-                    Select = new AxisEditorWindow.SelectAxis((InputAxis axis) => { Axis.SubAxis2 = axis.Name; });
+                if (GUILayout.Button(Axis.SubAxis2, AxisManager.Get(Axis.SubAxis2) != null ? Elements.Buttons.Default : Elements.Buttons.Red, GUILayout.MaxWidth(rightGraphRect.width)))
+                {
+                    Error = null;
+                    Select = new AxisEditorWindow.SelectAxis((InputAxis axis) =>
+                    {
+                        try
+                        {
+                            Axis.SubAxis2 = axis.Name;
+                        }
+                        catch (InvalidOperationException)
+                        {
+                            Select = null;
+                            Error = "'" + axis.Name + "' is already in the axis chain.\nAdding it here would create a cycle.";
+                        }
+                    });
+                }
             }
 
             GUILayout.EndHorizontal();
 
+            if (Error != null)
+            {
+                GUILayout.Label("\n<color=#FFFF00>Error:</color>", new GUIStyle(Elements.Labels.Title) { richText = true });
+                GUILayout.Label(Error);
+            }
             if (Select != null)
             {
                 string toBeRemoved = null;
@@ -135,7 +214,7 @@ namespace AdvancedControls.UI
                         var Editor = ADVControls.Instance.gameObject.AddComponent<AxisEditorWindow>();
                         Editor.windowRect.x = windowRect.x + windowRect.width;
                         Editor.windowRect.y = windowRect.y;
-                        Editor.EditAxis(axis.Clone());
+                        Editor.EditAxis(axis);
                         Select = null;
                     }
 

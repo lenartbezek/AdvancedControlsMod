@@ -103,7 +103,7 @@ namespace AdvancedControls.UI
                     var Editor = ADVControls.Instance.gameObject.AddComponent<AxisEditorWindow>();
                     Editor.windowRect.x = popupRect.x;
                     Editor.windowRect.y = popupRect.y;
-                    Editor.EditAxis(axis.Clone());
+                    Editor.EditAxis(axis);
                     Select = null;
                 }
 
@@ -128,7 +128,7 @@ namespace AdvancedControls.UI
             }
 
             // Draw close button
-            if (GUI.Button(new Rect(popupRect.width - 28, 8, 20, 20),
+            if (GUI.Button(new Rect(windowRect.width - 38, 8, 30, 30),
                 "×", Elements.Buttons.Red))
                 Select = null;
         }

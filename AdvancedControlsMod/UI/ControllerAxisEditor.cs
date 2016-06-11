@@ -47,7 +47,14 @@ namespace AdvancedControls.UI
 
         public void DrawAxis(Rect windowRect)
         {
-            if (Controller.NumDevices == 0)
+            if (!AdvancedControlsMod.EventManager.SDL_Initialized)
+            {
+                GUILayout.Label("<color=#FF0000><b>SDL2 library not loaded.</b></color>\nMake sure SDL2 libraries are properly installed.\n\n"+
+                                "<b>Windows</b>:\tPlace SDL2.dll in Mods/Resources/AdvancedControls/lib/\n" +
+                                "<b>Linux</b>:\tRun `sudo apt-get install libsdl2-2.0-0` command\n" +
+                                "<b>Mac OSX</b>:\tDownload and install runtime binaries from www.libsdl.org/download-2.0.php");
+            }
+            else if (Controller.NumDevices == 0)
             {
                 GUILayout.Label("<color=#FFFF00><b>No controllers connected.</b></color>\nYou must connect a joystick or controller to use this axis.");
             }
@@ -80,7 +87,7 @@ namespace AdvancedControls.UI
                     && Axis.ControllerID > 0)
                     Axis.ControllerID--;
 
-                GUILayout.Label(Controller.Get(Axis.ControllerID).Name, Elements.InputFields.Default);
+                GUILayout.Label(Controller.Get(Axis.ControllerID).Name, new GUIStyle(Elements.InputFields.Default) { alignment = TextAnchor.MiddleCenter });
 
                 if (GUILayout.Button(">", Axis.ControllerID < Controller.NumDevices - 1 ? Elements.Buttons.Default : Elements.Buttons.Disabled, GUILayout.Width(30)) 
                     && Axis.ControllerID < Controller.NumDevices - 1)
@@ -96,7 +103,7 @@ namespace AdvancedControls.UI
                     && Axis.AxisID > 0)
                     Axis.AxisID--;
 
-                GUILayout.Label(Controller.Get(Axis.ControllerID).AxisNames[Axis.AxisID], Elements.InputFields.Default);
+                GUILayout.Label(Controller.Get(Axis.ControllerID).AxisNames[Axis.AxisID], new GUIStyle(Elements.InputFields.Default) { alignment = TextAnchor.MiddleCenter });
 
                 if (GUILayout.Button(">", Axis.AxisID < Controller.Get(Axis.ControllerID).NumAxes - 1 ? Elements.Buttons.Default : Elements.Buttons.Disabled, GUILayout.Width(30)) 
                     && Axis.AxisID < Controller.Get(Axis.ControllerID).NumAxes - 1)

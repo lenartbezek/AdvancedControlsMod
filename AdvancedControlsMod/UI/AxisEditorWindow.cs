@@ -27,9 +27,10 @@ namespace AdvancedControls.UI
 
         public void SaveAxis()
         {
+            Axis = Axis.Clone();
             Axis.Name = SaveName;
             WindowName = "Edit " + SaveName;
-            AxisManager.Put(Axis.Name, Axis.Clone());
+            AxisManager.Put(Axis.Name, Axis);
             Select?.Invoke(Axis);
         }
 
@@ -41,9 +42,9 @@ namespace AdvancedControls.UI
             Axis = null;
         }
 
-        public void EditAxis(InputAxis axis, SelectAxis selectAxis = null)
+        public void EditAxis(InputAxis axis)
         {
-            Select = selectAxis;
+            Select = null;
             Visible = true;
             WindowName = "Edit " + axis.Name;
             SaveName = axis.Name;
@@ -69,37 +70,35 @@ namespace AdvancedControls.UI
             if(Axis == null)
             {
                 // Draw add buttons
-                GUILayout.Label("Create new axis", Elements.Labels.Title);
-
                 if (GUILayout.Button("Controller Axis", Elements.Buttons.ComponentField))
                 {
                     Axis = new ControllerAxis("new controller axis");
                     WindowName = "Create new controller axis";
-                    SaveName = Axis.Name;
                 }
                 if (GUILayout.Button("Inertial Axis", Elements.Buttons.ComponentField))
                 {
                     Axis = new InertialAxis("new inertial axis");
                     WindowName = "Create new inertial key axis";
-                    SaveName = Axis.Name;
                 }
                 if (GUILayout.Button("Standard Axis", Elements.Buttons.ComponentField))
                 {
                     Axis = new StandardAxis("new standard axis");
                     WindowName = "Create new standard axis";
-                    SaveName = Axis.Name;
                 }
                 if (GUILayout.Button("Chain Axis", Elements.Buttons.ComponentField))
                 {
                     Axis = new ChainAxis("new chain axis");
                     WindowName = "Create new chain axis";
-                    SaveName = Axis.Name;
                 }
                 if (GUILayout.Button("Custom Axis", Elements.Buttons.ComponentField))
                 {
                     Axis = new CustomAxis("new custom axis");
                     WindowName = "Create new custom axis";
+                }
+                if (Axis != null)
+                {
                     SaveName = Axis.Name;
+                    Select?.Invoke(Axis);
                 }
             }
             else
@@ -122,7 +121,7 @@ namespace AdvancedControls.UI
             }
 
             // Draw close button
-            if (GUI.Button(new Rect(windowRect.width - 28, 8, 20, 20),
+            if (GUI.Button(new Rect(windowRect.width - 38, 8, 30, 30),
                 "×", Elements.Buttons.Red))
             {
                 Visible = false;

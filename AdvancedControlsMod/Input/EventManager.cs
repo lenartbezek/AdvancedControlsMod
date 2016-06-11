@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.IO;
+using UnityEngine;
 
 namespace AdvancedControls.Input
 {
@@ -28,19 +29,36 @@ namespace AdvancedControls.Input
         public delegate void DeviceRemappedEventHandler(SDL.SDL_Event e);
         public event DeviceRemappedEventHandler OnDeviceRemapped;
 
+        public bool SDL_Initialized = false;
+
         private void Start()
         {
-            SDL.SDL_Init(SDL.SDL_INIT_GAMECONTROLLER | SDL.SDL_INIT_JOYSTICK);
-            Controller.AssignMappings();
+            try
+            {
+                SDL.SDL_Init(SDL.SDL_INIT_GAMECONTROLLER | SDL.SDL_INIT_JOYSTICK);
+                Controller.AssignMappings();
+                SDL_Initialized = true;
+                Debug.Log("[AdvancedControlsMod]: SDL2 initialized.");
+            }
+            catch (FileNotFoundException e)
+            {
+                Debug.Log("[AdvancedControlsMod]: SDL2 error.");
+                Debug.LogException(e);
+                enabled = false;
+            }
         }
 
         private void OnDestroy()
         {
-            SDL.SDL_Quit();
+            if (SDL_Initialized)
+                SDL.SDL_Quit();
         }
 
         private void Update()
         {
+            if (!SDL_Initialized)
+                return;
+
             SDL.SDL_Event e;
 
             while(SDL.SDL_PollEvent(out e) > 0)
