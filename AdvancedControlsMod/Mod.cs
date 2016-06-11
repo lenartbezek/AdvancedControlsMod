@@ -14,13 +14,12 @@ namespace AdvancedControls
         public override string Author { get; } = "Lench";
         public override Version Version { get; } = new Version(1, 2, 0);
         
-        public override string VersionExtra { get; } = "beta";
+        public override string VersionExtra { get; } = "alpha";
         public override string BesiegeVersion { get; } = "v0.3";
         public override bool CanBeUnloaded { get; } = true;
         public override bool Preload { get; } = false;
 
         internal static ControlMapperWindow ControlMapper;
-        internal static AxisEditorWindow AxisEditor;
         internal static EventManager EventManager;
 
         public override void OnLoad()
@@ -31,7 +30,6 @@ namespace AdvancedControls
             XmlSaver.OnSave += MachineData.SaveData;
             XmlLoader.OnLoad += MachineData.LoadData;
 
-            AxisEditor = ADVControls.Instance.gameObject.AddComponent<AxisEditorWindow>();
             ControlMapper = ADVControls.Instance.gameObject.AddComponent<ControlMapperWindow>();
             EventManager = ADVControls.Instance.gameObject.AddComponent<EventManager>();
         }

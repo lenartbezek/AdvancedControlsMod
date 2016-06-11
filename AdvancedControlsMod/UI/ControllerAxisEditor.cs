@@ -70,6 +70,8 @@ namespace AdvancedControls.UI
                                   graphRect.height),
                          Color.yellow);
 
+                Util.DrawRect(graphRect, Color.gray);
+
                 // Draw controller selection
                 Axis.ControllerID = Axis.ControllerID % Controller.NumDevices;
 

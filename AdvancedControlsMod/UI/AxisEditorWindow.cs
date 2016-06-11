@@ -1,7 +1,6 @@
 ﻿using UnityEngine;
 using spaar.ModLoader.UI;
 using AdvancedControls.Axes;
-using AdvancedControls.Controls;
 
 namespace AdvancedControls.UI
 {
@@ -23,29 +22,28 @@ namespace AdvancedControls.UI
         protected string SaveName = "";
         protected InputAxis Axis;
 
-        internal Control control;
+        public delegate void SelectAxis(InputAxis axis);
+        private SelectAxis Select;
 
         public void SaveAxis()
         {
             Axis.Name = SaveName;
             WindowName = "Edit " + SaveName;
             AxisManager.Put(Axis.Name, Axis.Clone());
-            if (control != null)
-            {
-                control.Enabled = true;
-                control.Axis = Axis.Name;
-            }
+            Select?.Invoke(Axis);
         }
 
-        public void CreateAxis()
+        public void CreateAxis(SelectAxis selectAxis = null)
         {
+            Select = selectAxis;
             Visible = true;
             WindowName = "Create new axis";
             Axis = null;
         }
 
-        public void EditAxis(InputAxis axis)
+        public void EditAxis(InputAxis axis, SelectAxis selectAxis = null)
         {
+            Select = selectAxis;
             Visible = true;
             WindowName = "Edit " + axis.Name;
             SaveName = axis.Name;
@@ -72,34 +70,37 @@ namespace AdvancedControls.UI
             {
                 // Draw add buttons
                 GUILayout.Label("Create new axis", Elements.Labels.Title);
-                GUILayout.BeginHorizontal();
 
-                if (GUILayout.Button("Controller"))
+                if (GUILayout.Button("Controller Axis", Elements.Buttons.ComponentField))
                 {
                     Axis = new ControllerAxis("new controller axis");
                     WindowName = "Create new controller axis";
                     SaveName = Axis.Name;
                 }
-                if (GUILayout.Button("Inertial"))
+                if (GUILayout.Button("Inertial Axis", Elements.Buttons.ComponentField))
                 {
                     Axis = new InertialAxis("new inertial axis");
                     WindowName = "Create new inertial key axis";
                     SaveName = Axis.Name;
                 }
-                if (GUILayout.Button("Standard"))
+                if (GUILayout.Button("Standard Axis", Elements.Buttons.ComponentField))
                 {
                     Axis = new StandardAxis("new standard axis");
                     WindowName = "Create new standard axis";
                     SaveName = Axis.Name;
                 }
-                if (GUILayout.Button("Custom"))
+                if (GUILayout.Button("Chain Axis", Elements.Buttons.ComponentField))
+                {
+                    Axis = new ChainAxis("new chain axis");
+                    WindowName = "Create new chain axis";
+                    SaveName = Axis.Name;
+                }
+                if (GUILayout.Button("Custom Axis", Elements.Buttons.ComponentField))
                 {
                     Axis = new CustomAxis("new custom axis");
                     WindowName = "Create new custom axis";
                     SaveName = Axis.Name;
                 }
-
-                GUILayout.EndHorizontal();
             }
             else
             {
@@ -125,7 +126,8 @@ namespace AdvancedControls.UI
                 "×", Elements.Buttons.Red))
             {
                 Visible = false;
-                control = null;
+                Select = null;
+                Destroy(this);
             }
 
             // Drag window

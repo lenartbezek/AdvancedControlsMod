@@ -15,7 +15,7 @@
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
+    <Optimize>true</Optimize>
     <OutputPath>bin\Debug\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
@@ -69,6 +69,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Axes\ChainAxis.cs" />
     <Compile Include="Axes\InertialAxis.cs" />
     <Compile Include="Axes\InputAxis.cs" />
     <Compile Include="Axes\AxisManager.cs" />
@@ -91,6 +92,7 @@
     <Compile Include="Input\LPUtf8StrMarshaler.cs" />
     <Compile Include="Input\SDL2.cs" />
     <Compile Include="UI\AxisEditorWindow.cs" />
+    <Compile Include="UI\ChainAxisEditor.cs" />
     <Compile Include="UI\ControlMapperWindow.cs" />
     <Compile Include="UI\ControllerAxisEditor.cs" />
     <Compile Include="Mod.cs" />

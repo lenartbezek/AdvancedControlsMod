@@ -25,7 +25,7 @@ namespace AdvancedControls.UI
         internal GenericBlock Block;
         internal List<Control> controls;
 
-        internal Control selectedControl;
+        internal AxisEditorWindow.SelectAxis Select;
 
         public void ShowBlockControls(GenericBlock b)
         {
@@ -41,7 +41,7 @@ namespace AdvancedControls.UI
         {
             Visible = false;
             Block = null;
-            selectedControl = null;
+            Select = null;
         }
 
         /// <summary>
@@ -55,7 +55,7 @@ namespace AdvancedControls.UI
                 windowRect = GUILayout.Window(windowID, windowRect, DoWindow, Block.MyBlockInfo.blockName.ToUpper(),
                     GUILayout.Width(DesiredWidth),
                     GUILayout.Height(DesiredHeight));
-                if (selectedControl != null)
+                if (Select != null)
                 {
                     popupRect.x = windowRect.x + windowRect.width;
                     popupRect.y = windowRect.y;
@@ -94,20 +94,17 @@ namespace AdvancedControls.UI
 
                 if (GUILayout.Button(name, Elements.Buttons.Default))
                 {
-                    selectedControl.Axis = name;
-                    selectedControl.Enabled = true;
-                    selectedControl = null;
+                    Select?.Invoke(axis);
+                    Select = null;
                 }
 
                 if (GUILayout.Button("✎", new GUIStyle(Elements.Buttons.Default) { fontSize = 20, padding = new RectOffset(-3, 0, 0, 0) }, GUILayout.Width(30), GUILayout.MaxHeight(28)))
                 {
-                    if (!AdvancedControlsMod.AxisEditor.Visible)
-                    {
-                        AdvancedControlsMod.AxisEditor.windowRect.x = popupRect.x;
-                        AdvancedControlsMod.AxisEditor.windowRect.y = popupRect.y;
-                    }
-                    AdvancedControlsMod.AxisEditor.EditAxis(axis.Clone());
-                    selectedControl = null;
+                    var Editor = ADVControls.Instance.gameObject.AddComponent<AxisEditorWindow>();
+                    Editor.windowRect.x = popupRect.x;
+                    Editor.windowRect.y = popupRect.y;
+                    Editor.EditAxis(axis.Clone());
+                    Select = null;
                 }
 
                 if (GUILayout.Button("×", Elements.Buttons.Red, GUILayout.Width(30)))
@@ -123,20 +120,17 @@ namespace AdvancedControls.UI
 
             if (GUILayout.Button("Create new axis", Elements.Buttons.Disabled))
             {
-                if (!AdvancedControlsMod.AxisEditor.Visible)
-                {
-                    AdvancedControlsMod.AxisEditor.windowRect.x = popupRect.x;
-                    AdvancedControlsMod.AxisEditor.windowRect.y = popupRect.y;
-                }
-                AdvancedControlsMod.AxisEditor.CreateAxis();
-                AdvancedControlsMod.AxisEditor.control = selectedControl;
-                selectedControl = null;
+                var Editor = ADVControls.Instance.gameObject.AddComponent<AxisEditorWindow>();
+                Editor.windowRect.x = popupRect.x;
+                Editor.windowRect.y = popupRect.y;
+                Editor.CreateAxis(new AxisEditorWindow.SelectAxis(Select));
+                Select = null;
             }
 
             // Draw close button
             if (GUI.Button(new Rect(popupRect.width - 28, 8, 20, 20),
                 "×", Elements.Buttons.Red))
-                selectedControl = null;
+                Select = null;
         }
 
         private void DrawControl(Control c)
@@ -150,7 +144,7 @@ namespace AdvancedControls.UI
             {
                 if (GUILayout.Button("Select Input Axis", Elements.Buttons.Disabled))
                 {
-                    selectedControl = c;
+                    Select = new AxisEditorWindow.SelectAxis((InputAxis axis) => { c.Axis = axis.Name; c.Enabled = true; });
                 }
             }
             else
@@ -158,7 +152,7 @@ namespace AdvancedControls.UI
                 var a = AxisManager.Get(c.Axis);
                 if (GUILayout.Button(c.Axis, a != null ? Elements.Buttons.Default : Elements.Buttons.Red))
                 {
-                    selectedControl = c;
+                    Select = new AxisEditorWindow.SelectAxis((InputAxis axis) => { c.Axis = axis.Name; c.Enabled = true; });
                 }
                 if (GUILayout.Button("×", Elements.Buttons.Red, GUILayout.Width(30)))
                 {

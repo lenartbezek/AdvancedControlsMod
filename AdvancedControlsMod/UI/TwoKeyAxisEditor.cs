@@ -26,6 +26,8 @@ namespace AdvancedControls.UI
 
             GUILayout.Box(GUIContent.none, GUILayout.Height(20));
 
+            Util.DrawRect(graphRect, Color.gray);
+
             Util.FillRect(new Rect(
                 graphRect.x + graphRect.width / 2 - 10 + Axis.OutputValue * (graphRect.width - 20) / 2,
                 graphRect.y,

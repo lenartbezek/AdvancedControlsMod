@@ -30,7 +30,7 @@ namespace AdvancedControls.Input
 
         private void Start()
         {
-            SDL.SDL_Init(SDL.SDL_INIT_JOYSTICK);
+            SDL.SDL_Init(SDL.SDL_INIT_GAMECONTROLLER | SDL.SDL_INIT_JOYSTICK);
             Controller.AssignMappings();
         }
 

@@ -48,28 +48,28 @@ namespace AdvancedControls.UI
 
         public static void DrawRect(Rect position, Color color)
         {
-            DrawRect(new Rect(
+            FillRect(new Rect(
                 position.x,
                 position.y,
                 position.width,
                 1),
                 Color.gray);
 
-            DrawRect(new Rect(
+            FillRect(new Rect(
                 position.x,
                 position.y + position.height - 1,
                 position.width,
                 1),
                 Color.gray);
 
-            DrawRect(new Rect(
+            FillRect(new Rect(
                 position.x,
                 position.y,
                 1,
                 position.height),
                 Color.gray);
 
-            DrawRect(new Rect(
+            FillRect(new Rect(
                 position.x + position.width - 1,
                 position.y,
                 1,

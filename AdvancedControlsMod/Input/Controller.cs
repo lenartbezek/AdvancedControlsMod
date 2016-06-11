@@ -40,11 +40,15 @@ namespace AdvancedControls.Input
 
         public static void AddJoystick(int index)
         {
+            RemoveDisconnected();
+            if (index < NumDevices) return;
             Devices.Insert(index, new Controller(index, false));
         }
 
         public static void AddController(int index)
         {
+            RemoveDisconnected();
+            if (index < NumDevices) return;
             Devices.Insert(index, new Controller(index, true));
         }
 
@@ -140,11 +144,8 @@ namespace AdvancedControls.Input
                 Debug.Log("Game controller connected: " + Name);
             else
                 Debug.Log("Joystick connected: " + Name);
+            Debug.Log("\tIndex: " + Index);
             Debug.Log("\tGuid: " + GUID);
-            Debug.Log("\tNumber of axes: " + NumAxes);
-            Debug.Log("\tNumber of balls: " + NumBalls);
-            Debug.Log("\tNumber of hats: " + NumHats);
-            Debug.Log("\tNumber of buttons: " + NumButtons);
         }
 
         private void Update()

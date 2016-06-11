@@ -6,7 +6,8 @@
         Controller = 1,
         Inertial = 2,
         Standard = 3,
-        Custom = 4
+        Custom = 4,
+        Chain = 5
     }
 
     public abstract class InputAxis
