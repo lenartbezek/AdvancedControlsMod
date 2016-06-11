@@ -1,12 +1,16 @@
 ﻿using UnityEngine;
 using spaar.ModLoader.UI;
 using AdvancedControls.Axes;
+using System;
 
 namespace AdvancedControls.UI
 {
     public interface AxisEditor
     {
         void DrawAxis(Rect windowRect);
+        string GetHelp();
+        string GetNote();
+        string GetError();
     }
 
     public class AxisEditorWindow : MonoBehaviour
@@ -14,6 +18,7 @@ namespace AdvancedControls.UI
         public new string name { get { return "Edit Axis window"; } }
 
         public bool Visible { get; set; } = false;
+        public bool ShowHelp { get; set; } = false;
 
         internal int _windowID = spaar.ModLoader.Util.GetWindowID();
         internal Rect windowRect = new Rect(100, 100, 100, 100);
@@ -27,11 +32,19 @@ namespace AdvancedControls.UI
 
         public void SaveAxis()
         {
-            Axis = Axis.Clone();
-            Axis.Name = SaveName;
-            WindowName = "Edit " + SaveName;
-            AxisManager.Put(Axis.Name, Axis);
-            Select?.Invoke(Axis);
+            try
+            {
+                Axis = Axis.Clone();
+                Axis.Name = SaveName;
+                WindowName = "Edit " + SaveName;
+                AxisManager.Put(Axis.Name, Axis);
+                Select?.Invoke(Axis);
+                Select = null;
+            }
+            catch (InvalidOperationException e)
+            {
+                
+            }
         }
 
         public void CreateAxis(SelectAxis selectAxis = null)
@@ -117,7 +130,35 @@ namespace AdvancedControls.UI
                 }
                 GUILayout.EndHorizontal();
 
+                // Draw axis editor
                 Axis.GetEditor().DrawAxis(windowRect);
+
+                // Draw error message
+                if (Axis.GetEditor().GetError() != null)
+                {
+                    GUILayout.Label(Axis.GetEditor().GetError(), new GUIStyle(Elements.Labels.Default) { margin = new RectOffset(8, 8, 12, 8) });
+                }
+
+                // Draw note message
+                if (Axis.GetEditor().GetNote() != null)
+                {
+                    GUILayout.Label(Axis.GetEditor().GetNote(), new GUIStyle(Elements.Labels.Default) { margin = new RectOffset(8, 8, 12, 8) });
+                }
+
+                // Draw help message
+                if (ShowHelp && Axis.GetEditor().GetHelp() != null)
+                {
+                    if (GUILayout.Button(Axis.GetEditor().GetHelp(), new GUIStyle(Elements.Labels.Default) { margin = new RectOffset(8, 8, 12, 8) }))
+                        ShowHelp = false;
+                }
+
+                // Draw help button
+                if (Axis.GetEditor().GetHelp() != null)
+                    if (GUI.Button(new Rect(windowRect.width - 76, 8, 30, 30),
+                        "?", Elements.Buttons.Red))
+                    {
+                        ShowHelp = !ShowHelp;
+                    }
             }
 
             // Draw close button

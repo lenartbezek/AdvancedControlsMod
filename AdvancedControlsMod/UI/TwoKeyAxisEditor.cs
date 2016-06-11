@@ -15,6 +15,10 @@ namespace AdvancedControls.UI
 
         private StandardAxis Axis;
 
+        private string help;
+        private string error;
+        private string note;
+
         public void DrawAxis(Rect windowRect)
         {
             // Draw graph
@@ -115,6 +119,21 @@ namespace AdvancedControls.UI
                 new GUIStyle(Elements.Labels.Default) { margin = new RectOffset(0, 0, 14, 0) });
 
             GUILayout.EndHorizontal();
+        }
+
+        public string GetHelp()
+        {
+            return help;
+        }
+
+        public string GetNote()
+        {
+            return note;
+        }
+
+        public string GetError()
+        {
+            return error;
         }
     }
 }

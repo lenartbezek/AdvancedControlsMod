@@ -6,6 +6,39 @@ namespace AdvancedControls.Axes
 {
     public class ChainAxis : InputAxis
     {
+        public override string Name
+        {
+            get
+            {
+                return base.Name;
+            }
+
+            set
+            {
+                base.Name = value;
+                var axis_a = AxisManager.Get(SubAxis1) as ChainAxis;
+                var axis_b = AxisManager.Get(SubAxis2) as ChainAxis;
+                bool error = false;
+                string error_message = "Renaming this axis caused a cycle in the chain.\n";
+                if (axis_a != null && axis_a.CheckCycle(new List<string>() { }))
+                {
+                    error = true;
+                    error_message += "'" + SubAxis1 + "' has been removed.\n";
+                    SubAxis1 = null;
+                }
+                if (axis_b != null && axis_b.CheckCycle(new List<string>() { }))
+                {
+                    error = true;
+                    error_message += "'" + SubAxis2 + "' has been removed.\n";
+                    SubAxis2 = null;
+                }
+                if (error)
+                {
+                    throw new InvalidOperationException(error_message);
+                }
+            }
+        }
+
         private string sub_axis1;
         public string SubAxis1
         {
@@ -20,7 +53,7 @@ namespace AdvancedControls.Axes
                 if (axis != null && axis.CheckCycle(new List<string>() { }))
                 {
                     sub_axis1 = null;
-                    throw new InvalidOperationException("Cannot create a cycle from chaining axes.");
+                    throw new InvalidOperationException("'" + value + "' is already in the axis chain.\nAdding it here would create a cycle.");
                 }
             }
         }
@@ -39,7 +72,7 @@ namespace AdvancedControls.Axes
                 if (axis != null && axis.CheckCycle(new List<string>() { }))
                 {
                     sub_axis2 = null;
-                    throw new InvalidOperationException("Cannot create a cycle from chaining axes.");
+                    throw new InvalidOperationException("'" + value + "' is already in the axis chain.\nAdding it here would create a cycle.");
                 }
             }
         }

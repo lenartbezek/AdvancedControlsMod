@@ -38,12 +38,9 @@ namespace AdvancedControls.Input
                 SDL.SDL_Init(SDL.SDL_INIT_GAMECONTROLLER | SDL.SDL_INIT_JOYSTICK);
                 Controller.AssignMappings();
                 SDL_Initialized = true;
-                Debug.Log("[AdvancedControlsMod]: SDL2 initialized.");
             }
-            catch (FileNotFoundException e)
+            catch
             {
-                Debug.Log("[AdvancedControlsMod]: SDL2 error.");
-                Debug.LogException(e);
                 enabled = false;
             }
         }

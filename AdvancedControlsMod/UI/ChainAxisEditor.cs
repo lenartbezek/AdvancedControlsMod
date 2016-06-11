@@ -14,7 +14,15 @@ namespace AdvancedControls.UI
         }
 
         private ChainAxis Axis;
-        private string Error;
+
+        private string help =
+@"With chain axis you can link two other axes
+and combine them in a single linear axis.
+
+You can also link another chain axis and
+design more complex inputs.";
+        private string note;
+        private string error;
 
         private AxisEditorWindow.SelectAxis Select;
 
@@ -111,17 +119,17 @@ namespace AdvancedControls.UI
             {
                 if (GUILayout.Button("Select Input Axis", Elements.Buttons.Disabled, GUILayout.MaxWidth(leftGraphRect.width)))
                 {
-                    Error = null;
+                    error = null;
                     Select = new AxisEditorWindow.SelectAxis((InputAxis axis) =>
                     {
                         try
                         {
                             Axis.SubAxis1 = axis.Name;
                         }
-                        catch (InvalidOperationException)
+                        catch (InvalidOperationException e)
                         {
                             Select = null;
-                            Error = "'" + axis.Name + "' is already in the axis chain.\nAdding it here would create a cycle.";
+                            error = "<color=#FFFF00><b>Chain cycle error</b></color>\n" + e.Message;
                         }
                     });
                 }
@@ -130,17 +138,17 @@ namespace AdvancedControls.UI
             {
                 if (GUILayout.Button(Axis.SubAxis1, AxisManager.Get(Axis.SubAxis1) != null ? Elements.Buttons.Default : Elements.Buttons.Red, GUILayout.MaxWidth(leftGraphRect.width)))
                 {
-                    Error = null;
+                    error = null;
                     Select = new AxisEditorWindow.SelectAxis((InputAxis axis) =>
                     {
                         try
                         {
                             Axis.SubAxis1 = axis.Name;
                         }
-                        catch (InvalidOperationException)
+                        catch (InvalidOperationException e)
                         {
                             Select = null;
-                            Error = "'" + axis.Name + "' is already in the axis chain.\nAdding it here would create a cycle.";
+                            error = "<color=#FFFF00><b>Chain cycle error</b></color>\n" + e.Message;
                         }
                     });
                 }
@@ -150,17 +158,17 @@ namespace AdvancedControls.UI
             {
                 if (GUILayout.Button("Select Input Axis", Elements.Buttons.Disabled, GUILayout.MaxWidth(rightGraphRect.width)))
                 {
-                    Error = null;
+                    error = null;
                     Select = new AxisEditorWindow.SelectAxis((InputAxis axis) =>
                     {
                         try
                         {
                             Axis.SubAxis2 = axis.Name;
                         }
-                        catch (InvalidOperationException)
+                        catch (InvalidOperationException e)
                         {
                             Select = null;
-                            Error = "'"+axis.Name + "' is already in the axis chain.\nAdding it here would create a cycle.";
+                            error = "<color=#FFFF00><b>Chain cycle error</b></color>\n" + e.Message;
                         }
                     });
                 }
@@ -169,17 +177,17 @@ namespace AdvancedControls.UI
             {
                 if (GUILayout.Button(Axis.SubAxis2, AxisManager.Get(Axis.SubAxis2) != null ? Elements.Buttons.Default : Elements.Buttons.Red, GUILayout.MaxWidth(rightGraphRect.width)))
                 {
-                    Error = null;
+                    error = null;
                     Select = new AxisEditorWindow.SelectAxis((InputAxis axis) =>
                     {
                         try
                         {
                             Axis.SubAxis2 = axis.Name;
                         }
-                        catch (InvalidOperationException)
+                        catch (InvalidOperationException e)
                         {
                             Select = null;
-                            Error = "'" + axis.Name + "' is already in the axis chain.\nAdding it here would create a cycle.";
+                            error = "<color=#FFFF00><b>Chain cycle error</b></color>\n" + e.Message;
                         }
                     });
                 }
@@ -187,11 +195,6 @@ namespace AdvancedControls.UI
 
             GUILayout.EndHorizontal();
 
-            if (Error != null)
-            {
-                GUILayout.Label("\n<color=#FFFF00>Error:</color>", new GUIStyle(Elements.Labels.Title) { richText = true });
-                GUILayout.Label(Error);
-            }
             if (Select != null)
             {
                 string toBeRemoved = null;
@@ -238,6 +241,21 @@ namespace AdvancedControls.UI
                     Select = null;
                 }
             }
+        }
+
+        public string GetHelp()
+        {
+            return help;
+        }
+
+        public string GetNote()
+        {
+            return note;
+        }
+
+        public string GetError()
+        {
+            return error;
         }
     }
 }

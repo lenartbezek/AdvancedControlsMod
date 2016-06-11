@@ -14,6 +14,20 @@ namespace AdvancedControls.UI
 
         private CustomAxis Axis;
 
+        private string help =
+//@"With chain axis you can link two other axes
+@"Program your own input axis with Python 2.7.
+Initialisation code is run once at the start.
+Update code is run on every frame.
+It's result is used as the axis value.
+
+Value should be in range [-1, 1].
+You can run axis code in global scope to 
+interact with other custom axes and 
+scripts in Lench Scripter Mod.";
+        private string note;
+        private string error;
+
         private Vector2 initialisationScrollPosition = Vector2.zero;
         private Vector2 updateScrollPosition = Vector2.zero;
 
@@ -21,10 +35,14 @@ namespace AdvancedControls.UI
         {
             if (!PythonEnvironment.Loaded)
             {
-                GUILayout.Label("<color=#FFFF00><b>Python engine not available.</b></color>\nInstall full LenchScripterMod with Python binaries to enable custom axes.");
+                note = "<color=#FFFF00><b>Python engine not available.</b></color>\n"+
+                        "Install full Lench Scripter Mod with Python binaries to enable custom axes.";
             }
             else
             {
+                error = null;
+                note = null;
+
                 // Draw initialisation code text area
                 GUILayout.Label("Initialisation code",
                     Util.LabelStyle);
@@ -61,16 +79,31 @@ namespace AdvancedControls.UI
                 // Draw notes
                 if (!PythonEnvironment.Enabled && Axis.GlobalScope)
                 {
-                    GUILayout.Label("<color=#FFFF00>Note</color>", new GUIStyle(Elements.Labels.Title) { richText = true });
-                    GUILayout.Label("Machine script not enabled in settings menu.\nAxis code will be run in local scope.");
+                    note = "<color=#FFFF00><b>Script not enabled in settings menu</b></color>\n" +
+                           "Axis code will be run in local scope.";
                 }
 
                 if (Axis.Error != null)
                 {
-                    GUILayout.Label("<color=#FF0000>Python error</color>", new GUIStyle(Elements.Labels.Title) { richText = true });
-                    GUILayout.Label(Axis.Error);
+                    error = "<color=#FF0000><b>Python error</b></color>\n" +
+                            Axis.Error;
                 }
             }
+        }
+
+        public string GetHelp()
+        {
+            return help;
+        }
+
+        public string GetNote()
+        {
+            return note;
+        }
+
+        public string GetError()
+        {
+            return error;
         }
     }
 }

@@ -7,6 +7,18 @@ namespace AdvancedControls.UI
 {
     public class ControllerAxisEditor : AxisEditor
     {
+
+#if windows
+        private const string sdl_load_error_message = "place SDL2.dll in Mods/Resources/AdvancedControls/lib/";
+        private const string platform = "Windows";
+#elif linux
+        private const string sdl_load_error_message = "run `sudo apt-get install libsdl2-2.0-0` command";
+        private const string platform = "Linux";
+#elif osx
+        private const string sdl_load_error_message = "download and install runtime binaries from www.libsdl.org/download-2.0.php";
+        private const string platform = "Mac OSX";
+#endif
+
         public ControllerAxisEditor(InputAxis axis)
         {
             Axis = axis as ControllerAxis;
@@ -17,6 +29,10 @@ namespace AdvancedControls.UI
         private Rect graphRect;
         private Rect last_graphRect;
         private Texture2D graphTex;
+
+        private string help;
+        private string note;
+        private string error;
 
         private ControllerAxis.Param last_parameters;
 
@@ -49,17 +65,23 @@ namespace AdvancedControls.UI
         {
             if (!AdvancedControlsMod.EventManager.SDL_Initialized)
             {
-                GUILayout.Label("<color=#FF0000><b>SDL2 library not loaded.</b></color>\nMake sure SDL2 libraries are properly installed.\n\n"+
-                                "<b>Windows</b>:\tPlace SDL2.dll in Mods/Resources/AdvancedControls/lib/\n" +
-                                "<b>Linux</b>:\tRun `sudo apt-get install libsdl2-2.0-0` command\n" +
-                                "<b>Mac OSX</b>:\tDownload and install runtime binaries from www.libsdl.org/download-2.0.php");
+                error = "<color=#FF0000><b>SDL2 library not found.</b></color>\n" +
+                        "Make sure SDL2 library is properly installed.\n" +
+                        "To install it, " + sdl_load_error_message;
+                note =  "<color=#FFFF00><b>" + platform + "</b></color>\n" +
+                        "You are using " + platform + " version of Advanced Controls Mod.\n"+
+                        "If you are using some other operating system, download the correct version of the mod.";
             }
             else if (Controller.NumDevices == 0)
             {
-                GUILayout.Label("<color=#FFFF00><b>No controllers connected.</b></color>\nYou must connect a joystick or controller to use this axis.");
+                note =  "<color=#FFFF00><b>No controllers connected.</b></color>\n"+
+                        "You must connect a joystick or controller to use this axis.";
             }
             else
             {
+                error = null;
+                note = null;
+
                 // Draw graph
                 graphRect = new Rect(
                 GUI.skin.window.padding.left,
@@ -163,6 +185,21 @@ namespace AdvancedControls.UI
 
                 GUILayout.EndHorizontal();
             }
+        }
+
+        public string GetHelp()
+        {
+            return help;
+        }
+
+        public string GetNote()
+        {
+            return note;
+        }
+
+        public string GetError()
+        {
+            return error;
         }
     }
 }
