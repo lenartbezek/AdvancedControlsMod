@@ -109,6 +109,7 @@
     <Compile Include="Axes\ControllerAxis.cs" />
     <Compile Include="Axes\CustomAxis.cs" />
     <Compile Include="Axes\StandardAxis.cs" />
+    <Compile Include="Configuration.cs" />
     <Compile Include="Controls\AngleControl.cs" />
     <Compile Include="Controls\Control.cs" />
     <Compile Include="Controls\ControlManager.cs" />

@@ -114,6 +114,7 @@ namespace AdvancedControls.Axes
 
         public ChainAxis(string name, string a = null, string b = null, ChainMethod m = ChainMethod.Sum) : base(name)
         {
+            Type = AxisType.Chain;
             SubAxis1 = a;
             SubAxis2 = b;
             Method = m;
@@ -149,14 +150,30 @@ namespace AdvancedControls.Axes
             return new ChainAxis(Name, SubAxis1, SubAxis2, Method);
         }
 
-        public override void Load(MachineInfo machineInfo)
+        public override void Load()
         {
-            throw new NotImplementedException();
+            if (spaar.ModLoader.Configuration.DoesKeyExist("axis-" + Name + "-method"))
+                Method = (ChainMethod)Enum.Parse(typeof(ChainMethod), spaar.ModLoader.Configuration.GetString("axis-" + Name + "-method", "Sum"));
+            if (spaar.ModLoader.Configuration.DoesKeyExist("axis-" + Name + "-subaxis1"))
+                SubAxis1 = spaar.ModLoader.Configuration.GetString("axis-" + Name + "-subaxis1", null);
+            if (spaar.ModLoader.Configuration.DoesKeyExist("axis-" + Name + "-subaxis2"))
+                SubAxis2 = spaar.ModLoader.Configuration.GetString("axis-" + Name + "-subaxis2", null);
         }
 
-        public override void Save(MachineInfo machineInfo)
+        public override void Save()
         {
-            throw new NotImplementedException();
+            spaar.ModLoader.Configuration.SetString("axis-" + Name + "-type", Type.ToString());
+            spaar.ModLoader.Configuration.SetString("axis-" + Name + "-method", Method.ToString());
+            spaar.ModLoader.Configuration.SetString("axis-" + Name + "-subaxis1", SubAxis1);
+            spaar.ModLoader.Configuration.SetString("axis-" + Name + "-subaxis2", SubAxis2);
+        }
+
+        public override void Delete()
+        {
+            spaar.ModLoader.Configuration.RemoveKey("axis-" + Name + "-type");
+            spaar.ModLoader.Configuration.RemoveKey("axis-" + Name + "-method");
+            spaar.ModLoader.Configuration.RemoveKey("axis-" + Name + "-subaxis1");
+            spaar.ModLoader.Configuration.RemoveKey("axis-" + Name + "-subaxis2");
         }
 
         public override void Initialise() { }

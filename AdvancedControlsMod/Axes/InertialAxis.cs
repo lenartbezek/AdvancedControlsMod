@@ -48,10 +48,5 @@ namespace AdvancedControls.Axes
         {
             return new InertialAxis(Name, PositiveBind, NegativeBind, Sensitivity, Gravity, Snap, Invert);
         }
-
-        public override void Save(MachineInfo machineInfo)
-        {
-            
-        }
     }
 }

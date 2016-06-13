@@ -82,14 +82,59 @@ namespace AdvancedControls.Axes
             return new StandardAxis(Name, PositiveBind, NegativeBind, Sensitivity, Gravity, Snap, Invert);
         }
 
-        public override void Load(MachineInfo machineInfo)
+        public override void Load()
         {
-            
+            Sensitivity = spaar.ModLoader.Configuration.GetFloat("axis-" + Name + "-sensitivity", Sensitivity);
+            Gravity = spaar.ModLoader.Configuration.GetFloat("axis-" + Name + "-gravity", Gravity);
+            Snap = spaar.ModLoader.Configuration.GetBool("axis-" + Name + "-snap", Snap);
+            Invert = spaar.ModLoader.Configuration.GetBool("axis-" + Name + "-invert", Invert);
+            PositiveBind = ParseButtonID(spaar.ModLoader.Configuration.GetString("axis-" + Name + "-positive", null));
+            NegativeBind = ParseButtonID(spaar.ModLoader.Configuration.GetString("axis-" + Name + "-negative", null));
         }
 
-        public override void Save(MachineInfo machineInfo)
+        public override void Save()
         {
-            
+            spaar.ModLoader.Configuration.SetString("axis-" + Name + "-type", Type.ToString());
+            spaar.ModLoader.Configuration.SetFloat("axis-" + Name + "-sensitivity", Sensitivity);
+            spaar.ModLoader.Configuration.SetFloat("axis-" + Name + "-gravity", Gravity);
+            spaar.ModLoader.Configuration.SetBool("axis-" + Name + "-snap", Snap);
+            spaar.ModLoader.Configuration.SetBool("axis-" + Name + "-invert", Invert);
+            spaar.ModLoader.Configuration.SetString("axis-" + Name + "-positive", PositiveBind.ID);
+            spaar.ModLoader.Configuration.SetString("axis-" + Name + "-negative", NegativeBind.ID);
+        }
+
+        public override void Delete()
+        {
+            spaar.ModLoader.Configuration.RemoveKey("axis-" + Name + "-type");
+            spaar.ModLoader.Configuration.RemoveKey("axis-" + Name + "-sensitivity");
+            spaar.ModLoader.Configuration.RemoveKey("axis-" + Name + "-gravity");
+            spaar.ModLoader.Configuration.RemoveKey("axis-" + Name + "-snap");
+            spaar.ModLoader.Configuration.RemoveKey("axis-" + Name + "-invert");
+            spaar.ModLoader.Configuration.RemoveKey("axis-" + Name + "-positive");
+            spaar.ModLoader.Configuration.RemoveKey("axis-" + Name + "-negative");
+        }
+
+        private Button ParseButtonID(string id)
+        {
+            if (id == null)
+                return null;
+            try
+            {
+                Button b = null;
+                if (id.StartsWith("key"))
+                    b = new Key(id);
+                if (id.StartsWith("hat"))
+                    b = new HatButton(id);
+                if (id.StartsWith("joy"))
+                    b = new JoystickButton(id);
+                if (b != null && b.Connected)
+                    return b;
+                return null;
+            }
+            catch
+            {
+                return null;
+            }
         }
     }
 }

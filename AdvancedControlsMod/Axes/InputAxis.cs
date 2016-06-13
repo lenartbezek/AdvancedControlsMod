@@ -37,7 +37,8 @@
         }
 
         public abstract InputAxis Clone();
-        public abstract void Load(MachineInfo machineInfo);
-        public abstract void Save(MachineInfo machineInfo);
+        public abstract void Load();
+        public abstract void Save();
+        public abstract void Delete();
     }
 }

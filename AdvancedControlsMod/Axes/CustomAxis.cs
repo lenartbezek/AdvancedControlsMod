@@ -104,22 +104,30 @@ axis_value";
             return new CustomAxis(Name, InitialisationCode, UpdateCode, GlobalScope);
         }
 
-        public override void Load(MachineInfo machineInfo)
+        public override void Load()
         {
-            if (machineInfo.MachineData.HasKey("ac-axis-" + Name + "-init"))
-                InitialisationCode = machineInfo.MachineData.ReadString("ac-axis-" + Name + "-init");
-            if (machineInfo.MachineData.HasKey("ac-axis-" + Name + "-update"))
-                UpdateCode = machineInfo.MachineData.ReadString("ac-axis-" + Name + "-update");
-            if (machineInfo.MachineData.HasKey("ac-axis-" + Name + "-global"))
-                GlobalScope = machineInfo.MachineData.ReadBool("ac-axis-" + Name + "-global");
+            if (spaar.ModLoader.Configuration.DoesKeyExist("axis-" + Name + "-init"))
+                spaar.ModLoader.Configuration.SetString("axis-" + Name + "-init", InitialisationCode);
+            if (spaar.ModLoader.Configuration.DoesKeyExist("axis-" + Name + "-update"))
+                spaar.ModLoader.Configuration.SetString("axis-" + Name + "-update", UpdateCode);
+            if (spaar.ModLoader.Configuration.DoesKeyExist("axis-" + Name + "-global"))
+                spaar.ModLoader.Configuration.SetBool("axis-" + Name + "-global", GlobalScope);
         }
 
-        public override void Save(MachineInfo machineInfo)
+        public override void Save()
         {
-            machineInfo.MachineData.Write("ac-axis-" + Name + "-type", "custom");
-            machineInfo.MachineData.Write("ac-axis-" + Name + "-init", InitialisationCode);
-            machineInfo.MachineData.Write("ac-axis-" + Name + "-update", UpdateCode);
-            machineInfo.MachineData.Write("ac-axis-" + Name + "-global", GlobalScope);
+            spaar.ModLoader.Configuration.SetString("axis-" + Name + "-type", Type.ToString());
+            spaar.ModLoader.Configuration.SetString("axis-" + Name + "-init", InitialisationCode);
+            spaar.ModLoader.Configuration.SetString("axis-" + Name + "-update", UpdateCode);
+            spaar.ModLoader.Configuration.SetBool("axis-" + Name + "-global", GlobalScope);
+        }
+
+        public override void Delete()
+        {
+            spaar.ModLoader.Configuration.RemoveKey("axis-" + Name + "-type");
+            spaar.ModLoader.Configuration.RemoveKey("axis-" + Name + "-init");
+            spaar.ModLoader.Configuration.RemoveKey("axis-" + Name + "-update");
+            spaar.ModLoader.Configuration.RemoveKey("axis-" + Name + "-global");
         }
     }
 }

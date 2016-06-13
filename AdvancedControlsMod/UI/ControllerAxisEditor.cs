@@ -59,8 +59,9 @@ namespace AdvancedControls.UI
             {
                 for (int i = 0; i < graphRect.width; i++)
                 {
-                    var value = Axis.Process((i - graphRect.width / 2) / (graphRect.width / 2));
-                    var point = graphRect.height / 2 - (graphRect.height-1) / 2 * value;
+                    var x = (i - graphRect.width / 2) / (graphRect.width / 2);
+                    var y = Axis.Process(-x);
+                    var point = graphRect.height / 2 + (graphRect.height-1) / 2 * y;
                     for (int j = 0; j < graphRect.height; j++)
                     {
                         if ((int)point == j)
@@ -99,10 +100,15 @@ namespace AdvancedControls.UI
 
                 // Graph rect
                 graphRect = new Rect(
-                GUI.skin.window.padding.left,
-                GUI.skin.window.padding.top + 36,
-                windowRect.width - GUI.skin.window.padding.left - GUI.skin.window.padding.right,
-                windowRect.width - GUI.skin.window.padding.left - GUI.skin.window.padding.right);
+                    GUI.skin.window.padding.left,
+                    GUI.skin.window.padding.top + 36,
+                    windowRect.width - GUI.skin.window.padding.left - GUI.skin.window.padding.right,
+                    windowRect.width - GUI.skin.window.padding.left - GUI.skin.window.padding.right);
+
+                // Axis value
+                GUI.Label(new Rect(graphRect.x, graphRect.y, graphRect.width, 20),
+                        "  <color=#808080><b>"+Axis.OutputValue.ToString("0.00")+"</b></color>",
+                        new GUIStyle(Elements.Labels.Default) { richText = true, alignment = TextAnchor.MiddleLeft });
 
                 // Draw drag controls
                 if (Axis.OffsetX == 0 && Axis.OffsetY == 0)
@@ -139,14 +145,13 @@ namespace AdvancedControls.UI
                 {
                     dragging = true;
                     click_position = mousePos;
-                    click_position.x -= Axis.OffsetX * drag_range;
+                    click_position.x += Axis.OffsetX * drag_range;
                     click_position.y += Axis.OffsetY * drag_range;
                 }
 
                 if (dragging)
                 {
-                    
-                    Axis.OffsetX = Mathf.Clamp((mousePos.x - click_position.x) / drag_range, -1f, 1f);
+                    Axis.OffsetX = Mathf.Clamp((click_position.x - mousePos.x) / drag_range, -1f, 1f);
                     Axis.OffsetY = Mathf.Clamp((click_position.y - mousePos.y) / drag_range, -1f, 1f);
                     if (UnityEngine.Input.GetMouseButtonUp(0))
                     {
@@ -157,7 +162,8 @@ namespace AdvancedControls.UI
                 // Draw graph input and frame
                 Util.DrawRect(graphRect, Color.gray);
 
-                Util.FillRect(new Rect(graphRect.x + graphRect.width / 2 + graphRect.width / 2 * Axis.InputValue,
+                Util.FillRect(new Rect(
+                                  graphRect.x + graphRect.width / 2 + graphRect.width / 2 * Axis.InputValue,
                                   graphRect.y,
                                   1,
                                   graphRect.height),

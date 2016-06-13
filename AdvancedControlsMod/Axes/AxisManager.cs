@@ -24,6 +24,7 @@ namespace AdvancedControls.Axes
         {
             if (Axes.ContainsKey(name))
             {
+                Axes[name].Delete();
                 Axes[name] = axis;
             }
             else
@@ -35,6 +36,7 @@ namespace AdvancedControls.Axes
 
         public static void Remove(string name)
         {
+            Axes[name].Delete();
             Axes.Remove(name);
         }
 

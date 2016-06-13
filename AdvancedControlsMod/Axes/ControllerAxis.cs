@@ -72,8 +72,6 @@ namespace AdvancedControls.Axes
 
         public struct Param
         {
-            public int axis;
-            public Guid controller;
             public float sens;
             public float curv;
             public float dead;
@@ -88,8 +86,6 @@ namespace AdvancedControls.Axes
             {
                 return new Param()
                 {
-                    axis = AxisID,
-                    controller = ControllerGUID,
                     sens = Sensitivity,
                     curv = Curvature,
                     dead = Deadzone,
@@ -126,12 +122,12 @@ namespace AdvancedControls.Axes
             input += OffsetX;
             float value;
             if (Mathf.Abs(input) < Deadzone)
-                return 0 - OffsetY;
+                return 0 + OffsetY;
             else
                 value = input > 0 ? input - Deadzone : input + Deadzone;
             value *= Sensitivity * (Invert ? -1 : 1);
             value = value > 0 ? Mathf.Pow(value, Curvature) : -Mathf.Pow(-value, Curvature);
-            return Mathf.Clamp(value - OffsetY, -1, 1);
+            return Mathf.Clamp(value + OffsetY, -1, 1);
         }
 
         public override InputAxis Clone()
@@ -139,14 +135,54 @@ namespace AdvancedControls.Axes
             return new ControllerAxis(Name, ControllerGUID, AxisID, Sensitivity, Curvature, Deadzone, OffsetX, OffsetY, Invert, Smooth);
         }
 
-        public override void Load(MachineInfo machineInfo)
+        public override void Load()
         {
-            throw new NotImplementedException();
+            if (spaar.ModLoader.Configuration.DoesKeyExist("axis-" + Name + "-controller"))
+                ControllerGUID = new Guid(spaar.ModLoader.Configuration.GetString("axis-" + Name + "-controller", ControllerGUID.ToString()));
+            if (spaar.ModLoader.Configuration.DoesKeyExist("axis-" + Name + "-axis"))
+                AxisID = spaar.ModLoader.Configuration.GetInt("axis-" + Name + "-axis", AxisID);
+            if (spaar.ModLoader.Configuration.DoesKeyExist("axis-" + Name + "-sensitivity"))
+                Sensitivity = spaar.ModLoader.Configuration.GetFloat("axis-" + Name + "-sensitivity", Sensitivity);
+            if (spaar.ModLoader.Configuration.DoesKeyExist("axis-" + Name + "-curvature"))
+                Curvature = spaar.ModLoader.Configuration.GetFloat("axis-" + Name + "-curvature", Curvature);
+            if (spaar.ModLoader.Configuration.DoesKeyExist("axis-" + Name + "-deadzone"))
+                Deadzone = spaar.ModLoader.Configuration.GetFloat("axis-" + Name + "-deadzone", Deadzone);
+            if (spaar.ModLoader.Configuration.DoesKeyExist("axis-" + Name + "-offsetx"))
+                OffsetX = spaar.ModLoader.Configuration.GetFloat("axis-" + Name + "-offsetx", OffsetX);
+            if (spaar.ModLoader.Configuration.DoesKeyExist("axis-" + Name + "-offsety"))
+                OffsetY = spaar.ModLoader.Configuration.GetFloat("axis-" + Name + "-offsety", OffsetY);
+            if (spaar.ModLoader.Configuration.DoesKeyExist("axis-" + Name + "-invert"))
+                Invert = spaar.ModLoader.Configuration.GetBool("axis-" + Name + "-invert", Invert);
+            if (spaar.ModLoader.Configuration.DoesKeyExist("axis-" + Name + "-smooth"))
+                Smooth = spaar.ModLoader.Configuration.GetBool("axis-" + Name + "-smooth", Smooth);
         }
 
-        public override void Save(MachineInfo machineInfo)
+        public override void Save()
         {
-            throw new NotImplementedException();
+            spaar.ModLoader.Configuration.SetString("axis-" + Name + "-type", Type.ToString());
+            spaar.ModLoader.Configuration.SetString("axis-" + Name + "-controller", ControllerGUID.ToString());
+            spaar.ModLoader.Configuration.SetInt("axis-" + Name + "-axis", AxisID);
+            spaar.ModLoader.Configuration.SetFloat("axis-" + Name + "-sensitivity", Sensitivity);
+            spaar.ModLoader.Configuration.SetFloat("axis-" + Name + "-curvature", Curvature);
+            spaar.ModLoader.Configuration.SetFloat("axis-" + Name + "-deadzone", Deadzone);
+            spaar.ModLoader.Configuration.SetFloat("axis-" + Name + "-offsetx", OffsetX);
+            spaar.ModLoader.Configuration.SetFloat("axis-" + Name + "-offsety", OffsetY);
+            spaar.ModLoader.Configuration.SetBool("axis-" + Name + "-invert", Invert);
+            spaar.ModLoader.Configuration.SetBool("axis-" + Name + "-smooth", Smooth);
+        }
+
+        public override void Delete()
+        {
+            spaar.ModLoader.Configuration.RemoveKey("axis-" + Name + "-type");
+            spaar.ModLoader.Configuration.RemoveKey("axis-" + Name + "-controller");
+            spaar.ModLoader.Configuration.RemoveKey("axis-" + Name + "-axis");
+            spaar.ModLoader.Configuration.RemoveKey("axis-" + Name + "-sensitivity");
+            spaar.ModLoader.Configuration.RemoveKey("axis-" + Name + "-curvature");
+            spaar.ModLoader.Configuration.RemoveKey("axis-" + Name + "-deadzone");
+            spaar.ModLoader.Configuration.RemoveKey("axis-" + Name + "-offsetx");
+            spaar.ModLoader.Configuration.RemoveKey("axis-" + Name + "-offsety");
+            spaar.ModLoader.Configuration.RemoveKey("axis-" + Name + "-invert");
+            spaar.ModLoader.Configuration.RemoveKey("axis-" + Name + "-smooth");
         }
 
         public override void Initialise() { }

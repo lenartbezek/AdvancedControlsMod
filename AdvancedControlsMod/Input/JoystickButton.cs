@@ -1,4 +1,6 @@
-﻿namespace AdvancedControls.Input
+﻿using System;
+
+namespace AdvancedControls.Input
 {
     /// <summary>
     /// Joystick button.
@@ -12,6 +14,7 @@
         private bool pressed = false;
         private bool released = false;
 
+        public string ID { get { return "joy-" + index + "-" + controller.GUID; } }
         public bool IsDown { get { return down; } }
         public bool Pressed { get { return pressed; } }
         public bool Released { get { return released; } }
@@ -23,6 +26,20 @@
         {
             this.controller = controller;
             this.index = index;
+
+            AdvancedControlsMod.EventManager.OnButton += HandleEvent;
+        }
+
+        public JoystickButton(string id)
+        {
+            var args = id.Split('-');
+            if (args[0].Equals("joy"))
+            {
+                index = int.Parse(args[1]);
+                controller = Controller.Get(new Guid(args[2]));
+            }
+            else
+                throw new FormatException("Specified id does not represent a joystick button.");
 
             AdvancedControlsMod.EventManager.OnButton += HandleEvent;
         }

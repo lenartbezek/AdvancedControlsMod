@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using AdvancedControls.Axes;
 using AdvancedControls.Controls;
 using UnityEngine;
 
@@ -9,7 +8,7 @@ namespace AdvancedControls
     public static class MachineData
     {
 
-        public static void LoadData(MachineInfo machineInfo)
+        public static void Load(MachineInfo machineInfo)
         {
             try
             {
@@ -19,19 +18,7 @@ namespace AdvancedControls
                 var axis_names = machineInfo.MachineData.ReadStringArray("ac-axislist");
                 foreach (string name in axis_names)
                 {
-                    InputAxis axis = null;
-                    var type = machineInfo.MachineData.ReadString("ac-axis-" + name + "-type");
-                    if (type == "controller")
-                        axis = new ControllerAxis(name, Input.Controller.DeviceList[0]);
-                    if (type == "custom")
-                        axis = new CustomAxis(name);
-                    if (type == "inertial" || type == "twokey" || type == "onekey")
-                        axis = new InertialAxis(name);
-                    if (type == "standard")
-                        axis = new StandardAxis(name);
-                    if (axis == null) continue;
-                    axis.Load(machineInfo);
-                    AxisManager.Put(name, axis);
+                    // add to prompt
                 }
 
                 foreach (BlockInfo blockInfo in machineInfo.Blocks)
@@ -45,46 +32,48 @@ namespace AdvancedControls
                         {
                             if (name == c.Name)
                                 c.Load(blockInfo);
-
                         }
                     }
                 }
             }
             catch (Exception e)
             {
-                Debug.LogError("Error while loading machine's AdvancedControls:");
+                Debug.Log("[AdvancedControlsMod]: Error loading machine's controls:");
                 Debug.LogException(e);
             }
         }
 
-        public static void SaveData(MachineInfo machineInfo)
+        public static void Save(MachineInfo machineInfo)
         {
-            var axes = new List<string>();
-
-            foreach (BlockInfo blockInfo in machineInfo.Blocks)
+            try
             {
-                if (ControlManager.Blocks.ContainsKey(blockInfo.Guid))
+                var axes = new List<string>();
+
+                foreach (BlockInfo blockInfo in machineInfo.Blocks)
                 {
-                    var controls = ControlManager.GetActiveBlockControls(blockInfo.Guid);
-                    if (controls.Count == 0) continue;
-                    var control_names = new List<string>();
-                    foreach (Control c in controls)
+                    if (ControlManager.Blocks.ContainsKey(blockInfo.Guid))
                     {
-                        if (!axes.Contains(c.Axis)) axes.Add(c.Axis);
-                        control_names.Add(c.Name);
-                        c.Save(blockInfo);
+                        var controls = ControlManager.GetActiveBlockControls(blockInfo.Guid);
+                        if (controls.Count == 0) continue;
+                        var control_names = new List<string>();
+                        foreach (Control c in controls)
+                        {
+                            if (!axes.Contains(c.Axis)) axes.Add(c.Axis);
+                            control_names.Add(c.Name);
+                            c.Save(blockInfo);
+                        }
+                        blockInfo.BlockData.Write("ac-controllist", control_names.ToArray());
                     }
-                    blockInfo.BlockData.Write("ac-controllist", control_names.ToArray());
                 }
-            }
 
-            if (axes.Count == 0) return;
-            foreach (string axis in axes)
-            {
-                AxisManager.Get(axis).Save(machineInfo);
+                machineInfo.MachineData.Write("ac-version", "v1.2.0");
+                if (axes.Count != 0) machineInfo.MachineData.Write("ac-axislist", axes.ToArray());
             }
-            machineInfo.MachineData.Write("ac-version", "v1.1.2");
-            machineInfo.MachineData.Write("ac-axislist", axes.ToArray());
+            catch (Exception e)
+            {
+                Debug.Log("[AdvancedControlsMod]: Error saving machine's controls:");
+                Debug.LogException(e);
+            }
         }
     }
 }

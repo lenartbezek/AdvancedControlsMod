@@ -27,19 +27,22 @@ namespace AdvancedControls
             UnityEngine.Object.DontDestroyOnLoad(ADVControls.Instance);
             BlockHandlers.OnInitialisation += ADVControls.Instance.Initialise;
             Game.OnSimulationToggle += ADVControls.Instance.OnSimulationToggle;
-            XmlSaver.OnSave += MachineData.SaveData;
-            XmlLoader.OnLoad += MachineData.LoadData;
+            XmlSaver.OnSave += MachineData.Save;
+            XmlLoader.OnLoad += MachineData.Load;
 
             ControlMapper = ADVControls.Instance.gameObject.AddComponent<ControlMapperWindow>();
             EventManager = ADVControls.Instance.gameObject.AddComponent<EventManager>();
+
+            Configuration.Load();
         }
 
         public override void OnUnload()
         {
             BlockHandlers.OnInitialisation -= ADVControls.Instance.Initialise;
             Game.OnSimulationToggle -= ADVControls.Instance.OnSimulationToggle;
-            XmlSaver.OnSave -= MachineData.SaveData;
-            XmlLoader.OnLoad -= MachineData.LoadData;
+            XmlSaver.OnSave -= MachineData.Save;
+            XmlLoader.OnLoad -= MachineData.Load;
+            Configuration.Save();
 
             UnityEngine.Object.Destroy(ADVControls.Instance);
         }

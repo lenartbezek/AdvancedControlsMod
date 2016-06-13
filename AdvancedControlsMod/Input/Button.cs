@@ -2,6 +2,7 @@
 {
     public interface Button
     {
+        string ID { get; }
         bool IsDown { get; }
         bool Pressed { get; }
         bool Released { get; }
