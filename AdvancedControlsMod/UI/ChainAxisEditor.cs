@@ -96,21 +96,27 @@ design more complex inputs.";
 
             GUILayout.EndHorizontal();
 
-            // Draw yellow squares
+            // Draw yellow lines
             Util.FillRect(new Rect(
-                graphRect.x + graphRect.width / 2 - 10 + Axis.OutputValue * (graphRect.width - 20) / 2,
-                graphRect.y,
-                20, 20), Color.yellow);
+                                  graphRect.x + graphRect.width / 2 + graphRect.width / 2 * Axis.OutputValue,
+                                  graphRect.y,
+                                  1,
+                                  graphRect.height),
+                         Color.yellow);
 
             Util.FillRect(new Rect(
-                leftGraphRect.x + leftGraphRect.width / 2 - 10 + a * (leftGraphRect.width - 20) / 2,
-                leftGraphRect.y,
-                20, 20), Color.yellow);
+                                  leftGraphRect.x + leftGraphRect.width / 2 + leftGraphRect.width / 2 * a,
+                                  leftGraphRect.y,
+                                  1,
+                                  leftGraphRect.height),
+                         Color.yellow);
 
             Util.FillRect(new Rect(
-                rightGraphRect.x + rightGraphRect.width / 2 - 10 + b * (rightGraphRect.width - 20) / 2,
-                rightGraphRect.y,
-                20, 20), Color.yellow);
+                                  rightGraphRect.x + rightGraphRect.width / 2 + rightGraphRect.width / 2 * b,
+                                  rightGraphRect.y,
+                                  1,
+                                  rightGraphRect.height),
+                         Color.yellow);
 
             // Draw axis select buttons
             GUILayout.BeginHorizontal();

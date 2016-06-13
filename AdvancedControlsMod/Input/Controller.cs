@@ -129,7 +129,6 @@ namespace AdvancedControls.Input
                 Debug.Log("Game controller connected: " + Name);
             else
                 Debug.Log("Joystick connected: " + Name);
-            Debug.Log("\tIndex: " + Index);
             Debug.Log("\tGuid: " + GUID);
         }
 
@@ -149,6 +148,7 @@ namespace AdvancedControls.Input
 
         private void UpdateMappings(SDL.SDL_Event e)
         {
+            if (!Connected) return;
             if (e.cdevice.which == Index ||
                 e.jdevice.which == Index)
                 UpdateMappings();
@@ -156,6 +156,7 @@ namespace AdvancedControls.Input
 
         private void UpdateMappings()
         {
+            if (!Connected) return;
             AxisNames = new List<string>();
             for (int i = 0; i < SDL.SDL_JoystickNumAxes(device_pointer); i++)
             {
@@ -193,6 +194,7 @@ namespace AdvancedControls.Input
 
         private void UpdateAxis(SDL.SDL_Event e)
         {
+            if (!Connected) return;
             if (e.jdevice.which == Index)
             {
                 axis_values_raw[e.jaxis.axis] = e.jaxis.axisValue / 32767.0f;
@@ -201,6 +203,7 @@ namespace AdvancedControls.Input
 
         private void UpdateBall(SDL.SDL_Event e)
         {
+            if (!Connected) return;
             if (e.jdevice.which == Index)
             {
                ball_values_raw[e.jball.ball, 0] = e.jball.xrel / 32767.0f;
@@ -239,8 +242,6 @@ namespace AdvancedControls.Input
             if (is_game_controller)
                 SDL.SDL_GameControllerClose(game_controller);
             SDL.SDL_JoystickClose(device_pointer);
-
-            Buttons.Clear();
 
             AdvancedControlsMod.EventManager.OnAxisMotion -= UpdateAxis;
             AdvancedControlsMod.EventManager.OnBallMotion -= UpdateBall;

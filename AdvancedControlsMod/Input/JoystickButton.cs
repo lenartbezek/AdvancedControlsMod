@@ -9,43 +9,49 @@ namespace AdvancedControls.Input
     {
         private Controller controller;
         private int index;
+        private Guid guid;
 
         private bool down = false;
         private bool pressed = false;
         private bool released = false;
 
-        public string ID { get { return "joy-" + index + "-" + controller.GUID; } }
+        public string ID { get { return "joy:" + index + ":" + guid; } }
         public bool IsDown { get { return down; } }
         public bool Pressed { get { return pressed; } }
         public bool Released { get { return released; } }
         public float Value { get { return down ? 1 : 0; } }
-        public string Name { get { return controller.ButtonNames[index]; } }
+        public string Name { get { return controller != null ? controller.ButtonNames[index] : "<color=#FF0000>Unknown button</color>"; } }
         public bool Connected { get { return controller != null && controller.Connected; } }
 
         public JoystickButton(Controller controller, int index)
         {
             this.controller = controller;
             this.index = index;
+            this.guid = controller.GUID;
 
             AdvancedControlsMod.EventManager.OnButton += HandleEvent;
+            AdvancedControlsMod.EventManager.OnDeviceAdded += UpdateDevice;
         }
 
         public JoystickButton(string id)
         {
-            var args = id.Split('-');
+            var args = id.Split(':');
             if (args[0].Equals("joy"))
             {
                 index = int.Parse(args[1]);
-                controller = Controller.Get(new Guid(args[2]));
+                guid = new Guid(args[2]);
+                controller = Controller.Get(guid);
             }
             else
-                throw new FormatException("Specified id does not represent a joystick button.");
+                throw new FormatException("Specified ID does not represent a joystick button.");
 
             AdvancedControlsMod.EventManager.OnButton += HandleEvent;
+            AdvancedControlsMod.EventManager.OnDeviceAdded += UpdateDevice;
         }
 
         private void HandleEvent(SDL.SDL_Event e, bool down)
         {
+            if (controller == null) return;
             if (e.cdevice.which != controller.Index &&
                 e.jdevice.which != controller.Index)
                 return;
@@ -67,6 +73,11 @@ namespace AdvancedControls.Input
                     this.down = down;
                 }
             }
+        }
+
+        private void UpdateDevice(SDL.SDL_Event e)
+        {
+            controller = Controller.Get(guid);
         }
     }
 }

@@ -36,9 +36,11 @@ namespace AdvancedControls.UI
             Util.DrawRect(graphRect, Color.gray);
 
             Util.FillRect(new Rect(
-                graphRect.x + graphRect.width / 2 - 10 + Axis.OutputValue * (graphRect.width - 20) / 2,
-                graphRect.y,
-                20, 20), Color.yellow);
+                                  graphRect.x + graphRect.width / 2 + graphRect.width / 2 * Axis.OutputValue,
+                                  graphRect.y,
+                                  1,
+                                  graphRect.height),
+                         Color.yellow);
 
             // Draw key mappers 
             GUILayout.BeginHorizontal();
@@ -50,7 +52,6 @@ namespace AdvancedControls.UI
                     foreach (Button b in entry.Value.Buttons)
                     {
                         if (b.IsDown) Axis.NegativeBind = b;
-                        note = null;
                     }
                 foreach (KeyCode key in Enum.GetValues(typeof(KeyCode)))
                 {
@@ -59,7 +60,6 @@ namespace AdvancedControls.UI
                     if (UnityEngine.Input.GetKey(key))
                     {
                         Axis.NegativeBind = key == KeyCode.Backspace ? null : new Key(key);
-                        note = null;
                         break;
                     }
                 }
@@ -71,7 +71,6 @@ namespace AdvancedControls.UI
                     foreach (Button b in entry.Value.Buttons)
                     {
                         if (b.IsDown) Axis.PositiveBind = b;
-                        note = null;
                     }
                 foreach (KeyCode key in Enum.GetValues(typeof(KeyCode)))
                 {
@@ -80,7 +79,6 @@ namespace AdvancedControls.UI
                     if (UnityEngine.Input.GetKey(key))
                     {
                         Axis.PositiveBind = key == KeyCode.Backspace ? null : new Key(key);
-                        note = null;
                         break;
                     }
                 }   
@@ -128,6 +126,22 @@ namespace AdvancedControls.UI
                 new GUIStyle(Elements.Labels.Default) { margin = new RectOffset(0, 0, 14, 0) });
 
             GUILayout.EndHorizontal();
+
+            // Set notes
+            note = "<color=#FFFF00><b>Device disconnected</b></color>";
+            var disconnected = false;
+            if (Axis.PositiveBind != null && !Axis.PositiveBind.Connected)
+            {
+                disconnected = true;
+                note += "\n'" + Axis.PositiveBind.Name + "' is not connected.";
+            }
+            if (Axis.NegativeBind != null && !Axis.NegativeBind.Connected)
+            {
+                disconnected = true;
+                note += "\n'" + Axis.NegativeBind.Name + "' is not connected.";
+            }
+            if (!disconnected)
+                note = null;
         }
 
         public string GetHelp()

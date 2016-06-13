@@ -32,8 +32,6 @@ namespace AdvancedControls
 
             ControlMapper = ADVControls.Instance.gameObject.AddComponent<ControlMapperWindow>();
             EventManager = ADVControls.Instance.gameObject.AddComponent<EventManager>();
-
-            Configuration.Load();
         }
 
         public override void OnUnload()
@@ -63,7 +61,12 @@ namespace AdvancedControls
 
         private BlockMapper blockMapper;
 
-        internal void Update()
+        private void Start()
+        {
+            Configuration.Load();
+        }
+
+        private void Update()
         {
 
             if (blockMapper == null)

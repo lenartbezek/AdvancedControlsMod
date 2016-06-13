@@ -7,7 +7,7 @@ namespace AdvancedControls.Input
     {
         private KeyCode keycode;
 
-        public string ID { get { return "key-" + keycode.ToString(); } }
+        public string ID { get { return "key:" + keycode.ToString(); } }
         public bool IsDown { get { return UnityEngine.Input.GetKey(keycode); } }
         public bool Pressed { get { return UnityEngine.Input.GetKeyDown(keycode); } }
         public bool Released { get { return UnityEngine.Input.GetKeyUp(keycode); } }
@@ -22,11 +22,11 @@ namespace AdvancedControls.Input
 
         public Key(string id)
         {
-            var args = id.Split('-');
+            var args = id.Split(':');
             if (args[0].Equals("key"))
-                keycode = (KeyCode)Enum.Parse(typeof(KeyCode), args[0]);
+                keycode = (KeyCode)Enum.Parse(typeof(KeyCode), args[1]);
             else
-                throw new FormatException("Specified id does not represent a key.");
+                throw new FormatException("Specified ID does not represent a key.");
         }
     }
 }

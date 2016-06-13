@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using AdvancedControls.Input;
+using System;
 
 namespace AdvancedControls.Axes
 {
@@ -12,12 +13,13 @@ namespace AdvancedControls.Axes
         public bool Invert { get; set; }
         public Button PositiveBind { get; set; }
         public Button NegativeBind { get; set; }
-
         private float last = 0;
 
         public StandardAxis(string name, Button pos_bind = null, Button neg_bind = null,
             float sensitivity = 1, float gravity = 1, bool snap = false, bool invert = false) : base(name)
         {
+            editor = new UI.TwoKeyAxisEditor(this);
+
             Type = AxisType.Standard;
             PositiveBind = pos_bind;
             NegativeBind = neg_bind;
@@ -25,29 +27,6 @@ namespace AdvancedControls.Axes
             Gravity = gravity;
             Snap = snap;
             Invert = invert;
-            editor = new UI.TwoKeyAxisEditor(this);
-
-            AdvancedControlsMod.EventManager.OnDeviceRemoved += (SDL.SDL_Event e) => RemoveDisconnected();
-        }
-
-        private void RemoveDisconnected()
-        {
-            var note = "<color=#FFFF00><b>Device disconnected</b></color>";
-            var disconnected = false;
-            if (PositiveBind != null && !PositiveBind.Connected)
-            {
-                disconnected = true;
-                note += "\n'" + PositiveBind.Name + "' has been removed.";
-                PositiveBind = null;
-            }
-            if (NegativeBind != null && !NegativeBind.Connected)
-            {
-                disconnected = true;
-                note += "\n'" + NegativeBind.Name + "' has been removed.";
-                NegativeBind = null;
-            }
-            if (disconnected)
-                (editor as UI.TwoKeyAxisEditor).note = note;
         }
 
         public override float InputValue
@@ -127,12 +106,14 @@ namespace AdvancedControls.Axes
                     b = new HatButton(id);
                 if (id.StartsWith("joy"))
                     b = new JoystickButton(id);
-                if (b != null && b.Connected)
+                if (b != null)
                     return b;
                 return null;
             }
-            catch
+            catch (Exception e)
             {
+                Debug.Log("[AdvancedControlsMod]: Error while loading a button:");
+                Debug.LogException(e);
                 return null;
             }
         }

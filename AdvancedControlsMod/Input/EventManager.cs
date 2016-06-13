@@ -30,7 +30,7 @@ namespace AdvancedControls.Input
 
         public bool SDL_Initialized = false;
 
-        private void Start()
+        private void Awake()
         {
             try
             {
