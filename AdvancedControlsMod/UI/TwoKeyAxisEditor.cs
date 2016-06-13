@@ -3,6 +3,7 @@ using UnityEngine;
 using spaar.ModLoader.UI;
 using AdvancedControls.Axes;
 using AdvancedControls.Input;
+using System.Collections.Generic;
 
 namespace AdvancedControls.UI
 {
@@ -15,9 +16,9 @@ namespace AdvancedControls.UI
 
         private StandardAxis Axis;
 
-        private string help;
-        private string error;
-        private string note;
+        internal string help;
+        internal string error;
+        internal string note;
 
         public void DrawAxis(Rect windowRect)
         {
@@ -39,15 +40,18 @@ namespace AdvancedControls.UI
                 graphRect.y,
                 20, 20), Color.yellow);
 
-            // Draw key mappers
+            // Draw key mappers 
             GUILayout.BeginHorizontal();
 
             GUILayout.Button(new GUIContent(Axis.NegativeBind != null ? Axis.NegativeBind.Name : "None", "Key Mapper Negative"), Elements.Buttons.Red);
             if (GUI.tooltip == "Key Mapper Negative")
             {
-                foreach (Controller c in Controller.Devices)
-                    foreach (Button b in c.Buttons)
+                foreach (KeyValuePair<Guid, Controller> entry in Controller.Devices)
+                    foreach (Button b in entry.Value.Buttons)
+                    {
                         if (b.IsDown) Axis.NegativeBind = b;
+                        note = null;
+                    }
                 foreach (KeyCode key in Enum.GetValues(typeof(KeyCode)))
                 {
                     if (key >= KeyCode.JoystickButton0 && key <= KeyCode.Joystick8Button19)
@@ -55,6 +59,7 @@ namespace AdvancedControls.UI
                     if (UnityEngine.Input.GetKey(key))
                     {
                         Axis.NegativeBind = key == KeyCode.Backspace ? null : new Key(key);
+                        note = null;
                         break;
                     }
                 }
@@ -62,9 +67,12 @@ namespace AdvancedControls.UI
             GUILayout.Button(new GUIContent(Axis.PositiveBind != null ? Axis.PositiveBind.Name : "None", "Key Mapper Positive"), Elements.Buttons.Red);
             if (GUI.tooltip == "Key Mapper Positive")
             {
-                foreach (Controller c in Controller.Devices)
-                    foreach (Button b in c.Buttons)
+                foreach (KeyValuePair<Guid, Controller> entry in Controller.Devices)
+                    foreach (Button b in entry.Value.Buttons)
+                    {
                         if (b.IsDown) Axis.PositiveBind = b;
+                        note = null;
+                    }
                 foreach (KeyCode key in Enum.GetValues(typeof(KeyCode)))
                 {
                     if (key >= KeyCode.JoystickButton0 && key <= KeyCode.Joystick8Button19)
@@ -72,6 +80,7 @@ namespace AdvancedControls.UI
                     if (UnityEngine.Input.GetKey(key))
                     {
                         Axis.PositiveBind = key == KeyCode.Backspace ? null : new Key(key);
+                        note = null;
                         break;
                     }
                 }   

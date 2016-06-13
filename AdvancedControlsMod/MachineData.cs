@@ -22,7 +22,7 @@ namespace AdvancedControls
                     InputAxis axis = null;
                     var type = machineInfo.MachineData.ReadString("ac-axis-" + name + "-type");
                     if (type == "controller")
-                        axis = new ControllerAxis(name);
+                        axis = new ControllerAxis(name, Input.Controller.DeviceList[0]);
                     if (type == "custom")
                         axis = new CustomAxis(name);
                     if (type == "inertial" || type == "twokey" || type == "onekey")

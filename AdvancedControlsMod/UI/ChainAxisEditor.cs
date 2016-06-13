@@ -15,14 +15,14 @@ namespace AdvancedControls.UI
 
         private ChainAxis Axis;
 
-        private string help =
+        internal string help =
 @"With chain axis you can link two other axes
 and combine them in a single linear axis.
 
 You can also link another chain axis and
 design more complex inputs.";
-        private string note;
-        private string error;
+        internal string note;
+        internal string error;
 
         private AxisEditorWindow.SelectAxis Select;
 

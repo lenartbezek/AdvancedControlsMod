@@ -16,25 +16,25 @@ namespace AdvancedControls.Axes
             set
             {
                 base.Name = value;
-                var axis_a = AxisManager.Get(SubAxis1) as ChainAxis;
-                var axis_b = AxisManager.Get(SubAxis2) as ChainAxis;
+                var sub1 = AxisManager.Get(SubAxis1) as ChainAxis;
+                var sub2 = AxisManager.Get(SubAxis2) as ChainAxis;
                 bool error = false;
-                string error_message = "Renaming this axis caused a cycle in the chain.\n";
-                if (axis_a != null && axis_a.CheckCycle(new List<string>() { }))
+                string error_message = "Renaming this axis formed a cycle in the chain.\n";
+                if (sub1 != null && sub1.CheckCycle(new List<string>() { Name }))
                 {
                     error = true;
-                    error_message += "'" + SubAxis1 + "' has been removed.\n";
+                    error_message += "'" + SubAxis1 + "' has been unlinked. ";
                     SubAxis1 = null;
                 }
-                if (axis_b != null && axis_b.CheckCycle(new List<string>() { }))
+                if (sub2 != null && sub2.CheckCycle(new List<string>() { Name }))
                 {
                     error = true;
-                    error_message += "'" + SubAxis2 + "' has been removed.\n";
+                    error_message += "'" + SubAxis2 + "' has been unlinked. ";
                     SubAxis2 = null;
                 }
                 if (error)
                 {
-                    throw new InvalidOperationException(error_message);
+                    (editor as UI.ChainAxisEditor).error = "<color=#FFFF00><b>Chain cycle error</b></color>\n" + error_message;
                 }
             }
         }
@@ -53,7 +53,7 @@ namespace AdvancedControls.Axes
                 if (axis != null && axis.CheckCycle(new List<string>() { }))
                 {
                     sub_axis1 = null;
-                    throw new InvalidOperationException("'" + value + "' is already in the axis chain.\nAdding it here would create a cycle.");
+                    throw new InvalidOperationException("'" + value + "' is already in the axis chain.\nLinking it here would create a cycle.");
                 }
             }
         }
@@ -72,7 +72,7 @@ namespace AdvancedControls.Axes
                 if (axis != null && axis.CheckCycle(new List<string>() { }))
                 {
                     sub_axis2 = null;
-                    throw new InvalidOperationException("'" + value + "' is already in the axis chain.\nAdding it here would create a cycle.");
+                    throw new InvalidOperationException("'" + value + "' is already in the axis chain.\nLinking it here would create a cycle.");
                 }
             }
         }

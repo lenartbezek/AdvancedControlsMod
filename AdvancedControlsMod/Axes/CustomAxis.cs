@@ -19,6 +19,7 @@ axis_value";
         public string InitialisationCode { get; set; }
         public string UpdateCode { get; set; }
         public bool GlobalScope { get; set; }
+        public override bool Saveable { get { return PythonEnvironment.Loaded; } }
 
         public string Error { get; set; }
 

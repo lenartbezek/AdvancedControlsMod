@@ -22,6 +22,9 @@ namespace AdvancedControls.UI
         public ControllerAxisEditor(InputAxis axis)
         {
             Axis = axis as ControllerAxis;
+            FindIndex();
+            AdvancedControlsMod.EventManager.OnDeviceAdded += (SDL.SDL_Event e) => FindIndex();
+            AdvancedControlsMod.EventManager.OnDeviceRemoved += (SDL.SDL_Event e) => FindIndex();
         }
 
         private ControllerAxis Axis;
@@ -30,11 +33,23 @@ namespace AdvancedControls.UI
         private Rect last_graphRect;
         private Texture2D graphTex;
 
-        private string help;
-        private string note;
-        private string error;
+        private int controller_index = -1;
+
+        internal string help;
+        internal string note;
+        internal string error;
 
         private ControllerAxis.Param last_parameters;
+        private Vector2 click_position;
+        private bool dragging;
+
+        private void FindIndex()
+        {
+            if (Controller.DeviceList.Contains(Axis.ControllerGUID))
+                controller_index = Controller.DeviceList.FindIndex(guid => guid == Axis.ControllerGUID);
+            else
+                controller_index = -1;
+        }
 
         private void DrawGraph()
         {
@@ -82,16 +97,65 @@ namespace AdvancedControls.UI
                 error = null;
                 note = null;
 
-                // Draw graph
+                // Graph rect
                 graphRect = new Rect(
                 GUI.skin.window.padding.left,
                 GUI.skin.window.padding.top + 36,
                 windowRect.width - GUI.skin.window.padding.left - GUI.skin.window.padding.right,
                 windowRect.width - GUI.skin.window.padding.left - GUI.skin.window.padding.right);
 
-                DrawGraph();
+                // Draw drag controls
+                if (Axis.OffsetX == 0 && Axis.OffsetY == 0)
+                {
+                    GUI.Label(new Rect(graphRect.x, graphRect.y + graphRect.height - 20, graphRect.width, 20),
+                        "<color=#808080><b>DRAG TO SET OFFSET</b></color>",
+                        new GUIStyle(Elements.Labels.Default) { richText = true, alignment = TextAnchor.MiddleCenter });
+                }
+                else
+                {
+                    GUI.Label(new Rect(graphRect.x, graphRect.y + graphRect.height - 20, (graphRect.width - 16) / 2, 20),
+                        "  <color=#808080><b>X: " + Axis.OffsetX.ToString("0.00") + "\tY:" + Axis.OffsetY.ToString("0.00") + "</b></color>",
+                        new GUIStyle(Elements.Labels.Default) { richText = true, alignment = TextAnchor.MiddleLeft });
+                    if (GUI.Button(new Rect(graphRect.x + (graphRect.width - 16) / 2, graphRect.y + graphRect.height - 20, (graphRect.width - 16) / 2, 20),
+                            "<color=#808080><b>RESET OFFSET</b></color>",
+                            new GUIStyle(Elements.Labels.Default) { richText = true, alignment = TextAnchor.MiddleRight }))
+                    {
+                        Axis.OffsetX = 0;
+                        Axis.OffsetY = 0;
+                    }
+                }
 
+                // Draw graph
+                DrawGraph();
                 graphRect = GUILayoutUtility.GetLastRect();
+
+                // Listen for drag
+                var mousePos = UnityEngine.Input.mousePosition;
+                mousePos.y = Screen.height - mousePos.y;
+                var drag_handle = new Rect(windowRect.x + graphRect.x, windowRect.y + graphRect.y, graphRect.width, graphRect.height);
+                var drag_range = (windowRect.width - GUI.skin.window.padding.left - GUI.skin.window.padding.right) / 2f;
+
+                if (!dragging && UnityEngine.Input.GetMouseButtonDown(0) && drag_handle.Contains(mousePos))
+                {
+                    dragging = true;
+                    click_position = mousePos;
+                    click_position.x -= Axis.OffsetX * drag_range;
+                    click_position.y += Axis.OffsetY * drag_range;
+                }
+
+                if (dragging)
+                {
+                    
+                    Axis.OffsetX = Mathf.Clamp((mousePos.x - click_position.x) / drag_range, -1f, 1f);
+                    Axis.OffsetY = Mathf.Clamp((click_position.y - mousePos.y) / drag_range, -1f, 1f);
+                    if (UnityEngine.Input.GetMouseButtonUp(0))
+                    {
+                        dragging = false;
+                    }
+                }
+
+                // Draw graph input and frame
+                Util.DrawRect(graphRect, Color.gray);
 
                 Util.FillRect(new Rect(graphRect.x + graphRect.width / 2 + graphRect.width / 2 * Axis.InputValue,
                                   graphRect.y,
@@ -99,36 +163,49 @@ namespace AdvancedControls.UI
                                   graphRect.height),
                          Color.yellow);
 
-                Util.DrawRect(graphRect, Color.gray);
-
                 // Draw controller selection
-                Axis.ControllerID = Axis.ControllerID % Controller.NumDevices;
+                var controller = Controller.Get(Axis.ControllerGUID);
+
+                if (controller_index < 0 && controller_index >= Controller.NumDevices)
+                {
+                    controller_index = 0;
+                    Axis.ControllerGUID = Controller.DeviceList[controller_index];
+                }
 
                 GUILayout.BeginHorizontal();
-                if (GUILayout.Button("<", Axis.ControllerID > 0 ? Elements.Buttons.Default : Elements.Buttons.Disabled, GUILayout.Width(30)) 
-                    && Axis.ControllerID > 0)
-                    Axis.ControllerID--;
+                if (GUILayout.Button("<", controller_index > 0 ? Elements.Buttons.Default : Elements.Buttons.Disabled, GUILayout.Width(30)) 
+                    && controller_index > 0)
+                {
+                    controller_index--;
+                    Axis.ControllerGUID = Controller.DeviceList[controller_index];
+                }
 
-                GUILayout.Label(Controller.Get(Axis.ControllerID).Name, new GUIStyle(Elements.InputFields.Default) { alignment = TextAnchor.MiddleCenter });
+                GUILayout.Label(controller != null ? controller.Name : "<color=#FF0000>Disconnected controller</color>",
+                    new GUIStyle(Elements.InputFields.Default) { alignment = TextAnchor.MiddleCenter });
 
-                if (GUILayout.Button(">", Axis.ControllerID < Controller.NumDevices - 1 ? Elements.Buttons.Default : Elements.Buttons.Disabled, GUILayout.Width(30)) 
-                    && Axis.ControllerID < Controller.NumDevices - 1)
-                    Axis.ControllerID++;
+                if (GUILayout.Button(">", controller_index < Controller.NumDevices - 1 ? Elements.Buttons.Default : Elements.Buttons.Disabled, GUILayout.Width(30)) 
+                    && controller_index < Controller.NumDevices - 1)
+                {
+                    controller_index++;
+                    Axis.ControllerGUID = Controller.DeviceList[controller_index];
+                }
+
+                if (controller == null) return;
 
                 GUILayout.EndHorizontal();
 
                 // Draw axis selection
-                Axis.AxisID = Axis.AxisID % Controller.Get(Axis.ControllerID).NumAxes;
+                Axis.AxisID = Axis.AxisID % controller.NumAxes;
 
                 GUILayout.BeginHorizontal();
                 if (GUILayout.Button("<", Axis.AxisID > 0 ? Elements.Buttons.Default : Elements.Buttons.Disabled, GUILayout.Width(30)) 
                     && Axis.AxisID > 0)
                     Axis.AxisID--;
 
-                GUILayout.Label(Controller.Get(Axis.ControllerID).AxisNames[Axis.AxisID], new GUIStyle(Elements.InputFields.Default) { alignment = TextAnchor.MiddleCenter });
+                GUILayout.Label(controller.AxisNames[Axis.AxisID], new GUIStyle(Elements.InputFields.Default) { alignment = TextAnchor.MiddleCenter });
 
-                if (GUILayout.Button(">", Axis.AxisID < Controller.Get(Axis.ControllerID).NumAxes - 1 ? Elements.Buttons.Default : Elements.Buttons.Disabled, GUILayout.Width(30)) 
-                    && Axis.AxisID < Controller.Get(Axis.ControllerID).NumAxes - 1)
+                if (GUILayout.Button(">", Axis.AxisID < Controller.Get(Axis.ControllerGUID).NumAxes - 1 ? Elements.Buttons.Default : Elements.Buttons.Disabled, GUILayout.Width(30)) 
+                    && Axis.AxisID < Controller.Get(Axis.ControllerGUID).NumAxes - 1)
                     Axis.AxisID++;
 
                 GUILayout.EndHorizontal();
@@ -179,7 +256,7 @@ namespace AdvancedControls.UI
                     Util.ToggleStyle,
                     GUILayout.Width(20),
                     GUILayout.Height(20));
-
+                
                 GUILayout.Label("Smooth",
                     new GUIStyle(Elements.Labels.Default) { margin = new RectOffset(0, 0, 14, 0) });
 

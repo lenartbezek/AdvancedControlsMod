@@ -19,6 +19,7 @@
         public bool Released { get { return released; } }
         public float Value { get { return down ? 1 : 0; } }
         public string Name { get { return controller.HatNames[index] + " - " + direction; } }
+        public bool Connected { get { return controller != null && controller.Connected; } }
 
         public HatButton(Controller controller, int index, byte down_state)
         {
@@ -39,10 +40,10 @@
 
         private void HandleEvent(SDL.SDL_Event e)
         {
-            if (e.cdevice.which != controller.Index &&
-                e.jdevice.which != controller.Index)
+            if (e.jhat.which != controller.Index &&
+                e.jhat.which != controller.Index)
                 return;
-            if (e.jhat.which == index)
+            if (e.jhat.hat == index)
             {
                 bool down = (e.jhat.hatValue & down_state) > 0;
                 pressed = this.down != down && down;

@@ -33,7 +33,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'windows|AnyCPU'">
     <DebugSymbols>true</DebugSymbols>
     <OutputPath>bin\windows\</OutputPath>
-    <DefineConstants>TRACE;DEBUG;windows, linux, osx</DefineConstants>
+    <DefineConstants>TRACE;DEBUG;windows</DefineConstants>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <Optimize>true</Optimize>
     <DebugType>full</DebugType>

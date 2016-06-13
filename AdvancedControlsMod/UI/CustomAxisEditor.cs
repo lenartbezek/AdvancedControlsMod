@@ -14,8 +14,7 @@ namespace AdvancedControls.UI
 
         private CustomAxis Axis;
 
-        private string help =
-//@"With chain axis you can link two other axes
+        internal string help =
 @"Program your own input axis with Python 2.7.
 Initialisation code is run once at the start.
 Update code is run on every frame.
@@ -25,8 +24,8 @@ Value should be in range [-1, 1].
 You can run axis code in global scope to 
 interact with other custom axes and 
 scripts in Lench Scripter Mod.";
-        private string note;
-        private string error;
+        internal string note;
+        internal string error;
 
         private Vector2 initialisationScrollPosition = Vector2.zero;
         private Vector2 updateScrollPosition = Vector2.zero;

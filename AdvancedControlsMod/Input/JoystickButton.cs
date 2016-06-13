@@ -17,6 +17,7 @@
         public bool Released { get { return released; } }
         public float Value { get { return down ? 1 : 0; } }
         public string Name { get { return controller.ButtonNames[index]; } }
+        public bool Connected { get { return controller != null && controller.Connected; } }
 
         public JoystickButton(Controller controller, int index)
         {

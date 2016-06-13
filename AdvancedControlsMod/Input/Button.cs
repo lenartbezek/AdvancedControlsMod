@@ -7,5 +7,6 @@
         bool Released { get; }
         float Value { get; }
         string Name { get; }
+        bool Connected { get; }
     }
 }

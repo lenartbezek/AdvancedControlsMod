@@ -34,7 +34,7 @@ namespace AdvancedControls.Axes
                 speed = 0;
                 OutputValue = 0;
             }
-            if (InputValue == 0 && (last > 0 != OutputValue > 0))
+            if (InputValue == 0 && Gravity != 0 && (last > 0 != OutputValue > 0))
             {
                 speed = 0;
                 OutputValue = 0;

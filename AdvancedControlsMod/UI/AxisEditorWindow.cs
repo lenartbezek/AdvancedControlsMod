@@ -1,7 +1,6 @@
 ﻿using UnityEngine;
 using spaar.ModLoader.UI;
 using AdvancedControls.Axes;
-using System;
 
 namespace AdvancedControls.UI
 {
@@ -32,19 +31,12 @@ namespace AdvancedControls.UI
 
         public void SaveAxis()
         {
-            try
-            {
-                Axis = Axis.Clone();
-                Axis.Name = SaveName;
-                WindowName = "Edit " + SaveName;
-                AxisManager.Put(Axis.Name, Axis);
-                Select?.Invoke(Axis);
-                Select = null;
-            }
-            catch (InvalidOperationException e)
-            {
-                
-            }
+            Axis = Axis.Clone();
+            Axis.Name = SaveName;
+            WindowName = "Edit " + SaveName;
+            AxisManager.Put(Axis.Name, Axis);
+            Select?.Invoke(Axis);
+            Select = null;
         }
 
         public void CreateAxis(SelectAxis selectAxis = null)
@@ -117,18 +109,21 @@ namespace AdvancedControls.UI
             else
             {
                 // Draw save text field and save button
-                GUILayout.BeginHorizontal();
-                SaveName = GUILayout.TextField(SaveName,
-                    Elements.InputFields.Default);
-
-                if (GUILayout.Button("Save",
-                    Elements.Buttons.Default,
-                    GUILayout.Width(80))
-                    && SaveName != "")
+                if (Axis.Saveable)
                 {
-                    SaveAxis();
+                    GUILayout.BeginHorizontal();
+                    SaveName = GUILayout.TextField(SaveName,
+                        Elements.InputFields.Default);
+
+                    if (GUILayout.Button("Save",
+                        Elements.Buttons.Default,
+                        GUILayout.Width(80))
+                        && SaveName != "")
+                    {
+                        SaveAxis();
+                    }
+                    GUILayout.EndHorizontal();
                 }
-                GUILayout.EndHorizontal();
 
                 // Draw axis editor
                 Axis.GetEditor().DrawAxis(windowRect);

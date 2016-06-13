@@ -26,6 +26,28 @@ namespace AdvancedControls.Axes
             Snap = snap;
             Invert = invert;
             editor = new UI.TwoKeyAxisEditor(this);
+
+            AdvancedControlsMod.EventManager.OnDeviceRemoved += (SDL.SDL_Event e) => RemoveDisconnected();
+        }
+
+        private void RemoveDisconnected()
+        {
+            var note = "<color=#FFFF00><b>Device disconnected</b></color>";
+            var disconnected = false;
+            if (PositiveBind != null && !PositiveBind.Connected)
+            {
+                disconnected = true;
+                note += "\n'" + PositiveBind.Name + "' has been removed.";
+                PositiveBind = null;
+            }
+            if (NegativeBind != null && !NegativeBind.Connected)
+            {
+                disconnected = true;
+                note += "\n'" + NegativeBind.Name + "' has been removed.";
+                NegativeBind = null;
+            }
+            if (disconnected)
+                (editor as UI.TwoKeyAxisEditor).note = note;
         }
 
         public override float InputValue

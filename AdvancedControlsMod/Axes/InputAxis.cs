@@ -16,6 +16,8 @@
         public virtual string Name { get; set; } = "new axis";
         public virtual float InputValue { get; } = 0;
         public virtual float OutputValue { get; set; } = 0;
+        public virtual bool Connected { get; } = true;
+        public virtual bool Saveable { get; } = true;
 
         protected UI.AxisEditor editor;
 
