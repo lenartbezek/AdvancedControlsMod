@@ -38,7 +38,7 @@ axis_value";
 
         public override void Update()
         {
-            if (!PythonEnvironment.Loaded || Error != null || !ADVControls.Instance.IsSimulating) return;
+            if (!PythonEnvironment.Loaded || Error != null || !ACM.Instance.IsSimulating) return;
             if (initialised)
             {
                 try
@@ -74,7 +74,7 @@ axis_value";
         public override void Initialise()
         {
             initialised = false;
-            if (!PythonEnvironment.Loaded || !ADVControls.Instance.IsSimulating) return;
+            if (!PythonEnvironment.Loaded || !ACM.Instance.IsSimulating) return;
             Error = null;
             if (GlobalScope && PythonEnvironment.Enabled)
                 python = PythonEnvironment.ScripterEnvironment;

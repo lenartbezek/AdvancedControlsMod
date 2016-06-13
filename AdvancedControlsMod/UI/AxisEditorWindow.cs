@@ -19,7 +19,7 @@ namespace AdvancedControls.UI
         public bool Visible { get; set; } = false;
         public bool ShowHelp { get; set; } = false;
 
-        internal int _windowID = spaar.ModLoader.Util.GetWindowID();
+        internal int windowID = spaar.ModLoader.Util.GetWindowID();
         internal Rect windowRect = new Rect(100, 100, 100, 100);
 
         protected string WindowName = "Create new axis";
@@ -64,7 +64,7 @@ namespace AdvancedControls.UI
             if (Visible)
             {
                 GUI.skin = Util.Skin;
-                windowRect = GUILayout.Window(_windowID, windowRect, DoWindow, WindowName,
+                windowRect = GUILayout.Window(windowID, windowRect, DoWindow, WindowName,
                     GUILayout.Width(320),
                     GUILayout.Height(100));
             }
@@ -103,7 +103,6 @@ namespace AdvancedControls.UI
                 if (Axis != null)
                 {
                     SaveName = Axis.Name;
-                    Select?.Invoke(Axis);
                 }
             }
             else

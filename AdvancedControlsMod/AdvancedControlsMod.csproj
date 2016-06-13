@@ -125,6 +125,7 @@
     <Compile Include="MachineData.cs" />
     <Compile Include="Input\LPUtf8StrMarshaler.cs" />
     <Compile Include="Input\SDL2.cs" />
+    <Compile Include="UI\AssignAxesWindow.cs" />
     <Compile Include="UI\AxisEditorWindow.cs" />
     <Compile Include="UI\ChainAxisEditor.cs" />
     <Compile Include="UI\ControlMapperWindow.cs" />

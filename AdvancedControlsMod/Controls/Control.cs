@@ -56,8 +56,8 @@ namespace AdvancedControls.Controls
         public Control(Guid guid)
         {
             BlockGUID = guid;
-            ADVControls.Instance.OnUpdate += Update;
-            ADVControls.Instance.OnInitialisation += Initialise;
+            ACM.Instance.OnUpdate += Update;
+            ACM.Instance.OnInitialisation += Initialise;
 
             min_string = (Mathf.Round(Min * 100) / 100).ToString();
             cen_string = (Mathf.Round(Center * 100) / 100).ToString();
@@ -79,7 +79,7 @@ namespace AdvancedControls.Controls
 
         public virtual void Update()
         {
-            if (ADVControls.Instance.IsSimulating)
+            if (ACM.Instance.IsSimulating)
             {
                 var a = AxisManager.Get(Axis);
                 if (Enabled && Block != null && a != null)

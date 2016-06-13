@@ -24,8 +24,8 @@
         public InputAxis(string name)
         {
             Name = name;
-            ADVControls.Instance.OnUpdate += Update;
-            ADVControls.Instance.OnInitialisation += Initialise;
+            ACM.Instance.OnUpdate += Update;
+            ACM.Instance.OnInitialisation += Initialise;
         }
 
         public abstract void Initialise();

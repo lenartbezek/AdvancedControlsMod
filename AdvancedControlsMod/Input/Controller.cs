@@ -122,7 +122,7 @@ namespace AdvancedControls.Input
             AdvancedControlsMod.EventManager.OnAxisMotion += UpdateAxis;
             AdvancedControlsMod.EventManager.OnBallMotion += UpdateBall;
             AdvancedControlsMod.EventManager.OnDeviceRemapped += UpdateMappings;
-            ADVControls.Instance.OnUpdate += Update;
+            ACM.Instance.OnUpdate += Update;
 
             // Debug
             if (is_game_controller)
@@ -246,7 +246,7 @@ namespace AdvancedControls.Input
             AdvancedControlsMod.EventManager.OnAxisMotion -= UpdateAxis;
             AdvancedControlsMod.EventManager.OnBallMotion -= UpdateBall;
             AdvancedControlsMod.EventManager.OnDeviceRemapped -= UpdateMappings;
-            ADVControls.Instance.OnUpdate -= Update;
+            ACM.Instance.OnUpdate -= Update;
         }
 
         public bool Equals(Controller other)

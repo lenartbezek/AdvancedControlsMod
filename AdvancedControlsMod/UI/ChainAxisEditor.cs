@@ -220,7 +220,7 @@ design more complex inputs.";
 
                     if (GUILayout.Button("✎", new GUIStyle(Elements.Buttons.Default) { fontSize = 20, padding = new RectOffset(-3, 0, 0, 0) }, GUILayout.Width(30), GUILayout.MaxHeight(28)))
                     {
-                        var Editor = ADVControls.Instance.gameObject.AddComponent<AxisEditorWindow>();
+                        var Editor = ACM.Instance.gameObject.AddComponent<AxisEditorWindow>();
                         Editor.windowRect.x = windowRect.x + windowRect.width;
                         Editor.windowRect.y = windowRect.y;
                         Editor.EditAxis(axis);
@@ -240,7 +240,7 @@ design more complex inputs.";
 
                 if (GUILayout.Button("Create new axis", Elements.Buttons.Disabled))
                 {
-                    var Editor = ADVControls.Instance.gameObject.AddComponent<AxisEditorWindow>();
+                    var Editor = ACM.Instance.gameObject.AddComponent<AxisEditorWindow>();
                     Editor.windowRect.x = windowRect.x + windowRect.width;
                     Editor.windowRect.y = windowRect.y;
                     Editor.CreateAxis(new AxisEditorWindow.SelectAxis(Select));

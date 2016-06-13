@@ -16,10 +16,6 @@ namespace AdvancedControls
                 var version = machineInfo.MachineData.ReadString("ac-version");
 
                 var axis_names = machineInfo.MachineData.ReadStringArray("ac-axislist");
-                foreach (string name in axis_names)
-                {
-                    // add to prompt
-                }
 
                 foreach (BlockInfo blockInfo in machineInfo.Blocks)
                 {
@@ -35,6 +31,8 @@ namespace AdvancedControls
                         }
                     }
                 }
+
+                ACM.Instance.LoadedMachine = true;
             }
             catch (Exception e)
             {

@@ -17,8 +17,6 @@ namespace AdvancedControls.UI
         private int popupID = spaar.ModLoader.Util.GetWindowID();
         private Rect popupRect;
 
-        private Vector2 popupScroll = Vector2.zero;
-
         private float DesiredWidth { get; } = 320;
         private float DesiredHeight { get; } = 50;
 
@@ -100,7 +98,7 @@ namespace AdvancedControls.UI
 
                 if (GUILayout.Button("✎", new GUIStyle(Elements.Buttons.Default) { fontSize = 20, padding = new RectOffset(-3, 0, 0, 0) }, GUILayout.Width(30), GUILayout.MaxHeight(28)))
                 {
-                    var Editor = ADVControls.Instance.gameObject.AddComponent<AxisEditorWindow>();
+                    var Editor = ACM.Instance.gameObject.AddComponent<AxisEditorWindow>();
                     Editor.windowRect.x = popupRect.x;
                     Editor.windowRect.y = popupRect.y;
                     Editor.EditAxis(axis);
@@ -120,7 +118,7 @@ namespace AdvancedControls.UI
 
             if (GUILayout.Button("Create new axis", Elements.Buttons.Disabled))
             {
-                var Editor = ADVControls.Instance.gameObject.AddComponent<AxisEditorWindow>();
+                var Editor = ACM.Instance.gameObject.AddComponent<AxisEditorWindow>();
                 Editor.windowRect.x = popupRect.x;
                 Editor.windowRect.y = popupRect.y;
                 Editor.CreateAxis(new AxisEditorWindow.SelectAxis(Select));

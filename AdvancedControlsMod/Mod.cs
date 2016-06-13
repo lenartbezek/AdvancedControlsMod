@@ -24,32 +24,33 @@ namespace AdvancedControls
 
         public override void OnLoad()
         {
-            UnityEngine.Object.DontDestroyOnLoad(ADVControls.Instance);
-            BlockHandlers.OnInitialisation += ADVControls.Instance.Initialise;
-            Game.OnSimulationToggle += ADVControls.Instance.OnSimulationToggle;
+            UnityEngine.Object.DontDestroyOnLoad(ACM.Instance);
+            BlockHandlers.OnInitialisation += ACM.Instance.Initialise;
+            Game.OnSimulationToggle += ACM.Instance.OnSimulationToggle;
             XmlSaver.OnSave += MachineData.Save;
             XmlLoader.OnLoad += MachineData.Load;
 
-            ControlMapper = ADVControls.Instance.gameObject.AddComponent<ControlMapperWindow>();
-            EventManager = ADVControls.Instance.gameObject.AddComponent<EventManager>();
+            ControlMapper = ACM.Instance.gameObject.AddComponent<ControlMapperWindow>();
+            EventManager = ACM.Instance.gameObject.AddComponent<EventManager>();
         }
 
         public override void OnUnload()
         {
-            BlockHandlers.OnInitialisation -= ADVControls.Instance.Initialise;
-            Game.OnSimulationToggle -= ADVControls.Instance.OnSimulationToggle;
+            BlockHandlers.OnInitialisation -= ACM.Instance.Initialise;
+            Game.OnSimulationToggle -= ACM.Instance.OnSimulationToggle;
             XmlSaver.OnSave -= MachineData.Save;
             XmlLoader.OnLoad -= MachineData.Load;
             Configuration.Save();
 
-            UnityEngine.Object.Destroy(ADVControls.Instance);
+            UnityEngine.Object.Destroy(ACM.Instance);
         }
     }
 
-    public class ADVControls : SingleInstance<ADVControls>
+    public class ACM : SingleInstance<ACM>
     {
         public override string Name { get { return "Advanced Controls"; } }
 
+        internal bool LoadedMachine = false;
         public bool IsSimulating { get { return isSimulating; } }
         private bool isSimulating = false;
 
@@ -84,6 +85,15 @@ namespace AdvancedControls
             {
                 if (AdvancedControlsMod.ControlMapper.Visible)
                     AdvancedControlsMod.ControlMapper.Hide();
+            }
+
+            if (LoadedMachine)
+            {
+                foreach (AssignAxesWindow g in FindObjectsOfType<AssignAxesWindow>())
+                    Destroy(g);
+
+                LoadedMachine = false;
+                AssignAxesWindow.Open();
             }
 
             OnUpdate?.Invoke();
