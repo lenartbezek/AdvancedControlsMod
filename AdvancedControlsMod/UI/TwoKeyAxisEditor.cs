@@ -20,8 +20,20 @@ namespace AdvancedControls.UI
         internal string error;
         internal string note;
 
+        private string sens_string;
+        private string grav_string;
+
+        private bool first_draw = true;
+
         public void DrawAxis(Rect windowRect)
         {
+            if (first_draw)
+            {
+                sens_string = Axis.Sensitivity.ToString("0.00");
+                grav_string = Axis.Gravity.ToString("0.00");
+                first_draw = false;
+            }
+
             // Draw graph
             Rect graphRect = new Rect(
                 GUI.skin.window.padding.left,
@@ -87,22 +99,10 @@ namespace AdvancedControls.UI
             GUILayout.EndHorizontal();
 
             // Draw Sensitivity slider
-            GUILayout.BeginHorizontal();
-            GUILayout.Label("Sensitivity", Util.LabelStyle);
-            GUILayout.Label((Mathf.Round(Axis.Sensitivity * 100) / 100).ToString(),
-                Util.LabelStyle,
-                GUILayout.Width(60));
-            GUILayout.EndHorizontal();
-
-            Axis.Sensitivity = GUILayout.HorizontalSlider(Axis.Sensitivity, 0, 10);
+            Axis.Sensitivity = Util.DrawSlider("Sensitivity", Axis.Sensitivity, 0, 5, sens_string, out sens_string);
 
             // Draw Curvature slider
-            GUILayout.BeginHorizontal();
-            GUILayout.Label("Gravity", Util.LabelStyle);
-            GUILayout.Label((Mathf.Round(Axis.Gravity * 100) / 100).ToString(),
-                Util.LabelStyle,
-                GUILayout.Width(60));
-            GUILayout.EndHorizontal();
+            Axis.Gravity = Util.DrawSlider("Gravity", Axis.Gravity, 0, 3, grav_string, out grav_string);
 
             Axis.Gravity = GUILayout.HorizontalSlider(Axis.Gravity, 0, 10);
 

@@ -90,7 +90,7 @@ namespace AdvancedControls.UI
 
                 GUILayout.BeginHorizontal();
 
-                if (GUILayout.Button(name, Elements.Buttons.Default))
+                if (GUILayout.Button(name, axis.Saveable ? Elements.Buttons.Default : Elements.Buttons.Disabled))
                 {
                     Select?.Invoke(axis);
                     Select = null;
@@ -148,7 +148,7 @@ namespace AdvancedControls.UI
             else
             {
                 var a = AxisManager.Get(c.Axis);
-                if (GUILayout.Button(c.Axis, a != null ? Elements.Buttons.Default : Elements.Buttons.Red))
+                if (GUILayout.Button(c.Axis, a != null ? a.Saveable ? Elements.Buttons.Default : Elements.Buttons.Disabled : Elements.Buttons.Red))
                 {
                     Select = new AxisEditorWindow.SelectAxis((InputAxis axis) => { c.Axis = axis.Name; c.Enabled = true; });
                 }

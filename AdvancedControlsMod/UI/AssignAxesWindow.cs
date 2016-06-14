@@ -77,7 +77,7 @@ namespace AdvancedControls.UI
             GUILayout.BeginHorizontal();
 
             var a = AxisManager.Get(axis);
-            if (GUILayout.Button(axis, a != null ? Elements.Buttons.Default : Elements.Buttons.Red))
+            if (GUILayout.Button(axis, a != null ? a.Saveable ? Elements.Buttons.Default : Elements.Buttons.Disabled : Elements.Buttons.Red))
                 Select = new AxisEditorWindow.SelectAxis((InputAxis new_axis) => { AssignAxis(axis, new_axis.Name); });
             Util.DrawEnabledBadge(a != null);
 

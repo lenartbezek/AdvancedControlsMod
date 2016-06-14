@@ -64,6 +64,34 @@ namespace AdvancedControls.UI
             }
         }
 
+        public static float DrawSlider(string label, float value, float min, float max, string old_text, out string new_text)
+        {
+            GUILayout.BeginHorizontal();
+            GUILayout.Label(label, LabelStyle);
+            new_text = GUILayout.TextField(old_text,
+                LabelStyle,
+                GUILayout.Width(60));
+            GUILayout.EndHorizontal();
+
+            float slider = GUILayout.HorizontalSlider(value, min, max);
+            if (new_text != old_text)
+            {
+                if (new_text != "-" &&
+                    !new_text.EndsWith(".") &&
+                    !new_text.EndsWith(".0"))
+                {
+                    float.TryParse(new_text, out value);
+                }
+            }
+            else if (slider != value)
+            {
+                value = slider;
+                new_text = value.ToString("0.00");
+            }
+                
+            return value;
+        }
+
         public static void DrawRect(Rect position, Color color)
         {
             FillRect(new Rect(

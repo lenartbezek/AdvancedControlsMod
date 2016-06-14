@@ -82,7 +82,7 @@ namespace AdvancedControls.Controls
             if (ACM.Instance.IsSimulating)
             {
                 var a = AxisManager.Get(Axis);
-                if (Enabled && Block != null && a != null)
+                if (Enabled && Block != null && a != null && a.Saveable)
                 {
                     Apply(a.OutputValue);
                 }

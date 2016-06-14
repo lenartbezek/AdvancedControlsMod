@@ -22,6 +22,7 @@ namespace AdvancedControls.UI
         public ControllerAxisEditor(InputAxis axis)
         {
             Axis = axis as ControllerAxis;
+
             FindIndex();
             ACM.Instance.EventManager.OnDeviceAdded += (SDL.SDL_Event e) => FindIndex();
             ACM.Instance.EventManager.OnDeviceRemoved += (SDL.SDL_Event e) => FindIndex();
@@ -41,6 +42,12 @@ namespace AdvancedControls.UI
 
         private Vector2 click_position;
         private bool dragging;
+
+        private string sens_string;
+        private string curv_string;
+        private string dead_string;
+
+        private bool first_draw = true;
 
         private void FindIndex()
         {
@@ -77,6 +84,14 @@ namespace AdvancedControls.UI
 
         public void DrawAxis(Rect windowRect)
         {
+            if (first_draw)
+            {
+                sens_string = Axis.Sensitivity.ToString("0.00");
+                curv_string = Axis.Curvature.ToString("0.00");
+                dead_string = Axis.Deadzone.ToString("0.00");
+                first_draw = false;
+            }
+
             var controller = Controller.Get(Axis.GUID);
 
             if (!ACM.Instance.EventManager.SDL_Initialized)
@@ -91,13 +106,14 @@ namespace AdvancedControls.UI
             else if (Controller.NumDevices == 0)
             {
                 note =  "<color=#FFFF00><b>No controllers connected.</b></color>\n"+
-                        "You must connect a joystick or controller to use this axis.";
+                        "Connect a joystick or controller to use this axis.";
             }
             else if (controller_index < 0)
             {
                 note = "<color=#FFFF00><b>Associated controller not connected.</b></color>\n" +
-                        "The device this axis is bound to is not found. Please connect it or create a new axis.\n"+
-                        "\nDevice GUID: "+Axis.GUID;
+                        "The device this axis is bound to is not found.\n"+
+                        "Please connect it or create a new axis.\n"+
+                        "\n<b>Device GUID</b>\n" + Axis.GUID;
             }
             else
             {
@@ -217,34 +233,13 @@ namespace AdvancedControls.UI
                 GUILayout.EndHorizontal();
 
                 // Draw Sensitivity slider
-                GUILayout.BeginHorizontal();
-                GUILayout.Label("Sensitivity", Util.LabelStyle);
-                GUILayout.Label((Mathf.Round(Axis.Sensitivity * 100) / 100).ToString(),
-                    Util.LabelStyle,
-                    GUILayout.Width(60));
-                GUILayout.EndHorizontal();
-
-                Axis.Sensitivity = GUILayout.HorizontalSlider(Axis.Sensitivity, 0, 5);
+                Axis.Sensitivity = Util.DrawSlider("Sensitivity", Axis.Sensitivity, 0, 5, sens_string, out sens_string);
 
                 // Draw Curvature slider
-                GUILayout.BeginHorizontal();
-                GUILayout.Label("Curvature", Util.LabelStyle);
-                GUILayout.Label((Mathf.Round(Axis.Curvature * 100) / 100).ToString(),
-                    Util.LabelStyle,
-                    GUILayout.Width(60));
-                GUILayout.EndHorizontal();
-
-                Axis.Curvature = GUILayout.HorizontalSlider(Axis.Curvature, 0, 3);
+                Axis.Curvature = Util.DrawSlider("Curvaure", Axis.Curvature, 0, 3, curv_string, out curv_string);
 
                 // Draw Deadzone slider
-                GUILayout.BeginHorizontal();
-                GUILayout.Label("Deadzone", Util.LabelStyle);
-                GUILayout.Label((Mathf.Round(Axis.Deadzone * 100) / 100).ToString(),
-                    Util.LabelStyle,
-                    GUILayout.Width(60));
-                GUILayout.EndHorizontal();
-
-                Axis.Deadzone = GUILayout.HorizontalSlider(Axis.Deadzone, 0, 0.5f);
+                Axis.Deadzone = Util.DrawSlider("Deadzone", Axis.Deadzone, 0, 0.5f, dead_string, out dead_string);
 
                 GUILayout.BeginHorizontal();
 

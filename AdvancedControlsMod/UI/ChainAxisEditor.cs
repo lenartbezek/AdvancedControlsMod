@@ -142,7 +142,8 @@ design more complex inputs.";
             }
             else
             {
-                if (GUILayout.Button(Axis.SubAxis1, AxisManager.Get(Axis.SubAxis1) != null ? Elements.Buttons.Default : Elements.Buttons.Red, GUILayout.MaxWidth(leftGraphRect.width)))
+                if (GUILayout.Button(Axis.SubAxis1, axis_a != null ? axis_a.Saveable ? Elements.Buttons.Default : Elements.Buttons.Disabled : Elements.Buttons.Red,
+                    GUILayout.MaxWidth(leftGraphRect.width)))
                 {
                     error = null;
                     Select = new AxisEditorWindow.SelectAxis((InputAxis axis) =>
@@ -181,7 +182,8 @@ design more complex inputs.";
             }
             else
             {
-                if (GUILayout.Button(Axis.SubAxis2, AxisManager.Get(Axis.SubAxis2) != null ? Elements.Buttons.Default : Elements.Buttons.Red, GUILayout.MaxWidth(rightGraphRect.width)))
+                if (GUILayout.Button(Axis.SubAxis2, axis_b != null ? axis_b.Saveable ? Elements.Buttons.Default : Elements.Buttons.Disabled : Elements.Buttons.Red,
+                    GUILayout.MaxWidth(rightGraphRect.width)))
                 {
                     error = null;
                     Select = new AxisEditorWindow.SelectAxis((InputAxis axis) =>
@@ -212,7 +214,7 @@ design more complex inputs.";
 
                     GUILayout.BeginHorizontal();
 
-                    if (GUILayout.Button(name, Elements.Buttons.Default))
+                    if (GUILayout.Button(name, axis.Saveable ? Elements.Buttons.Default : Elements.Buttons.Disabled))
                     {
                         Select?.Invoke(axis);
                         Select = null;
