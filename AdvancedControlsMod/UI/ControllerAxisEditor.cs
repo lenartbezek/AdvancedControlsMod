@@ -71,7 +71,8 @@ namespace AdvancedControls.UI
             if (Axis.Changed || graphRect != last_graphRect)
             {
                 graphTex.SetPixels(resetTex);
-                for (float x_value = -1; x_value < 1; x_value += 0.2f / graphTex.width)
+                float step = 0.2f / graphTex.width;
+                for (float x_value = -1; x_value < 1; x_value += step)
                 {
                     float y_value = Axis.Process(x_value);
                     if (y_value <= -1f || y_value >= 1f) continue;

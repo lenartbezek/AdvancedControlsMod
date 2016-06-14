@@ -195,9 +195,19 @@ namespace AdvancedControls.Input
         private void UpdateAxis(SDL.SDL_Event e)
         {
             if (!Connected) return;
-            if (e.jdevice.which == Index)
+            if (is_game_controller)
             {
-                axis_values_raw[e.jaxis.axis] = e.jaxis.axisValue / 32767.0f;
+                if (e.cdevice.which == Index)
+                {
+                    axis_values_raw[e.caxis.axis] = e.caxis.axisValue / 32767.0f;
+                }
+            }
+            else
+            {
+                if (e.jdevice.which == Index)
+                {
+                    axis_values_raw[e.jaxis.axis] = e.jaxis.axisValue / 32767.0f;
+                }
             }
         }
 
@@ -206,7 +216,7 @@ namespace AdvancedControls.Input
             if (!Connected) return;
             if (e.jdevice.which == Index)
             {
-               ball_values_raw[e.jball.ball, 0] = e.jball.xrel / 32767.0f;
+                ball_values_raw[e.jball.ball, 0] = e.jball.xrel / 32767.0f;
             }
         }
 
@@ -241,7 +251,8 @@ namespace AdvancedControls.Input
         {
             if (is_game_controller)
                 SDL.SDL_GameControllerClose(game_controller);
-            SDL.SDL_JoystickClose(device_pointer);
+            else
+                SDL.SDL_JoystickClose(device_pointer);
 
             ACM.Instance.EventManager.OnAxisMotion -= UpdateAxis;
             ACM.Instance.EventManager.OnBallMotion -= UpdateBall;

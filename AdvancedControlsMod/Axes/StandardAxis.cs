@@ -63,7 +63,7 @@ namespace AdvancedControls.Axes
             clone.Sensitivity = Sensitivity;
             clone.Gravity = Gravity;
             clone.Snap = Snap;
-            clone.Invert = Snap;
+            clone.Invert = Invert;
             return clone;
         }
 

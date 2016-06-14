@@ -84,7 +84,7 @@ namespace AdvancedControls.UI
             GUILayout.EndHorizontal();
 
             foreach (Control c in Controls[axis])
-                GUILayout.Label("\t<b>" + c.Name + "</b>\t for " + Blocks[c.BlockGUID]);
+                GUILayout.Label("    <b>" + c.Name + "</b> for " + Blocks[c.BlockGUID]);
         }
 
         /// <summary>

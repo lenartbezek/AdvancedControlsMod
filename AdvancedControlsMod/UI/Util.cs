@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using spaar.ModLoader.UI;
+using System.Text.RegularExpressions;
 
 namespace AdvancedControls.UI
 {
@@ -68,9 +69,9 @@ namespace AdvancedControls.UI
         {
             GUILayout.BeginHorizontal();
             GUILayout.Label(label, LabelStyle);
-            new_text = GUILayout.TextField(old_text,
+            new_text = Regex.Replace(GUILayout.TextField(old_text,
                 LabelStyle,
-                GUILayout.Width(60));
+                GUILayout.Width(60)), @"[^0-9\-.]", "");
             GUILayout.EndHorizontal();
 
             float slider = GUILayout.HorizontalSlider(value, min, max);
@@ -80,7 +81,8 @@ namespace AdvancedControls.UI
                     !new_text.EndsWith(".") &&
                     !new_text.EndsWith(".0"))
                 {
-                    float.TryParse(new_text, out value);
+                    float.TryParse(new_text.TrimEnd('-'), out value);
+                    new_text = value.ToString();
                 }
             }
             else if (slider != value)
