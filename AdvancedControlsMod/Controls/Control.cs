@@ -90,6 +90,7 @@ namespace AdvancedControls.Controls
         }
 
         public abstract void Apply(float value);
+        public abstract Control Clone();
 
         public virtual void Load(BlockInfo blockInfo)
         {

@@ -1,6 +1,5 @@
 ﻿using AdvancedControls.Axes;
 using AdvancedControls.Controls;
-using spaar.ModLoader;
 using spaar.ModLoader.UI;
 using System;
 using System.Collections.Generic;
@@ -31,7 +30,7 @@ namespace AdvancedControls.UI
         {
             var instance = ACM.Instance.gameObject.AddComponent<AssignAxesWindow>();
             foreach (GenericBlock block in Machine.Active().BuildingBlocks)
-                instance.Blocks[block.Guid] = block.MyBlockInfo.blockName;
+                instance.Blocks[block.Guid] = block.MyBlockInfo.blockName.ToUpper();
 
             foreach (KeyValuePair<Guid, List<Control>> entry in ControlManager.Blocks)
             {
@@ -75,12 +74,17 @@ namespace AdvancedControls.UI
         {
             GUILayout.Box(GUIContent.none, GUILayout.Height(20));
 
+            GUILayout.BeginHorizontal();
+
             var a = AxisManager.Get(axis);
             if (GUILayout.Button(axis, a != null ? Elements.Buttons.Default : Elements.Buttons.Red))
                 Select = new AxisEditorWindow.SelectAxis((InputAxis new_axis) => { AssignAxis(axis, new_axis.Name); });
+            Util.DrawEnabledBadge(a != null);
+
+            GUILayout.EndHorizontal();
 
             foreach (Control c in Controls[axis])
-                GUILayout.Label("      <b>" + c.Name + "</b>\t for " + Blocks[c.BlockGUID]);
+                GUILayout.Label("\t<b>" + c.Name + "</b>\t for " + Blocks[c.BlockGUID]);
         }
 
         /// <summary>
@@ -91,7 +95,7 @@ namespace AdvancedControls.UI
             if (Visible)
             {
                 GUI.skin = Util.Skin;
-                windowRect = GUILayout.Window(windowID, windowRect, DoWindow, "ACM - Assign axes",
+                windowRect = GUILayout.Window(windowID, windowRect, DoWindow, "ACM:  Assign axes",
                     GUILayout.Width(280),
                     GUILayout.Height(100));
                 if (Select != null)

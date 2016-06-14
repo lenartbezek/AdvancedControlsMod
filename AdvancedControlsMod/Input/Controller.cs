@@ -119,16 +119,16 @@ namespace AdvancedControls.Input
                 Buttons.Add(new JoystickButton(this, i));
             }
 
-            AdvancedControlsMod.EventManager.OnAxisMotion += UpdateAxis;
-            AdvancedControlsMod.EventManager.OnBallMotion += UpdateBall;
-            AdvancedControlsMod.EventManager.OnDeviceRemapped += UpdateMappings;
+            ACM.Instance.EventManager.OnAxisMotion += UpdateAxis;
+            ACM.Instance.EventManager.OnBallMotion += UpdateBall;
+            ACM.Instance.EventManager.OnDeviceRemapped += UpdateMappings;
             ACM.Instance.OnUpdate += Update;
 
             // Debug
             if (is_game_controller)
-                Debug.Log("Game controller connected: " + Name);
+                Debug.Log("[ACM]: Game controller connected: " + Name);
             else
-                Debug.Log("Joystick connected: " + Name);
+                Debug.Log("[ACM]: Joystick connected: " + Name);
             Debug.Log("\tGuid: " + GUID);
         }
 
@@ -243,9 +243,9 @@ namespace AdvancedControls.Input
                 SDL.SDL_GameControllerClose(game_controller);
             SDL.SDL_JoystickClose(device_pointer);
 
-            AdvancedControlsMod.EventManager.OnAxisMotion -= UpdateAxis;
-            AdvancedControlsMod.EventManager.OnBallMotion -= UpdateBall;
-            AdvancedControlsMod.EventManager.OnDeviceRemapped -= UpdateMappings;
+            ACM.Instance.EventManager.OnAxisMotion -= UpdateAxis;
+            ACM.Instance.EventManager.OnBallMotion -= UpdateBall;
+            ACM.Instance.EventManager.OnDeviceRemapped -= UpdateMappings;
             ACM.Instance.OnUpdate -= Update;
         }
 

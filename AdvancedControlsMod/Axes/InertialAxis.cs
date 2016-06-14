@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using AdvancedControls.Input;
 
 namespace AdvancedControls.Axes
 {
@@ -10,9 +9,7 @@ namespace AdvancedControls.Axes
         private float speed = 0;
         private float last = 0;
 
-        public InertialAxis(string name, Button pos_bind = null, Button neg_bind = null,
-                            float sensitivity = 1, float gravity = 1, bool snap = false, bool invert = false)
-            : base(name, pos_bind, neg_bind, sensitivity, gravity, snap, invert)
+        public InertialAxis(string name) : base(name)
         {
             Type = AxisType.Inertial;
         }
@@ -46,7 +43,14 @@ namespace AdvancedControls.Axes
 
         public override InputAxis Clone()
         {
-            return new InertialAxis(Name, PositiveBind, NegativeBind, Sensitivity, Gravity, Snap, Invert);
+            var clone = new InertialAxis(Name);
+            clone.PositiveBind = PositiveBind;
+            clone.NegativeBind = NegativeBind;
+            clone.Sensitivity = Sensitivity;
+            clone.Gravity = Gravity;
+            clone.Snap = Snap;
+            clone.Invert = Snap;
+            return clone;
         }
     }
 }

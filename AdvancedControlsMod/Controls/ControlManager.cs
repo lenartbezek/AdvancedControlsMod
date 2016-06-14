@@ -31,6 +31,22 @@ namespace AdvancedControls.Controls
             return null;
         }
 
+        public static void CopyBlockControls(Guid source_block, Guid destination_block)
+        {
+            if (!Blocks.ContainsKey(source_block) || !Blocks.ContainsKey(destination_block)) return;
+
+            foreach (Control src in Blocks[source_block])
+                foreach (Control tgt in Blocks[destination_block])
+                    if (src.Name == tgt.Name)
+                    {
+                        tgt.Enabled = src.Enabled;
+                        tgt.Axis = src.Axis;
+                        tgt.Min = src.Min;
+                        tgt.Center = src.Center;
+                        tgt.Max = src.Max;
+                    }
+        }
+
         public static List<Control> CreateBlockControls(int BlockID, Guid GUID)
         {
             if (BlockID == (int)BlockType.Wheel ||
@@ -139,6 +155,17 @@ namespace AdvancedControls.Controls
                 return new List<Control>()
                 {
                     new SliderControl(GUID){ Slider = "MASS", PositiveOnly = true }
+                };
+            }
+
+            if (BlockID == (int)BlockType.CameraBlock)
+            {
+                return new List<Control>()
+                {
+                    new SliderControl(GUID){ Slider = "DISTANCE", PositiveOnly = true, Min = 40, Center = 60, Max = 80 },
+                    new SliderControl(GUID){ Slider = "HEIGHT", Min = 0, Center = 30, Max = 60 },
+                    new SliderControl(GUID){ Slider = "ROTATION", Min = -60, Center = 0, Max = 60 },
+                    new SliderControl(GUID){ Slider = "TILT", Min = -60, Center = 0, Max = 60 },
                 };
             }
 

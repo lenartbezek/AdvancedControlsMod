@@ -29,8 +29,8 @@ namespace AdvancedControls.Input
             this.index = index;
             this.guid = controller.GUID;
 
-            AdvancedControlsMod.EventManager.OnButton += HandleEvent;
-            AdvancedControlsMod.EventManager.OnDeviceAdded += UpdateDevice;
+            ACM.Instance.EventManager.OnButton += HandleEvent;
+            ACM.Instance.EventManager.OnDeviceAdded += UpdateDevice;
         }
 
         public JoystickButton(string id)
@@ -45,8 +45,8 @@ namespace AdvancedControls.Input
             else
                 throw new FormatException("Specified ID does not represent a joystick button.");
 
-            AdvancedControlsMod.EventManager.OnButton += HandleEvent;
-            AdvancedControlsMod.EventManager.OnDeviceAdded += UpdateDevice;
+            ACM.Instance.EventManager.OnButton += HandleEvent;
+            ACM.Instance.EventManager.OnDeviceAdded += UpdateDevice;
         }
 
         private void HandleEvent(SDL.SDL_Event e, bool down)

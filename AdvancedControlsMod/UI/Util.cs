@@ -46,6 +46,24 @@ namespace AdvancedControls.UI
             }
         }
 
+        public static void DrawEnabledBadge(bool enabled)
+        {
+            if (enabled)
+            {
+                var oldColor = GUI.backgroundColor;
+                GUI.backgroundColor = new Color(0f, 1f, 0f, 1f);
+                GUILayout.Label("✓", Elements.InputFields.Default, GUILayout.Width(30));
+                GUI.backgroundColor = oldColor;
+            }
+            else
+            {
+                var oldColor = GUI.backgroundColor;
+                GUI.backgroundColor = new Color(1f, 0f, 0f, 1f);
+                GUILayout.Label("✘", Elements.InputFields.Default, GUILayout.Width(30));
+                GUI.backgroundColor = oldColor;
+            }
+        }
+
         public static void DrawRect(Rect position, Color color)
         {
             FillRect(new Rect(

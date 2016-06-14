@@ -112,12 +112,12 @@ namespace AdvancedControls.Axes
             }
         }
 
-        public ChainAxis(string name, string a = null, string b = null, ChainMethod m = ChainMethod.Sum) : base(name)
+        public ChainAxis(string name) : base(name)
         {
             Type = AxisType.Chain;
-            SubAxis1 = a;
-            SubAxis2 = b;
-            Method = m;
+            SubAxis1 = null;
+            SubAxis2 = null;
+            Method = ChainMethod.Sum;
             editor = new UI.ChainAxisEditor(this);
         }
 
@@ -147,7 +147,11 @@ namespace AdvancedControls.Axes
 
         public override InputAxis Clone()
         {
-            return new ChainAxis(Name, SubAxis1, SubAxis2, Method);
+            var clone = new ChainAxis(Name);
+            clone.Method = Method;
+            clone.SubAxis1 = SubAxis1;
+            clone.SubAxis2 = SubAxis2;
+            return clone;
         }
 
         public override void Load()

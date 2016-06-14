@@ -3,6 +3,7 @@ using spaar.ModLoader;
 using LenchScripter;
 using AdvancedControls.UI;
 using AdvancedControls.Input;
+using AdvancedControls.Controls;
 
 namespace AdvancedControls
 {
@@ -19,9 +20,6 @@ namespace AdvancedControls
         public override bool CanBeUnloaded { get; } = true;
         public override bool Preload { get; } = false;
 
-        internal static ControlMapperWindow ControlMapper;
-        internal static EventManager EventManager;
-
         public override void OnLoad()
         {
             UnityEngine.Object.DontDestroyOnLoad(ACM.Instance);
@@ -29,9 +27,6 @@ namespace AdvancedControls
             Game.OnSimulationToggle += ACM.Instance.OnSimulationToggle;
             XmlSaver.OnSave += MachineData.Save;
             XmlLoader.OnLoad += MachineData.Load;
-
-            ControlMapper = ACM.Instance.gameObject.AddComponent<ControlMapperWindow>();
-            EventManager = ACM.Instance.gameObject.AddComponent<EventManager>();
         }
 
         public override void OnUnload()
@@ -54,6 +49,9 @@ namespace AdvancedControls
         public bool IsSimulating { get { return isSimulating; } }
         private bool isSimulating = false;
 
+        internal ControlMapperWindow ControlMapper;
+        internal EventManager EventManager;
+
         public delegate void UpdateEventHandler();
         public event UpdateEventHandler OnUpdate;
 
@@ -61,15 +59,18 @@ namespace AdvancedControls
         public event InitialiseEventHandler OnInitialisation;
 
         private BlockMapper blockMapper;
+        private Guid copy_source;
 
         private void Start()
         {
+            ControlMapper = gameObject.AddComponent<ControlMapperWindow>();
+            EventManager = gameObject.AddComponent<EventManager>();
+
             Configuration.Load();
         }
 
         private void Update()
         {
-
             if (blockMapper == null)
             {
                 blockMapper = FindObjectOfType<BlockMapper>();
@@ -78,13 +79,22 @@ namespace AdvancedControls
             if (blockMapper != null)
             {
                 var hoveredBlock = blockMapper.Block.GetComponent<GenericBlock>();
-                if (hoveredBlock != null && hoveredBlock != AdvancedControlsMod.ControlMapper.Block)
-                    AdvancedControlsMod.ControlMapper.ShowBlockControls(hoveredBlock);
+                if (hoveredBlock != null && hoveredBlock != ControlMapper.Block)
+                    ControlMapper.ShowBlockControls(hoveredBlock);
+
+                if (hoveredBlock != null && UnityEngine.Input.GetKey(UnityEngine.KeyCode.LeftControl) ||
+                                            UnityEngine.Input.GetKey(UnityEngine.KeyCode.LeftCommand))
+                {
+                    if (UnityEngine.Input.GetKey(UnityEngine.KeyCode.C))
+                        copy_source = hoveredBlock.Guid;
+                    if (copy_source != null && UnityEngine.Input.GetKey(UnityEngine.KeyCode.V))
+                        ControlManager.CopyBlockControls(copy_source, hoveredBlock.Guid);
+                }
             }
             else
             {
-                if (AdvancedControlsMod.ControlMapper.Visible)
-                    AdvancedControlsMod.ControlMapper.Hide();
+                if (ControlMapper.Visible)
+                    ControlMapper.Hide();
             }
 
             if (LoadedMachine)

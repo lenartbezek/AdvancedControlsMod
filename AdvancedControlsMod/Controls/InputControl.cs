@@ -41,5 +41,19 @@ namespace AdvancedControls.Controls
             steering?.SetInput(value);
             spring?.SetInput(value);
         }
+
+        public override Control Clone()
+        {
+            var clone = new InputControl(BlockGUID);
+            clone.Name = Name;
+            clone.Enabled = Enabled;
+            clone.PositiveOnly = PositiveOnly;
+            clone.Axis = Axis;
+            clone.Block = Block;
+            clone.Min = Min;
+            clone.Center = Center;
+            clone.Max = Max;
+            return clone;
+        }
     }
 }

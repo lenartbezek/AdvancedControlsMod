@@ -31,5 +31,19 @@ namespace AdvancedControls.Controls
                 value = Mathf.Lerp(Center, Min, -value);
             Block?.SetSliderValue(Slider, value);
         }
+
+        public override Control Clone()
+        {
+            var clone = new SliderControl(BlockGUID);
+            clone.Name = Name;
+            clone.Enabled = Enabled;
+            clone.PositiveOnly = PositiveOnly;
+            clone.Axis = Axis;
+            clone.Block = Block;
+            clone.Min = Min;
+            clone.Center = Center;
+            clone.Max = Max;
+            return clone;
+        }
     }
 }

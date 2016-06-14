@@ -27,12 +27,12 @@ axis_value";
         private Func<object> update;
         private Func<object> init;
 
-        public CustomAxis(string name, string init = DefaultInitialisationCode, string update = DefaultUpdateCode, bool global = false) : base(name)
+        public CustomAxis(string name) : base(name)
         {
             Type = AxisType.Custom;
-            InitialisationCode = init;
-            UpdateCode = update;
-            GlobalScope = global;
+            InitialisationCode = DefaultInitialisationCode;
+            UpdateCode = DefaultUpdateCode;
+            GlobalScope = false;
             editor = new UI.CustomAxisEditor(this);
         }
 
@@ -101,7 +101,11 @@ axis_value";
 
         public override InputAxis Clone()
         {
-            return new CustomAxis(Name, InitialisationCode, UpdateCode, GlobalScope);
+            var clone = new CustomAxis(Name);
+            clone.InitialisationCode = InitialisationCode;
+            clone.UpdateCode = UpdateCode;
+            clone.GlobalScope = GlobalScope;
+            return clone;
         }
 
         public override void Load()

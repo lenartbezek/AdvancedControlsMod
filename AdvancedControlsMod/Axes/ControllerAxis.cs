@@ -7,20 +7,58 @@ namespace AdvancedControls.Axes
     public class ControllerAxis : InputAxis
     {
         public override string Name { get; set; } = "new controller axis";
-        public float Sensitivity { get; set; }
-        public float Curvature { get; set; }
-        public float Deadzone { get; set; }
-        public float OffsetX { get; set; }
-        public float OffsetY { get; set; }
-        public bool Invert { get; set; }
-        public bool Smooth { get; set; }
-        public int AxisID { get; set; }
-        public Guid ControllerGUID
+
+        private float sensitivity;
+        public float Sensitivity
         {
-            get
-            {
-                return guid;
-            }
+            get { return sensitivity; }
+            set { changed |= value != sensitivity; sensitivity = value; }
+        }
+
+        private float curvature;
+        public float Curvature
+        {
+            get { return curvature; }
+            set { changed |= value != curvature; curvature = value; }
+        }
+
+        private float deadzone;
+        public float Deadzone
+        {
+            get { return deadzone; }
+            set { changed |= value != deadzone; deadzone = value; }
+        }
+
+        private float offx;
+        public float OffsetX
+        {
+            get { return offx; }
+            set { changed |= value != offx; offx = value; }
+        }
+
+        private float offy;
+        public float OffsetY
+        {
+            get { return offy; }
+            set { changed |= value != offy; offy = value; }
+        }
+
+        private bool invert;
+        public bool Invert
+        {
+            get { return invert; }
+            set { changed |= value != invert; invert = value; }
+        }
+
+        public bool Smooth { get; set; }
+
+        public int Axis { get; set; }
+
+        private Guid guid;
+        private Controller controller;
+        public Guid GUID
+        {
+            get{ return guid; }
             set
             {
                 guid = value;
@@ -28,72 +66,31 @@ namespace AdvancedControls.Axes
             }
         }
 
-        public override bool Connected { get { return controller != null && controller.Connected; } }
-        public override bool Saveable { get { return AdvancedControlsMod.EventManager.SDL_Initialized && Controller.NumDevices > 0; } }
+        private bool changed = true;
+        public bool Changed
+        {
+            get { bool tmp = changed; changed = false; return tmp; }
+        }
 
-        private Guid guid;
-        private Controller controller;
+        public override bool Connected { get { return controller != null && controller.Connected; } }
+        public override bool Saveable { get { return ACM.Instance.EventManager.SDL_Initialized && Controller.NumDevices > 0; } }
 
         public ControllerAxis(string name) : base(name)
         {
             Type = AxisType.Controller;
-            AxisID = 0;
-            ControllerGUID = Controller.NumDevices > 0 ? Controller.DeviceList[0] : new Guid();
+            Axis = 0;
+            GUID = Controller.NumDevices > 0 ? Controller.DeviceList[0] : new Guid();
             Sensitivity = 1;
             Curvature = 1;
             Deadzone = 0;
+            OffsetX = 0;
+            OffsetY = 0;
             Invert = false;
             Smooth = false;
             editor = new UI.ControllerAxisEditor(this);
 
-            AdvancedControlsMod.EventManager.OnDeviceAdded += (SDL.SDL_Event e) => this.controller = Controller.Get(guid);
-            AdvancedControlsMod.EventManager.OnDeviceRemoved += (SDL.SDL_Event e) => this.controller = Controller.Get(guid);
-        }
-
-        public ControllerAxis(string name, Guid controller,
-            int axis = 0, float sensitivity = 1, float curvature = 1, float deadzone = 0, float off_x = 0, float off_y = 0,
-            bool invert = false, bool smooth = false) : base(name)
-        {
-            Type = AxisType.Controller;
-            AxisID = axis;
-            ControllerGUID = controller;
-            Sensitivity = sensitivity;
-            Curvature = curvature;
-            Deadzone = deadzone;
-            Invert = invert;
-            Smooth = smooth;
-            OffsetX = off_x;
-            OffsetY = off_y;
-            editor = new UI.ControllerAxisEditor(this);
-
-            AdvancedControlsMod.EventManager.OnDeviceAdded += (SDL.SDL_Event e) => this.controller = Controller.Get(guid);
-            AdvancedControlsMod.EventManager.OnDeviceRemoved += (SDL.SDL_Event e) => this.controller = Controller.Get(guid);
-        }
-
-        public struct Param
-        {
-            public float sens;
-            public float curv;
-            public float dead;
-            public bool inv;
-            public float off_x;
-            public float off_y;
-        }
-
-        public Param Parameters
-        {
-            get
-            {
-                return new Param()
-                {
-                    sens = Sensitivity,
-                    curv = Curvature,
-                    dead = Deadzone,
-                    inv = Invert,
-                    off_x = OffsetX,
-                    off_y = OffsetY
-                };
-            }
+            ACM.Instance.EventManager.OnDeviceAdded += (SDL.SDL_Event e) => this.controller = Controller.Get(guid);
+            ACM.Instance.EventManager.OnDeviceRemoved += (SDL.SDL_Event e) => this.controller = Controller.Get(guid);
         }
 
         public override float InputValue
@@ -103,9 +100,9 @@ namespace AdvancedControls.Axes
                 if (controller == null)
                     return 0;
                 if (Smooth)
-                    return controller.GetAxisSmooth(AxisID);
+                    return controller.GetAxisSmooth(Axis);
                 else
-                    return controller.GetAxis(AxisID);
+                    return controller.GetAxis(Axis);
             }
         }
 
@@ -132,15 +129,25 @@ namespace AdvancedControls.Axes
 
         public override InputAxis Clone()
         {
-            return new ControllerAxis(Name, ControllerGUID, AxisID, Sensitivity, Curvature, Deadzone, OffsetX, OffsetY, Invert, Smooth);
+            var clone = new ControllerAxis(Name);
+            clone.GUID = GUID;
+            clone.Axis = Axis;
+            clone.Sensitivity = Sensitivity;
+            clone.Curvature = Curvature;
+            clone.Deadzone = Deadzone;
+            clone.OffsetX = OffsetX;
+            clone.OffsetY = OffsetY;
+            clone.Invert = Invert;
+            clone.Smooth = Smooth;
+            return clone;
         }
 
         public override void Load()
         {
             if (spaar.ModLoader.Configuration.DoesKeyExist("axis-" + Name + "-controller"))
-                ControllerGUID = new Guid(spaar.ModLoader.Configuration.GetString("axis-" + Name + "-controller", ControllerGUID.ToString()));
+                GUID = new Guid(spaar.ModLoader.Configuration.GetString("axis-" + Name + "-controller", GUID.ToString()));
             if (spaar.ModLoader.Configuration.DoesKeyExist("axis-" + Name + "-axis"))
-                AxisID = spaar.ModLoader.Configuration.GetInt("axis-" + Name + "-axis", AxisID);
+                Axis = spaar.ModLoader.Configuration.GetInt("axis-" + Name + "-axis", Axis);
             if (spaar.ModLoader.Configuration.DoesKeyExist("axis-" + Name + "-sensitivity"))
                 Sensitivity = spaar.ModLoader.Configuration.GetFloat("axis-" + Name + "-sensitivity", Sensitivity);
             if (spaar.ModLoader.Configuration.DoesKeyExist("axis-" + Name + "-curvature"))
@@ -160,8 +167,8 @@ namespace AdvancedControls.Axes
         public override void Save()
         {
             spaar.ModLoader.Configuration.SetString("axis-" + Name + "-type", Type.ToString());
-            spaar.ModLoader.Configuration.SetString("axis-" + Name + "-controller", ControllerGUID.ToString());
-            spaar.ModLoader.Configuration.SetInt("axis-" + Name + "-axis", AxisID);
+            spaar.ModLoader.Configuration.SetString("axis-" + Name + "-controller", GUID.ToString());
+            spaar.ModLoader.Configuration.SetInt("axis-" + Name + "-axis", Axis);
             spaar.ModLoader.Configuration.SetFloat("axis-" + Name + "-sensitivity", Sensitivity);
             spaar.ModLoader.Configuration.SetFloat("axis-" + Name + "-curvature", Curvature);
             spaar.ModLoader.Configuration.SetFloat("axis-" + Name + "-deadzone", Deadzone);

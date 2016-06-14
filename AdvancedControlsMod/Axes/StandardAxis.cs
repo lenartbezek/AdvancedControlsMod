@@ -15,18 +15,17 @@ namespace AdvancedControls.Axes
         public Button NegativeBind { get; set; }
         private float last = 0;
 
-        public StandardAxis(string name, Button pos_bind = null, Button neg_bind = null,
-            float sensitivity = 1, float gravity = 1, bool snap = false, bool invert = false) : base(name)
+        public StandardAxis(string name) : base(name)
         {
             editor = new UI.TwoKeyAxisEditor(this);
 
             Type = AxisType.Standard;
-            PositiveBind = pos_bind;
-            NegativeBind = neg_bind;
-            Sensitivity = sensitivity;
-            Gravity = gravity;
-            Snap = snap;
-            Invert = invert;
+            PositiveBind = null;
+            NegativeBind = null;
+            Sensitivity = 1;
+            Gravity = 1;
+            Snap = false;
+            Invert = false;
         }
 
         public override float InputValue
@@ -58,7 +57,14 @@ namespace AdvancedControls.Axes
 
         public override InputAxis Clone()
         {
-            return new StandardAxis(Name, PositiveBind, NegativeBind, Sensitivity, Gravity, Snap, Invert);
+            var clone = new StandardAxis(Name);
+            clone.PositiveBind = PositiveBind;
+            clone.NegativeBind = NegativeBind;
+            clone.Sensitivity = Sensitivity;
+            clone.Gravity = Gravity;
+            clone.Snap = Snap;
+            clone.Invert = Snap;
+            return clone;
         }
 
         public override void Load()

@@ -38,5 +38,19 @@ namespace AdvancedControls.Controls
                 value = Mathf.Lerp(Center, Min, -value);
             steering?.SetAngle(value);
         }
+
+        public override Control Clone()
+        {
+            var clone = new AngleControl(BlockGUID);
+            clone.Name = Name;
+            clone.Enabled = Enabled;
+            clone.PositiveOnly = PositiveOnly;
+            clone.Axis = Axis;
+            clone.Block = Block;
+            clone.Min = Min;
+            clone.Center = Center;
+            clone.Max = Max;
+            return clone;
+        }
     }
 }

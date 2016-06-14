@@ -23,8 +23,8 @@ namespace AdvancedControls.UI
         {
             Axis = axis as ControllerAxis;
             FindIndex();
-            AdvancedControlsMod.EventManager.OnDeviceAdded += (SDL.SDL_Event e) => FindIndex();
-            AdvancedControlsMod.EventManager.OnDeviceRemoved += (SDL.SDL_Event e) => FindIndex();
+            ACM.Instance.EventManager.OnDeviceAdded += (SDL.SDL_Event e) => FindIndex();
+            ACM.Instance.EventManager.OnDeviceRemoved += (SDL.SDL_Event e) => FindIndex();
         }
 
         private ControllerAxis Axis;
@@ -39,14 +39,13 @@ namespace AdvancedControls.UI
         internal string note;
         internal string error;
 
-        private ControllerAxis.Param last_parameters;
         private Vector2 click_position;
         private bool dragging;
 
         private void FindIndex()
         {
-            if (Controller.DeviceList.Contains(Axis.ControllerGUID))
-                controller_index = Controller.DeviceList.FindIndex(guid => guid == Axis.ControllerGUID);
+            if (Controller.DeviceList.Contains(Axis.GUID))
+                controller_index = Controller.DeviceList.FindIndex(guid => guid == Axis.GUID);
             else
                 controller_index = -1;
         }
@@ -55,7 +54,7 @@ namespace AdvancedControls.UI
         {
             if (graphTex == null || graphRect != last_graphRect)
                 graphTex = new Texture2D((int)graphRect.width, (int)graphRect.height);
-            if (!Axis.Parameters.Equals(last_parameters) || graphRect != last_graphRect)
+            if (Axis.Changed || graphRect != last_graphRect)
             {
                 for (int i = 0; i < graphRect.width; i++)
                 {
@@ -72,14 +71,15 @@ namespace AdvancedControls.UI
                 }
                 graphTex.Apply();
                 last_graphRect = graphRect;
-                last_parameters = Axis.Parameters;
             }
             GUILayout.Box(graphTex);
         }
 
         public void DrawAxis(Rect windowRect)
         {
-            if (!AdvancedControlsMod.EventManager.SDL_Initialized)
+            var controller = Controller.Get(Axis.GUID);
+
+            if (!ACM.Instance.EventManager.SDL_Initialized)
             {
                 error = "<color=#FF0000><b>SDL2 library not found.</b></color>\n" +
                         "Make sure SDL2 library is properly installed.\n" +
@@ -92,6 +92,12 @@ namespace AdvancedControls.UI
             {
                 note =  "<color=#FFFF00><b>No controllers connected.</b></color>\n"+
                         "You must connect a joystick or controller to use this axis.";
+            }
+            else if (controller_index < 0)
+            {
+                note = "<color=#FFFF00><b>Associated controller not connected.</b></color>\n" +
+                        "The device this axis is bound to is not found. Please connect it or create a new axis.\n"+
+                        "\nDevice GUID: "+Axis.GUID;
             }
             else
             {
@@ -170,20 +176,14 @@ namespace AdvancedControls.UI
                          Color.yellow);
 
                 // Draw controller selection
-                var controller = Controller.Get(Axis.ControllerGUID);
-
-                if (controller_index < 0 && controller_index >= Controller.NumDevices)
-                {
-                    controller_index = 0;
-                    Axis.ControllerGUID = Controller.DeviceList[controller_index];
-                }
+                controller_index %= Controller.NumDevices;
 
                 GUILayout.BeginHorizontal();
                 if (GUILayout.Button("<", controller_index > 0 ? Elements.Buttons.Default : Elements.Buttons.Disabled, GUILayout.Width(30)) 
                     && controller_index > 0)
                 {
                     controller_index--;
-                    Axis.ControllerGUID = Controller.DeviceList[controller_index];
+                    Axis.GUID = Controller.DeviceList[controller_index];
                 }
 
                 GUILayout.Label(controller != null ? controller.Name : "<color=#FF0000>Disconnected controller</color>",
@@ -193,7 +193,7 @@ namespace AdvancedControls.UI
                     && controller_index < Controller.NumDevices - 1)
                 {
                     controller_index++;
-                    Axis.ControllerGUID = Controller.DeviceList[controller_index];
+                    Axis.GUID = Controller.DeviceList[controller_index];
                 }
 
                 if (controller == null) return;
@@ -201,18 +201,18 @@ namespace AdvancedControls.UI
                 GUILayout.EndHorizontal();
 
                 // Draw axis selection
-                Axis.AxisID = Axis.AxisID % controller.NumAxes;
+                Axis.Axis = Axis.Axis % controller.NumAxes;
 
                 GUILayout.BeginHorizontal();
-                if (GUILayout.Button("<", Axis.AxisID > 0 ? Elements.Buttons.Default : Elements.Buttons.Disabled, GUILayout.Width(30)) 
-                    && Axis.AxisID > 0)
-                    Axis.AxisID--;
+                if (GUILayout.Button("<", Axis.Axis > 0 ? Elements.Buttons.Default : Elements.Buttons.Disabled, GUILayout.Width(30)) 
+                    && Axis.Axis > 0)
+                    Axis.Axis--;
 
-                GUILayout.Label(controller.AxisNames[Axis.AxisID], new GUIStyle(Elements.InputFields.Default) { alignment = TextAnchor.MiddleCenter });
+                GUILayout.Label(controller.AxisNames[Axis.Axis], new GUIStyle(Elements.InputFields.Default) { alignment = TextAnchor.MiddleCenter });
 
-                if (GUILayout.Button(">", Axis.AxisID < Controller.Get(Axis.ControllerGUID).NumAxes - 1 ? Elements.Buttons.Default : Elements.Buttons.Disabled, GUILayout.Width(30)) 
-                    && Axis.AxisID < Controller.Get(Axis.ControllerGUID).NumAxes - 1)
-                    Axis.AxisID++;
+                if (GUILayout.Button(">", Axis.Axis < Controller.Get(Axis.GUID).NumAxes - 1 ? Elements.Buttons.Default : Elements.Buttons.Disabled, GUILayout.Width(30)) 
+                    && Axis.Axis < Controller.Get(Axis.GUID).NumAxes - 1)
+                    Axis.Axis++;
 
                 GUILayout.EndHorizontal();
 
