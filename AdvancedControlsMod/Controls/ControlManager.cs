@@ -164,8 +164,7 @@ namespace AdvancedControls.Controls
                 {
                     new SliderControl(GUID){ Slider = "DISTANCE", PositiveOnly = true, Min = 40, Center = 60, Max = 80 },
                     new SliderControl(GUID){ Slider = "HEIGHT", Min = 0, Center = 30, Max = 60 },
-                    new SliderControl(GUID){ Slider = "ROTATION", Min = -60, Center = 0, Max = 60 },
-                    new SliderControl(GUID){ Slider = "TILT", Min = -60, Center = 0, Max = 60 },
+                    new SliderControl(GUID){ Slider = "ROTATION", Min = -60, Center = 0, Max = 60 }
                 };
             }
 

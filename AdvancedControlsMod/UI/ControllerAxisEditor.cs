@@ -33,6 +33,7 @@ namespace AdvancedControls.UI
         private Rect graphRect;
         private Rect last_graphRect;
         private Texture2D graphTex;
+        private Color[] resetTex;
 
         private int controller_index = -1;
 
@@ -60,21 +61,23 @@ namespace AdvancedControls.UI
         private void DrawGraph()
         {
             if (graphTex == null || graphRect != last_graphRect)
+            {
                 graphTex = new Texture2D((int)graphRect.width, (int)graphRect.height);
+                for (int i = 0; i < graphTex.width; i++)
+                    for (int j = 0; j < graphTex.height; j++)
+                        graphTex.SetPixel(i, j, Color.clear);
+                resetTex = graphTex.GetPixels();
+            }
             if (Axis.Changed || graphRect != last_graphRect)
             {
-                for (int i = 0; i < graphRect.width; i++)
+                graphTex.SetPixels(resetTex);
+                for (float x_value = -1; x_value < 1; x_value += 0.2f / graphTex.width)
                 {
-                    var x = (i - graphRect.width / 2) / (graphRect.width / 2);
-                    var y = Axis.Process(-x);
-                    var point = graphRect.height / 2 + (graphRect.height-1) / 2 * y;
-                    for (int j = 0; j < graphRect.height; j++)
-                    {
-                        if ((int)point == j)
-                            graphTex.SetPixel((int)graphRect.width - i - 1, j, Color.white);
-                        else
-                            graphTex.SetPixel((int)graphRect.width - i - 1, j, new Color(0, 0, 0, 0));
-                    }
+                    float y_value = Axis.Process(x_value);
+                    if (y_value <= -1f || y_value >= 1f) continue;
+                    float x_pixel = (x_value + 1) * graphTex.width / 2;
+                    float y_pixel = (y_value + 1) * graphTex.height / 2;
+                    graphTex.SetPixel(Mathf.RoundToInt(x_pixel), Mathf.RoundToInt(y_pixel), Color.white);
                 }
                 graphTex.Apply();
                 last_graphRect = graphRect;

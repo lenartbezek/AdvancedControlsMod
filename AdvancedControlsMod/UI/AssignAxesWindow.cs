@@ -79,7 +79,7 @@ namespace AdvancedControls.UI
             var a = AxisManager.Get(axis);
             if (GUILayout.Button(axis, a != null ? a.Saveable ? Elements.Buttons.Default : Elements.Buttons.Disabled : Elements.Buttons.Red))
                 Select = new AxisEditorWindow.SelectAxis((InputAxis new_axis) => { AssignAxis(axis, new_axis.Name); });
-            Util.DrawEnabledBadge(a != null);
+            Util.DrawEnabledBadge(a != null && a.Saveable);
 
             GUILayout.EndHorizontal();
 
@@ -140,7 +140,7 @@ namespace AdvancedControls.UI
 
                 GUILayout.BeginHorizontal();
 
-                if (GUILayout.Button(name, Elements.Buttons.Default))
+                if (GUILayout.Button(name, axis.Saveable ? Elements.Buttons.Default : Elements.Buttons.Disabled))
                 {
                     Select?.Invoke(axis);
                     Select = null;

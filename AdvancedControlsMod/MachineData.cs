@@ -36,7 +36,7 @@ namespace AdvancedControls
             }
             catch (Exception e)
             {
-                Debug.Log("[AdvancedControlsMod]: Error loading machine's controls:");
+                Debug.Log("[ACM]: Error loading machine's controls:");
                 Debug.LogException(e);
             }
         }
@@ -69,7 +69,7 @@ namespace AdvancedControls
             }
             catch (Exception e)
             {
-                Debug.Log("[AdvancedControlsMod]: Error saving machine's controls:");
+                Debug.Log("[ACM]: Error saving machine's controls:");
                 Debug.LogException(e);
             }
         }

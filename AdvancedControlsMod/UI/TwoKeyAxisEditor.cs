@@ -99,12 +99,10 @@ namespace AdvancedControls.UI
             GUILayout.EndHorizontal();
 
             // Draw Sensitivity slider
-            Axis.Sensitivity = Util.DrawSlider("Sensitivity", Axis.Sensitivity, 0, 5, sens_string, out sens_string);
+            Axis.Sensitivity = Util.DrawSlider("Sensitivity", Axis.Sensitivity, 0, 10, sens_string, out sens_string);
 
             // Draw Curvature slider
-            Axis.Gravity = Util.DrawSlider("Gravity", Axis.Gravity, 0, 3, grav_string, out grav_string);
-
-            Axis.Gravity = GUILayout.HorizontalSlider(Axis.Gravity, 0, 10);
+            Axis.Gravity = Util.DrawSlider("Gravity", Axis.Gravity, 0, 10, grav_string, out grav_string);
 
             // Draw toggles
             GUILayout.BeginHorizontal();

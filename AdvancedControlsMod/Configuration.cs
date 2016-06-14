@@ -39,7 +39,7 @@ namespace AdvancedControls
             }
             catch (Exception e)
             {
-                Debug.Log("[AdvancedControlsMod]: Error loading saved axes:");
+                Debug.Log("[ACM]: Error loading saved axes:");
                 Debug.LogException(e);
             }
         }

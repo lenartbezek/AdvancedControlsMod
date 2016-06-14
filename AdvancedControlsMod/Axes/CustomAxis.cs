@@ -110,12 +110,9 @@ axis_value";
 
         public override void Load()
         {
-            if (spaar.ModLoader.Configuration.DoesKeyExist("axis-" + Name + "-init"))
-                spaar.ModLoader.Configuration.SetString("axis-" + Name + "-init", InitialisationCode);
-            if (spaar.ModLoader.Configuration.DoesKeyExist("axis-" + Name + "-update"))
-                spaar.ModLoader.Configuration.SetString("axis-" + Name + "-update", UpdateCode);
-            if (spaar.ModLoader.Configuration.DoesKeyExist("axis-" + Name + "-global"))
-                spaar.ModLoader.Configuration.SetBool("axis-" + Name + "-global", GlobalScope);
+            InitialisationCode = spaar.ModLoader.Configuration.GetString("axis-" + Name + "-init", InitialisationCode);
+            UpdateCode = spaar.ModLoader.Configuration.GetString("axis-" + Name + "-update", UpdateCode);
+            GlobalScope = spaar.ModLoader.Configuration.GetBool("axis-" + Name + "-global", GlobalScope);
         }
 
         public override void Save()

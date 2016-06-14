@@ -118,7 +118,7 @@ namespace AdvancedControls.Axes
             }
             catch (Exception e)
             {
-                Debug.Log("[AdvancedControlsMod]: Error while loading a button:");
+                Debug.Log("[ACM]: Error while loading a button:");
                 Debug.LogException(e);
                 return null;
             }
