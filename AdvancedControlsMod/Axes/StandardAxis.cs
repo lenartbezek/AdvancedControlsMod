@@ -84,8 +84,8 @@ namespace AdvancedControls.Axes
             spaar.ModLoader.Configuration.SetFloat("axis-" + Name + "-gravity", Gravity);
             spaar.ModLoader.Configuration.SetBool("axis-" + Name + "-snap", Snap);
             spaar.ModLoader.Configuration.SetBool("axis-" + Name + "-invert", Invert);
-            spaar.ModLoader.Configuration.SetString("axis-" + Name + "-positive", PositiveBind.ID);
-            spaar.ModLoader.Configuration.SetString("axis-" + Name + "-negative", NegativeBind.ID);
+            spaar.ModLoader.Configuration.SetString("axis-" + Name + "-positive", PositiveBind != null ? PositiveBind.ID : "None");
+            spaar.ModLoader.Configuration.SetString("axis-" + Name + "-negative", NegativeBind != null ? NegativeBind.ID : "None");
         }
 
         public override void Delete()

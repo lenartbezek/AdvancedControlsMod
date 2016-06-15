@@ -46,23 +46,44 @@ namespace AdvancedControls
 
         public static void Save()
         {
-            int count = spaar.ModLoader.Configuration.GetInt("number-of-axes", 0);
-            for (int i = 0; i < count; i++)
-                spaar.ModLoader.Configuration.RemoveKey("axis-" + i + "-name");
-
-            List<string> axis_names = new List<string>();
-
-            foreach (KeyValuePair<string, InputAxis> entry in AxisManager.Axes)
+            string log = "";
+            try
             {
-                axis_names.Add(entry.Key);
-                entry.Value.Save();
+                int count = spaar.ModLoader.Configuration.GetInt("number-of-axes", 0);
+                log += "Attempting to clear " + count + " existing axes.\n";
+                for (int i = 0; i < count; i++)
+                    spaar.ModLoader.Configuration.RemoveKey("axis-" + i + "-name");
+
+                log += "\tExisting axis list removed.\n\n";
+
+                List<string> axis_names = new List<string>();
+
+                foreach (KeyValuePair<string, InputAxis> entry in AxisManager.Axes)
+                {
+                    log += "Attempting to save axis '"+entry.Key+ "'.\n";
+                    axis_names.Add(entry.Key);
+                    entry.Value.Save();
+                    log += "\tSuccessfully saved axis '" + entry.Key + "'.\n";
+                }
+
+                spaar.ModLoader.Configuration.SetInt("number-of-axes", AxisManager.Axes.Count);
+                log += "\nWrote new number of axes: " + AxisManager.Axes.Count + ".\n";
+                for (int i = 0; i < axis_names.Count; i++)
+                    spaar.ModLoader.Configuration.SetString("axis-" + i + "-name", axis_names[i]);
+                log += "Successfully wrote axis list.\n";
+
+                spaar.ModLoader.Configuration.Save();
+                log += "Successfully saved configuration.";
             }
-
-            spaar.ModLoader.Configuration.SetInt("number-of-axes", AxisManager.Axes.Count);
-            for (int i = 0; i < axis_names.Count; i++)
-                spaar.ModLoader.Configuration.SetString("axis-"+i+"-name", axis_names[i]);
-
-            spaar.ModLoader.Configuration.Save();
+            catch (Exception e)
+            {
+                Debug.Log("[ACM]: Error saving axes:");
+                Debug.LogException(e);
+                log += "\nException thrown:\n";
+                log += e.Message + "\n";
+                log += e.StackTrace;
+            }
+            System.IO.File.WriteAllText(Application.dataPath + "/Mods/Debug/ACM_Log.txt", log);
         }
     }
 }

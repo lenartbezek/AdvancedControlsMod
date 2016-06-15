@@ -13,9 +13,9 @@ namespace AdvancedControls
         public override string Name { get; } = "Advanced Controls Mod";
         public override string DisplayName { get; } = "Advanced Controls Mod";
         public override string Author { get; } = "Lench";
-        public override Version Version { get; } = new Version(1, 2, 0);
+        public override Version Version { get; } = new Version(1, 2, 0, 0);
         
-        public override string VersionExtra { get; } = "alpha";
+        public override string VersionExtra { get; } = "";
         public override string BesiegeVersion { get; } = "v0.3";
         public override bool CanBeUnloaded { get; } = true;
         public override bool Preload { get; } = false;

@@ -13,7 +13,7 @@ namespace AdvancedControls.UI
         public bool Visible { get; set; } = false;
 
         internal int windowID = spaar.ModLoader.Util.GetWindowID();
-        internal Rect windowRect = new Rect(360, 115, 100, 100);
+        internal Rect windowRect = new Rect(360, 200, 100, 100);
         private int popupID = spaar.ModLoader.Util.GetWindowID();
         private Rect popupRect;
 
