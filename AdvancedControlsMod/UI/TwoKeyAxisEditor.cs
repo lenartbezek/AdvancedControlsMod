@@ -7,7 +7,7 @@ using System.Collections.Generic;
 
 namespace AdvancedControls.UI
 {
-    public class TwoKeyAxisEditor : AxisEditor
+    internal class TwoKeyAxisEditor : AxisEditor
     {
         public TwoKeyAxisEditor(InputAxis axis)
         {

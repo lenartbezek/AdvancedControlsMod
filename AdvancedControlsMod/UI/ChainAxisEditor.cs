@@ -6,9 +6,9 @@ using UnityEngine;
 
 namespace AdvancedControls.UI
 {
-    public class ChainAxisEditor : AxisEditor
+    internal class ChainAxisEditor : AxisEditor
     {
-        public ChainAxisEditor(InputAxis axis)
+        internal ChainAxisEditor(InputAxis axis)
         {
             Axis = axis as ChainAxis;
         }

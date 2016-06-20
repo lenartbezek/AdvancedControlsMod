@@ -7,6 +7,7 @@ namespace AdvancedControls.Axes
     public class ControllerAxis : InputAxis
     {
         public override string Name { get; set; } = "new controller axis";
+        public override AxisType Type { get { return AxisType.Controller; } }
 
         private float sensitivity;
         public float Sensitivity
@@ -77,7 +78,6 @@ namespace AdvancedControls.Axes
 
         public ControllerAxis(string name) : base(name)
         {
-            Type = AxisType.Controller;
             Axis = 0;
             GUID = Controller.NumDevices > 0 ? Controller.DeviceList[0] : new Guid();
             Sensitivity = 1;
@@ -127,7 +127,7 @@ namespace AdvancedControls.Axes
             return Mathf.Clamp(value + OffsetY, -1, 1);
         }
 
-        public override InputAxis Clone()
+        internal override InputAxis Clone()
         {
             var clone = new ControllerAxis(Name);
             clone.GUID = GUID;
@@ -142,7 +142,7 @@ namespace AdvancedControls.Axes
             return clone;
         }
 
-        public override void Load()
+        internal override void Load()
         {
             GUID = new Guid(spaar.ModLoader.Configuration.GetString("axis-" + Name + "-controller", GUID.ToString()));
             Axis = spaar.ModLoader.Configuration.GetInt("axis-" + Name + "-axis", Axis);
@@ -155,7 +155,7 @@ namespace AdvancedControls.Axes
             Smooth = spaar.ModLoader.Configuration.GetBool("axis-" + Name + "-smooth", Smooth);
         }
 
-        public override void Save()
+        internal override void Save()
         {
             spaar.ModLoader.Configuration.SetString("axis-" + Name + "-type", Type.ToString());
             spaar.ModLoader.Configuration.SetString("axis-" + Name + "-controller", GUID.ToString());
@@ -169,7 +169,7 @@ namespace AdvancedControls.Axes
             spaar.ModLoader.Configuration.SetBool("axis-" + Name + "-smooth", Smooth);
         }
 
-        public override void Delete()
+        internal override void Delete()
         {
             spaar.ModLoader.Configuration.RemoveKey("axis-" + Name + "-type");
             spaar.ModLoader.Configuration.RemoveKey("axis-" + Name + "-controller");
@@ -183,8 +183,8 @@ namespace AdvancedControls.Axes
             spaar.ModLoader.Configuration.RemoveKey("axis-" + Name + "-smooth");
         }
 
-        public override void Initialise() { }
+        protected override void Initialise() { }
 
-        public override void Update() { }
+        protected override void Update() { }
     }
 }

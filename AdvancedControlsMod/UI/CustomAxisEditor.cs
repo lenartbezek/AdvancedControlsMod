@@ -5,9 +5,9 @@ using spaar.ModLoader.UI;
 
 namespace AdvancedControls.UI
 {
-    public class CustomAxisEditor : AxisEditor
+    internal class CustomAxisEditor : AxisEditor
     {
-        public CustomAxisEditor(InputAxis axis)
+        internal CustomAxisEditor(InputAxis axis)
         {
             Axis = axis as CustomAxis;
         }

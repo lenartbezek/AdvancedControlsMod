@@ -102,6 +102,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AdvancedControls.cs" />
     <Compile Include="Axes\ChainAxis.cs" />
     <Compile Include="Axes\InertialAxis.cs" />
     <Compile Include="Axes\InputAxis.cs" />

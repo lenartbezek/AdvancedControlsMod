@@ -13,7 +13,7 @@ namespace AdvancedControls
         public override string Name { get; } = "Advanced Controls Mod";
         public override string DisplayName { get; } = "Advanced Controls Mod";
         public override string Author { get; } = "Lench";
-        public override Version Version { get; } = new Version(1, 2, 0, 0);
+        public override Version Version { get; } = new Version(1, 2, 2);
         
         public override string VersionExtra { get; } = "";
         public override string BesiegeVersion { get; } = "v0.3";
@@ -24,7 +24,6 @@ namespace AdvancedControls
         {
             UnityEngine.Object.DontDestroyOnLoad(ACM.Instance);
             BlockHandlers.OnInitialisation += ACM.Instance.Initialise;
-            Game.OnSimulationToggle += ACM.Instance.OnSimulationToggle;
             XmlSaver.OnSave += MachineData.Save;
             XmlLoader.OnLoad += MachineData.Load;
         }
@@ -32,7 +31,6 @@ namespace AdvancedControls
         public override void OnUnload()
         {
             BlockHandlers.OnInitialisation -= ACM.Instance.Initialise;
-            Game.OnSimulationToggle -= ACM.Instance.OnSimulationToggle;
             XmlSaver.OnSave -= MachineData.Save;
             XmlLoader.OnLoad -= MachineData.Load;
             Configuration.Save();
@@ -46,17 +44,15 @@ namespace AdvancedControls
         public override string Name { get { return "Advanced Controls"; } }
 
         internal bool LoadedMachine = false;
-        public bool IsSimulating { get { return isSimulating; } }
-        private bool isSimulating = false;
 
         internal ControlMapperWindow ControlMapper;
         internal EventManager EventManager;
 
-        public delegate void UpdateEventHandler();
-        public event UpdateEventHandler OnUpdate;
+        internal delegate void UpdateEventHandler();
+        internal event UpdateEventHandler OnUpdate;
 
-        public delegate void InitialiseEventHandler();
-        public event InitialiseEventHandler OnInitialisation;
+        internal delegate void InitialiseEventHandler();
+        internal event InitialiseEventHandler OnInitialisation;
 
         private BlockMapper blockMapper;
         private Guid copy_source;
@@ -66,14 +62,27 @@ namespace AdvancedControls
             ControlMapper = gameObject.AddComponent<ControlMapperWindow>();
             EventManager = gameObject.AddComponent<EventManager>();
 
+            if (PythonEnvironment.Loaded)
+                PythonEnvironment.AddInitStatement("clr.AddReference(\"AdvancedControlsMod\")");
+                PythonEnvironment.AddInitStatement("from AdvancedControls import AdvancedControls");
+
             Configuration.Load();
+        }
+
+        private void OnDestroy()
+        {
+            OnUpdate = null;
+            OnInitialisation = null;
+            Destroy(ControlMapper);
+            Destroy(EventManager);
+            Destroy(UnityEngine.GameObject.Find("Advanced Controls").transform.gameObject);
         }
 
         private void Update()
         {
             if (blockMapper == null)
             {
-                blockMapper = FindObjectOfType<BlockMapper>();
+                blockMapper = BlockMapper.CurrentInstance;
             }
 
             if (blockMapper != null)
@@ -99,9 +108,6 @@ namespace AdvancedControls
 
             if (LoadedMachine)
             {
-                foreach (AssignAxesWindow g in FindObjectsOfType<AssignAxesWindow>())
-                    Destroy(g);
-
                 LoadedMachine = false;
                 AssignAxesWindow.Open();
             }
@@ -112,11 +118,6 @@ namespace AdvancedControls
         internal void Initialise()
         {
             OnInitialisation?.Invoke();
-        }
-
-        internal void OnSimulationToggle(bool s)
-        {
-            isSimulating = s;
         }
     }
 }

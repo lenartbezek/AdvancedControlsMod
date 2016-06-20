@@ -5,7 +5,7 @@ namespace AdvancedControls.Axes
 {
     public static class AxisManager
     {
-        public static Dictionary<string, InputAxis> Axes = new Dictionary<string, InputAxis>();
+        internal static Dictionary<string, InputAxis> Axes = new Dictionary<string, InputAxis>();
 
         public static InputAxis Get(string name)
         {
@@ -20,7 +20,7 @@ namespace AdvancedControls.Axes
             }
         }
 
-        public static void Put(string name, InputAxis axis)
+        internal static void Put(string name, InputAxis axis)
         {
             if (Axes.ContainsKey(name))
             {
@@ -33,14 +33,13 @@ namespace AdvancedControls.Axes
             }
         }
 
-
-        public static void Remove(string name)
+        internal static void Remove(string name)
         {
             Axes[name].Delete();
             Axes.Remove(name);
         }
 
-        public static Dictionary<string, InputAxis> GetActiveAxes(List<Control> controls)
+        internal static Dictionary<string, InputAxis> GetActiveAxes(List<Control> controls)
         {
             var dict = new Dictionary<string, InputAxis>();
             foreach (Control c in controls)

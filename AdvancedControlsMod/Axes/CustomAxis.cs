@@ -1,11 +1,15 @@
 ﻿using System;
 using UnityEngine;
 using LenchScripter;
+using spaar.ModLoader;
 
 namespace AdvancedControls.Axes
 {
     public class CustomAxis : InputAxis
     {
+        public override string Name { get; set; } = "new custom axis";
+        public override AxisType Type { get { return AxisType.Custom; } }
+
         private const string DefaultInitialisationCode =
 @"time = 0";
         private const string DefaultUpdateCode =
@@ -13,7 +17,6 @@ namespace AdvancedControls.Axes
 axis_value = Mathf.Sin(time)
 axis_value";
 
-        public override string Name { get; set; } = "new custom axis";
         private bool initialised = false;
 
         public string InitialisationCode { get; set; }
@@ -29,16 +32,15 @@ axis_value";
 
         public CustomAxis(string name) : base(name)
         {
-            Type = AxisType.Custom;
             InitialisationCode = DefaultInitialisationCode;
             UpdateCode = DefaultUpdateCode;
             GlobalScope = false;
             editor = new UI.CustomAxisEditor(this);
         }
 
-        public override void Update()
+        protected override void Update()
         {
-            if (!PythonEnvironment.Loaded || Error != null || !ACM.Instance.IsSimulating) return;
+            if (!PythonEnvironment.Loaded || Error != null || !Game.IsSimulating) return;
             if (initialised)
             {
                 try
@@ -59,10 +61,8 @@ axis_value";
                 }
                 catch (Exception e)
                 {
-                    if (e.InnerException != null)
-                        Error = PythonEnvironment.FormatException(e.InnerException);
-                    else
-                        Error = PythonEnvironment.FormatException(e);
+                    if (e.InnerException != null) e = e.InnerException;
+                    Error = PythonEnvironment.FormatException(e);
                 }
             }
             else
@@ -71,10 +71,13 @@ axis_value";
             }
         }
 
-        public override void Initialise()
+        protected override void Initialise()
         {
+            init = null;
+            update = null;
+
             initialised = false;
-            if (!PythonEnvironment.Loaded || !ACM.Instance.IsSimulating) return;
+            if (!PythonEnvironment.Loaded || !Game.IsSimulating) return;
             Error = null;
             if (GlobalScope && PythonEnvironment.Enabled)
                 python = PythonEnvironment.ScripterEnvironment;
@@ -90,16 +93,14 @@ axis_value";
             }
             catch (Exception e)
             {
-                if (e.InnerException != null)
-                    Error = PythonEnvironment.FormatException(e.InnerException);
-                else
-                    Error = PythonEnvironment.FormatException(e);
+                if (e.InnerException != null) e = e.InnerException;
+                Error = PythonEnvironment.FormatException(e);
                 return;
             }
             initialised = true;
         }
 
-        public override InputAxis Clone()
+        internal override InputAxis Clone()
         {
             var clone = new CustomAxis(Name);
             clone.InitialisationCode = InitialisationCode;
@@ -108,14 +109,14 @@ axis_value";
             return clone;
         }
 
-        public override void Load()
+        internal override void Load()
         {
             InitialisationCode = spaar.ModLoader.Configuration.GetString("axis-" + Name + "-init", InitialisationCode);
             UpdateCode = spaar.ModLoader.Configuration.GetString("axis-" + Name + "-update", UpdateCode);
             GlobalScope = spaar.ModLoader.Configuration.GetBool("axis-" + Name + "-global", GlobalScope);
         }
 
-        public override void Save()
+        internal override void Save()
         {
             spaar.ModLoader.Configuration.SetString("axis-" + Name + "-type", Type.ToString());
             spaar.ModLoader.Configuration.SetString("axis-" + Name + "-init", InitialisationCode);
@@ -123,7 +124,7 @@ axis_value";
             spaar.ModLoader.Configuration.SetBool("axis-" + Name + "-global", GlobalScope);
         }
 
-        public override void Delete()
+        internal override void Delete()
         {
             spaar.ModLoader.Configuration.RemoveKey("axis-" + Name + "-type");
             spaar.ModLoader.Configuration.RemoveKey("axis-" + Name + "-init");

@@ -1,5 +1,6 @@
 ﻿using AdvancedControls.Axes;
 using AdvancedControls.Controls;
+using LenchScripter;
 using spaar.ModLoader.UI;
 using System;
 using System.Collections.Generic;
@@ -7,10 +8,10 @@ using UnityEngine;
 
 namespace AdvancedControls.UI
 {
-    public class AssignAxesWindow : MonoBehaviour
+    internal class AssignAxesWindow : MonoBehaviour
     {
-        public new string name { get { return "Assign Axes window"; } }
-        public bool Visible { get; set; } = false;
+        internal new string name { get { return "Assign Axes window"; } }
+        internal bool Visible { get; set; } = false;
 
         internal int windowID = spaar.ModLoader.Util.GetWindowID();
         internal Rect windowRect = new Rect(360, 200, 100, 100);
@@ -21,23 +22,24 @@ namespace AdvancedControls.UI
         private float DesiredHeight { get; } = 50;
 
         private Dictionary<string, List<Control>> Controls = new Dictionary<string, List<Control>>();
-        private Dictionary<Guid, string> Blocks = new Dictionary<Guid, string>();
         private List<string> AxisList = new List<string>();
 
         internal AxisEditorWindow.SelectAxis Select;
 
-        public static void Open()
+        internal static void Open()
         {
+            BlockHandlers.InitializeBuildingBlockIDs();
+
+            foreach (AssignAxesWindow x in ACM.Instance.gameObject.GetComponents<AssignAxesWindow>())
+                Destroy(x);
+
             var instance = ACM.Instance.gameObject.AddComponent<AssignAxesWindow>();
-            foreach (GenericBlock block in Machine.Active().BuildingBlocks)
-                instance.Blocks[block.Guid] = block.MyBlockInfo.blockName.ToUpper();
 
             foreach (KeyValuePair<Guid, List<Control>> entry in ControlManager.Blocks)
             {
-                if (!instance.Blocks.ContainsKey(entry.Key))
-                    continue;
                 foreach (Control c in entry.Value)
                 {
+                    try { BlockHandlers.GetID(c.BlockGUID); } catch { continue; }
                     if (c.Axis == null)
                         continue;
                     if (!instance.Controls.ContainsKey(c.Axis))
@@ -84,7 +86,7 @@ namespace AdvancedControls.UI
             GUILayout.EndHorizontal();
 
             foreach (Control c in Controls[axis])
-                GUILayout.Label("    <b>" + c.Name + "</b> for " + Blocks[c.BlockGUID]);
+                GUILayout.Label("    <b>" + c.Name + "</b> for " + BlockHandlers.GetID(c.BlockGUID));
         }
 
         /// <summary>

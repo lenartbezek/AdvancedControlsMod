@@ -30,7 +30,7 @@ namespace AdvancedControls.Controls
             }
         }
 
-        public override void Apply(float value)
+        protected override void Apply(float value)
         {
             if (value > 0)
                 value = Mathf.Lerp(Center, Max, value);
@@ -39,12 +39,11 @@ namespace AdvancedControls.Controls
             steering?.SetAngle(value);
         }
 
-        public override Control Clone()
+        internal override Control Clone()
         {
             var clone = new AngleControl(BlockGUID);
             clone.Name = Name;
             clone.Enabled = Enabled;
-            clone.PositiveOnly = PositiveOnly;
             clone.Axis = Axis;
             clone.Block = Block;
             clone.Min = Min;

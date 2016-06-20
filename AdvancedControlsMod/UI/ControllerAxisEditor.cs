@@ -5,7 +5,7 @@ using AdvancedControls.Input;
 
 namespace AdvancedControls.UI
 {
-    public class ControllerAxisEditor : AxisEditor
+    internal class ControllerAxisEditor : AxisEditor
     {
 
 #if windows

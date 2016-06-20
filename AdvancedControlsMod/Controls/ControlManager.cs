@@ -6,8 +6,8 @@ namespace AdvancedControls.Controls
 {
     public static class ControlManager
     {
-        public static Dictionary<Guid, List<Control>> Blocks = new Dictionary<Guid, List<Control>>();
-        
+        internal static Dictionary<Guid, List<Control>> Blocks = new Dictionary<Guid, List<Control>>();
+
         public static List<Control> GetBlockControls(int BlockID, Guid GUID)
         {
             if (Blocks.ContainsKey(GUID)) return Blocks[GUID];
@@ -31,7 +31,7 @@ namespace AdvancedControls.Controls
             return null;
         }
 
-        public static void CopyBlockControls(Guid source_block, Guid destination_block)
+        internal static void CopyBlockControls(Guid source_block, Guid destination_block)
         {
             if (!Blocks.ContainsKey(source_block) || !Blocks.ContainsKey(destination_block)) return;
 
@@ -47,7 +47,7 @@ namespace AdvancedControls.Controls
                     }
         }
 
-        public static List<Control> CreateBlockControls(int BlockID, Guid GUID)
+        internal static List<Control> CreateBlockControls(int BlockID, Guid GUID)
         {
             if (BlockID == (int)BlockType.Wheel ||
                 BlockID == (int)BlockType.LargeWheel ||
@@ -187,7 +187,7 @@ namespace AdvancedControls.Controls
             return list;
         }
 
-        public static List<Control> GetActiveControls()
+        internal static List<Control> GetActiveControls()
         {
             var list = new List<Control>();
             foreach(Guid guid in Blocks.Keys)

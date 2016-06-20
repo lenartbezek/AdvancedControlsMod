@@ -3,6 +3,7 @@ using UnityEngine;
 using LenchScripter;
 using LenchScripter.Blocks;
 using AdvancedControls.Axes;
+using spaar.ModLoader;
 
 namespace AdvancedControls.Controls
 {
@@ -64,7 +65,7 @@ namespace AdvancedControls.Controls
             max_string = (Mathf.Round(Max * 100) / 100).ToString();
         }
 
-        public virtual void Initialise()
+        protected virtual void Initialise()
         {
             try
             {
@@ -77,9 +78,9 @@ namespace AdvancedControls.Controls
             }
         }
 
-        public virtual void Update()
+        protected virtual void Update()
         {
-            if (ACM.Instance.IsSimulating)
+            if (Game.IsSimulating)
             {
                 var a = AxisManager.Get(Axis);
                 if (Enabled && Block != null && a != null && a.Saveable)
@@ -89,10 +90,11 @@ namespace AdvancedControls.Controls
             }
         }
 
-        public abstract void Apply(float value);
-        public abstract Control Clone();
+        protected abstract void Apply(float value);
 
-        public virtual void Load(BlockInfo blockInfo)
+        internal abstract Control Clone();
+
+        internal virtual void Load(BlockInfo blockInfo)
         {
             Axis = blockInfo.BlockData.ReadString("ac-control-" + Name + "-axis");
             if (blockInfo.BlockData.HasKey("ac-control-" + Name + "-min"))
@@ -104,7 +106,7 @@ namespace AdvancedControls.Controls
             Enabled = true;
         }
 
-        public virtual void Save(BlockInfo blockInfo)
+        internal virtual void Save(BlockInfo blockInfo)
         {
             blockInfo.BlockData.Write("ac-control-" + Name + "-axis", Axis);
             blockInfo.BlockData.Write("ac-control-" + Name + "-min", Min);

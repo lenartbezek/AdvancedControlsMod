@@ -2,31 +2,31 @@
 
 namespace AdvancedControls.Input
 {
-    public class EventManager : MonoBehaviour
+    internal class EventManager : MonoBehaviour
     {
-        public delegate void AxisMotionEventHandler(SDL.SDL_Event e);
-        public event AxisMotionEventHandler OnAxisMotion;
+        internal delegate void AxisMotionEventHandler(SDL.SDL_Event e);
+        internal event AxisMotionEventHandler OnAxisMotion;
 
-        public delegate void BallMotionEventHandler(SDL.SDL_Event e);
-        public event BallMotionEventHandler OnBallMotion;
+        internal delegate void BallMotionEventHandler(SDL.SDL_Event e);
+        internal event BallMotionEventHandler OnBallMotion;
 
-        public delegate void HatMotionEventHandler(SDL.SDL_Event e);
-        public event HatMotionEventHandler OnHatMotion;
+        internal delegate void HatMotionEventHandler(SDL.SDL_Event e);
+        internal event HatMotionEventHandler OnHatMotion;
 
-        public delegate void ButtonEventHandler(SDL.SDL_Event e, bool down);
-        public event ButtonEventHandler OnButton;
+        internal delegate void ButtonEventHandler(SDL.SDL_Event e, bool down);
+        internal event ButtonEventHandler OnButton;
 
-        public delegate void KeyEventHandler(SDL.SDL_Event e, bool down);
-        public event KeyEventHandler OnKey;
+        internal delegate void KeyEventHandler(SDL.SDL_Event e, bool down);
+        internal event KeyEventHandler OnKey;
 
-        public delegate void DeviceAddedEventHandler(SDL.SDL_Event e);
-        public event DeviceAddedEventHandler OnDeviceAdded;
+        internal delegate void DeviceAddedEventHandler(SDL.SDL_Event e);
+        internal event DeviceAddedEventHandler OnDeviceAdded;
 
-        public delegate void DeviceRemovedEventHandler(SDL.SDL_Event e);
-        public event DeviceRemovedEventHandler OnDeviceRemoved;
+        internal delegate void DeviceRemovedEventHandler(SDL.SDL_Event e);
+        internal event DeviceRemovedEventHandler OnDeviceRemoved;
 
-        public delegate void DeviceRemappedEventHandler(SDL.SDL_Event e);
-        public event DeviceRemappedEventHandler OnDeviceRemapped;
+        internal delegate void DeviceRemappedEventHandler(SDL.SDL_Event e);
+        internal event DeviceRemappedEventHandler OnDeviceRemapped;
 
         public bool SDL_Initialized = false;
 

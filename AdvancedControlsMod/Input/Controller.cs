@@ -34,12 +34,12 @@ namespace AdvancedControls.Input
         public int NumHats { get { return SDL.SDL_JoystickNumHats(device_pointer); } }
         public int NumButtons { get { return SDL.SDL_JoystickNumButtons(device_pointer); } }
 
-        public static List<Guid> DeviceList = new List<Guid>();
-        public static Dictionary<Guid, Controller> Devices = new Dictionary<Guid, Controller>();
+        internal static List<Guid> DeviceList = new List<Guid>();
+        internal static Dictionary<Guid, Controller> Devices = new Dictionary<Guid, Controller>();
 
         public static int NumDevices { get { return Devices.Count;}}
 
-        public static void AddJoystick(int index)
+        internal static void AddJoystick(int index)
         {
             RemoveDisconnected();
             if (index < NumDevices) return;
@@ -48,7 +48,7 @@ namespace AdvancedControls.Input
             Devices.Add(controller.GUID, controller);
         }
 
-        public static void AddController(int index)
+        internal static void AddController(int index)
         {
             RemoveDisconnected();
             if (index < NumDevices) return;
@@ -57,7 +57,7 @@ namespace AdvancedControls.Input
             Devices.Add(controller.GUID, controller);
         }
 
-        public static void RemoveDisconnected()
+        internal static void RemoveDisconnected()
         {
             var remove = new List<Guid>();
 
@@ -78,6 +78,18 @@ namespace AdvancedControls.Input
                 return Devices[guid];
             else
                 return null;
+        }
+
+        public static Controller Get(int id)
+        {
+            try
+            {
+                return Devices[DeviceList[id]];
+            }
+            catch
+            {
+                return null;
+            }
         }
 
         private Controller(int index, bool is_game_controller)
@@ -157,6 +169,9 @@ namespace AdvancedControls.Input
         private void UpdateMappings()
         {
             if (!Connected) return;
+
+            is_game_controller = SDL.SDL_IsGameController(Index) == SDL.SDL_bool.SDL_TRUE;
+
             AxisNames = new List<string>();
             for (int i = 0; i < SDL.SDL_JoystickNumAxes(device_pointer); i++)
             {

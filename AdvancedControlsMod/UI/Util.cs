@@ -4,13 +4,13 @@ using System.Text.RegularExpressions;
 
 namespace AdvancedControls.UI
 {
-    public static class Util
+    internal static class Util
     {
         private static Texture2D _rectTexture = new Texture2D(1, 1);
         private static GUIStyle _rectStyle = new GUIStyle();
         private static Color _currentColor = new Color();
 
-        public static GUIStyle LabelStyle
+        internal static GUIStyle LabelStyle
         {
             get
             {
@@ -22,7 +22,7 @@ namespace AdvancedControls.UI
             }
         }
 
-        public static GUIStyle ToggleStyle
+        internal static GUIStyle ToggleStyle
         {
             get
             {
@@ -34,7 +34,7 @@ namespace AdvancedControls.UI
             }
         }
 
-        public static GUISkin Skin
+        internal static GUISkin Skin
         {
             get
             {
@@ -47,7 +47,7 @@ namespace AdvancedControls.UI
             }
         }
 
-        public static void DrawEnabledBadge(bool enabled)
+        internal static void DrawEnabledBadge(bool enabled)
         {
             if (enabled)
             {
@@ -65,7 +65,7 @@ namespace AdvancedControls.UI
             }
         }
 
-        public static float DrawSlider(string label, float value, float min, float max, string old_text, out string new_text)
+        internal static float DrawSlider(string label, float value, float min, float max, string old_text, out string new_text)
         {
             GUILayout.BeginHorizontal();
             GUILayout.Label(label, LabelStyle);
@@ -94,7 +94,7 @@ namespace AdvancedControls.UI
             return value;
         }
 
-        public static void DrawRect(Rect position, Color color)
+        internal static void DrawRect(Rect position, Color color)
         {
             FillRect(new Rect(
                 position.x,
@@ -125,7 +125,7 @@ namespace AdvancedControls.UI
                 Color.gray);
         }
 
-        public static void FillRect(Rect position, Color color)
+        internal static void FillRect(Rect position, Color color)
         {
             if (color != _currentColor)
             {

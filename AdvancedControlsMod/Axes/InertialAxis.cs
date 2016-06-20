@@ -5,22 +5,20 @@ namespace AdvancedControls.Axes
     public class InertialAxis : StandardAxis
     {
         public override string Name { get; set; } = "new inertial axis";
+        public override AxisType Type { get { return AxisType.Inertial; } }
 
         private float speed = 0;
         private float last = 0;
 
-        public InertialAxis(string name) : base(name)
-        {
-            Type = AxisType.Inertial;
-        }
+        public InertialAxis(string name) : base(name) { }
 
-        public override void Initialise()
+        protected override void Initialise()
         {
             speed = 0;
             OutputValue = 0;
         }
 
-        public override void Update()
+        protected override void Update()
         {
             float g_force = OutputValue > 0 ? -Gravity : Gravity;
             float force = InputValue * Sensitivity + (1 - Mathf.Abs(InputValue)) * g_force;
@@ -41,7 +39,7 @@ namespace AdvancedControls.Axes
                 speed = 0;
         }
 
-        public override InputAxis Clone()
+        internal override InputAxis Clone()
         {
             var clone = new InertialAxis(Name);
             clone.PositiveBind = PositiveBind;

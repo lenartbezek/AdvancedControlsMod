@@ -5,9 +5,9 @@ using UnityEngine;
 
 namespace AdvancedControls
 {
-    public static class Configuration
+    internal static class Configuration
     {
-        public static void Load()
+        internal static void Load()
         {
             try
             {
@@ -44,7 +44,7 @@ namespace AdvancedControls
             }
         }
 
-        public static void Save()
+        internal static void Save()
         {
             string log = "";
             try

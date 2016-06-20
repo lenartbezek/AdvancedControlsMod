@@ -4,7 +4,7 @@ using AdvancedControls.Axes;
 
 namespace AdvancedControls.UI
 {
-    public interface AxisEditor
+    internal interface AxisEditor
     {
         void DrawAxis(Rect windowRect);
         string GetHelp();
@@ -12,12 +12,9 @@ namespace AdvancedControls.UI
         string GetError();
     }
 
-    public class AxisEditorWindow : MonoBehaviour
+    internal class AxisEditorWindow : MonoBehaviour
     {
-        public new string name { get { return "Edit Axis window"; } }
-
-        public bool Visible { get; set; } = false;
-        public bool ShowHelp { get; set; } = false;
+        internal bool ShowHelp { get; set; } = false;
 
         internal int windowID = spaar.ModLoader.Util.GetWindowID();
         internal Rect windowRect = new Rect(100, 100, 100, 100);
@@ -26,10 +23,10 @@ namespace AdvancedControls.UI
         protected string SaveName = "";
         protected InputAxis Axis;
 
-        public delegate void SelectAxis(InputAxis axis);
+        internal delegate void SelectAxis(InputAxis axis);
         private SelectAxis Select;
 
-        public void SaveAxis()
+        internal void SaveAxis()
         {
             Axis = Axis.Clone();
             Axis.Name = SaveName;
@@ -39,18 +36,16 @@ namespace AdvancedControls.UI
             Select = null;
         }
 
-        public void CreateAxis(SelectAxis selectAxis = null)
+        internal void CreateAxis(SelectAxis selectAxis = null)
         {
             Select = selectAxis;
-            Visible = true;
             WindowName = "Create new axis";
             Axis = null;
         }
 
-        public void EditAxis(InputAxis axis)
+        internal void EditAxis(InputAxis axis)
         {
             Select = null;
-            Visible = true;
             WindowName = "Edit " + axis.Name;
             SaveName = axis.Name;
             Axis = axis;
@@ -61,13 +56,10 @@ namespace AdvancedControls.UI
         /// </summary>
         protected virtual void OnGUI()
         {
-            if (Visible)
-            {
-                GUI.skin = Util.Skin;
-                windowRect = GUILayout.Window(windowID, windowRect, DoWindow, WindowName,
-                    GUILayout.Width(320),
-                    GUILayout.Height(100));
-            }
+            GUI.skin = Util.Skin;
+            windowRect = GUILayout.Window(windowID, windowRect, DoWindow, WindowName,
+                GUILayout.Width(320),
+                GUILayout.Height(100));
         }
 
         protected virtual void DoWindow(int id)
@@ -159,7 +151,6 @@ namespace AdvancedControls.UI
             if (GUI.Button(new Rect(windowRect.width - 38, 8, 30, 30),
                 "×", Elements.Buttons.Red))
             {
-                Visible = false;
                 Select = null;
                 Destroy(this);
             }

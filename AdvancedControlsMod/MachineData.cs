@@ -5,10 +5,9 @@ using UnityEngine;
 
 namespace AdvancedControls
 {
-    public static class MachineData
+    internal static class MachineData
     {
-
-        public static void Load(MachineInfo machineInfo)
+        internal static void Load(MachineInfo machineInfo)
         {
             try
             {
@@ -41,7 +40,7 @@ namespace AdvancedControls
             }
         }
 
-        public static void Save(MachineInfo machineInfo)
+        internal static void Save(MachineInfo machineInfo)
         {
             try
             {
@@ -64,8 +63,11 @@ namespace AdvancedControls
                     }
                 }
 
-                machineInfo.MachineData.Write("ac-version", "v1.2.0");
-                if (axes.Count != 0) machineInfo.MachineData.Write("ac-axislist", axes.ToArray());
+                if (axes.Count != 0)
+                {
+                    machineInfo.MachineData.Write("ac-version", "v1.2.2");
+                    machineInfo.MachineData.Write("ac-axislist", axes.ToArray());
+                }
             }
             catch (Exception e)
             {

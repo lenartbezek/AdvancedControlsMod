@@ -7,11 +7,9 @@ using System.Text.RegularExpressions;
 
 namespace AdvancedControls.UI
 {
-    public class ControlMapperWindow : MonoBehaviour
+    internal class ControlMapperWindow : MonoBehaviour
     {
-        public new string name { get { return "Control Mapper window"; } }
-
-        public bool Visible { get; set; } = false;
+        internal bool Visible { get; set; } = false;
 
         internal int windowID = spaar.ModLoader.Util.GetWindowID();
         internal Rect windowRect = new Rect(680, 115, 100, 100);
@@ -26,7 +24,7 @@ namespace AdvancedControls.UI
 
         internal AxisEditorWindow.SelectAxis Select;
 
-        public void ShowBlockControls(GenericBlock b)
+        internal void ShowBlockControls(GenericBlock b)
         {
             Block = b;
             controls = ControlManager.GetBlockControls(Block);
@@ -36,7 +34,7 @@ namespace AdvancedControls.UI
                 Hide();
         }
 
-        public void Hide()
+        internal void Hide()
         {
             Visible = false;
             Block = null;

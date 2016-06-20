@@ -7,6 +7,8 @@ namespace AdvancedControls.Axes
     public class StandardAxis : InputAxis
     {
         public override string Name { get; set; } = "new standard axis";
+        public override AxisType Type { get { return AxisType.Standard; } }
+
         public float Gravity { get; set; }
         public float Sensitivity { get; set; }
         public bool Snap { get; set; }
@@ -19,7 +21,6 @@ namespace AdvancedControls.Axes
         {
             editor = new UI.TwoKeyAxisEditor(this);
 
-            Type = AxisType.Standard;
             PositiveBind = null;
             NegativeBind = null;
             Sensitivity = 1;
@@ -38,12 +39,12 @@ namespace AdvancedControls.Axes
             }
         }
 
-        public override void Initialise()
+        protected override void Initialise()
         {
             OutputValue = 0;
         }
 
-        public override void Update()
+        protected override void Update()
         {
             float g_force = OutputValue > 0 ? -Gravity : Gravity;
             float force = InputValue * Sensitivity + (1 - Mathf.Abs(InputValue)) * g_force;
@@ -55,7 +56,7 @@ namespace AdvancedControls.Axes
             last = OutputValue;
         }
 
-        public override InputAxis Clone()
+        internal override InputAxis Clone()
         {
             var clone = new StandardAxis(Name);
             clone.PositiveBind = PositiveBind;
@@ -67,7 +68,7 @@ namespace AdvancedControls.Axes
             return clone;
         }
 
-        public override void Load()
+        internal override void Load()
         {
             Sensitivity = spaar.ModLoader.Configuration.GetFloat("axis-" + Name + "-sensitivity", Sensitivity);
             Gravity = spaar.ModLoader.Configuration.GetFloat("axis-" + Name + "-gravity", Gravity);
@@ -77,7 +78,7 @@ namespace AdvancedControls.Axes
             NegativeBind = ParseButtonID(spaar.ModLoader.Configuration.GetString("axis-" + Name + "-negative", null));
         }
 
-        public override void Save()
+        internal override void Save()
         {
             spaar.ModLoader.Configuration.SetString("axis-" + Name + "-type", Type.ToString());
             spaar.ModLoader.Configuration.SetFloat("axis-" + Name + "-sensitivity", Sensitivity);
@@ -88,7 +89,7 @@ namespace AdvancedControls.Axes
             spaar.ModLoader.Configuration.SetString("axis-" + Name + "-negative", NegativeBind != null ? NegativeBind.ID : "None");
         }
 
-        public override void Delete()
+        internal override void Delete()
         {
             spaar.ModLoader.Configuration.RemoveKey("axis-" + Name + "-type");
             spaar.ModLoader.Configuration.RemoveKey("axis-" + Name + "-sensitivity");

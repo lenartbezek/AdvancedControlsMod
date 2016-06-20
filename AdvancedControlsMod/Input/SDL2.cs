@@ -36,7 +36,7 @@ namespace AdvancedControls.Input
     /// <summary>
     /// Entry point for all SDL-related (non-extension) types and methods
     /// </summary>
-    public static class SDL
+    internal static class SDL
     {
         #region SDL2# Variables
 
