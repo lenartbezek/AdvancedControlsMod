@@ -98,6 +98,7 @@ namespace AdvancedControls.Axes
             spaar.ModLoader.Configuration.RemoveKey("axis-" + Name + "-invert");
             spaar.ModLoader.Configuration.RemoveKey("axis-" + Name + "-positive");
             spaar.ModLoader.Configuration.RemoveKey("axis-" + Name + "-negative");
+            Dispose();
         }
 
         private Button ParseButtonID(string id)

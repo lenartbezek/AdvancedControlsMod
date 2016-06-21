@@ -180,6 +180,7 @@ namespace AdvancedControls.Axes
             spaar.ModLoader.Configuration.RemoveKey("axis-" + Name + "-method");
             spaar.ModLoader.Configuration.RemoveKey("axis-" + Name + "-subaxis1");
             spaar.ModLoader.Configuration.RemoveKey("axis-" + Name + "-subaxis2");
+            Dispose();
         }
 
         protected override void Initialise() { }

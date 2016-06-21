@@ -249,7 +249,7 @@ namespace AdvancedControls.Input
             return axis_values_raw[index];
         }
 
-        public static void AssignMappings()
+        internal static void AssignMappings()
         {
             try
             {

@@ -65,10 +65,6 @@ axis_value";
                     Error = PythonEnvironment.FormatException(e);
                 }
             }
-            else
-            {
-                Initialise();
-            }
         }
 
         protected override void Initialise()
@@ -130,6 +126,7 @@ axis_value";
             spaar.ModLoader.Configuration.RemoveKey("axis-" + Name + "-init");
             spaar.ModLoader.Configuration.RemoveKey("axis-" + Name + "-update");
             spaar.ModLoader.Configuration.RemoveKey("axis-" + Name + "-global");
+            Dispose();
         }
     }
 }

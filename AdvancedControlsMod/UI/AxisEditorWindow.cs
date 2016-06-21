@@ -28,6 +28,8 @@ namespace AdvancedControls.UI
 
         internal void SaveAxis()
         {
+            if (Axis.Name == SaveName || !AxisManager.Axes.ContainsKey(Axis.Name))
+                Axis.Dispose();
             Axis = Axis.Clone();
             Axis.Name = SaveName;
             WindowName = "Edit " + SaveName;

@@ -63,8 +63,12 @@ namespace AdvancedControls
             EventManager = gameObject.AddComponent<EventManager>();
 
             if (PythonEnvironment.Loaded)
+            {
                 PythonEnvironment.AddInitStatement("clr.AddReference(\"AdvancedControlsMod\")");
                 PythonEnvironment.AddInitStatement("from AdvancedControls import AdvancedControls");
+                PythonEnvironment.AddInitStatement("from AdvancedControls.Axes import AxisType");
+                PythonEnvironment.AddInitStatement("from AdvancedControls.Axes.ChainAxis import ChainMethod");
+            }
 
             Configuration.Load();
         }

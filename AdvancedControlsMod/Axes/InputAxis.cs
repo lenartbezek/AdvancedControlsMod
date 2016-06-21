@@ -28,6 +28,12 @@
             ACM.Instance.OnInitialisation += Initialise;
         }
 
+        internal void Dispose()
+        {
+            ACM.Instance.OnUpdate -= Update;
+            ACM.Instance.OnInitialisation -= Initialise;
+        }
+
         protected abstract void Initialise();
         protected abstract void Update();
 

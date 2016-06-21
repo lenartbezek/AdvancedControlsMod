@@ -68,7 +68,7 @@ namespace AdvancedControls.Axes
         }
 
         private bool changed = true;
-        public bool Changed
+        internal bool Changed
         {
             get { bool tmp = changed; changed = false; return tmp; }
         }
@@ -181,6 +181,7 @@ namespace AdvancedControls.Axes
             spaar.ModLoader.Configuration.RemoveKey("axis-" + Name + "-offsety");
             spaar.ModLoader.Configuration.RemoveKey("axis-" + Name + "-invert");
             spaar.ModLoader.Configuration.RemoveKey("axis-" + Name + "-smooth");
+            Dispose();
         }
 
         protected override void Initialise() { }

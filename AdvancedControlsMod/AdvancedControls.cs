@@ -12,14 +12,14 @@ namespace AdvancedControls
             return Controller.NumDevices;
         }
 
-        public static Controller GetController(int id)
+        public static Controller GetController(int i)
         {
-            return Controller.Get(id);
+            return Controller.Get(i);
         }
 
-        public static Controller GetController(Guid guid)
+        public static Controller GetController(string guid)
         {
-            return Controller.Get(guid);
+            return Controller.Get(new Guid(guid));
         }
 
         public static int GetNumAxes()
@@ -27,16 +27,21 @@ namespace AdvancedControls
             return AxisManager.Axes.Count;
         }
 
-        public static InputAxis GetAxis(int id)
+        public static InputAxis GetAxis(int i)
         {
             var names = new List<string>(AxisManager.Axes.Keys);
             names.Sort();
-            return GetAxis(names[id]);
+            return GetAxis(names[i]);
         }
 
         public static InputAxis GetAxis(string name)
         {
             return AxisManager.Get(name);
+        }
+
+        public static Button CreateButtonFromKeycode(UnityEngine.KeyCode key)
+        {
+            return new Key(key);
         }
     }
 }
