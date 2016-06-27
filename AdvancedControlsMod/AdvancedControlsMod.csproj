@@ -134,6 +134,7 @@
     <Compile Include="Mod.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="UI\CustomAxisEditor.cs" />
+    <Compile Include="UI\SelectAxisWindow.cs" />
     <Compile Include="UI\TwoKeyAxisEditor.cs" />
     <Compile Include="UI\Util.cs" />
   </ItemGroup>

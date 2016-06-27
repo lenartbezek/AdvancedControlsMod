@@ -13,8 +13,6 @@ namespace AdvancedControls.UI
 
         internal int windowID = spaar.ModLoader.Util.GetWindowID();
         internal Rect windowRect = new Rect(680, 115, 100, 100);
-        private int popupID = spaar.ModLoader.Util.GetWindowID();
-        private Rect popupRect;
 
         private float DesiredWidth { get; } = 320;
         private float DesiredHeight { get; } = 50;
@@ -22,7 +20,7 @@ namespace AdvancedControls.UI
         internal GenericBlock Block;
         internal List<Control> controls;
 
-        internal AxisEditorWindow.SelectAxis Select;
+        internal SelectAxisWindow popup;
 
         internal void ShowBlockControls(GenericBlock b)
         {
@@ -38,7 +36,7 @@ namespace AdvancedControls.UI
         {
             Visible = false;
             Block = null;
-            Select = null;
+            Destroy(popup);
         }
 
         /// <summary>
@@ -52,13 +50,10 @@ namespace AdvancedControls.UI
                 windowRect = GUILayout.Window(windowID, windowRect, DoWindow, Block.MyBlockInfo.blockName.ToUpper(),
                     GUILayout.Width(DesiredWidth),
                     GUILayout.Height(DesiredHeight));
-                if (Select != null)
+                if (popup != null)
                 {
-                    popupRect.x = windowRect.x + windowRect.width;
-                    popupRect.y = windowRect.y;
-                    popupRect = GUILayout.Window(popupID, popupRect, DoPopup, "Select axis",
-                        GUILayout.Width(DesiredWidth),
-                        GUILayout.Height(DesiredHeight));
+                    popup.windowRect.x = windowRect.x + windowRect.width;
+                    popup.windowRect.y = windowRect.y;
                 }
             }
         }
@@ -78,58 +73,6 @@ namespace AdvancedControls.UI
             GUI.DragWindow(new Rect(0, 0, windowRect.width, GUI.skin.window.padding.top));
         }
 
-        private void DoPopup(int id)
-        {
-            string toBeRemoved = null;
-
-            foreach (KeyValuePair<string, InputAxis> pair in AxisManager.Axes)
-            {
-                var name = pair.Key;
-                var axis = pair.Value;
-
-                GUILayout.BeginHorizontal();
-
-                if (GUILayout.Button(name, axis.Saveable ? Elements.Buttons.Default : Elements.Buttons.Disabled))
-                {
-                    Select?.Invoke(axis);
-                    Select = null;
-                }
-
-                if (GUILayout.Button("✎", new GUIStyle(Elements.Buttons.Default) { fontSize = 20, padding = new RectOffset(-3, 0, 0, 0) }, GUILayout.Width(30), GUILayout.MaxHeight(28)))
-                {
-                    var Editor = ACM.Instance.gameObject.AddComponent<AxisEditorWindow>();
-                    Editor.windowRect.x = popupRect.x;
-                    Editor.windowRect.y = popupRect.y;
-                    Editor.EditAxis(axis);
-                    Select = null;
-                }
-
-                if (GUILayout.Button("×", Elements.Buttons.Red, GUILayout.Width(30)))
-                {
-                    toBeRemoved = name;
-                }
-
-                GUILayout.EndHorizontal();
-            }
-
-            if (toBeRemoved != null)
-                AxisManager.Remove(toBeRemoved);
-
-            if (GUILayout.Button("Create new axis", Elements.Buttons.Disabled))
-            {
-                var Editor = ACM.Instance.gameObject.AddComponent<AxisEditorWindow>();
-                Editor.windowRect.x = popupRect.x;
-                Editor.windowRect.y = popupRect.y;
-                Editor.CreateAxis(new AxisEditorWindow.SelectAxis(Select));
-                Select = null;
-            }
-
-            // Draw close button
-            if (GUI.Button(new Rect(windowRect.width - 38, 8, 30, 30),
-                "×", Elements.Buttons.Red))
-                Select = null;
-        }
-
         private void DrawControl(Control c)
         {
 
@@ -141,7 +84,9 @@ namespace AdvancedControls.UI
             {
                 if (GUILayout.Button("Select Input Axis", Elements.Buttons.Disabled))
                 {
-                    Select = new AxisEditorWindow.SelectAxis((InputAxis axis) => { c.Axis = axis.Name; c.Enabled = true; });
+                    Destroy(popup);
+                    popup = SelectAxisWindow.Open(
+                        new SelectAxisDelegate((InputAxis axis) => { c.Axis = axis.Name; c.Enabled = true; }));
                 }
             }
             else
@@ -149,7 +94,9 @@ namespace AdvancedControls.UI
                 var a = AxisManager.Get(c.Axis);
                 if (GUILayout.Button(c.Axis, a != null ? a.Saveable ? Elements.Buttons.Default : Elements.Buttons.Disabled : Elements.Buttons.Red))
                 {
-                    Select = new AxisEditorWindow.SelectAxis((InputAxis axis) => { c.Axis = axis.Name; c.Enabled = true; });
+                    Destroy(popup);
+                    popup = SelectAxisWindow.Open(
+                        new SelectAxisDelegate((InputAxis axis) => { c.Axis = axis.Name; c.Enabled = true; }));
                 }
                 if (GUILayout.Button("×", Elements.Buttons.Red, GUILayout.Width(30)))
                 {

@@ -7,6 +7,8 @@ namespace AdvancedControls.UI
     internal interface AxisEditor
     {
         void DrawAxis(Rect windowRect);
+        void Open();
+        void Close();
         string GetHelp();
         string GetNote();
         string GetError();
@@ -23,14 +25,14 @@ namespace AdvancedControls.UI
         protected string SaveName = "";
         protected InputAxis Axis;
 
-        internal delegate void SelectAxis(InputAxis axis);
-        private SelectAxis Select;
+        private SelectAxisDelegate Select;
 
         internal void SaveAxis()
         {
             if (Axis.Name == SaveName || !AxisManager.Axes.ContainsKey(Axis.Name))
                 Axis.Dispose();
             Axis = Axis.Clone();
+            Axis.editor.Open();
             Axis.Name = SaveName;
             WindowName = "Edit " + SaveName;
             AxisManager.Put(Axis.Name, Axis);
@@ -38,7 +40,7 @@ namespace AdvancedControls.UI
             Select = null;
         }
 
-        internal void CreateAxis(SelectAxis selectAxis = null)
+        internal void CreateAxis(SelectAxisDelegate selectAxis = null)
         {
             Select = selectAxis;
             WindowName = "Create new axis";
@@ -51,6 +53,7 @@ namespace AdvancedControls.UI
             WindowName = "Edit " + axis.Name;
             SaveName = axis.Name;
             Axis = axis;
+            Axis.editor.Open();
         }
 
         /// <summary>
@@ -62,6 +65,11 @@ namespace AdvancedControls.UI
             windowRect = GUILayout.Window(windowID, windowRect, DoWindow, WindowName,
                 GUILayout.Width(320),
                 GUILayout.Height(100));
+        }
+
+        protected virtual void OnDestroy()
+        {
+            Axis?.editor.Close();
         }
 
         protected virtual void DoWindow(int id)
@@ -97,6 +105,7 @@ namespace AdvancedControls.UI
                 if (Axis != null)
                 {
                     SaveName = Axis.Name;
+                    Axis.editor.Open();
                 }
             }
             else

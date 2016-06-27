@@ -23,17 +23,16 @@ namespace AdvancedControls.UI
         private string sens_string;
         private string grav_string;
 
-        private bool first_draw = true;
+        public void Open()
+        {
+            sens_string = Axis.Sensitivity.ToString("0.00");
+            grav_string = Axis.Gravity.ToString("0.00");
+        }
+
+        public void Close() { }
 
         public void DrawAxis(Rect windowRect)
         {
-            if (first_draw)
-            {
-                sens_string = Axis.Sensitivity.ToString("0.00");
-                grav_string = Axis.Gravity.ToString("0.00");
-                first_draw = false;
-            }
-
             // Draw graph
             Rect graphRect = new Rect(
                 GUI.skin.window.padding.left,

@@ -86,6 +86,9 @@ namespace AdvancedControls.UI
             GUILayout.Box(graphTex);
         }
 
+        public void Open() { }
+        public void Close() { }
+
         public void DrawAxis(Rect windowRect)
         {
             if (first_draw)

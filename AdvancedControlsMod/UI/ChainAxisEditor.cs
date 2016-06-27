@@ -1,7 +1,6 @@
 ﻿using AdvancedControls.Axes;
 using spaar.ModLoader.UI;
 using System;
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace AdvancedControls.UI
@@ -24,7 +23,17 @@ design more complex inputs.";
         internal string note;
         internal string error;
 
-        private AxisEditorWindow.SelectAxis Select;
+        private SelectAxisWindow popup;
+
+        public void Open()
+        {
+
+        }
+
+        public void Close()
+        {
+            UnityEngine.GameObject.Destroy(popup);
+        }
 
         public void DrawAxis(Rect windowRect)
         {
@@ -62,7 +71,6 @@ design more complex inputs.";
                 GUILayout.Height(20));
 
             // Draw method select
-
             int i = (int)Axis.Method;
             int num_methods = Enum.GetValues(typeof(ChainAxis.ChainMethod)).Length;
 
@@ -126,7 +134,7 @@ design more complex inputs.";
                 if (GUILayout.Button("Select Input Axis", Elements.Buttons.Disabled, GUILayout.MaxWidth(leftGraphRect.width)))
                 {
                     error = null;
-                    Select = new AxisEditorWindow.SelectAxis((InputAxis axis) =>
+                    var callback = new SelectAxisDelegate((InputAxis axis) =>
                     {
                         try
                         {
@@ -134,10 +142,11 @@ design more complex inputs.";
                         }
                         catch (InvalidOperationException e)
                         {
-                            Select = null;
                             error = "<color=#FFFF00><b>Chain cycle error</b></color>\n" + e.Message;
                         }
                     });
+                    UnityEngine.GameObject.Destroy(popup);
+                    popup = SelectAxisWindow.Open(callback);
                 }
             }
             else
@@ -146,7 +155,7 @@ design more complex inputs.";
                     GUILayout.MaxWidth(leftGraphRect.width)))
                 {
                     error = null;
-                    Select = new AxisEditorWindow.SelectAxis((InputAxis axis) =>
+                    var callback = new SelectAxisDelegate((InputAxis axis) =>
                     {
                         try
                         {
@@ -154,10 +163,11 @@ design more complex inputs.";
                         }
                         catch (InvalidOperationException e)
                         {
-                            Select = null;
                             error = "<color=#FFFF00><b>Chain cycle error</b></color>\n" + e.Message;
                         }
                     });
+                    UnityEngine.GameObject.Destroy(popup);
+                    popup = SelectAxisWindow.Open(callback);
                 }
             }
 
@@ -166,7 +176,7 @@ design more complex inputs.";
                 if (GUILayout.Button("Select Input Axis", Elements.Buttons.Disabled, GUILayout.MaxWidth(rightGraphRect.width)))
                 {
                     error = null;
-                    Select = new AxisEditorWindow.SelectAxis((InputAxis axis) =>
+                    var callback = new SelectAxisDelegate((InputAxis axis) =>
                     {
                         try
                         {
@@ -174,10 +184,11 @@ design more complex inputs.";
                         }
                         catch (InvalidOperationException e)
                         {
-                            Select = null;
                             error = "<color=#FFFF00><b>Chain cycle error</b></color>\n" + e.Message;
                         }
                     });
+                    UnityEngine.GameObject.Destroy(popup);
+                    popup = SelectAxisWindow.Open(callback);
                 }
             }
             else
@@ -186,7 +197,7 @@ design more complex inputs.";
                     GUILayout.MaxWidth(rightGraphRect.width)))
                 {
                     error = null;
-                    Select = new AxisEditorWindow.SelectAxis((InputAxis axis) =>
+                    var callback = new SelectAxisDelegate((InputAxis axis) =>
                     {
                         try
                         {
@@ -194,60 +205,21 @@ design more complex inputs.";
                         }
                         catch (InvalidOperationException e)
                         {
-                            Select = null;
                             error = "<color=#FFFF00><b>Chain cycle error</b></color>\n" + e.Message;
                         }
                     });
+                    UnityEngine.GameObject.Destroy(popup);
+                    popup = SelectAxisWindow.Open(callback);
                 }
             }
 
             GUILayout.EndHorizontal();
 
-            if (Select != null)
+            // Popup position
+            if (popup != null)
             {
-                string toBeRemoved = null;
-
-                foreach (KeyValuePair<string, InputAxis> pair in AxisManager.Axes)
-                {
-                    var name = pair.Key;
-                    var axis = pair.Value;
-
-                    GUILayout.BeginHorizontal();
-
-                    if (GUILayout.Button(name, axis.Saveable ? Elements.Buttons.Default : Elements.Buttons.Disabled))
-                    {
-                        Select?.Invoke(axis);
-                        Select = null;
-                    }
-
-                    if (GUILayout.Button("✎", new GUIStyle(Elements.Buttons.Default) { fontSize = 20, padding = new RectOffset(-3, 0, 0, 0) }, GUILayout.Width(30), GUILayout.MaxHeight(28)))
-                    {
-                        var Editor = ACM.Instance.gameObject.AddComponent<AxisEditorWindow>();
-                        Editor.windowRect.x = windowRect.x + windowRect.width;
-                        Editor.windowRect.y = windowRect.y;
-                        Editor.EditAxis(axis);
-                        Select = null;
-                    }
-
-                    if (GUILayout.Button("×", Elements.Buttons.Red, GUILayout.Width(30)))
-                    {
-                        toBeRemoved = name;
-                    }
-
-                    GUILayout.EndHorizontal();
-                }
-
-                if (toBeRemoved != null)
-                    AxisManager.Remove(toBeRemoved);
-
-                if (GUILayout.Button("Create new axis", Elements.Buttons.Disabled))
-                {
-                    var Editor = ACM.Instance.gameObject.AddComponent<AxisEditorWindow>();
-                    Editor.windowRect.x = windowRect.x + windowRect.width;
-                    Editor.windowRect.y = windowRect.y;
-                    Editor.CreateAxis(new AxisEditorWindow.SelectAxis(Select));
-                    Select = null;
-                }
+                popup.windowRect.x = windowRect.x;
+                popup.windowRect.y = windowRect.y + windowRect.height;
             }
         }
 

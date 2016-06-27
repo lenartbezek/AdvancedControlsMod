@@ -30,6 +30,9 @@ scripts in Lench Scripter Mod.";
         private Vector2 initialisationScrollPosition = Vector2.zero;
         private Vector2 updateScrollPosition = Vector2.zero;
 
+        public void Open() { }
+        public void Close() { }
+
         public void DrawAxis(Rect windowRect)
         {
             if (!PythonEnvironment.Loaded)
