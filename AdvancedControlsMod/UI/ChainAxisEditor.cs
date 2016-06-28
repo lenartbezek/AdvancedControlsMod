@@ -146,7 +146,7 @@ design more complex inputs.";
                         }
                     });
                     UnityEngine.GameObject.Destroy(popup);
-                    popup = SelectAxisWindow.Open(callback);
+                    popup = SelectAxisWindow.Open(callback, true);
                 }
             }
             else
@@ -167,7 +167,7 @@ design more complex inputs.";
                         }
                     });
                     UnityEngine.GameObject.Destroy(popup);
-                    popup = SelectAxisWindow.Open(callback);
+                    popup = SelectAxisWindow.Open(callback, true);
                 }
             }
 
@@ -188,7 +188,7 @@ design more complex inputs.";
                         }
                     });
                     UnityEngine.GameObject.Destroy(popup);
-                    popup = SelectAxisWindow.Open(callback);
+                    popup = SelectAxisWindow.Open(callback, true);
                 }
             }
             else
@@ -209,7 +209,7 @@ design more complex inputs.";
                         }
                     });
                     UnityEngine.GameObject.Destroy(popup);
-                    popup = SelectAxisWindow.Open(callback);
+                    popup = SelectAxisWindow.Open(callback, true);
                 }
             }
 

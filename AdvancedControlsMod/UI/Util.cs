@@ -47,6 +47,25 @@ namespace AdvancedControls.UI
             }
         }
 
+        internal static GUIStyle CompactWindowStyle
+        {
+            get
+            {
+                return new GUIStyle
+                {
+                    normal = Elements.Windows.Default.normal,
+                    border = new RectOffset(4, 4, 4, 4),
+                    padding = Elements.Settings.DefaultPadding,
+                    margin = Elements.Settings.DefaultMargin
+                };
+            }
+        }
+
+        internal static GUIStyle FullWindowStyle
+        {
+            get { return Elements.Windows.Default; }
+        }
+
         internal static void DrawEnabledBadge(bool enabled)
         {
             if (enabled)

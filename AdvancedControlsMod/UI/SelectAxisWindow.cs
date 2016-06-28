@@ -11,29 +11,34 @@ namespace AdvancedControls.UI
     {
         internal int windowID = spaar.ModLoader.Util.GetWindowID();
         internal Rect windowRect = new Rect(100, 100, 320, 100);
+        private bool compact;
 
-        private float DesiredWidth { get; } = 320;
-        private float DesiredHeight { get; } = 50;
+        private Vector2 scrollPosition = Vector2.zero;
 
         private SelectAxisDelegate callback;
 
-        internal static SelectAxisWindow Open(SelectAxisDelegate callback)
+        internal static SelectAxisWindow Open(SelectAxisDelegate callback, bool compact = false)
         {
             var window = ACM.Instance.gameObject.AddComponent<SelectAxisWindow>();
             window.callback = callback;
+            window.compact = compact;
             return window;
         }
 
         private void OnGUI()
         {
             GUI.skin = Util.Skin;
-            windowRect = GUILayout.Window(windowID, windowRect, DoWindow, "Select axis",
-                        GUILayout.Width(DesiredWidth),
-                        GUILayout.Height(DesiredHeight));
+            GUIStyle windowStyle = compact ? Util.CompactWindowStyle : Util.FullWindowStyle;
+            windowRect = GUILayout.Window(windowID, windowRect, DoWindow, "Select axis", windowStyle,
+                        GUILayout.Width(320),
+                        GUILayout.Height(50));
         }
 
         private void DoWindow(int id)
         {
+            scrollPosition = GUILayout.BeginScrollView(scrollPosition,
+                GUILayout.Height(Mathf.Clamp(AxisManager.Axes.Count * 38, 180, 480)));
+
             string toBeRemoved = null;
 
             foreach (KeyValuePair<string, InputAxis> pair in AxisManager.Axes)
@@ -69,6 +74,8 @@ namespace AdvancedControls.UI
             if (toBeRemoved != null)
                 AxisManager.Remove(toBeRemoved);
 
+            GUILayout.EndScrollView();
+
             if (GUILayout.Button("Create new axis", Elements.Buttons.Disabled))
             {
                 var Editor = ACM.Instance.gameObject.AddComponent<AxisEditorWindow>();
@@ -79,9 +86,10 @@ namespace AdvancedControls.UI
             }
 
             // Draw close button
-            if (GUI.Button(new Rect(windowRect.width - 38, 8, 30, 30),
-                "×", Elements.Buttons.Red))
-                Destroy(this);
+            if (!compact)
+                if (GUI.Button(new Rect(windowRect.width - 38, 8, 30, 30),
+                    "×", Elements.Buttons.Red))
+                    Destroy(this);
         }
     }
 }
