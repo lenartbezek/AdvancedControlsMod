@@ -57,8 +57,26 @@ design more complex inputs.";
                 20);
 
             Util.DrawRect(graphRect, Color.gray);
+            Util.FillRect(new Rect(
+                    graphRect.x + graphRect.width / 2,
+                    graphRect.y,
+                    1,
+                    graphRect.height),
+                Color.gray);
             Util.DrawRect(leftGraphRect, Color.gray);
+            Util.FillRect(new Rect(
+                    leftGraphRect.x + leftGraphRect.width / 2,
+                    leftGraphRect.y,
+                    1,
+                    leftGraphRect.height),
+                Color.gray);
             Util.DrawRect(rightGraphRect, Color.gray);
+            Util.FillRect(new Rect(
+                    rightGraphRect.x + rightGraphRect.width / 2,
+                    rightGraphRect.y,
+                    1,
+                    rightGraphRect.height),
+                Color.gray);
 
             var axis_a = AxisManager.Get(Axis.SubAxis1);
             var axis_b = AxisManager.Get(Axis.SubAxis2);

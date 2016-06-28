@@ -14,9 +14,6 @@ namespace AdvancedControls.UI
         internal int windowID = spaar.ModLoader.Util.GetWindowID();
         internal Rect windowRect = new Rect(680, 115, 100, 100);
 
-        private float DesiredWidth { get; } = 320;
-        private float DesiredHeight { get; } = 50;
-
         internal GenericBlock Block;
         internal List<Control> controls;
 
@@ -48,8 +45,8 @@ namespace AdvancedControls.UI
             {
                 GUI.skin = Util.Skin;
                 windowRect = GUILayout.Window(windowID, windowRect, DoWindow, Block.MyBlockInfo.blockName.ToUpper(),
-                    GUILayout.Width(DesiredWidth),
-                    GUILayout.Height(DesiredHeight));
+                    GUILayout.Width(320),
+                    GUILayout.Height(50));
                 if (popup != null)
                 {
                     popup.windowRect.x = windowRect.x + windowRect.width;
@@ -78,6 +75,7 @@ namespace AdvancedControls.UI
 
             GUILayout.Label(c.Name, Elements.Labels.Title);
 
+            // Draw axis select button
             GUILayout.BeginHorizontal();
 
             if (c.Axis == null)
@@ -109,12 +107,63 @@ namespace AdvancedControls.UI
 
             if (c.Enabled)
             {
+                // Draw graph
+                var axis = AxisManager.Get(c.Axis);
+                float axis_value = axis != null ? axis.OutputValue : 0;
+                float control_value = 0;
+                string text;
+                if (axis == null)
+                {
+                    text = "NOT FOUND";
+                }
+                else
+                {
+                    if (axis_value > 0)
+                        control_value = Mathf.Lerp(c.Center, c.Max, axis_value);
+                    else
+                        control_value = Mathf.Lerp(c.Center, c.Min, -axis_value);
+
+                    text = axis.Connected ? control_value.ToString("0.00") : "DISCONNECTED";
+                }
+                
+                GUILayout.Label("<color=#808080><b>" + text + "</b></color>",
+                    new GUIStyle(Elements.Labels.Default) { padding = new RectOffset(38, 38, 4, 0), richText = true, alignment = TextAnchor.MiddleLeft },
+                    GUILayout.Height(20));
+
+                var graphRect = GUILayoutUtility.GetLastRect();
+                graphRect.x += 30;
+                graphRect.height += 44;
+                graphRect.width -= 60;
+
+                Util.DrawRect(graphRect, Color.gray);
+                Util.FillRect(new Rect(
+                            graphRect.x + graphRect.width / 2,
+                            graphRect.y,
+                            1,
+                            graphRect.height),
+                    Color.gray);
+
+                if (axis != null && axis.Connected)
+                    Util.FillRect(new Rect(
+                                          graphRect.x + graphRect.width / 2 + graphRect.width / 2 * axis_value,
+                                          graphRect.y,
+                                          1,
+                                          graphRect.height),
+                                 Color.yellow);
+
+                // Draw interval input fields
                 GUILayout.BeginHorizontal();
                 {
-                    GUILayout.BeginVertical();
-                    GUILayout.Label("Mininum");
+                    var oldColor = GUI.backgroundColor;
+                    GUI.backgroundColor = new Color(0.7f, 0.7f, 0.7f, 0.5f);
+
                     float min_parsed = c.Min;
-                    c.min_string = Regex.Replace(GUILayout.TextField(c.min_string), @"[^0-9\-.]", "");
+                    c.min_string = Regex.Replace(
+                        GUILayout.TextField(
+                            c.min_string, 
+                            new GUIStyle(Elements.InputFields.Default) { alignment = TextAnchor.MiddleCenter },
+                            GUILayout.Width(60)),
+                        @"[^0-9\-.]", "");
                     if (c.min_string != c.Min.ToString() &&
                         !c.min_string.EndsWith(".0") &&
                         !c.min_string.EndsWith(".") &&
@@ -125,12 +174,16 @@ namespace AdvancedControls.UI
                         c.Min = min_parsed;
                         c.min_string = c.Min.ToString();
                     }
-                    GUILayout.EndVertical();
 
-                    GUILayout.BeginVertical();
-                    GUILayout.Label("Center");
+                    GUILayout.FlexibleSpace();
+
                     float cen_parsed = c.Center;
-                    c.cen_string = Regex.Replace(GUILayout.TextField(c.cen_string), @"[^0-9\-.]", "");
+                    c.cen_string = Regex.Replace(
+                        GUILayout.TextField(
+                            c.cen_string, 
+                            new GUIStyle(Elements.InputFields.Default) { alignment = TextAnchor.MiddleCenter },
+                            GUILayout.Width(60)),
+                        @"[^0-9\-.]", "");
                     if (c.cen_string != c.Center.ToString() &&
                         !c.cen_string.EndsWith(".0") &&
                         !c.cen_string.EndsWith(".") &&
@@ -141,12 +194,16 @@ namespace AdvancedControls.UI
                         c.Center = cen_parsed;
                         c.cen_string = c.Center.ToString();
                     }
-                    GUILayout.EndVertical();
 
-                    GUILayout.BeginVertical();
-                    GUILayout.Label("Maximum");
+                    GUILayout.FlexibleSpace();
+
                     float max_parsed = c.Max;
-                    c.max_string = Regex.Replace(GUILayout.TextField(c.max_string), @"[^0-9\-.]", "");
+                    c.max_string = Regex.Replace(
+                        GUILayout.TextField(
+                            c.max_string, 
+                            new GUIStyle(Elements.InputFields.Default) { alignment = TextAnchor.MiddleCenter },
+                            GUILayout.Width(60)),
+                        @"[^0-9\-.]", "");
                     if (c.max_string != c.Max.ToString() &&
                         !c.max_string.EndsWith(".0") &&
                         !c.max_string.EndsWith(".") &&
@@ -157,7 +214,8 @@ namespace AdvancedControls.UI
                         c.Max = max_parsed;
                         c.max_string = c.Max.ToString();
                     }
-                    GUILayout.EndVertical();
+
+                    GUI.backgroundColor = oldColor;
                 }
                 GUILayout.EndHorizontal();
             }

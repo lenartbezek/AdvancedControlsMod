@@ -65,7 +65,7 @@ namespace AdvancedControls
 
                 if (axes.Count != 0)
                 {
-                    machineInfo.MachineData.Write("ac-version", "v1.2.2");
+                    machineInfo.MachineData.Write("ac-version", "v1.2.3");
                     machineInfo.MachineData.Write("ac-axislist", axes.ToArray());
                 }
             }

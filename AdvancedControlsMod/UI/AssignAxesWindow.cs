@@ -83,6 +83,41 @@ namespace AdvancedControls.UI
 
             GUILayout.EndHorizontal();
 
+            // Draw graph
+            float axis_value = a != null ? a.OutputValue : 0;
+            string text;
+            if (a == null)
+                text = "NOT FOUND";
+            else if (!a.Connected)
+                text = "DISCONNECTED";
+            else
+                text = axis_value.ToString("0.00");
+
+            GUILayout.Label("  <color=#808080><b>" + text + "</b></color>",
+                new GUIStyle(Elements.Labels.Default) { richText = true, alignment = TextAnchor.MiddleLeft },
+                GUILayout.Height(20));
+
+            var graphRect = GUILayoutUtility.GetLastRect();
+
+            GUILayout.Box(GUIContent.none, GUILayout.Height(8));
+
+            Util.DrawRect(graphRect, Color.gray);
+            Util.FillRect(new Rect(
+                        graphRect.x + graphRect.width / 2,
+                        graphRect.y,
+                        1,
+                        graphRect.height),
+                Color.gray);
+
+            if (a != null && a.Connected)
+                Util.FillRect(new Rect(
+                                      graphRect.x + graphRect.width / 2 + graphRect.width / 2 * axis_value,
+                                      graphRect.y,
+                                      1,
+                                      graphRect.height),
+                             Color.yellow);
+
+            // Draw assigned controls list
             foreach (Control c in Controls[axis])
                 GUILayout.Label("    <b>" + c.Name + "</b> for " + BlockHandlers.GetID(c.BlockGUID));
         }
@@ -100,7 +135,7 @@ namespace AdvancedControls.UI
             if (Visible)
             {
                 GUI.skin = Util.Skin;
-                windowRect = GUILayout.Window(windowID, windowRect, DoWindow, "ACM:  Assign axes",
+                windowRect = GUILayout.Window(windowID, windowRect, DoWindow, "ACM: Overview",
                     GUILayout.Width(280),
                     GUILayout.Height(100));
                 if (popup != null)

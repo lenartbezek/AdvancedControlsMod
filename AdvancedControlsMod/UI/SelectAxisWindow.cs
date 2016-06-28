@@ -37,7 +37,7 @@ namespace AdvancedControls.UI
         private void DoWindow(int id)
         {
             scrollPosition = GUILayout.BeginScrollView(scrollPosition,
-                GUILayout.Height(Mathf.Clamp(AxisManager.Axes.Count * 38, 180, 480)));
+                GUILayout.Height(Mathf.Clamp(AxisManager.Axes.Count * 34, 180, 480)));
 
             string toBeRemoved = null;
 

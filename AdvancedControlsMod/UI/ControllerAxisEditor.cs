@@ -190,6 +190,18 @@ namespace AdvancedControls.UI
 
                 // Draw graph input and frame
                 Util.DrawRect(graphRect, Color.gray);
+                Util.FillRect(new Rect(
+                        graphRect.x + graphRect.width / 2,
+                        graphRect.y,
+                        1,
+                        graphRect.height),
+                    Color.gray);
+                Util.FillRect(new Rect(
+                        graphRect.x,
+                        graphRect.y + graphRect.height / 2,
+                        graphRect.width,
+                        1),
+                    Color.gray);
 
                 Util.FillRect(new Rect(
                                   graphRect.x + graphRect.width / 2 + graphRect.width / 2 * Axis.InputValue,
