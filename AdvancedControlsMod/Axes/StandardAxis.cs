@@ -8,6 +8,21 @@ namespace AdvancedControls.Axes
     {
         public override string Name { get; set; } = "new standard axis";
         public override AxisType Type { get { return AxisType.Standard; } }
+        public override bool Connected
+        {
+            get
+            {
+                return (PositiveBind == null || PositiveBind.Connected) && (NegativeBind == null || NegativeBind.Connected);
+            }
+        }
+        public override string Status
+        {
+            get
+            {
+                if (!Connected) return "DISCONNECTED";
+                return "OK";
+            }
+        }
 
         public float Gravity { get; set; }
         public float Sensitivity { get; set; }

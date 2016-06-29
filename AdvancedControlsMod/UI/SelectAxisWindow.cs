@@ -29,18 +29,15 @@ namespace AdvancedControls.UI
         {
             GUI.skin = Util.Skin;
             GUIStyle windowStyle = compact ? Util.CompactWindowStyle : Util.FullWindowStyle;
-            windowRect = GUILayout.Window(windowID, windowRect, DoWindow, "Select axis", windowStyle,
+            windowRect = GUILayout.Window(windowID, windowRect, DoWindow, compact ? "" : "Select axis", windowStyle,
                         GUILayout.Width(320),
                         GUILayout.Height(50));
         }
 
         private void DoWindow(int id)
         {
-            var oldColor = GUI.backgroundColor;
-            GUI.backgroundColor = new Color(0.7f, 0.7f, 0.7f, 0.7f);
             scrollPosition = GUILayout.BeginScrollView(scrollPosition,
-                GUILayout.Height(Mathf.Clamp(AxisManager.Axes.Count * 38 - 8, 180, 480)));
-            GUI.backgroundColor = oldColor;
+                GUILayout.Height(Mathf.Clamp(AxisManager.Axes.Count * 42 - 8, 180, 480)));
 
             string toBeRemoved = null;
 

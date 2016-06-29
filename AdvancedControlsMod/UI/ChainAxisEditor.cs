@@ -110,12 +110,12 @@ design more complex inputs.";
             // Draw sub axis values
             GUILayout.BeginHorizontal(GUILayout.Height(20));
 
-            GUILayout.Label("  <color=#808080><b>" + a.ToString("0.00") + "</b></color>",
+            GUILayout.Label("  <color=#808080><b>" + (axis_a == null ? "" : axis_a.Status == "OK" ? a.ToString("0.00") : axis_a.Status) + "</b></color>",
                 new GUIStyle(Elements.Labels.Default) { richText = true, alignment = TextAnchor.MiddleLeft },
                 GUILayout.MinWidth(leftGraphRect.width),
                 GUILayout.Height(20));
 
-            GUILayout.Label("  <color=#808080><b>" + b.ToString("0.00") + "</b></color>",
+            GUILayout.Label("  <color=#808080><b>" + (axis_b == null ? "" : axis_b.Status == "OK" ? b.ToString("0.00") : axis_b.Status) + "</b></color>",
                 new GUIStyle(Elements.Labels.Default) { richText = true, alignment = TextAnchor.MiddleLeft, margin = new RectOffset(8, 0, 0, 0) },
                 GUILayout.MinWidth(rightGraphRect.width),
                 GUILayout.Height(20));
@@ -123,21 +123,24 @@ design more complex inputs.";
             GUILayout.EndHorizontal();
 
             // Draw yellow lines
-            Util.FillRect(new Rect(
-                                  graphRect.x + graphRect.width / 2 + graphRect.width / 2 * Axis.OutputValue,
-                                  graphRect.y,
-                                  1,
-                                  graphRect.height),
-                         Color.yellow);
+            if (Axis.Status == "OK")
+                Util.FillRect(new Rect(
+                                        graphRect.x + graphRect.width / 2 + graphRect.width / 2 * Axis.OutputValue,
+                                        graphRect.y,
+                                        1,
+                                        graphRect.height),
+                                Color.yellow);
 
-            Util.FillRect(new Rect(
-                                  leftGraphRect.x + leftGraphRect.width / 2 + leftGraphRect.width / 2 * a,
-                                  leftGraphRect.y,
-                                  1,
-                                  leftGraphRect.height),
-                         Color.yellow);
+            if (axis_a != null && axis_a.Status == "OK")
+                Util.FillRect(new Rect(
+                                      leftGraphRect.x + leftGraphRect.width / 2 + leftGraphRect.width / 2 * a,
+                                      leftGraphRect.y,
+                                      1,
+                                      leftGraphRect.height),
+                             Color.yellow);
 
-            Util.FillRect(new Rect(
+            if (axis_b != null && axis_b.Status == "OK")
+                Util.FillRect(new Rect(
                                   rightGraphRect.x + rightGraphRect.width / 2 + rightGraphRect.width / 2 * b,
                                   rightGraphRect.y,
                                   1,

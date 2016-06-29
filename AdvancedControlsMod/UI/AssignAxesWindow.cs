@@ -99,14 +99,13 @@ namespace AdvancedControls.UI
             GUILayout.EndHorizontal();
 
             // Draw graph
-            float axis_value = a != null ? a.OutputValue : 0;
             string text;
             if (a == null)
                 text = "NOT FOUND";
-            else if (!a.Connected)
-                text = "DISCONNECTED";
+            else if (a.Status != "OK")
+                text = a.Status;
             else
-                text = axis_value.ToString("0.00");
+                text = "";
 
             GUILayout.Label("  <color=#808080><b>" + text + "</b></color>",
                 new GUIStyle(Elements.Labels.Default) { richText = true, alignment = TextAnchor.MiddleLeft },
@@ -126,7 +125,7 @@ namespace AdvancedControls.UI
 
             if (a != null && a.Connected)
                 Util.FillRect(new Rect(
-                                      graphRect.x + graphRect.width / 2 + graphRect.width / 2 * axis_value,
+                                      graphRect.x + graphRect.width / 2 + graphRect.width / 2 * a.OutputValue,
                                       graphRect.y,
                                       1,
                                       graphRect.height),
@@ -184,13 +183,10 @@ namespace AdvancedControls.UI
 
                 float viewHeight = 0;
                 foreach (KeyValuePair<string, List<Control>> entry in Controls)
-                    viewHeight += 84 + entry.Value.Count * 20;
+                    viewHeight += 90 + entry.Value.Count * 20;
 
-                var oldColor = GUI.backgroundColor;
-                GUI.backgroundColor = new Color(0.7f, 0.7f, 0.7f, 0.7f);
                 scrollPosition = GUILayout.BeginScrollView(scrollPosition,
                     GUILayout.Height(Mathf.Clamp(viewHeight, 180, 640)));
-                GUI.backgroundColor = oldColor;
 
                 // Draw axes
                 foreach (string axis in AxisList)

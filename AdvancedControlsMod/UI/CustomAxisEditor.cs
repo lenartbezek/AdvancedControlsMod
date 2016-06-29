@@ -45,6 +45,43 @@ scripts in Lench Scripter Mod.";
                 error = null;
                 note = null;
 
+                // Draw graph
+                GUILayout.BeginHorizontal();
+
+                string text;
+                if (Axis.Status == "OK")
+                    text = Axis.OutputValue.ToString("0.00");
+                else
+                    text = Axis.Status;
+
+                GUILayout.Label("  <color=#808080><b>" + text + "</b></color>",
+                    new GUIStyle(Elements.Labels.Default) { richText = true, alignment = TextAnchor.MiddleLeft },
+                    GUILayout.Height(28));
+
+                var graphRect = GUILayoutUtility.GetLastRect();
+
+                Util.DrawRect(graphRect, Color.gray);
+                Util.FillRect(new Rect(
+                        graphRect.x + graphRect.width / 2,
+                        graphRect.y,
+                        1,
+                        graphRect.height),
+                    Color.gray);
+
+                if (Axis.Status == "OK")
+                    Util.FillRect(new Rect(
+                                          graphRect.x + graphRect.width / 2 + graphRect.width / 2 * Axis.OutputValue,
+                                          graphRect.y,
+                                          1,
+                                          graphRect.height),
+                                 Color.yellow);
+
+                // Draw start/stop button
+                if (GUILayout.Button(Axis.Running ? "STOP" : "START", new GUIStyle(Elements.Buttons.Red) { margin = new RectOffset(8, 8, 0, 0) }, GUILayout.Width(80)))
+                    Axis.Running = !Axis.Running;
+
+                GUILayout.EndHorizontal();
+
                 // Draw initialisation code text area
                 GUILayout.Label("Initialisation code",
                     Util.LabelStyle);

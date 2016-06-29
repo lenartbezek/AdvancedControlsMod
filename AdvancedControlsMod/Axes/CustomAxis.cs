@@ -22,7 +22,18 @@ axis_value";
         public string InitialisationCode { get; set; }
         public string UpdateCode { get; set; }
         public bool GlobalScope { get; set; }
+        public bool Running { get; set; }
         public override bool Saveable { get { return PythonEnvironment.Loaded; } }
+        public override string Status
+        {
+            get
+            {
+                if (!PythonEnvironment.Loaded) return "NOT AVAILABLE";
+                if (Error != null) return "ERROR";
+                if (!Running) return "NOT RUNNING";
+                return "OK";
+            }
+        }
 
         public string Error { get; set; }
 
@@ -35,12 +46,19 @@ axis_value";
             InitialisationCode = DefaultInitialisationCode;
             UpdateCode = DefaultUpdateCode;
             GlobalScope = false;
+            Running = false;
             editor = new UI.CustomAxisEditor(this);
         }
 
         protected override void Update()
         {
-            if (!PythonEnvironment.Loaded || Error != null || !Game.IsSimulating) return;
+            if (!PythonEnvironment.Loaded) return;
+            if (!Running && initialised)
+            {
+                initialised = false;
+                Running = false;
+            }
+            if (!Running) return;
             if (initialised)
             {
                 try
@@ -49,6 +67,7 @@ axis_value";
                     if (result == null)
                     {
                         Error = "Update code does not return a value.";
+                        Running = false;
                     }
                     else if (result is float || result is int || result is double)
                     {
@@ -57,24 +76,34 @@ axis_value";
                     else
                     {
                         Error = "Update code returns "+result.GetType()+"\ninstead of number.";
+                        Running = false;
                     }
                 }
                 catch (Exception e)
                 {
                     if (e.InnerException != null) e = e.InnerException;
                     Error = PythonEnvironment.FormatException(e);
+                    Running = false;
+                    initialised = false;
                 }
+            }
+            else
+            {
+                Initialise();
             }
         }
 
         protected override void Initialise()
         {
+            if (!PythonEnvironment.Loaded) return;
+
             init = null;
             update = null;
 
             initialised = false;
-            if (!PythonEnvironment.Loaded || !Game.IsSimulating) return;
+            if (!Running && !Game.IsSimulating) return;
             Error = null;
+            Running = false;
             if (GlobalScope && PythonEnvironment.Enabled)
                 python = PythonEnvironment.ScripterEnvironment;
             else
@@ -93,6 +122,7 @@ axis_value";
                 Error = PythonEnvironment.FormatException(e);
                 return;
             }
+            Running = true;
             initialised = true;
         }
 

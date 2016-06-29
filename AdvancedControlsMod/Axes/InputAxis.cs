@@ -17,6 +17,7 @@
         public virtual float OutputValue { get; set; } = 0;
         public virtual bool Connected { get; } = true;
         public virtual bool Saveable { get; } = true;
+        public virtual string Status { get; } = "OK";
         public abstract AxisType Type { get; }
 
         internal UI.AxisEditor editor;

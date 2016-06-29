@@ -158,6 +158,7 @@ namespace AdvancedControls.UI
                     }
             }
 
+
             // Draw close button
             if (GUI.Button(new Rect(windowRect.width - 38, 8, 30, 30),
                 "×", Elements.Buttons.Red))

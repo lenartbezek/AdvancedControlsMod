@@ -130,7 +130,11 @@ namespace AdvancedControls.UI
                     else
                         control_value = Mathf.Lerp(c.Center, c.Min, -axis_value);
 
-                    text = axis.Connected ? control_value.ToString("0.00") : "DISCONNECTED";
+                    if (axis.Status == "OK")
+                        text = control_value.ToString("0.00");
+                    else
+                        text = axis.Status;
+
                 }
                 
                 GUILayout.Label("<color=#808080><b>" + text + "</b></color>",
@@ -150,7 +154,7 @@ namespace AdvancedControls.UI
                             graphRect.height),
                     Color.gray);
 
-                if (axis != null && axis.Connected)
+                if (axis != null && axis.Status == "OK")
                     Util.FillRect(new Rect(
                                           graphRect.x + graphRect.width / 2 + graphRect.width / 2 * axis_value,
                                           graphRect.y,

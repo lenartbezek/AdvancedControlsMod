@@ -75,6 +75,15 @@ namespace AdvancedControls.Axes
 
         public override bool Connected { get { return controller != null && controller.Connected; } }
         public override bool Saveable { get { return ACM.Instance.EventManager.SDL_Initialized && Controller.NumDevices > 0; } }
+        public override string Status
+        {
+            get
+            {
+                if (!ACM.Instance.EventManager.SDL_Initialized) return "NOT AVAILABLE";
+                if (!Connected) return "DISCONNECTED";
+                return "OK";
+            }
+        }
 
         public ControllerAxis(string name) : base(name)
         {

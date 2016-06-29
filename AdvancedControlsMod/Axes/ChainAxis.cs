@@ -123,6 +123,15 @@ namespace AdvancedControls.Axes
             editor = new UI.ChainAxisEditor(this);
         }
 
+        public override string Status
+        {
+            get
+            {
+                if (sub_axis1 == null && sub_axis2 == null) return "NO LINK";
+                return "OK";
+            }
+        }
+
         private bool CheckCycle(List<string> path)
         {
             if (path.Contains(Name))
