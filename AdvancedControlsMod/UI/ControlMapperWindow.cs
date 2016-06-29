@@ -66,6 +66,13 @@ namespace AdvancedControls.UI
             if (controls.Count == 0)
                 GUILayout.Label("This block has no available controls.");
 
+            // Draw overview button
+            if (GUI.Button(new Rect(windowRect.width - 68, 8, 60, 24),
+                "<size=9><b>OVERVIEW</b></size>", Elements.Buttons.Default))
+            {
+                AssignAxesWindow.Open();
+            }
+
             // Drag window
             GUI.DragWindow(new Rect(0, 0, windowRect.width, GUI.skin.window.padding.top));
         }
@@ -155,7 +162,7 @@ namespace AdvancedControls.UI
                 GUILayout.BeginHorizontal();
                 {
                     var oldColor = GUI.backgroundColor;
-                    GUI.backgroundColor = new Color(0.7f, 0.7f, 0.7f, 0.5f);
+                    GUI.backgroundColor = new Color(0.7f, 0.7f, 0.7f, 0.7f);
 
                     float min_parsed = c.Min;
                     c.min_string = Regex.Replace(

@@ -14,6 +14,7 @@ namespace AdvancedControls
                 if (!machineInfo.MachineData.HasKey("ac-version")) return;
                 var version = machineInfo.MachineData.ReadString("ac-version");
 
+                if (!machineInfo.MachineData.HasKey("ac-axislist")) return;
                 var axis_names = machineInfo.MachineData.ReadStringArray("ac-axislist");
 
                 foreach (BlockInfo blockInfo in machineInfo.Blocks)

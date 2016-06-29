@@ -36,8 +36,11 @@ namespace AdvancedControls.UI
 
         private void DoWindow(int id)
         {
+            var oldColor = GUI.backgroundColor;
+            GUI.backgroundColor = new Color(0.7f, 0.7f, 0.7f, 0.7f);
             scrollPosition = GUILayout.BeginScrollView(scrollPosition,
-                GUILayout.Height(Mathf.Clamp(AxisManager.Axes.Count * 34, 180, 480)));
+                GUILayout.Height(Mathf.Clamp(AxisManager.Axes.Count * 38 - 8, 180, 480)));
+            GUI.backgroundColor = oldColor;
 
             string toBeRemoved = null;
 

@@ -113,7 +113,7 @@ namespace AdvancedControls
             if (LoadedMachine)
             {
                 LoadedMachine = false;
-                AssignAxesWindow.Open();
+                AssignAxesWindow.Open(true);
             }
 
             OnUpdate?.Invoke();
