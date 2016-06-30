@@ -31,7 +31,7 @@ namespace AdvancedControls.UI
                 Destroy(x);
 
             var instance = ACM.Instance.gameObject.AddComponent<AssignAxesWindow>();
-            instance.windowRect.x = Screen.width - 280 - 200;
+            instance.windowRect.x = Screen.width - 280 - 400;
             instance.windowRect.y = 200;
 
             instance.RefreshOverview();
@@ -91,9 +91,27 @@ namespace AdvancedControls.UI
         {
             GUILayout.BeginHorizontal();
 
+            var buttonRect = GUILayoutUtility.GetRect(new GUIContent(" "), Elements.Buttons.Default);
             var a = AxisManager.Get(axis);
-            if (GUILayout.Button(axis, a != null ? a.Saveable ? Elements.Buttons.Default : Elements.Buttons.Disabled : Elements.Buttons.Red))
-                popup = SelectAxisWindow.Open(new SelectAxisDelegate((InputAxis new_axis) => { AssignAxis(axis, new_axis.Name); }));
+            if (GUI.Button(buttonRect, axis, a != null ? a.Saveable ? Elements.Buttons.Default : Elements.Buttons.Disabled : Elements.Buttons.Red))
+            {
+                var callback = new SelectAxisDelegate((InputAxis new_axis) => { AssignAxis(axis, new_axis.Name); });
+                if (popup == null)
+                    popup = SelectAxisWindow.Open(callback, true);
+                else
+                    popup.Callback = callback;
+                popup.windowRect.x = windowRect.x + buttonRect.x - 8;
+                popup.windowRect.y = windowRect.y + buttonRect.y - 8;
+            }
+
+            if (a != null && GUILayout.Button("✎", new GUIStyle(Elements.Buttons.Default) { fontSize = 20, padding = new RectOffset(-3, 0, 0, 0) }, GUILayout.Width(30), GUILayout.MaxHeight(28)))
+            {
+                var Editor = ACM.Instance.gameObject.AddComponent<AxisEditorWindow>();
+                Editor.windowRect.x = windowRect.x + windowRect.width;
+                Editor.windowRect.y = windowRect.y;
+                Editor.EditAxis(a, new SelectAxisDelegate((InputAxis new_axis) => { AssignAxis(axis, new_axis.Name); }));
+            }
+
             Util.DrawEnabledBadge(a != null && a.Saveable);
 
             GUILayout.EndHorizontal();
@@ -160,14 +178,11 @@ namespace AdvancedControls.UI
             if (Visible)
             {
                 GUI.skin = Util.Skin;
-                windowRect = GUILayout.Window(windowID, windowRect, DoWindow, "ACM: Overview",
+                windowRect = GUILayout.Window(windowID, windowRect, DoWindow, "Overview",
                     GUILayout.Width(320),
-                    GUILayout.Height(100));
-                if (popup != null)
-                {
-                    popup.windowRect.x = windowRect.x + windowRect.width;
-                    popup.windowRect.y = windowRect.y;
-                }
+                    GUILayout.Height(42));
+                if (popup != null && !popup.ContainsMouse)
+                    Destroy(popup);
             }
         }
 
@@ -179,20 +194,11 @@ namespace AdvancedControls.UI
                 GUILayout.Label("<b>" + Machine.Active().Name + "</b> uses no advanced controls.");
             else
             {
-                GUILayout.Label("<b>" + Machine.Active().Name + "</b> uses these input axes:");
-
-                float viewHeight = 0;
-                foreach (KeyValuePair<string, List<Control>> entry in Controls)
-                    viewHeight += 90 + entry.Value.Count * 20;
-
-                scrollPosition = GUILayout.BeginScrollView(scrollPosition,
-                    GUILayout.Height(Mathf.Clamp(viewHeight, 180, 640)));
+                GUILayout.Label("<b>" + Machine.Active().Name + "</b> uses these input axes:\n");
 
                 // Draw axes
                 foreach (string axis in AxisList)
                     DrawAxis(axis);
-
-                GUILayout.EndScrollView();
             }
 
             // Draw close button

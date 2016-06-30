@@ -44,20 +44,17 @@ namespace AdvancedControls.UI
             if (Visible && Block != null)
             {
                 GUI.skin = Util.Skin;
-                windowRect = GUILayout.Window(windowID, windowRect, DoWindow, Block.MyBlockInfo.blockName.ToUpper(),
+                windowRect = GUILayout.Window(windowID, windowRect, DoWindow, "Advanced Controls",
                     GUILayout.Width(320),
                     GUILayout.Height(50));
-                if (popup != null)
-                {
-                    popup.windowRect.x = windowRect.x + windowRect.width;
-                    popup.windowRect.y = windowRect.y;
-                }
+                if (popup != null && !popup.ContainsMouse)
+                    Destroy(popup);
             }
         }
 
         private void DoWindow(int id)
         {
-            foreach(Control c in controls)
+            foreach (Control c in controls)
             {
                 DrawControl(c);
                 GUILayout.Label(" ");
@@ -85,23 +82,32 @@ namespace AdvancedControls.UI
             // Draw axis select button
             GUILayout.BeginHorizontal();
 
+            var buttonRect = GUILayoutUtility.GetRect(new GUIContent(" "), Elements.Buttons.Default);
             if (c.Axis == null)
             {
-                if (GUILayout.Button("Select Input Axis", Elements.Buttons.Disabled))
+                if (GUI.Button(buttonRect, "Select Input Axis", Elements.Buttons.Disabled))
                 {
-                    Destroy(popup);
-                    popup = SelectAxisWindow.Open(
-                        new SelectAxisDelegate((InputAxis axis) => { c.Axis = axis.Name; c.Enabled = true; }));
+                    var callback = new SelectAxisDelegate((InputAxis axis) => { c.Axis = axis.Name; c.Enabled = true; });
+                    if (popup == null)
+                        popup = SelectAxisWindow.Open(callback, true);
+                    else
+                        popup.Callback = callback;
+                    popup.windowRect.x = windowRect.x + buttonRect.x - 8;
+                    popup.windowRect.y = windowRect.y + buttonRect.y - 8;
                 }
             }
             else
             {
                 var a = AxisManager.Get(c.Axis);
-                if (GUILayout.Button(c.Axis, a != null ? a.Saveable ? Elements.Buttons.Default : Elements.Buttons.Disabled : Elements.Buttons.Red))
+                if (GUI.Button(buttonRect, c.Axis, a != null ? a.Saveable ? Elements.Buttons.Default : Elements.Buttons.Disabled : Elements.Buttons.Red))
                 {
-                    Destroy(popup);
-                    popup = SelectAxisWindow.Open(
-                        new SelectAxisDelegate((InputAxis axis) => { c.Axis = axis.Name; c.Enabled = true; }));
+                    var callback = new SelectAxisDelegate((InputAxis axis) => { c.Axis = axis.Name; c.Enabled = true; });
+                    if (popup == null)
+                        popup = SelectAxisWindow.Open(callback, true);
+                    else
+                        popup.Callback = callback;
+                    popup.windowRect.x = windowRect.x + buttonRect.x - 8;
+                    popup.windowRect.y = windowRect.y + buttonRect.y - 8;
                 }
                 if (GUILayout.Button("×", Elements.Buttons.Red, GUILayout.Width(30)))
                 {

@@ -25,7 +25,7 @@ namespace AdvancedControls.UI
         protected string SaveName = "";
         protected InputAxis Axis;
 
-        private SelectAxisDelegate Select;
+        internal SelectAxisDelegate Callback;
 
         internal void SaveAxis()
         {
@@ -34,22 +34,21 @@ namespace AdvancedControls.UI
             Axis = Axis.Clone();
             Axis.editor.Open();
             Axis.Name = SaveName;
-            WindowName = "Edit " + SaveName;
             AxisManager.Put(Axis.Name, Axis);
-            Select?.Invoke(Axis);
-            Select = null;
+            Callback?.Invoke(Axis);
+            Destroy(this);
         }
 
         internal void CreateAxis(SelectAxisDelegate selectAxis = null)
         {
-            Select = selectAxis;
+            Callback = selectAxis;
             WindowName = "Create new axis";
             Axis = null;
         }
 
-        internal void EditAxis(InputAxis axis)
+        internal void EditAxis(InputAxis axis, SelectAxisDelegate selectAxis = null)
         {
-            Select = null;
+            Callback = selectAxis;
             WindowName = "Edit " + axis.Name;
             SaveName = axis.Name;
             Axis = axis;
@@ -163,7 +162,7 @@ namespace AdvancedControls.UI
             if (GUI.Button(new Rect(windowRect.width - 38, 8, 30, 30),
                 "×", Elements.Buttons.Red))
             {
-                Select = null;
+                Callback = null;
                 Destroy(this);
             }
 

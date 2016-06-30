@@ -32,7 +32,7 @@ design more complex inputs.";
 
         public void Close()
         {
-            UnityEngine.GameObject.Destroy(popup);
+            GameObject.Destroy(popup);
         }
 
         public void DrawAxis(Rect windowRect)
@@ -150,9 +150,10 @@ design more complex inputs.";
             // Draw axis select buttons
             GUILayout.BeginHorizontal();
 
+            var buttonRect = GUILayoutUtility.GetRect(new GUIContent(" "), Elements.Buttons.Default, GUILayout.MaxWidth(leftGraphRect.width));
             if (Axis.SubAxis1 == null)
             {
-                if (GUILayout.Button("Select Input Axis", Elements.Buttons.Disabled, GUILayout.MaxWidth(leftGraphRect.width)))
+                if (GUI.Button(buttonRect, "Select Input Axis", Elements.Buttons.Disabled))
                 {
                     error = null;
                     var callback = new SelectAxisDelegate((InputAxis axis) =>
@@ -166,14 +167,17 @@ design more complex inputs.";
                             error = "<color=#FFFF00><b>Chain cycle error</b></color>\n" + e.Message;
                         }
                     });
-                    UnityEngine.GameObject.Destroy(popup);
-                    popup = SelectAxisWindow.Open(callback, true);
+                    if (popup == null)
+                        popup = SelectAxisWindow.Open(callback, true);
+                    else
+                        popup.Callback = callback;
+                    popup.windowRect.x = windowRect.x + buttonRect.x - 8;
+                    popup.windowRect.y = windowRect.y + buttonRect.y - 8;
                 }
             }
             else
             {
-                if (GUILayout.Button(Axis.SubAxis1, axis_a != null ? axis_a.Saveable ? Elements.Buttons.Default : Elements.Buttons.Disabled : Elements.Buttons.Red,
-                    GUILayout.MaxWidth(leftGraphRect.width)))
+                if (GUI.Button(buttonRect, Axis.SubAxis1, axis_a != null ? axis_a.Saveable ? Elements.Buttons.Default : Elements.Buttons.Disabled : Elements.Buttons.Red))
                 {
                     error = null;
                     var callback = new SelectAxisDelegate((InputAxis axis) =>
@@ -187,8 +191,12 @@ design more complex inputs.";
                             error = "<color=#FFFF00><b>Chain cycle error</b></color>\n" + e.Message;
                         }
                     });
-                    UnityEngine.GameObject.Destroy(popup);
-                    popup = SelectAxisWindow.Open(callback, true);
+                    if (popup == null)
+                        popup = SelectAxisWindow.Open(callback, true);
+                    else
+                        popup.Callback = callback;
+                    popup.windowRect.x = windowRect.x + buttonRect.x - 8;
+                    popup.windowRect.y = windowRect.y + buttonRect.y - 8;
                 }
             }
 
@@ -208,8 +216,12 @@ design more complex inputs.";
                             error = "<color=#FFFF00><b>Chain cycle error</b></color>\n" + e.Message;
                         }
                     });
-                    UnityEngine.GameObject.Destroy(popup);
-                    popup = SelectAxisWindow.Open(callback, true);
+                    if (popup == null)
+                        popup = SelectAxisWindow.Open(callback, true);
+                    else
+                        popup.Callback = callback;
+                    popup.windowRect.x = windowRect.x + buttonRect.x - 8;
+                    popup.windowRect.y = windowRect.y + buttonRect.y - 8;
                 }
             }
             else
@@ -229,19 +241,20 @@ design more complex inputs.";
                             error = "<color=#FFFF00><b>Chain cycle error</b></color>\n" + e.Message;
                         }
                     });
-                    UnityEngine.GameObject.Destroy(popup);
-                    popup = SelectAxisWindow.Open(callback, true);
+                    if (popup == null)
+                        popup = SelectAxisWindow.Open(callback, true);
+                    else
+                        popup.Callback = callback;
+                    popup.windowRect.x = windowRect.x + buttonRect.x - 8;
+                    popup.windowRect.y = windowRect.y + buttonRect.y - 8;
                 }
             }
 
             GUILayout.EndHorizontal();
 
-            // Popup position
-            if (popup != null)
-            {
-                popup.windowRect.x = windowRect.x;
-                popup.windowRect.y = windowRect.y + windowRect.height;
-            }
+            // Check for mouse exit
+            if (popup != null && !popup.ContainsMouse)
+                GameObject.Destroy(popup);
         }
 
         public string GetHelp()

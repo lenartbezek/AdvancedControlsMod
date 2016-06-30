@@ -116,7 +116,7 @@ namespace AdvancedControls.Axes
 
         public ChainAxis(string name) : base(name)
         {
-            base.Name = "new chain axis";
+            base.Name = name;
             SubAxis1 = null;
             SubAxis2 = null;
             Method = ChainMethod.Sum;
@@ -179,8 +179,10 @@ namespace AdvancedControls.Axes
         {
             spaar.ModLoader.Configuration.SetString("axis-" + Name + "-type", Type.ToString());
             spaar.ModLoader.Configuration.SetString("axis-" + Name + "-method", Method.ToString());
-            spaar.ModLoader.Configuration.SetString("axis-" + Name + "-subaxis1", SubAxis1);
-            spaar.ModLoader.Configuration.SetString("axis-" + Name + "-subaxis2", SubAxis2);
+            if (SubAxis1 != null)
+                spaar.ModLoader.Configuration.SetString("axis-" + Name + "-subaxis1", SubAxis1);
+            if (SubAxis2 != null)
+                spaar.ModLoader.Configuration.SetString("axis-" + Name + "-subaxis2", SubAxis2);
         }
 
         internal override void Delete()
