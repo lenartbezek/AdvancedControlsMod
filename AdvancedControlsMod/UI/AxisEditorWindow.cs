@@ -19,7 +19,7 @@ namespace AdvancedControls.UI
         internal bool ShowHelp { get; set; } = false;
 
         internal int windowID = spaar.ModLoader.Util.GetWindowID();
-        internal Rect windowRect = new Rect(100, 100, 100, 100);
+        internal Rect windowRect = new Rect(0, 0, 320, 100);
 
         protected string WindowName = "Create new axis";
         protected string SaveName = "";

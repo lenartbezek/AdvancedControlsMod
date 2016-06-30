@@ -70,17 +70,13 @@ namespace AdvancedControls.UI
         {
             if (enabled)
             {
-                var oldColor = GUI.backgroundColor;
-                GUI.backgroundColor = new Color(0f, 1f, 0f, 1f);
                 GUILayout.Label("✓", Elements.InputFields.Default, GUILayout.Width(30));
-                GUI.backgroundColor = oldColor;
             }
             else
             {
-                var oldColor = GUI.backgroundColor;
-                GUI.backgroundColor = new Color(1f, 0f, 0f, 1f);
-                GUILayout.Label("✘", Elements.InputFields.Default, GUILayout.Width(30));
-                GUI.backgroundColor = oldColor;
+                GUIStyle style = new GUIStyle(Elements.InputFields.Default);
+                style.normal.textColor = new Color(1, 0, 0);
+                GUILayout.Label("✘", style, GUILayout.Width(30));
             }
         }
 

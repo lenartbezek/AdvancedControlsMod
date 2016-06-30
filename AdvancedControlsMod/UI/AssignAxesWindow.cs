@@ -10,11 +10,8 @@ namespace AdvancedControls.UI
 {
     internal class AssignAxesWindow : MonoBehaviour
     {
-        internal new string name { get { return "Assign Axes window"; } }
-        internal bool Visible { get; set; } = false;
-
         internal int windowID = spaar.ModLoader.Util.GetWindowID();
-        internal Rect windowRect = new Rect(360, 200, 100, 100);
+        internal Rect windowRect = new Rect();
 
         private Dictionary<string, List<Control>> Controls = new Dictionary<string, List<Control>>();
         private List<string> AxisList = new List<string>();
@@ -31,6 +28,8 @@ namespace AdvancedControls.UI
                 Destroy(x);
 
             var instance = ACM.Instance.gameObject.AddComponent<AssignAxesWindow>();
+            instance.enabled = false;
+
             instance.windowRect.x = Screen.width - 280 - 400;
             instance.windowRect.y = 200;
 
@@ -48,7 +47,6 @@ namespace AdvancedControls.UI
                 }
             }
 
-            instance.Visible = true;
             instance.enabled = true;
             return instance;
         }
@@ -107,12 +105,11 @@ namespace AdvancedControls.UI
             if (a != null && GUILayout.Button("✎", new GUIStyle(Elements.Buttons.Default) { fontSize = 20, padding = new RectOffset(-3, 0, 0, 0) }, GUILayout.Width(30), GUILayout.MaxHeight(28)))
             {
                 var Editor = ACM.Instance.gameObject.AddComponent<AxisEditorWindow>();
-                Editor.windowRect.x = windowRect.x + windowRect.width;
-                Editor.windowRect.y = windowRect.y;
+                Editor.windowRect.x = Mathf.Clamp(windowRect.x + windowRect.width,
+                            -320 + GUI.skin.window.padding.top, Screen.width - GUI.skin.window.padding.top);
+                Editor.windowRect.y = Mathf.Clamp(windowRect.y, 0, Screen.height - GUI.skin.window.padding.top);
                 Editor.EditAxis(a, new SelectAxisDelegate((InputAxis new_axis) => { AssignAxis(axis, new_axis.Name); }));
             }
-
-            Util.DrawEnabledBadge(a != null && a.Saveable);
 
             GUILayout.EndHorizontal();
 
@@ -175,15 +172,12 @@ namespace AdvancedControls.UI
         /// </summary>
         protected virtual void OnGUI()
         {
-            if (Visible)
-            {
-                GUI.skin = Util.Skin;
-                windowRect = GUILayout.Window(windowID, windowRect, DoWindow, "Overview",
-                    GUILayout.Width(320),
-                    GUILayout.Height(42));
-                if (popup != null && !popup.ContainsMouse)
-                    Destroy(popup);
-            }
+            GUI.skin = Util.Skin;
+            windowRect = GUILayout.Window(windowID, windowRect, DoWindow, "Overview",
+                GUILayout.Width(320),
+                GUILayout.Height(42));
+            if (popup != null && !popup.ContainsMouse)
+                Destroy(popup);
         }
 
         protected virtual void DoWindow(int id)

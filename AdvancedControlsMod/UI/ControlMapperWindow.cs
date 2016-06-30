@@ -12,7 +12,7 @@ namespace AdvancedControls.UI
         internal bool Visible { get; set; } = false;
 
         internal int windowID = spaar.ModLoader.Util.GetWindowID();
-        internal Rect windowRect = new Rect(680, 115, 100, 100);
+        internal Rect windowRect = new Rect(680, 115, 320, 50);
 
         internal GenericBlock Block;
         internal List<Control> controls;
