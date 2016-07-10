@@ -166,22 +166,68 @@ namespace AdvancedControls.Input
                 UpdateMappings();
         }
 
+        private static string GetAxisNameFromEnum(SDL.SDL_GameControllerAxis i)
+        {
+            switch (i)
+            {
+                case SDL.SDL_GameControllerAxis.SDL_CONTROLLER_AXIS_LEFTX:
+                    return "Left X";
+                case SDL.SDL_GameControllerAxis.SDL_CONTROLLER_AXIS_LEFTY:
+                    return "Left Y";
+                case SDL.SDL_GameControllerAxis.SDL_CONTROLLER_AXIS_RIGHTX:
+                    return "Right X";
+                case SDL.SDL_GameControllerAxis.SDL_CONTROLLER_AXIS_RIGHTY:
+                    return "Right Y";
+                case SDL.SDL_GameControllerAxis.SDL_CONTROLLER_AXIS_TRIGGERLEFT:
+                    return "Left Trigger";
+                case SDL.SDL_GameControllerAxis.SDL_CONTROLLER_AXIS_TRIGGERRIGHT:
+                    return "Right Trigger";
+                default:
+                    return "Axis " + ((int)i + 1);
+            }
+        }
+
+        private static string GetButtonNameFromEnum(SDL.SDL_GameControllerButton i)
+        {
+            switch (i)
+            {
+                case SDL.SDL_GameControllerButton.SDL_CONTROLLER_BUTTON_A:
+                    return "A Button";
+                case SDL.SDL_GameControllerButton.SDL_CONTROLLER_BUTTON_B:
+                    return "B Button";
+                case SDL.SDL_GameControllerButton.SDL_CONTROLLER_BUTTON_X:
+                    return "X Button";
+                case SDL.SDL_GameControllerButton.SDL_CONTROLLER_BUTTON_Y:
+                    return "Y Button";
+                case SDL.SDL_GameControllerButton.SDL_CONTROLLER_BUTTON_LEFTSHOULDER:
+                    return "Left Shoulder";
+                case SDL.SDL_GameControllerButton.SDL_CONTROLLER_BUTTON_RIGHTSHOULDER:
+                    return "Right Shoulder";
+                case SDL.SDL_GameControllerButton.SDL_CONTROLLER_BUTTON_BACK:
+                    return "Back Button";
+                case SDL.SDL_GameControllerButton.SDL_CONTROLLER_BUTTON_START:
+                    return "Start Button";
+                case SDL.SDL_GameControllerButton.SDL_CONTROLLER_BUTTON_GUIDE:
+                    return "Guide Button";
+                default:
+                    return "Button " + ((int)i + 1);
+            }
+        }
+
         private void UpdateMappings()
         {
             if (!Connected) return;
-
-            is_game_controller = SDL.SDL_IsGameController(Index) == SDL.SDL_bool.SDL_TRUE;
 
             AxisNames = new List<string>();
             for (int i = 0; i < SDL.SDL_JoystickNumAxes(device_pointer); i++)
             {
                 string name = null;
                 if (is_game_controller)
-                    name = SDL.SDL_GameControllerGetStringForAxis((SDL.SDL_GameControllerAxis)i);
-                if (!is_game_controller || name == null)
+                    name = GetAxisNameFromEnum((SDL.SDL_GameControllerAxis)i);
+                else
                 {
-                    if (i == 0) name = "X axis";
-                    else if (i == 1) name = "Y axis";
+                    if (i == 0) name = "X Axis";
+                    else if (i == 1) name = "Y Axis";
                     else name = "Axis " + (i + 1);
                 }
                 AxisNames.Add(name);
@@ -193,15 +239,18 @@ namespace AdvancedControls.Input
 
             HatNames = new List<string>();
             for (int i = 0; i < SDL.SDL_JoystickNumHats(device_pointer); i++)
-                HatNames.Add("Hat " + (i + 1));
+                if (is_game_controller)
+                    HatNames.Add("DPAD");
+                else
+                    HatNames.Add("Hat " + (i + 1));
 
             ButtonNames = new List<string>();
             for (int i = 0; i < SDL.SDL_JoystickNumButtons(device_pointer); i++)
             {
                 string name = null;
                 if (is_game_controller)
-                    name = SDL.SDL_GameControllerGetStringForButton((SDL.SDL_GameControllerButton)i);
-                if (!is_game_controller || name == null)
+                    name = GetButtonNameFromEnum((SDL.SDL_GameControllerButton)i);
+                else
                     name = "Button " + (i + 1);
                 ButtonNames.Add(name);
             }

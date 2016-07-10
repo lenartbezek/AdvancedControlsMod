@@ -7,18 +7,19 @@ using AdvancedControls.Controls;
 
 namespace AdvancedControls
 {
-
     public class AdvancedControlsMod : Mod
     {
         public override string Name { get; } = "Advanced Controls Mod";
         public override string DisplayName { get; } = "Advanced Controls Mod";
         public override string Author { get; } = "Lench";
-        public override Version Version { get; } = new Version(1, 2, 3);
+        public override Version Version { get { return _version; } }
         
-        public override string VersionExtra { get; } = "";
+        public override string VersionExtra { get; } = "beta";
         public override string BesiegeVersion { get; } = "v0.3";
         public override bool CanBeUnloaded { get; } = true;
         public override bool Preload { get; } = false;
+
+        internal static readonly Version _version = new Version(1, 2, 5);
 
         public override void OnLoad()
         {
@@ -45,8 +46,9 @@ namespace AdvancedControls
 
         internal bool LoadedMachine = false;
 
-        internal ControlMapperWindow ControlMapper;
+        internal ControlMapper ControlMapper;
         internal EventManager EventManager;
+        internal Updater UpdateChecker;
 
         internal delegate void UpdateEventHandler();
         internal event UpdateEventHandler OnUpdate;
@@ -54,13 +56,13 @@ namespace AdvancedControls
         internal delegate void InitialiseEventHandler();
         internal event InitialiseEventHandler OnInitialisation;
 
-        private BlockMapper blockMapper;
         private Guid copy_source;
 
         private void Start()
         {
-            ControlMapper = gameObject.AddComponent<ControlMapperWindow>();
+            ControlMapper = gameObject.AddComponent<ControlMapper>();
             EventManager = gameObject.AddComponent<EventManager>();
+            UpdateChecker = gameObject.AddComponent<Updater>();
 
             if (PythonEnvironment.Loaded)
             {
@@ -84,24 +86,19 @@ namespace AdvancedControls
 
         private void Update()
         {
-            if (blockMapper == null)
+            if (BlockMapper.CurrentInstance != null)
             {
-                blockMapper = BlockMapper.CurrentInstance;
-            }
+                if (BlockMapper.CurrentInstance.Block != null && BlockMapper.CurrentInstance.Block != ControlMapper.Block)
+                    ControlMapper.ShowBlockControls(BlockMapper.CurrentInstance.Block);
 
-            if (blockMapper != null)
-            {
-                var hoveredBlock = blockMapper.Block.GetComponent<GenericBlock>();
-                if (hoveredBlock != null && hoveredBlock != ControlMapper.Block)
-                    ControlMapper.ShowBlockControls(hoveredBlock);
-
-                if (hoveredBlock != null && UnityEngine.Input.GetKey(UnityEngine.KeyCode.LeftControl) ||
-                                            UnityEngine.Input.GetKey(UnityEngine.KeyCode.LeftCommand))
+                if (BlockMapper.CurrentInstance.Block != null &&
+                    UnityEngine.Input.GetKey(UnityEngine.KeyCode.LeftControl) ||
+                    UnityEngine.Input.GetKey(UnityEngine.KeyCode.LeftCommand))
                 {
                     if (UnityEngine.Input.GetKey(UnityEngine.KeyCode.C))
-                        copy_source = hoveredBlock.Guid;
+                        copy_source = BlockMapper.CurrentInstance.Block.Guid;
                     if (copy_source != null && UnityEngine.Input.GetKey(UnityEngine.KeyCode.V))
-                        ControlManager.CopyBlockControls(copy_source, hoveredBlock.Guid);
+                        ControlManager.CopyBlockControls(copy_source, BlockMapper.CurrentInstance.Block.Guid);
                 }
             }
             else
@@ -113,7 +110,7 @@ namespace AdvancedControls
             if (LoadedMachine)
             {
                 LoadedMachine = false;
-                AssignAxesWindow.Open(true);
+                ControlOverview.Open(true);
             }
 
             OnUpdate?.Invoke();

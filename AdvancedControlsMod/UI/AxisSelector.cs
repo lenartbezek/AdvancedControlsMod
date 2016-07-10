@@ -7,7 +7,7 @@ namespace AdvancedControls.UI
 {
     internal delegate void SelectAxisDelegate(InputAxis axis);
 
-    internal class SelectAxisWindow : MonoBehaviour
+    internal class AxisSelector : MonoBehaviour
     {
         internal int windowID = spaar.ModLoader.Util.GetWindowID();
         internal Rect windowRect = new Rect(0, 0, 320, 42);
@@ -26,9 +26,9 @@ namespace AdvancedControls.UI
         private bool compact;
         private Vector2 scrollPosition = Vector2.zero;
 
-        internal static SelectAxisWindow Open(SelectAxisDelegate callback, bool compact = false)
+        internal static AxisSelector Open(SelectAxisDelegate callback, bool compact = false)
         {
-            var window = ACM.Instance.gameObject.AddComponent<SelectAxisWindow>();
+            var window = ACM.Instance.gameObject.AddComponent<AxisSelector>();
             window.Callback = callback;
             window.compact = compact;
             return window;

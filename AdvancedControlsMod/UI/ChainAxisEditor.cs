@@ -23,7 +23,7 @@ design more complex inputs.";
         internal string note;
         internal string error;
 
-        private SelectAxisWindow popup;
+        private AxisSelector popup;
 
         public void Open()
         {
@@ -168,7 +168,7 @@ design more complex inputs.";
                         }
                     });
                     if (popup == null)
-                        popup = SelectAxisWindow.Open(callback, true);
+                        popup = AxisSelector.Open(callback, true);
                     else
                         popup.Callback = callback;
                     popup.windowRect.x = windowRect.x + buttonRect.x - 8;
@@ -192,7 +192,7 @@ design more complex inputs.";
                         }
                     });
                     if (popup == null)
-                        popup = SelectAxisWindow.Open(callback, true);
+                        popup = AxisSelector.Open(callback, true);
                     else
                         popup.Callback = callback;
                     popup.windowRect.x = windowRect.x + buttonRect.x - 8;
@@ -217,7 +217,7 @@ design more complex inputs.";
                         }
                     });
                     if (popup == null)
-                        popup = SelectAxisWindow.Open(callback, true);
+                        popup = AxisSelector.Open(callback, true);
                     else
                         popup.Callback = callback;
                     popup.windowRect.x = windowRect.x + buttonRect.x - 8;
@@ -242,7 +242,7 @@ design more complex inputs.";
                         }
                     });
                     if (popup == null)
-                        popup = SelectAxisWindow.Open(callback, true);
+                        popup = AxisSelector.Open(callback, true);
                     else
                         popup.Callback = callback;
                     popup.windowRect.x = windowRect.x + buttonRect.x - 8;

@@ -16,10 +16,10 @@ namespace AdvancedControls.Controls
             return controls;
         }
 
-        public static List<Control> GetBlockControls(GenericBlock block)
+        public static List<Control> GetBlockControls(BlockBehaviour block)
         {
             if (Blocks.ContainsKey(block.Guid)) return Blocks[block.Guid];
-            var controls = CreateBlockControls(block.BlockID, block.Guid);
+            var controls = CreateBlockControls(block.GetBlockID(), block.Guid);
             Blocks.Add(block.Guid, controls);
             return controls;
         }

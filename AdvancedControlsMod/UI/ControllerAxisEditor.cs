@@ -119,8 +119,12 @@ namespace AdvancedControls.UI
             {
                 note = "<color=#FFFF00><b>Associated controller not connected.</b></color>\n" +
                         "The device this axis is bound to is not found.\n"+
-                        "Please connect it or create a new axis.\n"+
                         "\n<b>Device GUID</b>\n" + Axis.GUID;
+                if (GUILayout.Button("Use another controller"))
+                {
+                    controller_index = 0;
+                    Axis.GUID = Controller.DeviceList[controller_index];
+                }
             }
             else
             {

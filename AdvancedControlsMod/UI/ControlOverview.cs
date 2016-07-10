@@ -8,7 +8,7 @@ using UnityEngine;
 
 namespace AdvancedControls.UI
 {
-    internal class AssignAxesWindow : MonoBehaviour
+    internal class ControlOverview : MonoBehaviour
     {
         internal int windowID = spaar.ModLoader.Util.GetWindowID();
         internal Rect windowRect = new Rect();
@@ -18,16 +18,16 @@ namespace AdvancedControls.UI
 
         private Vector2 scrollPosition = Vector2.zero;
 
-        internal SelectAxisWindow popup;
+        internal AxisSelector popup;
 
-        internal static AssignAxesWindow Open(bool onload = false)
+        internal static ControlOverview Open(bool onload = false)
         {
             BlockHandlers.InitializeBuildingBlockIDs();
 
-            foreach (AssignAxesWindow x in ACM.Instance.gameObject.GetComponents<AssignAxesWindow>())
+            foreach (ControlOverview x in ACM.Instance.gameObject.GetComponents<ControlOverview>())
                 Destroy(x);
 
-            var instance = ACM.Instance.gameObject.AddComponent<AssignAxesWindow>();
+            var instance = ACM.Instance.gameObject.AddComponent<ControlOverview>();
             instance.enabled = false;
 
             instance.windowRect.x = Screen.width - 280 - 400;
@@ -95,7 +95,7 @@ namespace AdvancedControls.UI
             {
                 var callback = new SelectAxisDelegate((InputAxis new_axis) => { AssignAxis(axis, new_axis.Name); });
                 if (popup == null)
-                    popup = SelectAxisWindow.Open(callback, true);
+                    popup = AxisSelector.Open(callback, true);
                 else
                     popup.Callback = callback;
                 popup.windowRect.x = windowRect.x + buttonRect.x - 8;

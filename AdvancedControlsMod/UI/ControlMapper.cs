@@ -7,19 +7,20 @@ using System.Text.RegularExpressions;
 
 namespace AdvancedControls.UI
 {
-    internal class ControlMapperWindow : MonoBehaviour
+    internal class ControlMapper : SingleInstance<ControlMapper>
     {
         internal bool Visible { get; set; } = false;
+        public override string Name { get { return "ACM: Control Mapper"; } }
 
         internal int windowID = spaar.ModLoader.Util.GetWindowID();
         internal Rect windowRect = new Rect(680, 115, 320, 50);
 
-        internal GenericBlock Block;
+        internal BlockBehaviour Block;
         internal List<Control> controls;
 
-        internal SelectAxisWindow popup;
+        internal AxisSelector popup;
 
-        internal void ShowBlockControls(GenericBlock b)
+        internal void ShowBlockControls(BlockBehaviour b)
         {
             Block = b;
             controls = ControlManager.GetBlockControls(Block);
@@ -67,7 +68,7 @@ namespace AdvancedControls.UI
             if (GUI.Button(new Rect(windowRect.width - 68, 8, 60, 24),
                 "<size=9><b>OVERVIEW</b></size>", Elements.Buttons.Default))
             {
-                AssignAxesWindow.Open();
+                ControlOverview.Open();
             }
 
             // Drag window
@@ -89,7 +90,7 @@ namespace AdvancedControls.UI
                 {
                     var callback = new SelectAxisDelegate((InputAxis axis) => { c.Axis = axis.Name; c.Enabled = true; });
                     if (popup == null)
-                        popup = SelectAxisWindow.Open(callback, true);
+                        popup = AxisSelector.Open(callback, true);
                     else
                         popup.Callback = callback;
                     popup.windowRect.x = windowRect.x + buttonRect.x - 8;
@@ -103,7 +104,7 @@ namespace AdvancedControls.UI
                 {
                     var callback = new SelectAxisDelegate((InputAxis axis) => { c.Axis = axis.Name; c.Enabled = true; });
                     if (popup == null)
-                        popup = SelectAxisWindow.Open(callback, true);
+                        popup = AxisSelector.Open(callback, true);
                     else
                         popup.Callback = callback;
                     popup.windowRect.x = windowRect.x + buttonRect.x - 8;

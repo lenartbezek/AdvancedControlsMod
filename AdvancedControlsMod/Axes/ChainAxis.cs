@@ -167,12 +167,9 @@ namespace AdvancedControls.Axes
 
         internal override void Load()
         {
-            if (spaar.ModLoader.Configuration.DoesKeyExist("axis-" + Name + "-method"))
-                Method = (ChainMethod)Enum.Parse(typeof(ChainMethod), spaar.ModLoader.Configuration.GetString("axis-" + Name + "-method", "Sum"));
-            if (spaar.ModLoader.Configuration.DoesKeyExist("axis-" + Name + "-subaxis1"))
-                SubAxis1 = spaar.ModLoader.Configuration.GetString("axis-" + Name + "-subaxis1", null);
-            if (spaar.ModLoader.Configuration.DoesKeyExist("axis-" + Name + "-subaxis2"))
-                SubAxis2 = spaar.ModLoader.Configuration.GetString("axis-" + Name + "-subaxis2", null);
+            Method = (ChainMethod)Enum.Parse(typeof(ChainMethod), spaar.ModLoader.Configuration.GetString("axis-" + Name + "-method", "Sum"));
+            SubAxis1 = spaar.ModLoader.Configuration.GetString("axis-" + Name + "-subaxis1", null);
+            SubAxis2 = spaar.ModLoader.Configuration.GetString("axis-" + Name + "-subaxis2", null);
         }
 
         internal override void Save()
@@ -181,8 +178,12 @@ namespace AdvancedControls.Axes
             spaar.ModLoader.Configuration.SetString("axis-" + Name + "-method", Method.ToString());
             if (SubAxis1 != null)
                 spaar.ModLoader.Configuration.SetString("axis-" + Name + "-subaxis1", SubAxis1);
+            else
+                spaar.ModLoader.Configuration.RemoveKey("axis-" + Name + "-subaxis1");
             if (SubAxis2 != null)
                 spaar.ModLoader.Configuration.SetString("axis-" + Name + "-subaxis2", SubAxis2);
+            else
+                spaar.ModLoader.Configuration.RemoveKey("axis-" + Name + "-subaxis2");
         }
 
         internal override void Delete()

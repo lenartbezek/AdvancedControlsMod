@@ -1,8 +1,9 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 namespace AdvancedControls.Input
 {
-    internal class EventManager : MonoBehaviour
+    internal class EventManager : SingleInstance<EventManager>
     {
         internal delegate void AxisMotionEventHandler(SDL.SDL_Event e);
         internal event AxisMotionEventHandler OnAxisMotion;
@@ -30,6 +31,8 @@ namespace AdvancedControls.Input
 
         public bool SDL_Initialized = false;
 
+        public override string Name { get { return "ACM: Event Manager"; } }
+
         private void Awake()
         {
             try
@@ -38,8 +41,10 @@ namespace AdvancedControls.Input
                 Controller.AssignMappings();
                 SDL_Initialized = true;
             }
-            catch
+            catch (Exception e)
             {
+                Debug.Log("Error while initializing SDL engine.");
+                Debug.LogException(e);
                 enabled = false;
             }
         }
