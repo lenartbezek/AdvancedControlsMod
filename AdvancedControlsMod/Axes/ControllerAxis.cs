@@ -74,12 +74,12 @@ namespace Lench.AdvancedControls.Axes
         }
 
         public override bool Connected { get { return controller != null && controller.Connected; } }
-        public override bool Saveable { get { return ACM.Instance.EventManager.SDL_Initialized && Controller.NumDevices > 0; } }
+        public override bool Saveable { get { return ACM.Instance.DeviceManager.SDL_Initialized && Controller.NumDevices > 0; } }
         public override string Status
         {
             get
             {
-                if (!ACM.Instance.EventManager.SDL_Initialized) return "NOT AVAILABLE";
+                if (!ACM.Instance.DeviceManager.SDL_Initialized) return "NOT AVAILABLE";
                 if (!Connected) return "DISCONNECTED";
                 return "OK";
             }
@@ -98,8 +98,8 @@ namespace Lench.AdvancedControls.Axes
             Smooth = false;
             editor = new UI.ControllerAxisEditor(this);
 
-            ACM.Instance.EventManager.OnDeviceAdded += (SDL.SDL_Event e) => this.controller = Controller.Get(guid);
-            ACM.Instance.EventManager.OnDeviceRemoved += (SDL.SDL_Event e) => this.controller = Controller.Get(guid);
+            ACM.Instance.DeviceManager.OnDeviceAdded += (SDL.SDL_Event e) => this.controller = Controller.Get(guid);
+            ACM.Instance.DeviceManager.OnDeviceRemoved += (SDL.SDL_Event e) => this.controller = Controller.Get(guid);
         }
 
         public override float InputValue

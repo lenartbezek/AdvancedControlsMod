@@ -32,7 +32,6 @@ namespace Lench.AdvancedControls.Input
         internal event DeviceRemappedEventHandler OnDeviceRemapped;
 
         public bool SDL_Initialized = false;
-        public bool AutoDBUpdate = true;
 
         public override string Name { get { return "ACM: Device Manager"; } }
 
@@ -41,8 +40,8 @@ namespace Lench.AdvancedControls.Input
             try
             {
                 SDL.SDL_Init(SDL.SDL_INIT_GAMECONTROLLER | SDL.SDL_INIT_JOYSTICK);
-                StartCoroutine(AssignMappings());
                 SDL_Initialized = true;
+                StartCoroutine(AssignMappings(false));
             }
             catch (Exception e)
             {
@@ -52,17 +51,19 @@ namespace Lench.AdvancedControls.Input
             }
         }
 
-        private IEnumerator AssignMappings()
+        internal IEnumerator AssignMappings(bool update, bool verbose = false)
         {
             string mappings = null;
 
-            if (AutoDBUpdate)
+            if (update)
             {
                 var www = new WWW("https://raw.githubusercontent.com/lench4991/AdvancedControlsMod/master/Resources/AdvancedControls/GameControllerMappings.txt");
                 yield return www;
 
                 if (www.isDone && string.IsNullOrEmpty(www.error))
                     mappings = www.text;
+                else
+                    if (verbose) Debug.Log("=> Unable to connect.");
             }
 
             var dir = Application.dataPath + @"\Mods\Resources\AdvancedControls\";
@@ -70,18 +71,33 @@ namespace Lench.AdvancedControls.Input
 
             if (File.Exists(dir + file))
             {
-                if (AutoDBUpdate && mappings != null)
-                    File.WriteAllText(dir + file, mappings);
+                var current_mappings = File.ReadAllText(dir + file);
+                if (update && mappings != null)
+                {
+                    if (mappings == current_mappings)
+                    {
+                        if (verbose) Debug.Log("=> Game Controller DB is up to date.");
+                    }
+                    else
+                    {
+                        File.WriteAllText(dir + file, mappings);
+                        if (verbose) Debug.Log("=> Game Controller DB update successfull.");
+                    }
+                        
+                }
                 else
-                    mappings = File.ReadAllText(dir + file);
+                {
+                    mappings = current_mappings;
+                }
             }
             else
             {
-                if (AutoDBUpdate && mappings != null)
+                if (update && mappings != null)
                 {
                     if (!Directory.Exists(dir))
                         Directory.CreateDirectory(dir);
                     File.WriteAllText(dir + file, mappings);
+                    if (verbose) Debug.Log("=> Game Controller DB downloaded.");
                 }
             }
 

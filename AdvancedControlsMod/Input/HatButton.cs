@@ -40,8 +40,8 @@ namespace Lench.AdvancedControls.Input
             else if ((down_state & SDL.SDL_HAT_RIGHT) > 0)
                 direction = "RIGHT";
 
-            ACM.Instance.EventManager.OnHatMotion += HandleEvent;
-            ACM.Instance.EventManager.OnDeviceAdded += UpdateDevice;
+            ACM.Instance.DeviceManager.OnHatMotion += HandleEvent;
+            ACM.Instance.DeviceManager.OnDeviceAdded += UpdateDevice;
         }
 
         public HatButton(string id)
@@ -66,8 +66,8 @@ namespace Lench.AdvancedControls.Input
             else if ((down_state & SDL.SDL_HAT_RIGHT) > 0)
                 direction = "RIGHT";
 
-            ACM.Instance.EventManager.OnHatMotion += HandleEvent;
-            ACM.Instance.EventManager.OnDeviceAdded += UpdateDevice;
+            ACM.Instance.DeviceManager.OnHatMotion += HandleEvent;
+            ACM.Instance.DeviceManager.OnDeviceAdded += UpdateDevice;
         }
 
         private void HandleEvent(SDL.SDL_Event e)

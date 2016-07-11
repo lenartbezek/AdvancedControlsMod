@@ -11,6 +11,10 @@ namespace Lench.AdvancedControls
         {
             try
             {
+                ACM.Instance.ModEnabled = spaar.ModLoader.Configuration.GetBool("acm-enabled", true);
+                ACM.Instance.ModUpdaterEnabled = spaar.ModLoader.Configuration.GetBool("mod-updater-enabled", true);
+                ACM.Instance.DBUpdaterEnabled = spaar.ModLoader.Configuration.GetBool("db-updater-enabled", true);
+
                 int count = spaar.ModLoader.Configuration.GetInt("number-of-axes", 0);
                 for (int i = 0; i < count; i++)
                 {
@@ -49,6 +53,10 @@ namespace Lench.AdvancedControls
             string log = "";
             try
             {
+                spaar.ModLoader.Configuration.SetBool("acm-enabled", ACM.Instance.ModEnabled);
+                spaar.ModLoader.Configuration.SetBool("mod-updater-enabled", ACM.Instance.ModUpdaterEnabled);
+                spaar.ModLoader.Configuration.SetBool("db-updater-enabled", ACM.Instance.DBUpdaterEnabled);
+
                 int count = spaar.ModLoader.Configuration.GetInt("number-of-axes", 0);
                 log += "Attempting to clear " + count + " existing axes.\n";
                 for (int i = 0; i < count; i++)

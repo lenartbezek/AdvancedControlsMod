@@ -24,8 +24,8 @@ namespace Lench.AdvancedControls.UI
             Axis = axis as ControllerAxis;
 
             FindIndex();
-            ACM.Instance.EventManager.OnDeviceAdded += (SDL.SDL_Event e) => FindIndex();
-            ACM.Instance.EventManager.OnDeviceRemoved += (SDL.SDL_Event e) => FindIndex();
+            ACM.Instance.DeviceManager.OnDeviceAdded += (SDL.SDL_Event e) => FindIndex();
+            ACM.Instance.DeviceManager.OnDeviceRemoved += (SDL.SDL_Event e) => FindIndex();
         }
 
         private ControllerAxis Axis;
@@ -100,7 +100,7 @@ namespace Lench.AdvancedControls.UI
 
             var controller = Controller.Get(Axis.GUID);
 
-            if (!ACM.Instance.EventManager.SDL_Initialized)
+            if (!ACM.Instance.DeviceManager.SDL_Initialized)
             {
                 error = "<color=#FF0000><b>SDL2 library not found.</b></color>\n" +
                         "Make sure SDL2 library is properly installed.\n" +

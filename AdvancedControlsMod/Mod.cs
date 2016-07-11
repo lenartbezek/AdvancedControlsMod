@@ -51,10 +51,14 @@ namespace Lench.AdvancedControls
     {
         public override string Name { get { return "Advanced Controls"; } }
 
+        public bool ModEnabled = true;
+        public bool DBUpdaterEnabled = false;
+        public bool ModUpdaterEnabled = false;
+
         internal bool LoadedMachine = false;
 
         internal ControlMapper ControlMapper;
-        internal DeviceManager EventManager;
+        internal DeviceManager DeviceManager;
 
         internal delegate void UpdateEventHandler();
         internal event UpdateEventHandler OnUpdate;
@@ -67,7 +71,7 @@ namespace Lench.AdvancedControls
         private void Start()
         {
             ControlMapper = gameObject.AddComponent<ControlMapper>();
-            EventManager = gameObject.AddComponent<DeviceManager>();
+            DeviceManager = gameObject.AddComponent<DeviceManager>();
 
             if (PythonEnvironment.Loaded)
             {
@@ -78,17 +82,15 @@ namespace Lench.AdvancedControls
             }
 
             Configuration.Load();
-            
-            var updater = gameObject.AddComponent<Updater>();
-            updater.Check(
-                "Advanced Controls Mod",
-                "https://api.github.com/repos/lench4991/AdvancedControlsMod/releases",
-                Assembly.GetExecutingAssembly().GetName().Version,
-                new List<Updater.Link>()
-                    {
-                            new Updater.Link() { DisplayName = "Spiderling forum page", URL = "http://forum.spiderlinggames.co.uk/index.php?threads/3150/" },
-                            new Updater.Link() { DisplayName = "GitHub release page", URL = "https://github.com/lench4991/AdvancedControlsMod/releases/latest" }
-                    });
+
+            if (ModUpdaterEnabled)
+                CheckForModUpdate();
+
+            if (DBUpdaterEnabled)
+                CheckForDBUpdate();
+
+            Commands.RegisterCommand("acm", ConfigurationCommand, "Enter 'acm' for all available commands.");
+            SettingsMenu.RegisterSettingsButton("ACM", EnableToggle, ModEnabled, 12);
         }
 
         private void OnDestroy()
@@ -96,12 +98,14 @@ namespace Lench.AdvancedControls
             OnUpdate = null;
             OnInitialisation = null;
             Destroy(ControlMapper);
-            Destroy(EventManager);
+            Destroy(DeviceManager);
             Destroy(UnityEngine.GameObject.Find("Advanced Controls").transform.gameObject);
         }
 
         private void Update()
         {
+            if (!ModEnabled) return;
+
             if (BlockMapper.CurrentInstance != null)
             {
                 if (BlockMapper.CurrentInstance.Block != null && BlockMapper.CurrentInstance.Block != ControlMapper.Block)
@@ -134,7 +138,99 @@ namespace Lench.AdvancedControls
 
         internal void Initialise()
         {
+            if (!ModEnabled) return;
             OnInitialisation?.Invoke();
+        }
+
+        private void EnableToggle(bool active)
+        {
+            ModEnabled = active;
+        }
+
+        private string ConfigurationCommand(string[] args, IDictionary<string, string> namedArgs)
+        {
+            if (args.Length > 0)
+            {
+                switch (args[0].ToLower())
+                {
+                    case "modupdate":
+                        if (args.Length > 1)
+                        {
+                            switch (args[1].ToLower())
+                            {
+                                case "check":
+                                    CheckForModUpdate(true);
+                                    return "Checking for mod updates ...";
+                                case "enable":
+                                    ModUpdaterEnabled = true;
+                                    return "Mod update checker enabled.";
+                                case "disable":
+                                    ModUpdaterEnabled = false;
+                                    return "Mod update checker disabled.";
+                                default:
+                                    return "Invalid argument [check/enable/disable]. Enter 'acm' for all available commands.";
+                            }
+                        }
+                        else
+                        {
+                            return "Missing argument [check/enable/disable]. Enter 'acm' for all available commands.";
+                        }
+                    case "dbupdate":
+                        if (args.Length > 1)
+                        {
+                            switch (args[1].ToLower())
+                            {
+                                case "check":
+                                    CheckForDBUpdate(true);
+                                    return "Checking for controller DB updates ...";
+                                case "enable":
+                                    DBUpdaterEnabled = true;
+                                    return "Controller DB update checker enabled.";
+                                case "disable":
+                                    DBUpdaterEnabled = false;
+                                    return "Controller DB update checker disabled.";
+                                default:
+                                    return "Invalid argument [check/enable/disable]. Enter 'acm' for all available commands.";
+                            }
+                        }
+                        else
+                        {
+                            return "Missing argument [check/enable/disable]. Enter 'acm' for all available commands.";
+                        }
+                    default:
+                        return "Invalid command. Enter 'acm' for all available commands.";
+                }
+            }
+            else
+            {
+                return "Available commands:\n" +
+                    "  acm modupdate check  \t Checks for mod update.\n" +
+                    "  acm modupdate enable \t Enables update checker.\n" +
+                    "  acm modupdate disable\t Disables update checker.\n" +
+                    "  acm dbupdate check   \t Checks for controller database update.\n" +
+                    "  acm dbupdate enable  \t Enables automatic controller database updates.\n" +
+                    "  acm dbupdate disable \t Disables automatic controller database updates.\n";
+            }
+        }
+
+        private void CheckForModUpdate(bool verbose = false)
+        {
+            var updater = gameObject.AddComponent<Updater>();
+            updater.Check(
+                "Advanced Controls Mod",
+                "https://api.github.com/repos/lench4991/AdvancedControlsMod/releases",
+                Assembly.GetExecutingAssembly().GetName().Version,
+                new List<Updater.Link>()
+                    {
+                            new Updater.Link() { DisplayName = "Spiderling forum page", URL = "http://forum.spiderlinggames.co.uk/index.php?threads/3150/" },
+                            new Updater.Link() { DisplayName = "GitHub release page", URL = "https://github.com/lench4991/AdvancedControlsMod/releases/latest" }
+                    },
+                verbose);
+        }
+
+        private void CheckForDBUpdate(bool verbose = false)
+        {
+            StartCoroutine(DeviceManager.AssignMappings(true, verbose));
         }
     }
 }
