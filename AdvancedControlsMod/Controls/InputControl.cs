@@ -1,8 +1,8 @@
 ﻿using System;
-using LenchScripter.Blocks;
+using Lench.Scripter.Blocks;
 using UnityEngine;
 
-namespace AdvancedControls.Controls
+namespace Lench.AdvancedControls.Controls
 {
     public class InputControl : Control
     {

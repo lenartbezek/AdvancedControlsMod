@@ -1,8 +1,8 @@
 ﻿using System;
 using UnityEngine;
-using LenchScripter.Blocks;
+using Lench.Scripter.Blocks;
 
-namespace AdvancedControls.Controls
+namespace Lench.AdvancedControls.Controls
 {
 
     public class PositionControl : Control

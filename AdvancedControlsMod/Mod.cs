@@ -1,25 +1,24 @@
 ﻿using System;
+using System.Reflection;
 using spaar.ModLoader;
-using LenchScripter;
-using AdvancedControls.UI;
-using AdvancedControls.Input;
-using AdvancedControls.Controls;
+using Lench.Scripter;
+using Lench.AdvancedControls.UI;
+using Lench.AdvancedControls.Input;
+using Lench.AdvancedControls.Controls;
 
-namespace AdvancedControls
+namespace Lench.AdvancedControls
 {
     public class AdvancedControlsMod : Mod
     {
-        public override string Name { get; } = "Advanced Controls Mod";
+        public override string Name { get; } = "AdvancedControlsMod";
         public override string DisplayName { get; } = "Advanced Controls Mod";
         public override string Author { get; } = "Lench";
-        public override Version Version { get { return _version; } }
+        public override Version Version { get { return Assembly.GetExecutingAssembly().GetName().Version; } }
         
-        public override string VersionExtra { get; } = "beta";
+        public override string VersionExtra { get; } = "";
         public override string BesiegeVersion { get; } = "v0.3";
         public override bool CanBeUnloaded { get; } = true;
         public override bool Preload { get; } = false;
-
-        internal static readonly Version _version = new Version(1, 2, 5);
 
         public override void OnLoad()
         {
@@ -62,7 +61,7 @@ namespace AdvancedControls
         {
             ControlMapper = gameObject.AddComponent<ControlMapper>();
             EventManager = gameObject.AddComponent<EventManager>();
-            UpdateChecker = gameObject.AddComponent<Updater>();
+            UpdateChecker = gameObject.AddComponent<ACMUpdater>();
 
             if (PythonEnvironment.Loaded)
             {

@@ -1,4 +1,4 @@
-﻿namespace AdvancedControls.Input
+﻿namespace Lench.AdvancedControls.Input
 {
     public interface Button
     {

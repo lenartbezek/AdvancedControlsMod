@@ -2,7 +2,7 @@
 using spaar.ModLoader.UI;
 using System.Text.RegularExpressions;
 
-namespace AdvancedControls.UI
+namespace Lench.AdvancedControls.UI
 {
     internal static class Util
     {

@@ -1,9 +1,9 @@
 ﻿using System;
 using UnityEngine;
-using LenchScripter;
+using Lench.Scripter;
 using spaar.ModLoader;
 
-namespace AdvancedControls.Axes
+namespace Lench.AdvancedControls.Axes
 {
     public class CustomAxis : InputAxis
     {

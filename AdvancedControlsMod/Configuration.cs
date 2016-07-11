@@ -1,9 +1,9 @@
-﻿using AdvancedControls.Axes;
+﻿using Lench.AdvancedControls.Axes;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace AdvancedControls
+namespace Lench.AdvancedControls
 {
     internal static class Configuration
     {

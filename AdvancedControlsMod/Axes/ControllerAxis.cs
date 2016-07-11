@@ -1,8 +1,8 @@
-﻿using AdvancedControls.Input;
+﻿using Lench.AdvancedControls.Input;
 using System;
 using UnityEngine;
 
-namespace AdvancedControls.Axes
+namespace Lench.AdvancedControls.Axes
 {
     public class ControllerAxis : InputAxis
     {

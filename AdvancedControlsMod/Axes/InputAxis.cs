@@ -1,4 +1,4 @@
-﻿namespace AdvancedControls.Axes
+﻿namespace Lench.AdvancedControls.Axes
 {
     public enum AxisType
     {

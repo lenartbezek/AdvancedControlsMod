@@ -1,11 +1,11 @@
 ﻿using System.Collections.Generic;
+using System.Text.RegularExpressions;
 using UnityEngine;
 using spaar.ModLoader.UI;
-using AdvancedControls.Controls;
-using AdvancedControls.Axes;
-using System.Text.RegularExpressions;
+using Lench.AdvancedControls.Controls;
+using Lench.AdvancedControls.Axes;
 
-namespace AdvancedControls.UI
+namespace Lench.AdvancedControls.UI
 {
     internal class ControlMapper : SingleInstance<ControlMapper>
     {

@@ -31,7 +31,7 @@ using System;
 using System.Runtime.InteropServices;
 #endregion
 
-namespace AdvancedControls.Input
+namespace Lench.AdvancedControls.Input
 {
     /// <summary>
     /// Entry point for all SDL-related (non-extension) types and methods

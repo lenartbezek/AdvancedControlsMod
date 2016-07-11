@@ -1,9 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using AdvancedControls.Controls;
+using Lench.AdvancedControls.Controls;
 using UnityEngine;
+using System.Reflection;
 
-namespace AdvancedControls
+namespace Lench.AdvancedControls
 {
     internal static class MachineData
     {
@@ -66,13 +67,13 @@ namespace AdvancedControls
 
                 if (axes.Count != 0)
                 {
-                    machineInfo.MachineData.Write("ac-version", "v1.2.4");
+                    machineInfo.MachineData.Write("ac-version", Assembly.GetExecutingAssembly().GetName().Version);
                     machineInfo.MachineData.Write("ac-axislist", axes.ToArray());
                 }
             }
             catch (Exception e)
             {
-                Debug.Log("[ACM]: Error saving machine's controls:");
+                Debug.Log("[ACM]: Error saving machine's controls.\nView /Mods/Debug/ACM_Log.txt for more info.");
                 Debug.LogException(e);
             }
         }

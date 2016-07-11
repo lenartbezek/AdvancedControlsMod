@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace AdvancedControls.Input
+namespace Lench.AdvancedControls.Input
 {
     /// <summary>
     /// Translates a joystick hat position into a button.

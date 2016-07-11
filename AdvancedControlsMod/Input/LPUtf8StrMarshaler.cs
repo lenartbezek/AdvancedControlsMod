@@ -28,7 +28,7 @@ using System;
 using System.Text;
 using System.Runtime.InteropServices;
 
-namespace AdvancedControls.Input
+namespace Lench.AdvancedControls.Input
 {
 	internal unsafe class LPUtf8StrMarshaler : ICustomMarshaler
 	{

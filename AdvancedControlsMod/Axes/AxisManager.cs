@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
-using AdvancedControls.Controls;
+using Lench.AdvancedControls.Controls;
 
-namespace AdvancedControls.Axes
+namespace Lench.AdvancedControls.Axes
 {
     public static class AxisManager
     {

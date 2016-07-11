@@ -1,7 +1,7 @@
 ﻿using System;
 using UnityEngine;
 
-namespace AdvancedControls.Input
+namespace Lench.AdvancedControls.Input
 {
     public class Key : Button
     {

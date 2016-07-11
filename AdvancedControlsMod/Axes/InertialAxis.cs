@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace AdvancedControls.Axes
+namespace Lench.AdvancedControls.Axes
 {
     public class InertialAxis : StandardAxis
     {

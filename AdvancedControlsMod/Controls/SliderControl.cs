@@ -1,7 +1,7 @@
 ﻿using System;
 using UnityEngine;
 
-namespace AdvancedControls.Controls
+namespace Lench.AdvancedControls.Controls
 {
     public class SliderControl : Control
     {

@@ -1,8 +1,8 @@
 ﻿using UnityEngine;
 using spaar.ModLoader.UI;
-using AdvancedControls.Axes;
+using Lench.AdvancedControls.Axes;
 
-namespace AdvancedControls.UI
+namespace Lench.AdvancedControls.UI
 {
     internal interface AxisEditor
     {

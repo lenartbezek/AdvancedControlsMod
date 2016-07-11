@@ -1,9 +1,9 @@
 ﻿using UnityEngine;
-using LenchScripter;
-using AdvancedControls.Axes;
+using Lench.Scripter;
+using Lench.AdvancedControls.Axes;
 using spaar.ModLoader.UI;
 
-namespace AdvancedControls.UI
+namespace Lench.AdvancedControls.UI
 {
     internal class CustomAxisEditor : AxisEditor
     {

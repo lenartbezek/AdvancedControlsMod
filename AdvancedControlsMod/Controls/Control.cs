@@ -1,11 +1,11 @@
 ﻿using System;
 using UnityEngine;
-using LenchScripter;
-using LenchScripter.Blocks;
-using AdvancedControls.Axes;
+using Lench.Scripter;
+using Lench.Scripter.Blocks;
+using Lench.AdvancedControls.Axes;
 using spaar.ModLoader;
 
-namespace AdvancedControls.Controls
+namespace Lench.AdvancedControls.Controls
 {
     public abstract class Control
     {

@@ -1,9 +1,9 @@
-﻿using AdvancedControls.Axes;
+﻿using Lench.AdvancedControls.Axes;
 using spaar.ModLoader.UI;
 using System;
 using UnityEngine;
 
-namespace AdvancedControls.UI
+namespace Lench.AdvancedControls.UI
 {
     internal class ChainAxisEditor : AxisEditor
     {

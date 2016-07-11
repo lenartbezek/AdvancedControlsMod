@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace AdvancedControls.Input
+namespace Lench.AdvancedControls.Input
 {
     public class Controller : IDisposable, IEquatable<Controller>
     {
@@ -223,7 +223,10 @@ namespace AdvancedControls.Input
             {
                 string name = null;
                 if (is_game_controller)
-                    name = GetAxisNameFromEnum((SDL.SDL_GameControllerAxis)i);
+                {
+                    var bind = SDL.SDL_GameControllerGetBindForAxis(game_controller, (SDL.SDL_GameControllerAxis)i);
+                    name = GetAxisNameFromEnum((SDL.SDL_GameControllerAxis)bind.axis);
+                } 
                 else
                 {
                     if (i == 0) name = "X Axis";
@@ -249,9 +252,14 @@ namespace AdvancedControls.Input
             {
                 string name = null;
                 if (is_game_controller)
-                    name = GetButtonNameFromEnum((SDL.SDL_GameControllerButton)i);
+                {
+                    var bind = SDL.SDL_GameControllerGetBindForButton(game_controller, (SDL.SDL_GameControllerButton)i);
+                    name = GetButtonNameFromEnum((SDL.SDL_GameControllerButton)bind.button);
+                }
                 else
+                {
                     name = "Button " + (i + 1);
+                }
                 ButtonNames.Add(name);
             }
         }

@@ -1,12 +1,12 @@
-﻿using AdvancedControls.Axes;
-using AdvancedControls.Controls;
-using LenchScripter;
+﻿using Lench.AdvancedControls.Axes;
+using Lench.AdvancedControls.Controls;
+using Lench.Scripter;
 using spaar.ModLoader.UI;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace AdvancedControls.UI
+namespace Lench.AdvancedControls.UI
 {
     internal class ControlOverview : MonoBehaviour
     {

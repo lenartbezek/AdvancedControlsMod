@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using AdvancedControls.Axes;
+using Lench.AdvancedControls.Axes;
 
-namespace AdvancedControls.Controls
+namespace Lench.AdvancedControls.Controls
 {
     public static class ControlManager
     {

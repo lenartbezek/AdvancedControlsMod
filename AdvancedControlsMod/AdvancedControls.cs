@@ -1,9 +1,9 @@
-﻿using AdvancedControls.Axes;
-using AdvancedControls.Input;
+﻿using Lench.AdvancedControls.Axes;
+using Lench.AdvancedControls.Input;
 using System;
 using System.Collections.Generic;
 
-namespace AdvancedControls
+namespace Lench.AdvancedControls
 {
     public static class AdvancedControls
     {

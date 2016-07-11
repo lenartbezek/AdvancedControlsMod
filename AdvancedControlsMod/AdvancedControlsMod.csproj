@@ -7,7 +7,7 @@
     <ProjectGuid>{6A16F1F7-31C2-4CAE-9FD3-0C56BBD29757}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>AdvancedControls</RootNamespace>
+    <RootNamespace>Lench.AdvancedControls</RootNamespace>
     <AssemblyName>AdvancedControlsMod</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
@@ -80,7 +80,7 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\Steam\steamapps\common\Besiege\Besiege_Data\Managed\Assembly-UnityScript-firstpass.dll</HintPath>
     </Reference>
-    <Reference Include="LenchScripterMod, Version=2.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="LenchScripterMod, Version=2.0.1.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\Steam\steamapps\common\Besiege\Besiege_Data\Mods\LenchScripterMod.dll</HintPath>
     </Reference>
@@ -137,7 +137,7 @@
     <Compile Include="UI\AxisSelector.cs" />
     <Compile Include="UI\TwoKeyAxisEditor.cs" />
     <Compile Include="UI\Util.cs" />
-    <Compile Include="Updater.cs" />
+    <Compile Include="UI\Updater.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

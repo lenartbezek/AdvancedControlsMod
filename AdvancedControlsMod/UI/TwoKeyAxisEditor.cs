@@ -1,11 +1,11 @@
 ﻿using System;
 using UnityEngine;
 using spaar.ModLoader.UI;
-using AdvancedControls.Axes;
-using AdvancedControls.Input;
+using Lench.AdvancedControls.Axes;
+using Lench.AdvancedControls.Input;
 using System.Collections.Generic;
 
-namespace AdvancedControls.UI
+namespace Lench.AdvancedControls.UI
 {
     internal class TwoKeyAxisEditor : AxisEditor
     {
