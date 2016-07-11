@@ -5,6 +5,7 @@ using Lench.Scripter;
 using Lench.AdvancedControls.UI;
 using Lench.AdvancedControls.Input;
 using Lench.AdvancedControls.Controls;
+using System.Collections.Generic;
 
 namespace Lench.AdvancedControls
 {
@@ -13,7 +14,14 @@ namespace Lench.AdvancedControls
         public override string Name { get; } = "AdvancedControlsMod";
         public override string DisplayName { get; } = "Advanced Controls Mod";
         public override string Author { get; } = "Lench";
-        public override Version Version { get { return Assembly.GetExecutingAssembly().GetName().Version; } }
+        public override Version Version
+        {
+            get
+            {
+                var v =  Assembly.GetExecutingAssembly().GetName().Version;
+                return new Version(v.Major, v.Minor, v.Build);
+            }
+        }
         
         public override string VersionExtra { get; } = "";
         public override string BesiegeVersion { get; } = "v0.3";
@@ -46,8 +54,7 @@ namespace Lench.AdvancedControls
         internal bool LoadedMachine = false;
 
         internal ControlMapper ControlMapper;
-        internal EventManager EventManager;
-        internal Updater UpdateChecker;
+        internal DeviceManager EventManager;
 
         internal delegate void UpdateEventHandler();
         internal event UpdateEventHandler OnUpdate;
@@ -60,8 +67,7 @@ namespace Lench.AdvancedControls
         private void Start()
         {
             ControlMapper = gameObject.AddComponent<ControlMapper>();
-            EventManager = gameObject.AddComponent<EventManager>();
-            UpdateChecker = gameObject.AddComponent<ACMUpdater>();
+            EventManager = gameObject.AddComponent<DeviceManager>();
 
             if (PythonEnvironment.Loaded)
             {
@@ -72,6 +78,17 @@ namespace Lench.AdvancedControls
             }
 
             Configuration.Load();
+            
+            var updater = gameObject.AddComponent<Updater>();
+            updater.Check(
+                "Advanced Controls Mod",
+                "https://api.github.com/repos/lench4991/AdvancedControlsMod/releases",
+                Assembly.GetExecutingAssembly().GetName().Version,
+                new List<Updater.Link>()
+                    {
+                            new Updater.Link() { DisplayName = "Spiderling forum page", URL = "http://forum.spiderlinggames.co.uk/index.php?threads/3150/" },
+                            new Updater.Link() { DisplayName = "GitHub release page", URL = "https://github.com/lench4991/AdvancedControlsMod/releases/latest" }
+                    });
         }
 
         private void OnDestroy()

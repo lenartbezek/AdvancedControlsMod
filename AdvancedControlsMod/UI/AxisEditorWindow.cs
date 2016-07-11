@@ -141,19 +141,12 @@ namespace Lench.AdvancedControls.UI
                     GUILayout.Label(Axis.GetEditor().GetNote(), new GUIStyle(Elements.Labels.Default) { margin = new RectOffset(8, 8, 12, 8) });
                 }
 
-                // Draw help message
-                if (ShowHelp && Axis.GetEditor().GetHelp() != null)
-                {
-                    if (GUILayout.Button(Axis.GetEditor().GetHelp(), new GUIStyle(Elements.Labels.Default) { margin = new RectOffset(8, 8, 12, 8) }))
-                        ShowHelp = false;
-                }
-
                 // Draw help button
                 if (Axis.GetEditor().GetHelp() != null)
                     if (GUI.Button(new Rect(windowRect.width - 76, 8, 30, 30),
                         "?", Elements.Buttons.Red))
                     {
-                        ShowHelp = !ShowHelp;
+                        Application.OpenURL("https://github.com/lench4991/AdvancedControlsMod/wiki");
                     }
             }
 

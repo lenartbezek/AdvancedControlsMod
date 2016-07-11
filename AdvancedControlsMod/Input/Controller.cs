@@ -39,20 +39,11 @@ namespace Lench.AdvancedControls.Input
 
         public static int NumDevices { get { return Devices.Count;}}
 
-        internal static void AddJoystick(int index)
+        internal static void AddDevice(int index)
         {
             RemoveDisconnected();
             if (index < NumDevices) return;
-            var controller = new Controller(NumDevices, false);
-            DeviceList.Add(controller.GUID);
-            Devices.Add(controller.GUID, controller);
-        }
-
-        internal static void AddController(int index)
-        {
-            RemoveDisconnected();
-            if (index < NumDevices) return;
-            var controller = new Controller(NumDevices, true);
+            var controller = new Controller(NumDevices);
             DeviceList.Add(controller.GUID);
             Devices.Add(controller.GUID, controller);
         }
@@ -92,12 +83,12 @@ namespace Lench.AdvancedControls.Input
             }
         }
 
-        private Controller(int index, bool is_game_controller)
+        private Controller(int index)
         {
             if (index > SDL.SDL_NumJoysticks())
                 throw new InvalidOperationException("Cannot open controller " + index + " when only " + SDL.SDL_NumJoysticks()+" are connected.");
 
-            this.is_game_controller = is_game_controller;
+            is_game_controller = SDL.SDL_IsGameController(index) == SDL.SDL_bool.SDL_TRUE;
 
             if (is_game_controller)
             {
@@ -131,8 +122,6 @@ namespace Lench.AdvancedControls.Input
                 Buttons.Add(new JoystickButton(this, i));
             }
 
-            ACM.Instance.EventManager.OnAxisMotion += UpdateAxis;
-            ACM.Instance.EventManager.OnBallMotion += UpdateBall;
             ACM.Instance.EventManager.OnDeviceRemapped += UpdateMappings;
             ACM.Instance.OnUpdate += Update;
 
@@ -149,10 +138,18 @@ namespace Lench.AdvancedControls.Input
             var d = Mathf.Clamp(Time.deltaTime * 12, 0, 1);
             for (int i = 0; i < NumAxes; i++)
             {
-                axis_values_smooth[i] = axis_values_smooth[i] * (1 - d) + axis_values_raw[i] * d;
+                int axis = i;
+                if (IsGameController)
+                    axis = SDL.SDL_GameControllerGetBindForAxis(game_controller, (SDL.SDL_GameControllerAxis)i).axis;
+                axis_values_raw[axis] = SDL.SDL_JoystickGetAxis(device_pointer, axis) / 32767.0f;
+                axis_values_smooth[axis] = axis_values_smooth[axis] * (1 - d) + axis_values_raw[axis] * d;
             }
             for (int i = 0; i < NumBalls; i++)
             {
+                int x, y;
+                SDL.SDL_JoystickGetBall(device_pointer, i, out x, out y);
+                ball_values_raw[i, 0] = x / 32767.0f;
+                ball_values_raw[i, 1] = y / 32767.0f;
                 ball_values_smooth[i, 0] = ball_values_smooth[i, 0] * (1 - d) + ball_values_raw[i, 0] * d;
                 ball_values_smooth[i, 1] = ball_values_smooth[i, 1] * (1 - d) + ball_values_raw[i, 1] * d;
             }
@@ -264,59 +261,12 @@ namespace Lench.AdvancedControls.Input
             }
         }
 
-        private void UpdateAxis(SDL.SDL_Event e)
+        public float GetAxis(int index, bool smooth = false)
         {
-            if (!Connected) return;
-            if (is_game_controller)
-            {
-                if (e.cdevice.which == Index)
-                {
-                    axis_values_raw[e.caxis.axis] = e.caxis.axisValue / 32767.0f;
-                }
-            }
+            if (smooth)
+                return axis_values_smooth[index];
             else
-            {
-                if (e.jdevice.which == Index)
-                {
-                    axis_values_raw[e.jaxis.axis] = e.jaxis.axisValue / 32767.0f;
-                }
-            }
-        }
-
-        private void UpdateBall(SDL.SDL_Event e)
-        {
-            if (!Connected) return;
-            if (e.jdevice.which == Index)
-            {
-                ball_values_raw[e.jball.ball, 0] = e.jball.xrel / 32767.0f;
-            }
-        }
-
-        public float GetAxisSmooth(int index)
-        {
-            if (index > NumAxes)
-                throw new InvalidOperationException("Controller " + Name + " only has " + NumAxes + " axes.");
-            return axis_values_smooth[index];
-        }
-
-        public float GetAxis(int index)
-        {
-            if (index > NumAxes)
-                throw new InvalidOperationException("Controller " + Name + " only has " + NumAxes + " axes.");
-            return axis_values_raw[index];
-        }
-
-        internal static void AssignMappings()
-        {
-            try
-            {
-                var text = System.IO.File.ReadAllText(Application.dataPath + @"\Mods\Resources\AdvancedControls\GameControllerMappings.txt");
-                SDL.SDL_GameControllerAddMapping(text);
-            }
-            catch
-            {
-                // pass
-            }
+                return axis_values_raw[index];
         }
 
         public void Dispose()
@@ -326,8 +276,6 @@ namespace Lench.AdvancedControls.Input
             else
                 SDL.SDL_JoystickClose(device_pointer);
 
-            ACM.Instance.EventManager.OnAxisMotion -= UpdateAxis;
-            ACM.Instance.EventManager.OnBallMotion -= UpdateBall;
             ACM.Instance.EventManager.OnDeviceRemapped -= UpdateMappings;
             ACM.Instance.OnUpdate -= Update;
         }

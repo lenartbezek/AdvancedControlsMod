@@ -119,7 +119,7 @@
     <Compile Include="Controls\SliderControl.cs" />
     <Compile Include="Input\Button.cs" />
     <Compile Include="Input\Controller.cs" />
-    <Compile Include="Input\EventManager.cs" />
+    <Compile Include="Input\DeviceManager.cs" />
     <Compile Include="Input\HatButton.cs" />
     <Compile Include="Input\JoystickButton.cs" />
     <Compile Include="Input\Key.cs" />
@@ -137,7 +137,6 @@
     <Compile Include="UI\AxisSelector.cs" />
     <Compile Include="UI\TwoKeyAxisEditor.cs" />
     <Compile Include="UI\Util.cs" />
-    <Compile Include="UI\Updater.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

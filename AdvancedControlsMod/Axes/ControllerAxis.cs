@@ -108,10 +108,7 @@ namespace Lench.AdvancedControls.Axes
             {
                 if (controller == null)
                     return 0;
-                if (Smooth)
-                    return controller.GetAxisSmooth(Axis);
-                else
-                    return controller.GetAxis(Axis);
+                return controller.GetAxis(Axis, Smooth);
             }
         }
 

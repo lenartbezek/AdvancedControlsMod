@@ -1,9 +1,11 @@
 ﻿using System;
+using System.IO;
+using System.Collections;
 using UnityEngine;
 
 namespace Lench.AdvancedControls.Input
 {
-    internal class EventManager : SingleInstance<EventManager>
+    internal class DeviceManager : SingleInstance<DeviceManager>
     {
         internal delegate void AxisMotionEventHandler(SDL.SDL_Event e);
         internal event AxisMotionEventHandler OnAxisMotion;
@@ -30,15 +32,16 @@ namespace Lench.AdvancedControls.Input
         internal event DeviceRemappedEventHandler OnDeviceRemapped;
 
         public bool SDL_Initialized = false;
+        public bool AutoDBUpdate = true;
 
-        public override string Name { get { return "ACM: Event Manager"; } }
+        public override string Name { get { return "ACM: Device Manager"; } }
 
-        private void Awake()
+        private void Start()
         {
             try
             {
                 SDL.SDL_Init(SDL.SDL_INIT_GAMECONTROLLER | SDL.SDL_INIT_JOYSTICK);
-                Controller.AssignMappings();
+                StartCoroutine(AssignMappings());
                 SDL_Initialized = true;
             }
             catch (Exception e)
@@ -47,6 +50,43 @@ namespace Lench.AdvancedControls.Input
                 Debug.LogException(e);
                 enabled = false;
             }
+        }
+
+        private IEnumerator AssignMappings()
+        {
+            string mappings = null;
+
+            if (AutoDBUpdate)
+            {
+                var www = new WWW("https://raw.githubusercontent.com/lench4991/AdvancedControlsMod/master/Resources/AdvancedControls/GameControllerMappings.txt");
+                yield return www;
+
+                if (www.isDone && string.IsNullOrEmpty(www.error))
+                    mappings = www.text;
+            }
+
+            var dir = Application.dataPath + @"\Mods\Resources\AdvancedControls\";
+            var file = "GameControllerMappings.txt";
+
+            if (File.Exists(dir + file))
+            {
+                if (AutoDBUpdate && mappings != null)
+                    File.WriteAllText(dir + file, mappings);
+                else
+                    mappings = File.ReadAllText(dir + file);
+            }
+            else
+            {
+                if (AutoDBUpdate && mappings != null)
+                {
+                    if (!Directory.Exists(dir))
+                        Directory.CreateDirectory(dir);
+                    File.WriteAllText(dir + file, mappings);
+                }
+            }
+
+            if (mappings != null)
+                SDL.SDL_GameControllerAddMapping(mappings);
         }
 
         private void OnDestroy()
@@ -82,7 +122,7 @@ namespace Lench.AdvancedControls.Input
                         OnButton?.Invoke(e, false);
                         break;
                     case SDL.SDL_EventType.SDL_CONTROLLERDEVICEADDED:
-                        Controller.AddController(e.cdevice.which);
+                        Controller.AddDevice(e.cdevice.which);
                         OnDeviceAdded?.Invoke(e);
                         break;
                     case SDL.SDL_EventType.SDL_CONTROLLERDEVICEREMOVED:
@@ -108,7 +148,7 @@ namespace Lench.AdvancedControls.Input
                         OnButton?.Invoke(e, false);
                         break;
                     case SDL.SDL_EventType.SDL_JOYDEVICEADDED:
-                        Controller.AddJoystick(e.jdevice.which);
+                        Controller.AddDevice(e.jdevice.which);
                         OnDeviceAdded?.Invoke(e);
                         break;
                     case SDL.SDL_EventType.SDL_JOYDEVICEREMOVED:
