@@ -14,12 +14,6 @@ namespace Lench.AdvancedControls.UI
 
         private ChainAxis Axis;
 
-        internal string help =
-@"With chain axis you can link two other axes
-and combine them in a single linear axis.
-
-You can also link another chain axis and
-design more complex inputs.";
         internal string note;
         internal string error;
 
@@ -257,9 +251,9 @@ design more complex inputs.";
                 GameObject.Destroy(popup);
         }
 
-        public string GetHelp()
+        public string GetHelpURL()
         {
-            return help;
+            return "https://github.com/lench4991/AdvancedControlsMod/wiki/Chain-Axis";
         }
 
         public string GetNote()

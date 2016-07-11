@@ -37,7 +37,6 @@ namespace Lench.AdvancedControls.UI
 
         private int controller_index = -1;
 
-        internal string help;
         internal string note;
         internal string error;
 
@@ -288,9 +287,9 @@ namespace Lench.AdvancedControls.UI
             }
         }
 
-        public string GetHelp()
+        public string GetHelpURL()
         {
-            return help;
+            return "https://github.com/lench4991/AdvancedControlsMod/wiki/Controller-Axis";
         }
 
         public string GetNote()

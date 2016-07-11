@@ -57,7 +57,8 @@ namespace Lench.AdvancedControls.Input
                 return;
             if (controller.IsGameController)
             {
-                if (e.cbutton.button == index)
+                var button = SDL.SDL_GameControllerGetBindForButton(controller.game_controller, (SDL.SDL_GameControllerButton)index).button;
+                if (e.cbutton.button == button)
                 {
                     pressed = this.down != down && down;
                     released = this.down != down && !down;

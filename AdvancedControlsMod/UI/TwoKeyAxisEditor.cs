@@ -16,7 +16,6 @@ namespace Lench.AdvancedControls.UI
 
         private StandardAxis Axis;
 
-        internal string help;
         internal string error;
         internal string note;
 
@@ -147,9 +146,9 @@ namespace Lench.AdvancedControls.UI
                 note = null;
         }
 
-        public string GetHelp()
+        public string GetHelpURL()
         {
-            return help;
+            return "https://github.com/lench4991/AdvancedControlsMod/wiki/Key-Axes";
         }
 
         public string GetNote()

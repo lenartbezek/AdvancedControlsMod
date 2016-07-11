@@ -9,7 +9,7 @@ namespace Lench.AdvancedControls.UI
         void DrawAxis(Rect windowRect);
         void Open();
         void Close();
-        string GetHelp();
+        string GetHelpURL();
         string GetNote();
         string GetError();
     }
@@ -142,11 +142,11 @@ namespace Lench.AdvancedControls.UI
                 }
 
                 // Draw help button
-                if (Axis.GetEditor().GetHelp() != null)
+                if (Axis.GetEditor().GetHelpURL() != null)
                     if (GUI.Button(new Rect(windowRect.width - 76, 8, 30, 30),
                         "?", Elements.Buttons.Red))
                     {
-                        Application.OpenURL("https://github.com/lench4991/AdvancedControlsMod/wiki");
+                        Application.OpenURL(Axis.GetEditor().GetHelpURL());
                     }
             }
 

@@ -14,16 +14,6 @@ namespace Lench.AdvancedControls.UI
 
         private CustomAxis Axis;
 
-        internal string help =
-@"Program your own input axis with Python 2.7.
-Initialisation code is run once at the start.
-Update code is run on every frame.
-It's result is used as the axis value.
-
-Value should be in range [-1, 1].
-You can run axis code in global scope to 
-interact with other custom axes and 
-scripts in Lench Scripter Mod.";
         internal string note;
         internal string error;
 
@@ -130,9 +120,9 @@ scripts in Lench Scripter Mod.";
             }
         }
 
-        public string GetHelp()
+        public string GetHelpURL()
         {
-            return help;
+            return "https://github.com/lench4991/AdvancedControlsMod/wiki/Custom-Axis";
         }
 
         public string GetNote()

@@ -6,10 +6,8 @@ namespace Lench.AdvancedControls.Input
 {
     public class Controller : IDisposable, IEquatable<Controller>
     {
-        private IntPtr device_pointer;
-        private IntPtr game_controller;
-
-        private bool is_game_controller;
+        internal IntPtr device_pointer;
+        internal IntPtr game_controller;
 
         private float[] axis_values_raw;
         private float[] axis_values_smooth;
@@ -24,10 +22,10 @@ namespace Lench.AdvancedControls.Input
         public readonly List<Button> Buttons;
 
         public int Index { get { return SDL.SDL_JoystickInstanceID(device_pointer); } }
-        public string Name { get { return SDL.SDL_JoystickName(device_pointer); } }
+        public string Name { get { return IsGameController ? SDL.SDL_GameControllerName(game_controller) : SDL.SDL_JoystickName(device_pointer); } }
         public Guid GUID { get { return SDL.SDL_JoystickGetGUID(device_pointer); } }
         public bool Connected { get { return SDL.SDL_JoystickGetAttached(device_pointer) == SDL.SDL_bool.SDL_TRUE; } }
-        public bool IsGameController { get { return is_game_controller; } }
+        public bool IsGameController { get; private set; }
 
         public int NumAxes { get { return SDL.SDL_JoystickNumAxes(device_pointer); } }
         public int NumBalls { get { return SDL.SDL_JoystickNumBalls(device_pointer); } }
@@ -88,9 +86,9 @@ namespace Lench.AdvancedControls.Input
             if (index > SDL.SDL_NumJoysticks())
                 throw new InvalidOperationException("Cannot open controller " + index + " when only " + SDL.SDL_NumJoysticks()+" are connected.");
 
-            is_game_controller = SDL.SDL_IsGameController(index) == SDL.SDL_bool.SDL_TRUE;
+            IsGameController = SDL.SDL_IsGameController(index) == SDL.SDL_bool.SDL_TRUE;
 
-            if (is_game_controller)
+            if (IsGameController)
             {
                 game_controller = SDL.SDL_GameControllerOpen(index);
                 device_pointer = SDL.SDL_GameControllerGetJoystick(game_controller);
@@ -126,7 +124,7 @@ namespace Lench.AdvancedControls.Input
             ACM.Instance.OnUpdate += Update;
 
             // Debug
-            if (is_game_controller)
+            if (IsGameController)
                 Debug.Log("[ACM]: Game controller connected: " + Name);
             else
                 Debug.Log("[ACM]: Joystick connected: " + Name);
@@ -219,10 +217,9 @@ namespace Lench.AdvancedControls.Input
             for (int i = 0; i < SDL.SDL_JoystickNumAxes(device_pointer); i++)
             {
                 string name = null;
-                if (is_game_controller)
+                if (IsGameController)
                 {
-                    var bind = SDL.SDL_GameControllerGetBindForAxis(game_controller, (SDL.SDL_GameControllerAxis)i);
-                    name = GetAxisNameFromEnum((SDL.SDL_GameControllerAxis)bind.axis);
+                    name = GetAxisNameFromEnum((SDL.SDL_GameControllerAxis)i);
                 } 
                 else
                 {
@@ -239,7 +236,7 @@ namespace Lench.AdvancedControls.Input
 
             HatNames = new List<string>();
             for (int i = 0; i < SDL.SDL_JoystickNumHats(device_pointer); i++)
-                if (is_game_controller)
+                if (IsGameController)
                     HatNames.Add("DPAD");
                 else
                     HatNames.Add("Hat " + (i + 1));
@@ -248,10 +245,9 @@ namespace Lench.AdvancedControls.Input
             for (int i = 0; i < SDL.SDL_JoystickNumButtons(device_pointer); i++)
             {
                 string name = null;
-                if (is_game_controller)
+                if (IsGameController)
                 {
-                    var bind = SDL.SDL_GameControllerGetBindForButton(game_controller, (SDL.SDL_GameControllerButton)i);
-                    name = GetButtonNameFromEnum((SDL.SDL_GameControllerButton)bind.button);
+                    name = GetButtonNameFromEnum((SDL.SDL_GameControllerButton)i);
                 }
                 else
                 {
@@ -271,7 +267,7 @@ namespace Lench.AdvancedControls.Input
 
         public void Dispose()
         {
-            if (is_game_controller)
+            if (IsGameController)
                 SDL.SDL_GameControllerClose(game_controller);
             else
                 SDL.SDL_JoystickClose(device_pointer);
