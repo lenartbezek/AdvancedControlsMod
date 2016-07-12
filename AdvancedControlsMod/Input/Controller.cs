@@ -194,16 +194,20 @@ namespace Lench.AdvancedControls.Input
                     return "X Button";
                 case SDL.SDL_GameControllerButton.SDL_CONTROLLER_BUTTON_Y:
                     return "Y Button";
+                case SDL.SDL_GameControllerButton.SDL_CONTROLLER_BUTTON_BACK:
+                    return "Back Button";
+                case SDL.SDL_GameControllerButton.SDL_CONTROLLER_BUTTON_GUIDE:
+                    return "Guide Button";
+                case SDL.SDL_GameControllerButton.SDL_CONTROLLER_BUTTON_START:
+                    return "Start Button";
+                case SDL.SDL_GameControllerButton.SDL_CONTROLLER_BUTTON_LEFTSTICK:
+                    return "Left Stick";
+                case SDL.SDL_GameControllerButton.SDL_CONTROLLER_BUTTON_RIGHTSTICK:
+                    return "Right Stick";
                 case SDL.SDL_GameControllerButton.SDL_CONTROLLER_BUTTON_LEFTSHOULDER:
                     return "Left Shoulder";
                 case SDL.SDL_GameControllerButton.SDL_CONTROLLER_BUTTON_RIGHTSHOULDER:
                     return "Right Shoulder";
-                case SDL.SDL_GameControllerButton.SDL_CONTROLLER_BUTTON_BACK:
-                    return "Back Button";
-                case SDL.SDL_GameControllerButton.SDL_CONTROLLER_BUTTON_START:
-                    return "Start Button";
-                case SDL.SDL_GameControllerButton.SDL_CONTROLLER_BUTTON_GUIDE:
-                    return "Guide Button";
                 default:
                     return "Button " + ((int)i + 1);
             }

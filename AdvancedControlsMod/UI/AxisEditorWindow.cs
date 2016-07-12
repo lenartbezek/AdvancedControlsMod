@@ -76,27 +76,27 @@ namespace Lench.AdvancedControls.UI
             if(Axis == null)
             {
                 // Draw add buttons
-                if (GUILayout.Button("Controller Axis", Elements.Buttons.ComponentField))
+                if (GUILayout.Button("Controller Axis", spaar.ModLoader.UI.Elements.Buttons.ComponentField))
                 {
                     Axis = new ControllerAxis("new controller axis");
                     WindowName = "Create new controller axis";
                 }
-                if (GUILayout.Button("Inertial Axis", Elements.Buttons.ComponentField))
+                if (GUILayout.Button("Inertial Axis", spaar.ModLoader.UI.Elements.Buttons.ComponentField))
                 {
                     Axis = new InertialAxis("new inertial axis");
                     WindowName = "Create new inertial key axis";
                 }
-                if (GUILayout.Button("Standard Axis", Elements.Buttons.ComponentField))
+                if (GUILayout.Button("Standard Axis", spaar.ModLoader.UI.Elements.Buttons.ComponentField))
                 {
                     Axis = new StandardAxis("new standard axis");
                     WindowName = "Create new standard axis";
                 }
-                if (GUILayout.Button("Chain Axis", Elements.Buttons.ComponentField))
+                if (GUILayout.Button("Chain Axis", spaar.ModLoader.UI.Elements.Buttons.ComponentField))
                 {
                     Axis = new ChainAxis("new chain axis");
                     WindowName = "Create new chain axis";
                 }
-                if (GUILayout.Button("Custom Axis", Elements.Buttons.ComponentField))
+                if (GUILayout.Button("Custom Axis", spaar.ModLoader.UI.Elements.Buttons.ComponentField))
                 {
                     Axis = new CustomAxis("new custom axis");
                     WindowName = "Create new custom axis";
@@ -114,10 +114,10 @@ namespace Lench.AdvancedControls.UI
                 {
                     GUILayout.BeginHorizontal();
                     SaveName = GUILayout.TextField(SaveName,
-                        Elements.InputFields.Default);
+                        spaar.ModLoader.UI.Elements.InputFields.Default);
 
                     if (GUILayout.Button("Save",
-                        Elements.Buttons.Default,
+                        spaar.ModLoader.UI.Elements.Buttons.Default,
                         GUILayout.Width(80))
                         && SaveName != "")
                     {
@@ -132,19 +132,19 @@ namespace Lench.AdvancedControls.UI
                 // Draw error message
                 if (Axis.GetEditor().GetError() != null)
                 {
-                    GUILayout.Label(Axis.GetEditor().GetError(), new GUIStyle(Elements.Labels.Default) { margin = new RectOffset(8, 8, 12, 8) });
+                    GUILayout.Label(Axis.GetEditor().GetError(), new GUIStyle(spaar.ModLoader.UI.Elements.Labels.Default) { margin = new RectOffset(8, 8, 12, 8) });
                 }
 
                 // Draw note message
                 if (Axis.GetEditor().GetNote() != null)
                 {
-                    GUILayout.Label(Axis.GetEditor().GetNote(), new GUIStyle(Elements.Labels.Default) { margin = new RectOffset(8, 8, 12, 8) });
+                    GUILayout.Label(Axis.GetEditor().GetNote(), new GUIStyle(spaar.ModLoader.UI.Elements.Labels.Default) { margin = new RectOffset(8, 8, 12, 8) });
                 }
 
                 // Draw help button
                 if (Axis.GetEditor().GetHelpURL() != null)
                     if (GUI.Button(new Rect(windowRect.width - 76, 8, 30, 30),
-                        "?", Elements.Buttons.Red))
+                        "?", spaar.ModLoader.UI.Elements.Buttons.Red))
                     {
                         Application.OpenURL(Axis.GetEditor().GetHelpURL());
                     }
@@ -153,7 +153,7 @@ namespace Lench.AdvancedControls.UI
 
             // Draw close button
             if (GUI.Button(new Rect(windowRect.width - 38, 8, 30, 30),
-                "×", Elements.Buttons.Red))
+                "×", spaar.ModLoader.UI.Elements.Buttons.Red))
             {
                 Callback = null;
                 Destroy(this);

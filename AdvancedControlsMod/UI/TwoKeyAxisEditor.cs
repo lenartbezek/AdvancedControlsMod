@@ -39,7 +39,7 @@ namespace Lench.AdvancedControls.UI
                 windowRect.width - GUI.skin.window.padding.left - GUI.skin.window.padding.right,
                 20);
 
-            GUILayout.Label("  <color=#808080><b>"+Axis.OutputValue.ToString("0.00") + "</b></color>",
+            GUILayout.Label("  <color=#808080><b>"+ Axis.OutputValue.ToString("0.00") + "</b></color>",
                 new GUIStyle(Elements.Labels.Default) { richText = true, alignment = TextAnchor.MiddleLeft },
                 GUILayout.Height(20));
 

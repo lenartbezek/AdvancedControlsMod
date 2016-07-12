@@ -6,6 +6,7 @@ using Lench.AdvancedControls.UI;
 using Lench.AdvancedControls.Input;
 using Lench.AdvancedControls.Controls;
 using System.Collections.Generic;
+using UnityEngine;
 
 namespace Lench.AdvancedControls
 {
@@ -89,7 +90,8 @@ namespace Lench.AdvancedControls
             if (DBUpdaterEnabled)
                 CheckForDBUpdate();
 
-            Commands.RegisterCommand("acm", ConfigurationCommand, "Enter 'acm' for all available commands.");
+            Commands.RegisterCommand("controller", ControllerCommand, "Enter 'controller' for all available controller commands.");
+            Commands.RegisterCommand("acm", ConfigurationCommand, "Enter 'acm' for all available configuration commands.");
             SettingsMenu.RegisterSettingsButton("ACM", EnableToggle, ModEnabled, 12);
         }
 
@@ -99,7 +101,7 @@ namespace Lench.AdvancedControls
             OnInitialisation = null;
             Destroy(ControlMapper);
             Destroy(DeviceManager);
-            Destroy(UnityEngine.GameObject.Find("Advanced Controls").transform.gameObject);
+            Destroy(GameObject.Find("Advanced Controls").transform.gameObject);
         }
 
         private void Update()
@@ -145,6 +147,38 @@ namespace Lench.AdvancedControls
         private void EnableToggle(bool active)
         {
             ModEnabled = active;
+        }
+
+        private string ControllerCommand(string[] args, IDictionary<string, string> namedArgs)
+        {
+            if (args.Length > 0)
+            {
+                switch (args[0].ToLower())
+                {
+                    case "list":
+                        string result = "Controller list:\n";
+                        if (Controller.NumDevices > 0)
+                            for (int i = 0; i < Controller.NumDevices; i++)
+                            {
+                                var controller = Controller.Get(i);
+                                result += i+": "+controller.Name+" ("+(controller.IsGameController ? "Controller" : "Joystick")+")\n"+ "\tGuid: " + controller.GUID+"\n";
+                            }
+                        else
+                            result = "No devices connected.";
+                        return result;
+                    case "info":
+
+                    default:
+                        return "Invalid command. Enter 'controller' for all available commands.";
+                }
+            }
+            else
+            {
+                return "Available commands:\n" +
+                    "  controller list             \t List all connected devices.\n" +
+                    "  controller info [index]     \t Show info of a device at index.\n" +
+                    "  controller reconnect [index]\t Reconnects the controller.\n";
+            }
         }
 
         private string ConfigurationCommand(string[] args, IDictionary<string, string> namedArgs)

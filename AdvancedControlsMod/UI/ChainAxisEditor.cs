@@ -79,7 +79,7 @@ namespace Lench.AdvancedControls.UI
 
             // Draw axis value
             GUILayout.Label("  <color=#808080><b>" + Axis.OutputValue.ToString("0.00") + "</b></color>",
-                new GUIStyle(Elements.Labels.Default) { richText = true, alignment = TextAnchor.MiddleLeft },
+                new GUIStyle(spaar.ModLoader.UI.Elements.Labels.Default) { richText = true, alignment = TextAnchor.MiddleLeft },
                 GUILayout.Height(20));
 
             // Draw method select
@@ -87,13 +87,13 @@ namespace Lench.AdvancedControls.UI
             int num_methods = Enum.GetValues(typeof(ChainAxis.ChainMethod)).Length;
 
             GUILayout.BeginHorizontal();
-            if (GUILayout.Button("<", Elements.Buttons.Default, GUILayout.Width(30)))
+            if (GUILayout.Button("<", spaar.ModLoader.UI.Elements.Buttons.Default, GUILayout.Width(30)))
                 i--;
             if (i < 0) i += num_methods;
 
-            GUILayout.Label(Enum.GetNames(typeof(ChainAxis.ChainMethod))[i], new GUIStyle(Elements.InputFields.Default) { alignment = TextAnchor.MiddleCenter });
+            GUILayout.Label(Enum.GetNames(typeof(ChainAxis.ChainMethod))[i], new GUIStyle(spaar.ModLoader.UI.Elements.InputFields.Default) { alignment = TextAnchor.MiddleCenter });
 
-            if (GUILayout.Button(">", Elements.Buttons.Default, GUILayout.Width(30)))
+            if (GUILayout.Button(">", spaar.ModLoader.UI.Elements.Buttons.Default, GUILayout.Width(30)))
                 i++;
             if (i == num_methods) i = 0;
 
@@ -105,12 +105,12 @@ namespace Lench.AdvancedControls.UI
             GUILayout.BeginHorizontal(GUILayout.Height(20));
 
             GUILayout.Label("  <color=#808080><b>" + (axis_a == null ? "" : axis_a.Status == "OK" ? a.ToString("0.00") : axis_a.Status) + "</b></color>",
-                new GUIStyle(Elements.Labels.Default) { richText = true, alignment = TextAnchor.MiddleLeft },
+                new GUIStyle(spaar.ModLoader.UI.Elements.Labels.Default) { richText = true, alignment = TextAnchor.MiddleLeft },
                 GUILayout.MinWidth(leftGraphRect.width),
                 GUILayout.Height(20));
 
             GUILayout.Label("  <color=#808080><b>" + (axis_b == null ? "" : axis_b.Status == "OK" ? b.ToString("0.00") : axis_b.Status) + "</b></color>",
-                new GUIStyle(Elements.Labels.Default) { richText = true, alignment = TextAnchor.MiddleLeft, margin = new RectOffset(8, 0, 0, 0) },
+                new GUIStyle(spaar.ModLoader.UI.Elements.Labels.Default) { richText = true, alignment = TextAnchor.MiddleLeft, margin = new RectOffset(8, 0, 0, 0) },
                 GUILayout.MinWidth(rightGraphRect.width),
                 GUILayout.Height(20));
 
@@ -144,10 +144,10 @@ namespace Lench.AdvancedControls.UI
             // Draw axis select buttons
             GUILayout.BeginHorizontal();
 
-            var buttonRect = GUILayoutUtility.GetRect(new GUIContent(" "), Elements.Buttons.Default, GUILayout.MaxWidth(leftGraphRect.width));
+            var buttonRect = GUILayoutUtility.GetRect(new GUIContent(" "), spaar.ModLoader.UI.Elements.Buttons.Default, GUILayout.MaxWidth(leftGraphRect.width));
             if (Axis.SubAxis1 == null)
             {
-                if (GUI.Button(buttonRect, "Select Input Axis", Elements.Buttons.Disabled))
+                if (GUI.Button(buttonRect, "Select Input Axis", spaar.ModLoader.UI.Elements.Buttons.Disabled))
                 {
                     error = null;
                     var callback = new SelectAxisDelegate((InputAxis axis) =>
@@ -171,7 +171,7 @@ namespace Lench.AdvancedControls.UI
             }
             else
             {
-                if (GUI.Button(buttonRect, Axis.SubAxis1, axis_a != null ? axis_a.Saveable ? Elements.Buttons.Default : Elements.Buttons.Disabled : Elements.Buttons.Red))
+                if (GUI.Button(buttonRect, Axis.SubAxis1, axis_a != null ? axis_a.Saveable ? spaar.ModLoader.UI.Elements.Buttons.Default : spaar.ModLoader.UI.Elements.Buttons.Disabled : spaar.ModLoader.UI.Elements.Buttons.Red))
                 {
                     error = null;
                     var callback = new SelectAxisDelegate((InputAxis axis) =>
@@ -196,7 +196,7 @@ namespace Lench.AdvancedControls.UI
 
             if (Axis.SubAxis2 == null)
             {
-                if (GUILayout.Button("Select Input Axis", Elements.Buttons.Disabled, GUILayout.MaxWidth(rightGraphRect.width)))
+                if (GUILayout.Button("Select Input Axis", spaar.ModLoader.UI.Elements.Buttons.Disabled, GUILayout.MaxWidth(rightGraphRect.width)))
                 {
                     error = null;
                     var callback = new SelectAxisDelegate((InputAxis axis) =>
@@ -220,7 +220,7 @@ namespace Lench.AdvancedControls.UI
             }
             else
             {
-                if (GUILayout.Button(Axis.SubAxis2, axis_b != null ? axis_b.Saveable ? Elements.Buttons.Default : Elements.Buttons.Disabled : Elements.Buttons.Red,
+                if (GUILayout.Button(Axis.SubAxis2, axis_b != null ? axis_b.Saveable ? spaar.ModLoader.UI.Elements.Buttons.Default : spaar.ModLoader.UI.Elements.Buttons.Disabled : spaar.ModLoader.UI.Elements.Buttons.Red,
                     GUILayout.MaxWidth(rightGraphRect.width)))
                 {
                     error = null;

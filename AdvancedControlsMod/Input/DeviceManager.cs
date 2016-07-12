@@ -1,7 +1,10 @@
 ﻿using System;
 using System.IO;
 using System.Collections;
+using System.Net;
+using System.ComponentModel;
 using UnityEngine;
+using Lench.AdvancedControls.UI;
 
 namespace Lench.AdvancedControls.Input
 {
@@ -31,27 +34,73 @@ namespace Lench.AdvancedControls.Input
         internal delegate void DeviceRemappedEventHandler(SDL.SDL_Event e);
         internal event DeviceRemappedEventHandler OnDeviceRemapped;
 
-        public bool SDL_Initialized = false;
+        public static bool SDL_Initialized = false;
+        public static bool SDL_Installed = false;
 
         public override string Name { get { return "ACM: Device Manager"; } }
 
         private void Start()
         {
+            InitSDL();
+        }
+
+        internal static void InitSDL()
+        {
             try
             {
+                SDL.SDL_SetMainReady();
                 SDL.SDL_Init(SDL.SDL_INIT_GAMECONTROLLER | SDL.SDL_INIT_JOYSTICK);
                 SDL_Initialized = true;
-                StartCoroutine(AssignMappings(false));
             }
-            catch (Exception e)
+            catch (DllNotFoundException)
             {
-                Debug.Log("Error while initializing SDL engine.");
-                Debug.LogException(e);
-                enabled = false;
+                SDL_Initialized = false;
+            }
+
+            if (SDL_Initialized)
+                ACM.Instance.DeviceManager.StartCoroutine(AssignMappings(false));
+        }
+
+        internal static void InstallSDL()
+        {
+            ControllerAxisEditor.downloading_in_progress = true;
+            ControllerAxisEditor.download_button_text = "0 %";
+            if (!Directory.Exists(Application.dataPath + @"\Mods\Resources\AdvancedControls\lib\"))
+                Directory.CreateDirectory(Application.dataPath + @"\Mods\Resources\AdvancedControls\lib\");
+            using (var client = new WebClient())
+            {
+                try
+                {
+                    client.DownloadProgressChanged += (object sender, DownloadProgressChangedEventArgs e) =>
+                    {
+                        ControllerAxisEditor.download_button_text = e.ProgressPercentage + " % ";
+                    };
+                    client.DownloadFileCompleted += (object sender, AsyncCompletedEventArgs e) =>
+                    {
+                        ControllerAxisEditor.downloading_in_progress = false;
+                        if (e.Error != null)
+                        {
+                            ControllerAxisEditor.download_button_text = "Error";
+                        }
+                        else
+                        {
+                            ControllerAxisEditor.download_button_text = "Please restart Besiege";
+                            SDL_Installed = true;
+                        } 
+                    };
+                    client.DownloadFileAsync(
+                        new Uri("http://puu.sh/pZrWp/575c5163a0.dll"),
+                        Application.dataPath + @"\Mods\Resources\AdvancedControls\lib\SDL2.dll");
+                }
+                catch
+                {
+                    ControllerAxisEditor.downloading_in_progress = false;
+                    ControllerAxisEditor.download_button_text = "Error";
+                }
             }
         }
 
-        internal IEnumerator AssignMappings(bool update, bool verbose = false)
+        internal static IEnumerator AssignMappings(bool update, bool verbose = false)
         {
             string mappings = null;
 
@@ -83,7 +132,6 @@ namespace Lench.AdvancedControls.Input
                         File.WriteAllText(dir + file, mappings);
                         if (verbose) Debug.Log("=> Game Controller DB update successfull.");
                     }
-                        
                 }
                 else
                 {
@@ -101,8 +149,28 @@ namespace Lench.AdvancedControls.Input
                 }
             }
 
+            if (!SDL_Initialized) yield break;
+
             if (mappings != null)
                 SDL.SDL_GameControllerAddMapping(mappings);
+
+            try
+            {
+                var env_var = Environment.GetEnvironmentVariable("SDL_GAMECONTROLLERCONFIG", EnvironmentVariableTarget.User);
+                if (string.IsNullOrEmpty(env_var))
+                {
+                    if (verbose) Debug.Log("=> SDL_GAMECONTROLLERCONFIG environment variable not set.");
+                }
+                else
+                {
+                    if (verbose) Debug.Log("=> Successfully read SDL_GAMECONTROLLERCONFIG environment variable.");
+                    SDL.SDL_GameControllerAddMapping(env_var);
+                }
+            }
+            catch
+            {
+                if (verbose) Debug.Log("=> SDL_GAMECONTROLLERCONFIG environment variable not retrieved.");
+            }
         }
 
         private void OnDestroy()
@@ -113,8 +181,7 @@ namespace Lench.AdvancedControls.Input
 
         private void Update()
         {
-            if (!SDL_Initialized)
-                return;
+            if (!SDL_Initialized) return;
 
             SDL.SDL_Event e;
 

@@ -59,13 +59,13 @@ namespace Lench.AdvancedControls.UI
 
                     GUILayout.BeginHorizontal();
 
-                    if (GUILayout.Button(name, axis.Saveable ? Elements.Buttons.Default : Elements.Buttons.Disabled))
+                    if (GUILayout.Button(name, axis.Saveable ? spaar.ModLoader.UI.Elements.Buttons.Default : spaar.ModLoader.UI.Elements.Buttons.Disabled))
                     {
                         Callback?.Invoke(axis);
                         Destroy(this);
                     }
 
-                    if (GUILayout.Button("✎", new GUIStyle(Elements.Buttons.Default) { fontSize = 20, padding = new RectOffset(-3, 0, 0, 0) }, GUILayout.Width(30), GUILayout.MaxHeight(28)))
+                    if (GUILayout.Button("✎", new GUIStyle(spaar.ModLoader.UI.Elements.Buttons.Default) { fontSize = 20, padding = new RectOffset(-3, 0, 0, 0) }, GUILayout.Width(30), GUILayout.MaxHeight(28)))
                     {
                         var Editor = ACM.Instance.gameObject.AddComponent<AxisEditorWindow>();
                         Editor.windowRect.x = Mathf.Clamp(windowRect.x + windowRect.width,
@@ -74,7 +74,7 @@ namespace Lench.AdvancedControls.UI
                         Editor.EditAxis(axis);
                     }
 
-                    if (GUILayout.Button("×", Elements.Buttons.Red, GUILayout.Width(30)))
+                    if (GUILayout.Button("×", spaar.ModLoader.UI.Elements.Buttons.Red, GUILayout.Width(30)))
                     {
                         toBeRemoved = name;
                     }
@@ -88,7 +88,7 @@ namespace Lench.AdvancedControls.UI
                 GUILayout.EndScrollView();
             }
 
-            if (GUILayout.Button("Create new axis", Elements.Buttons.Disabled))
+            if (GUILayout.Button("Create new axis", spaar.ModLoader.UI.Elements.Buttons.Disabled))
             {
                 var Editor = ACM.Instance.gameObject.AddComponent<AxisEditorWindow>();
                 Editor.windowRect.x = Mathf.Clamp(windowRect.x + windowRect.width,
@@ -101,7 +101,7 @@ namespace Lench.AdvancedControls.UI
             // Draw close button
             if (!compact)
                 if (GUI.Button(new Rect(windowRect.width - 38, 8, 30, 30),
-                    "×", Elements.Buttons.Red))
+                    "×", spaar.ModLoader.UI.Elements.Buttons.Red))
                     Destroy(this);
         }
     }

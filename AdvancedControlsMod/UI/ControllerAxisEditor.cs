@@ -8,14 +8,19 @@ namespace Lench.AdvancedControls.UI
     internal class ControllerAxisEditor : AxisEditor
     {
 
+        internal static bool downloading_in_progress = false;
+        internal static string download_button_text = "Download";
+
 #if windows
-        private const string sdl_load_error_message = "place SDL2.dll in Mods/Resources/AdvancedControls/lib/";
+        private const string sdl_load_error_message = "place SDL2.dll in Mods/Resources/AdvancedControls/lib/"+
+                                                     "\nor press the Download button to install it automatically.";
         private const string platform = "Windows";
 #elif linux
-        private const string sdl_load_error_message = "run `sudo apt-get install libsdl2-2.0-0` command";
+        private const string sdl_load_error_message = "run `sudo apt-get install libsdl2-2.0-0` command.";
         private const string platform = "Linux";
 #elif osx
-        private const string sdl_load_error_message = "download and install runtime binaries from www.libsdl.org/download-2.0.php";
+        private const string sdl_load_error_message = "download and install runtime binaries from\n"+
+                                                      "the link above.";
         private const string platform = "Mac OSX";
 #endif
 
@@ -100,14 +105,26 @@ namespace Lench.AdvancedControls.UI
 
             var controller = Controller.Get(Axis.GUID);
 
-            if (!ACM.Instance.DeviceManager.SDL_Initialized)
+            if (!DeviceManager.SDL_Initialized)
             {
                 error = "<color=#FF0000><b>SDL2 library not found.</b></color>\n" +
                         "Make sure SDL2 library is properly installed.\n" +
                         "To install it, " + sdl_load_error_message;
-                note =  "<color=#FFFF00><b>" + platform + "</b></color>\n" +
-                        "You are using " + platform + " version of Advanced Controls Mod.\n"+
-                        "If you are using some other operating system, download the correct version of the mod.";
+                note = "<color=#FFFF00><b>" + platform + "</b></color>\n" +
+                        "You are using " + platform + " version of ACM.\n" +
+                        "If you are using some other operating system,\n" +
+                        "download the correct version of the mod.";
+#if windows
+                if (GUILayout.Button(download_button_text) && !downloading_in_progress && !DeviceManager.SDL_Installed)
+                {
+                    DeviceManager.InstallSDL();
+                }
+#elif osx
+                if (GUILayout.Button("www.libsdl.org/download-2.0.php.", Elements.Buttons.ComponentField))
+                {
+                    Application.OpenURL("www.libsdl.org/download-2.0.php.");
+                }
+#endif
             }
             else if (Controller.NumDevices == 0)
             {
@@ -139,7 +156,7 @@ namespace Lench.AdvancedControls.UI
 
                 // Axis value
                 GUI.Label(new Rect(graphRect.x, graphRect.y, graphRect.width, 20),
-                        "  <color=#808080><b>"+Axis.OutputValue.ToString("0.00")+"</b></color>",
+                        "  <color=#808080><b>"+ Axis.OutputValue.ToString("0.00")+"</b></color>",
                         new GUIStyle(Elements.Labels.Default) { richText = true, alignment = TextAnchor.MiddleLeft });
 
                 // Draw drag controls
@@ -279,7 +296,7 @@ namespace Lench.AdvancedControls.UI
                     Util.ToggleStyle,
                     GUILayout.Width(20),
                     GUILayout.Height(20));
-                
+
                 GUILayout.Label("Smooth",
                     new GUIStyle(Elements.Labels.Default) { margin = new RectOffset(0, 0, 14, 0) });
 

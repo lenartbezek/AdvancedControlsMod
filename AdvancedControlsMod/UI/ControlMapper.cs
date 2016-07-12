@@ -66,7 +66,7 @@ namespace Lench.AdvancedControls.UI
 
             // Draw overview button
             if (GUI.Button(new Rect(windowRect.width - 68, 8, 60, 24),
-                "<size=9><b>OVERVIEW</b></size>", Elements.Buttons.Default))
+                "<size=9><b>OVERVIEW</b></size>", spaar.ModLoader.UI.Elements.Buttons.Default))
             {
                 ControlOverview.Open();
             }
@@ -78,15 +78,15 @@ namespace Lench.AdvancedControls.UI
         private void DrawControl(Control c)
         {
 
-            GUILayout.Label(c.Name, Elements.Labels.Title);
+            GUILayout.Label(c.Name, spaar.ModLoader.UI.Elements.Labels.Title);
 
             // Draw axis select button
             GUILayout.BeginHorizontal();
 
-            var buttonRect = GUILayoutUtility.GetRect(new GUIContent(" "), Elements.Buttons.Default);
+            var buttonRect = GUILayoutUtility.GetRect(new GUIContent(" "), spaar.ModLoader.UI.Elements.Buttons.Default);
             if (c.Axis == null)
             {
-                if (GUI.Button(buttonRect, "Select Input Axis", Elements.Buttons.Disabled))
+                if (GUI.Button(buttonRect, "Select Input Axis", spaar.ModLoader.UI.Elements.Buttons.Disabled))
                 {
                     var callback = new SelectAxisDelegate((InputAxis axis) => { c.Axis = axis.Name; c.Enabled = true; });
                     if (popup == null)
@@ -100,7 +100,7 @@ namespace Lench.AdvancedControls.UI
             else
             {
                 var a = AxisManager.Get(c.Axis);
-                if (GUI.Button(buttonRect, c.Axis, a != null ? a.Saveable ? Elements.Buttons.Default : Elements.Buttons.Disabled : Elements.Buttons.Red))
+                if (GUI.Button(buttonRect, c.Axis, a != null ? a.Saveable ? spaar.ModLoader.UI.Elements.Buttons.Default : spaar.ModLoader.UI.Elements.Buttons.Disabled : spaar.ModLoader.UI.Elements.Buttons.Red))
                 {
                     var callback = new SelectAxisDelegate((InputAxis axis) => { c.Axis = axis.Name; c.Enabled = true; });
                     if (popup == null)
@@ -110,7 +110,7 @@ namespace Lench.AdvancedControls.UI
                     popup.windowRect.x = windowRect.x + buttonRect.x - 8;
                     popup.windowRect.y = windowRect.y + buttonRect.y - 8;
                 }
-                if (GUILayout.Button("×", Elements.Buttons.Red, GUILayout.Width(30)))
+                if (GUILayout.Button("×", spaar.ModLoader.UI.Elements.Buttons.Red, GUILayout.Width(30)))
                 {
                     c.Enabled = false;
                     c.Axis = null;
@@ -143,7 +143,7 @@ namespace Lench.AdvancedControls.UI
                         text = axis.Status;
 
                 }
-                
+
                 GUILayout.Label("<color=#808080><b>" + text + "</b></color>",
                     new GUIStyle(Elements.Labels.Default) { padding = new RectOffset(38, 38, 4, 0), richText = true, alignment = TextAnchor.MiddleLeft },
                     GUILayout.Height(20));
@@ -179,7 +179,7 @@ namespace Lench.AdvancedControls.UI
                     c.min_string = Regex.Replace(
                         GUILayout.TextField(
                             c.min_string, 
-                            new GUIStyle(Elements.InputFields.Default) { alignment = TextAnchor.MiddleCenter },
+                            new GUIStyle(spaar.ModLoader.UI.Elements.InputFields.Default) { alignment = TextAnchor.MiddleCenter },
                             GUILayout.Width(60)),
                         @"[^0-9\-.]", "");
                     if (c.min_string != c.Min.ToString() &&
@@ -199,7 +199,7 @@ namespace Lench.AdvancedControls.UI
                     c.cen_string = Regex.Replace(
                         GUILayout.TextField(
                             c.cen_string, 
-                            new GUIStyle(Elements.InputFields.Default) { alignment = TextAnchor.MiddleCenter },
+                            new GUIStyle(spaar.ModLoader.UI.Elements.InputFields.Default) { alignment = TextAnchor.MiddleCenter },
                             GUILayout.Width(60)),
                         @"[^0-9\-.]", "");
                     if (c.cen_string != c.Center.ToString() &&
@@ -219,7 +219,7 @@ namespace Lench.AdvancedControls.UI
                     c.max_string = Regex.Replace(
                         GUILayout.TextField(
                             c.max_string, 
-                            new GUIStyle(Elements.InputFields.Default) { alignment = TextAnchor.MiddleCenter },
+                            new GUIStyle(spaar.ModLoader.UI.Elements.InputFields.Default) { alignment = TextAnchor.MiddleCenter },
                             GUILayout.Width(60)),
                         @"[^0-9\-.]", "");
                     if (c.max_string != c.Max.ToString() &&

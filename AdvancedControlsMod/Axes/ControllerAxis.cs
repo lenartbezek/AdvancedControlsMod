@@ -74,12 +74,12 @@ namespace Lench.AdvancedControls.Axes
         }
 
         public override bool Connected { get { return controller != null && controller.Connected; } }
-        public override bool Saveable { get { return ACM.Instance.DeviceManager.SDL_Initialized && Controller.NumDevices > 0; } }
+        public override bool Saveable { get { return DeviceManager.SDL_Initialized && Controller.NumDevices > 0; } }
         public override string Status
         {
             get
             {
-                if (!ACM.Instance.DeviceManager.SDL_Initialized) return "NOT AVAILABLE";
+                if (!DeviceManager.SDL_Initialized) return "NOT AVAILABLE";
                 if (!Connected) return "DISCONNECTED";
                 return "OK";
             }
