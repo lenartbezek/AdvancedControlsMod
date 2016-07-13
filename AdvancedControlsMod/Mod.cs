@@ -114,12 +114,12 @@ namespace Lench.AdvancedControls
                     ControlMapper.ShowBlockControls(BlockMapper.CurrentInstance.Block);
 
                 if (BlockMapper.CurrentInstance.Block != null &&
-                    UnityEngine.Input.GetKey(UnityEngine.KeyCode.LeftControl) ||
-                    UnityEngine.Input.GetKey(UnityEngine.KeyCode.LeftCommand))
+                    UnityEngine.Input.GetKey(KeyCode.LeftControl) ||
+                    UnityEngine.Input.GetKey(KeyCode.LeftCommand))
                 {
-                    if (UnityEngine.Input.GetKey(UnityEngine.KeyCode.C))
+                    if (UnityEngine.Input.GetKey(KeyCode.C))
                         copy_source = BlockMapper.CurrentInstance.Block.Guid;
-                    if (copy_source != null && UnityEngine.Input.GetKey(UnityEngine.KeyCode.V))
+                    if (copy_source != null && UnityEngine.Input.GetKey(KeyCode.V))
                         ControlManager.CopyBlockControls(copy_source, BlockMapper.CurrentInstance.Block.Guid);
                 }
             }

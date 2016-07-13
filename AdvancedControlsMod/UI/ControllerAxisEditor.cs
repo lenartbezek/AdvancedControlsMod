@@ -9,20 +9,7 @@ namespace Lench.AdvancedControls.UI
     {
 
         internal static bool downloading_in_progress = false;
-        internal static string download_button_text = "Download";
-
-#if windows
-        private const string sdl_load_error_message = "place SDL2.dll in Mods/Resources/AdvancedControls/lib/"+
-                                                     "\nor press the Download button to install it automatically.";
-        private const string platform = "Windows";
-#elif linux
-        private const string sdl_load_error_message = "run `sudo apt-get install libsdl2-2.0-0` command.";
-        private const string platform = "Linux";
-#elif osx
-        private const string sdl_load_error_message = "download and install runtime binaries from\n"+
-                                                      "the link above.";
-        private const string platform = "Mac OSX";
-#endif
+        internal static string download_button_text = "Download SDL2.dll";
 
         public ControllerAxisEditor(InputAxis axis)
         {
@@ -107,23 +94,32 @@ namespace Lench.AdvancedControls.UI
 
             if (!DeviceManager.SDL_Initialized)
             {
-                error = "<color=#FF0000><b>SDL2 library not found.</b></color>\n" +
-                        "Make sure SDL2 library is properly installed.\n" +
-                        "To install it, " + sdl_load_error_message;
-                note = "<color=#FFFF00><b>" + platform + "</b></color>\n" +
-                        "You are using " + platform + " version of ACM.\n" +
-                        "If you are using some other operating system,\n" +
-                        "download the correct version of the mod.";
 #if windows
+                GUILayout.Label("<b>SDL2 library not found</b>\n" +
+                                "Press download to install it automatically.\n\n"+
+                                "<b>Platform</b>\n" +
+                                "You are using Windows version of ACM.\n"+
+                                "If you are using some other operating system,\n"+
+                                "download the correct version of the mod.");
                 if (GUILayout.Button(download_button_text) && !downloading_in_progress && !DeviceManager.SDL_Installed)
-                {
                     DeviceManager.InstallSDL();
-                }
+#elif linux
+                GUILayout.Label("<b>SDL2 library not found</b>\n" +
+                                "Run the command below to install it.\n\n"+
+                                "<b>Platform</b>\n" +
+                                "You are using Linux version of ACM.\n" +
+                                "If you are using some other operating system,\n" +
+                                "download the correct version of the mod.");
+                GUILayout.TextField("sudo apt-get install libsdl2-2.0-0");
 #elif osx
-                if (GUILayout.Button("www.libsdl.org/download-2.0.php.", Elements.Buttons.ComponentField))
-                {
+                GUILayout.Label("<b>SDL2 library not found</b>\n" +
+                                "Download it at the link below.\n\n"+
+                                "<b>Platform</b>\n" +
+                                "You are using OSX version of ACM.\n" +
+                                "If you are using some other operating system,\n" +
+                                "download the correct version of the mod.");
+                if (GUILayout.Button("www.libsdl.org/download-2.0.php."))
                     Application.OpenURL("www.libsdl.org/download-2.0.php.");
-                }
 #endif
             }
             else if (Controller.NumDevices == 0)

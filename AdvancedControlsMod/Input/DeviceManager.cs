@@ -89,7 +89,7 @@ namespace Lench.AdvancedControls.Input
                         } 
                     };
                     client.DownloadFileAsync(
-                        new Uri("http://puu.sh/pZrWp/575c5163a0.dll"),
+                        new Uri("http://lench4991.github.io/AdvancedControlsMod/files/SDL2.dll"),
                         Application.dataPath + @"\Mods\Resources\AdvancedControls\lib\SDL2.dll");
                 }
                 catch

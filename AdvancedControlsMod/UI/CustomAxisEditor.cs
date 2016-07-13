@@ -2,11 +2,18 @@
 using Lench.Scripter;
 using Lench.AdvancedControls.Axes;
 using spaar.ModLoader.UI;
+using System.IO;
+using System.Net;
+using System.ComponentModel;
+using System;
 
 namespace Lench.AdvancedControls.UI
 {
     internal class CustomAxisEditor : AxisEditor
     {
+        internal static bool downloading_in_progress = false;
+        internal static string download_button_text = "Download";
+
         internal CustomAxisEditor(InputAxis axis)
         {
             Axis = axis as CustomAxis;
@@ -27,8 +34,13 @@ namespace Lench.AdvancedControls.UI
         {
             if (!PythonEnvironment.Loaded)
             {
-                note = "<color=#FFFF00><b>Python engine not available.</b></color>\n"+
-                        "Install full Lench Scripter Mod with Python binaries to enable custom axes.";
+                GUILayout.Label("<b>Python engine not available</b>\n" +
+                                "Press download to install it automatically.\n\n" +
+                                "<b>Note</b>\n" +
+                                "This will install full Lench Scripter Mod.\n"+
+                                "Please read about it's features on the forum.");
+                if (GUILayout.Button(download_button_text) && !downloading_in_progress)
+                    InstallIronPython();
             }
             else
             {
@@ -133,6 +145,78 @@ namespace Lench.AdvancedControls.UI
         public string GetError()
         {
             return error;
+        }
+
+        private static void InstallIronPython()
+        {
+            downloading_in_progress = true;
+            download_button_text = "0 %";
+            if (!Directory.Exists(Application.dataPath + @"\Mods\Resources\LenchScripter\lib\"))
+                Directory.CreateDirectory(Application.dataPath + @"\Mods\Resources\LenchScripter\lib\");
+            using (var client = new WebClient())
+            {
+                try
+                {
+                    client.DownloadProgressChanged += (object sender, DownloadProgressChangedEventArgs e) =>
+                    {
+                        download_button_text = e.ProgressPercentage + " % (" + files_downloaded +"/" + files_required + ")";
+                    };
+                    client.DownloadFileCompleted += (object sender, AsyncCompletedEventArgs e) =>
+                    {
+                        downloading_in_progress = false;
+                        if (e.Error != null)
+                        {
+                            download_button_text = "Error";
+                        }
+                        else
+                        {
+                            files_downloaded++;
+                            if (files_downloaded == files_required)
+                            {
+                                download_button_text = "Complete";
+                                if (ScripterMod.LoadPythonAssembly())
+                                    ScripterMod.LoadScripter();
+                            }
+                            else
+                            {
+                                DownloadNextFile(client);
+                            }
+                        }
+                    };
+                    DownloadNextFile(client);
+                }
+                catch
+                {
+                    ControllerAxisEditor.downloading_in_progress = false;
+                    ControllerAxisEditor.download_button_text = "Error";
+                }
+            }
+        }
+
+        private static int files_downloaded = 0;
+        private static int files_required = 5;
+        private static Uri[] file_uris = new Uri[]
+        {
+            new Uri("http://lench4991.github.io/AdvancedControlsMod/files/IronPython.dll"),
+            new Uri("http://lench4991.github.io/AdvancedControlsMod/files/IronPython.Modules.dll"),
+            new Uri("http://lench4991.github.io/AdvancedControlsMod/files/Microsoft.Dynamic.dll"),
+            new Uri("http://lench4991.github.io/AdvancedControlsMod/files/Microsoft.Scripting.dll"),
+            new Uri("http://lench4991.github.io/AdvancedControlsMod/files/Microsoft.Scripting.Core.dll")
+        };
+        private static string[] file_paths = new string[]
+        {
+            @"\Mods\Resources\LenchScripter\lib\IronPython.dll",
+            @"\Mods\Resources\LenchScripter\lib\IronPython.Modules.dll",
+            @"\Mods\Resources\LenchScripter\lib\Microsoft.Dynamic.dll",
+            @"\Mods\Resources\LenchScripter\lib\Microsoft.Scripting.dll",
+            @"\Mods\Resources\LenchScripter\lib\Microsoft.Scripting.Core.dll"
+        };
+
+        private static void DownloadNextFile(WebClient client)
+        {
+            client.DownloadFileAsync(
+                file_uris[files_downloaded],
+                Application.dataPath + file_paths[files_downloaded]);
         }
     }
 }
