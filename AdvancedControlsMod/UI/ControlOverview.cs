@@ -195,6 +195,13 @@ namespace Lench.AdvancedControls.UI
                     DrawAxis(axis);
             }
 
+            // Draw help button
+            if (GUI.Button(new Rect(windowRect.width - 76, 8, 30, 30),
+                "?", Elements.Buttons.Red))
+            {
+                Application.OpenURL("https://github.com/lench4991/AdvancedControlsMod/wiki/Sharing");
+            }
+
             // Draw close button
             if (GUI.Button(new Rect(windowRect.width - 38, 8, 30, 30),
                 "×", Elements.Buttons.Red))

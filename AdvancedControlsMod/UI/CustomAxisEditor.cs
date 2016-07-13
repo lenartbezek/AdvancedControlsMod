@@ -150,7 +150,7 @@ namespace Lench.AdvancedControls.UI
         private static void InstallIronPython()
         {
             downloading_in_progress = true;
-            download_button_text = "0 %";
+            download_button_text = "0 % (" + (files_downloaded) + "/" + files_required + ")";
             if (!Directory.Exists(Application.dataPath + @"\Mods\Resources\LenchScripter\lib\"))
                 Directory.CreateDirectory(Application.dataPath + @"\Mods\Resources\LenchScripter\lib\");
             using (var client = new WebClient())
@@ -159,7 +159,7 @@ namespace Lench.AdvancedControls.UI
                 {
                     client.DownloadProgressChanged += (object sender, DownloadProgressChangedEventArgs e) =>
                     {
-                        download_button_text = e.ProgressPercentage + " % (" + files_downloaded +"/" + files_required + ")";
+                        download_button_text = e.ProgressPercentage + " % (" + (files_downloaded+1) +"/" + files_required + ")";
                     };
                     client.DownloadFileCompleted += (object sender, AsyncCompletedEventArgs e) =>
                     {
@@ -175,7 +175,10 @@ namespace Lench.AdvancedControls.UI
                             {
                                 download_button_text = "Complete";
                                 if (ScripterMod.LoadPythonAssembly())
+                                {
                                     ScripterMod.LoadScripter();
+                                    ScripterMod.UpdateCheckerEnabled = false;
+                                }
                             }
                             else
                             {

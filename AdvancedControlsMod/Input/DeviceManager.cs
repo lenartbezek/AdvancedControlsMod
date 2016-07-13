@@ -106,7 +106,7 @@ namespace Lench.AdvancedControls.Input
 
             if (update)
             {
-                var www = new WWW("https://raw.githubusercontent.com/lench4991/AdvancedControlsMod/master/Resources/AdvancedControls/GameControllerMappings.txt");
+                var www = new WWW("http://lench4991.github.io/AdvancedControlsMod/db/gamecontrollerdb.txt");
                 yield return www;
 
                 if (www.isDone && string.IsNullOrEmpty(www.error))

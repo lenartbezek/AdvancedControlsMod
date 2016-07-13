@@ -176,8 +176,7 @@ namespace Lench.AdvancedControls
             {
                 return "Available commands:\n" +
                     "  controller list             \t List all connected devices.\n" +
-                    "  controller info [index]     \t Show info of a device at index.\n" +
-                    "  controller reconnect [index]\t Reconnects the controller.\n";
+                    "  controller info [index]     \t Show info of a device at index.\n";
             }
         }
 
