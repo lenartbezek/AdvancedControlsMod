@@ -79,7 +79,7 @@ namespace Lench.AdvancedControls.UI
 
             // Draw axis value
             GUILayout.Label("  <color=#808080><b>" + Axis.OutputValue.ToString("0.00") + "</b></color>",
-                new GUIStyle(spaar.ModLoader.UI.Elements.Labels.Default) { richText = true, alignment = TextAnchor.MiddleLeft },
+                new GUIStyle(Elements.Labels.Default) { richText = true, alignment = TextAnchor.MiddleLeft },
                 GUILayout.Height(20));
 
             // Draw method select
@@ -87,13 +87,13 @@ namespace Lench.AdvancedControls.UI
             int num_methods = Enum.GetValues(typeof(ChainAxis.ChainMethod)).Length;
 
             GUILayout.BeginHorizontal();
-            if (GUILayout.Button("<", spaar.ModLoader.UI.Elements.Buttons.Default, GUILayout.Width(30)))
+            if (GUILayout.Button("<", Elements.Buttons.Default, GUILayout.Width(30)))
                 i--;
             if (i < 0) i += num_methods;
 
-            GUILayout.Label(Enum.GetNames(typeof(ChainAxis.ChainMethod))[i], new GUIStyle(spaar.ModLoader.UI.Elements.InputFields.Default) { alignment = TextAnchor.MiddleCenter });
+            GUILayout.Label(Enum.GetNames(typeof(ChainAxis.ChainMethod))[i], new GUIStyle(Elements.InputFields.Default) { alignment = TextAnchor.MiddleCenter });
 
-            if (GUILayout.Button(">", spaar.ModLoader.UI.Elements.Buttons.Default, GUILayout.Width(30)))
+            if (GUILayout.Button(">", Elements.Buttons.Default, GUILayout.Width(30)))
                 i++;
             if (i == num_methods) i = 0;
 
@@ -104,20 +104,20 @@ namespace Lench.AdvancedControls.UI
             // Draw sub axis values
             GUILayout.BeginHorizontal(GUILayout.Height(20));
 
-            GUILayout.Label("  <color=#808080><b>" + (axis_a == null ? "" : axis_a.Status == "OK" ? a.ToString("0.00") : axis_a.Status) + "</b></color>",
-                new GUIStyle(spaar.ModLoader.UI.Elements.Labels.Default) { richText = true, alignment = TextAnchor.MiddleLeft },
+            GUILayout.Label("  <color=#808080><b>" + (axis_a == null ? "" : axis_a.Status == AxisStatus.OK ? a.ToString("0.00") : InputAxis.GetStatusString(axis_a.Status)) + "</b></color>",
+                new GUIStyle(Elements.Labels.Default) { richText = true, alignment = TextAnchor.MiddleLeft },
                 GUILayout.MinWidth(leftGraphRect.width),
                 GUILayout.Height(20));
 
-            GUILayout.Label("  <color=#808080><b>" + (axis_b == null ? "" : axis_b.Status == "OK" ? b.ToString("0.00") : axis_b.Status) + "</b></color>",
-                new GUIStyle(spaar.ModLoader.UI.Elements.Labels.Default) { richText = true, alignment = TextAnchor.MiddleLeft, margin = new RectOffset(8, 0, 0, 0) },
+            GUILayout.Label("  <color=#808080><b>" + (axis_b == null ? "" : axis_b.Status == AxisStatus.OK ? b.ToString("0.00") : InputAxis.GetStatusString(axis_a.Status)) + "</b></color>",
+                new GUIStyle(Elements.Labels.Default) { richText = true, alignment = TextAnchor.MiddleLeft, margin = new RectOffset(8, 0, 0, 0) },
                 GUILayout.MinWidth(rightGraphRect.width),
                 GUILayout.Height(20));
 
             GUILayout.EndHorizontal();
 
             // Draw yellow lines
-            if (Axis.Status == "OK")
+            if (Axis.Status == AxisStatus.OK)
                 Util.FillRect(new Rect(
                                         graphRect.x + graphRect.width / 2 + graphRect.width / 2 * Axis.OutputValue,
                                         graphRect.y,
@@ -125,7 +125,7 @@ namespace Lench.AdvancedControls.UI
                                         graphRect.height),
                                 Color.yellow);
 
-            if (axis_a != null && axis_a.Status == "OK")
+            if (axis_a != null && Axis.Status == AxisStatus.OK)
                 Util.FillRect(new Rect(
                                       leftGraphRect.x + leftGraphRect.width / 2 + leftGraphRect.width / 2 * a,
                                       leftGraphRect.y,
@@ -133,7 +133,7 @@ namespace Lench.AdvancedControls.UI
                                       leftGraphRect.height),
                              Color.yellow);
 
-            if (axis_b != null && axis_b.Status == "OK")
+            if (axis_b != null && Axis.Status == AxisStatus.OK)
                 Util.FillRect(new Rect(
                                   rightGraphRect.x + rightGraphRect.width / 2 + rightGraphRect.width / 2 * b,
                                   rightGraphRect.y,

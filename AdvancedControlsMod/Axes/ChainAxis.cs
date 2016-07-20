@@ -123,12 +123,12 @@ namespace Lench.AdvancedControls.Axes
             editor = new UI.ChainAxisEditor(this);
         }
 
-        public override string Status
+        public override AxisStatus Status
         {
             get
             {
-                if (sub_axis1 == null && sub_axis2 == null) return "NO LINK";
-                return "OK";
+                if (sub_axis1 == null && sub_axis2 == null) return AxisStatus.NoLink;
+                return AxisStatus.OK;
             }
         }
 

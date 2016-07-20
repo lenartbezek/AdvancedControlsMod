@@ -117,8 +117,8 @@ namespace Lench.AdvancedControls.UI
             string text;
             if (a == null)
                 text = "NOT FOUND";
-            else if (a.Status != "OK")
-                text = a.Status;
+            else if (a.Status != AxisStatus.OK)
+                text = InputAxis.GetStatusString(a.Status);
             else
                 text = "";
 

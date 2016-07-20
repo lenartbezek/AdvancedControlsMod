@@ -75,13 +75,13 @@ namespace Lench.AdvancedControls.Axes
 
         public override bool Connected { get { return controller != null && controller.Connected; } }
         public override bool Saveable { get { return DeviceManager.SDL_Initialized && Controller.NumDevices > 0; } }
-        public override string Status
+        public override AxisStatus Status
         {
             get
             {
-                if (!DeviceManager.SDL_Initialized) return "NOT AVAILABLE";
-                if (!Connected) return "DISCONNECTED";
-                return "OK";
+                if (!DeviceManager.SDL_Initialized) return AxisStatus.Unavailable;
+                if (!Connected) return AxisStatus.Disconnected;
+                return AxisStatus.OK;
             }
         }
 

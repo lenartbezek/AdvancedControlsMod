@@ -15,12 +15,12 @@ namespace Lench.AdvancedControls.Axes
                 return (PositiveBind == null || PositiveBind.Connected) && (NegativeBind == null || NegativeBind.Connected);
             }
         }
-        public override string Status
+        public override AxisStatus Status
         {
             get
             {
-                if (!Connected) return "DISCONNECTED";
-                return "OK";
+                if (!Connected) return AxisStatus.Disconnected;
+                return AxisStatus.OK;
             }
         }
 

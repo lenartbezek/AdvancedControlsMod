@@ -21,9 +21,9 @@ namespace Lench.AdvancedControls.UI
         internal int windowID = spaar.ModLoader.Util.GetWindowID();
         internal Rect windowRect = new Rect(0, 0, 320, 100);
 
-        protected string WindowName = "Create new axis";
-        protected string SaveName = "";
-        protected InputAxis Axis;
+        private string WindowName = "Create new axis";
+        private string SaveName = "";
+        private InputAxis Axis;
 
         internal SelectAxisDelegate Callback;
 
@@ -58,7 +58,7 @@ namespace Lench.AdvancedControls.UI
         /// <summary>
         /// Render window.
         /// </summary>
-        protected virtual void OnGUI()
+        private void OnGUI()
         {
             GUI.skin = Util.Skin;
             windowRect = GUILayout.Window(windowID, windowRect, DoWindow, WindowName,
@@ -66,12 +66,12 @@ namespace Lench.AdvancedControls.UI
                 GUILayout.Height(100));
         }
 
-        protected virtual void OnDestroy()
+        private void OnDestroy()
         {
             Axis?.editor.Close();
         }
 
-        protected virtual void DoWindow(int id)
+        private void DoWindow(int id)
         {
             if(Axis == null)
             {

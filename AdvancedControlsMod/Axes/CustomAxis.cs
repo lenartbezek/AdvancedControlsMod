@@ -24,14 +24,14 @@ axis_value";
         public bool GlobalScope { get; set; }
         public bool Running { get; set; }
         public override bool Saveable { get { return PythonEnvironment.Loaded; } }
-        public override string Status
+        public override AxisStatus Status
         {
             get
             {
-                if (!PythonEnvironment.Loaded) return "NOT AVAILABLE";
-                if (Error != null) return "ERROR";
-                if (!Running) return "NOT RUNNING";
-                return "OK";
+                if (!PythonEnvironment.Loaded) return AxisStatus.Unavailable;
+                if (Error != null) return AxisStatus.Error;
+                if (!Running) return AxisStatus.NotRunning;
+                return AxisStatus.OK;
             }
         }
 

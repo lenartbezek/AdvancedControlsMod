@@ -51,10 +51,10 @@ namespace Lench.AdvancedControls.UI
                 GUILayout.BeginHorizontal();
 
                 string text;
-                if (Axis.Status == "OK")
+                if (Axis.Status == AxisStatus.OK)
                     text = Axis.OutputValue.ToString("0.00");
                 else
-                    text = Axis.Status;
+                    text = InputAxis.GetStatusString(Axis.Status);
 
                 GUILayout.Label("  <color=#808080><b>" + text + "</b></color>",
                     new GUIStyle(Elements.Labels.Default) { richText = true, alignment = TextAnchor.MiddleLeft },
@@ -70,7 +70,7 @@ namespace Lench.AdvancedControls.UI
                         graphRect.height),
                     Color.gray);
 
-                if (Axis.Status == "OK")
+                if (Axis.Status == AxisStatus.OK)
                     Util.FillRect(new Rect(
                                           graphRect.x + graphRect.width / 2 + graphRect.width / 2 * Axis.OutputValue,
                                           graphRect.y,

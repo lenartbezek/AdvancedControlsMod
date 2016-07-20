@@ -123,6 +123,14 @@ namespace Lench.AdvancedControls.Controls
                 };
             }
 
+            if (BlockID == (int)BlockType.FlyingBlock)
+            {
+                return new List<Control>()
+                {
+                    new SliderControl(GUID){ Slider = "FLYING SPEED", PositiveOnly = true }
+                };
+            }
+
             if (BlockID == (int)BlockType.WaterCannon)
             {
                 return new List<Control>()

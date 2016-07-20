@@ -69,19 +69,23 @@ namespace Lench.AdvancedControls
 
         private Guid copy_source;
 
-        private void Start()
+        private void Awake()
         {
             ControlMapper = gameObject.AddComponent<ControlMapper>();
             DeviceManager = gameObject.AddComponent<DeviceManager>();
 
-            if (PythonEnvironment.Loaded)
-            {
-                PythonEnvironment.AddInitStatement("clr.AddReference(\"AdvancedControlsMod\")");
-                PythonEnvironment.AddInitStatement("from AdvancedControls import AdvancedControls");
-                PythonEnvironment.AddInitStatement("from AdvancedControls.Axes import AxisType");
-                PythonEnvironment.AddInitStatement("from AdvancedControls.Axes.ChainAxis import ChainMethod");
-            }
+            PythonEnvironment.AddInitStatement("clr.AddReference(\"AdvancedControlsMod\")");
+            PythonEnvironment.AddInitStatement("from Lench.AdvancedControls import AdvancedControls");
+            PythonEnvironment.AddInitStatement("from Lench.AdvancedControls.Axes import AxisType");
+            PythonEnvironment.AddInitStatement("from Lench.AdvancedControls.Axes.ChainAxis import ChainMethod");
 
+            Commands.RegisterCommand("controller", ControllerCommand, "Enter 'controller' for all available controller commands.");
+            Commands.RegisterCommand("acm", ConfigurationCommand, "Enter 'acm' for all available configuration commands.");
+            SettingsMenu.RegisterSettingsButton("ACM", EnableToggle, ModEnabled, 14);
+        }
+
+        private void Start()
+        {
             Configuration.Load();
 
             if (ModUpdaterEnabled)
@@ -90,9 +94,7 @@ namespace Lench.AdvancedControls
             if (DBUpdaterEnabled)
                 CheckForDBUpdate();
 
-            Commands.RegisterCommand("controller", ControllerCommand, "Enter 'controller' for all available controller commands.");
-            Commands.RegisterCommand("acm", ConfigurationCommand, "Enter 'acm' for all available configuration commands.");
-            SettingsMenu.RegisterSettingsButton("ACM", EnableToggle, ModEnabled, 12);
+            enabled = ModEnabled;
         }
 
         private void OnDestroy()
@@ -106,8 +108,6 @@ namespace Lench.AdvancedControls
 
         private void Update()
         {
-            if (!ModEnabled) return;
-
             if (BlockMapper.CurrentInstance != null)
             {
                 if (BlockMapper.CurrentInstance.Block != null && BlockMapper.CurrentInstance.Block != ControlMapper.Block)
@@ -140,13 +140,13 @@ namespace Lench.AdvancedControls
 
         internal void Initialise()
         {
-            if (!ModEnabled) return;
             OnInitialisation?.Invoke();
         }
 
         private void EnableToggle(bool active)
         {
             ModEnabled = active;
+            enabled = active;
         }
 
         private string ControllerCommand(string[] args, IDictionary<string, string> namedArgs)

@@ -55,21 +55,23 @@ namespace Lench.AdvancedControls.UI
 
         private void DoWindow(int id)
         {
+            // Draw controls
             foreach (Control c in controls)
             {
                 DrawControl(c);
-                GUILayout.Label(" ");
+                GUILayout.Box(GUIContent.none, GUILayout.Height(20));
             }
 
             if (controls.Count == 0)
                 GUILayout.Label("This block has no available controls.");
 
             // Draw overview button
-            if (GUI.Button(new Rect(windowRect.width - 68, 8, 60, 24),
-                "<size=9><b>OVERVIEW</b></size>", spaar.ModLoader.UI.Elements.Buttons.Default))
+            if (GUI.Button(new Rect(windowRect.width - 78, 8, 16, 16),
+                GUIContent.none, Elements.Buttons.ArrowCollapsed))
             {
                 ControlOverview.Open();
             }
+            GUI.Label(new Rect(windowRect.width - 62, 12, 16, 16), "<size=9><b>OVERVIEW</b></size>");
 
             // Drag window
             GUI.DragWindow(new Rect(0, 0, windowRect.width, GUI.skin.window.padding.top));
@@ -78,15 +80,15 @@ namespace Lench.AdvancedControls.UI
         private void DrawControl(Control c)
         {
 
-            GUILayout.Label(c.Name, spaar.ModLoader.UI.Elements.Labels.Title);
+            GUILayout.Label(c.Name, Elements.Labels.Title);
 
             // Draw axis select button
             GUILayout.BeginHorizontal();
 
-            var buttonRect = GUILayoutUtility.GetRect(new GUIContent(" "), spaar.ModLoader.UI.Elements.Buttons.Default);
+            var buttonRect = GUILayoutUtility.GetRect(new GUIContent(" "), Elements.Buttons.Default);
             if (c.Axis == null)
             {
-                if (GUI.Button(buttonRect, "Select Input Axis", spaar.ModLoader.UI.Elements.Buttons.Disabled))
+                if (GUI.Button(buttonRect, "Select Input Axis", Elements.Buttons.Disabled))
                 {
                     var callback = new SelectAxisDelegate((InputAxis axis) => { c.Axis = axis.Name; c.Enabled = true; });
                     if (popup == null)
@@ -100,7 +102,7 @@ namespace Lench.AdvancedControls.UI
             else
             {
                 var a = AxisManager.Get(c.Axis);
-                if (GUI.Button(buttonRect, c.Axis, a != null ? a.Saveable ? spaar.ModLoader.UI.Elements.Buttons.Default : spaar.ModLoader.UI.Elements.Buttons.Disabled : spaar.ModLoader.UI.Elements.Buttons.Red))
+                if (GUI.Button(buttonRect, c.Axis, a != null ? a.Saveable ? Elements.Buttons.Default : Elements.Buttons.Disabled : Elements.Buttons.Red))
                 {
                     var callback = new SelectAxisDelegate((InputAxis axis) => { c.Axis = axis.Name; c.Enabled = true; });
                     if (popup == null)
@@ -110,7 +112,7 @@ namespace Lench.AdvancedControls.UI
                     popup.windowRect.x = windowRect.x + buttonRect.x - 8;
                     popup.windowRect.y = windowRect.y + buttonRect.y - 8;
                 }
-                if (GUILayout.Button("×", spaar.ModLoader.UI.Elements.Buttons.Red, GUILayout.Width(30)))
+                if (GUILayout.Button("×", Elements.Buttons.Red, GUILayout.Width(30)))
                 {
                     c.Enabled = false;
                     c.Axis = null;
@@ -137,10 +139,10 @@ namespace Lench.AdvancedControls.UI
                     else
                         control_value = Mathf.Lerp(c.Center, c.Min, -axis_value);
 
-                    if (axis.Status == "OK")
+                    if (axis.Status == AxisStatus.OK)
                         text = control_value.ToString("0.00");
                     else
-                        text = axis.Status;
+                        text = InputAxis.GetStatusString(axis.Status);
 
                 }
 
@@ -161,7 +163,7 @@ namespace Lench.AdvancedControls.UI
                             graphRect.height),
                     Color.gray);
 
-                if (axis != null && axis.Status == "OK")
+                if (axis != null && axis.Status == AxisStatus.OK)
                     Util.FillRect(new Rect(
                                           graphRect.x + graphRect.width / 2 + graphRect.width / 2 * axis_value,
                                           graphRect.y,
@@ -179,7 +181,7 @@ namespace Lench.AdvancedControls.UI
                     c.min_string = Regex.Replace(
                         GUILayout.TextField(
                             c.min_string, 
-                            new GUIStyle(spaar.ModLoader.UI.Elements.InputFields.Default) { alignment = TextAnchor.MiddleCenter },
+                            new GUIStyle(Elements.InputFields.Default) { alignment = TextAnchor.MiddleCenter },
                             GUILayout.Width(60)),
                         @"[^0-9\-.]", "");
                     if (c.min_string != c.Min.ToString() &&
@@ -199,7 +201,7 @@ namespace Lench.AdvancedControls.UI
                     c.cen_string = Regex.Replace(
                         GUILayout.TextField(
                             c.cen_string, 
-                            new GUIStyle(spaar.ModLoader.UI.Elements.InputFields.Default) { alignment = TextAnchor.MiddleCenter },
+                            new GUIStyle(Elements.InputFields.Default) { alignment = TextAnchor.MiddleCenter },
                             GUILayout.Width(60)),
                         @"[^0-9\-.]", "");
                     if (c.cen_string != c.Center.ToString() &&
@@ -219,7 +221,7 @@ namespace Lench.AdvancedControls.UI
                     c.max_string = Regex.Replace(
                         GUILayout.TextField(
                             c.max_string, 
-                            new GUIStyle(spaar.ModLoader.UI.Elements.InputFields.Default) { alignment = TextAnchor.MiddleCenter },
+                            new GUIStyle(Elements.InputFields.Default) { alignment = TextAnchor.MiddleCenter },
                             GUILayout.Width(60)),
                         @"[^0-9\-.]", "");
                     if (c.max_string != c.Max.ToString() &&
