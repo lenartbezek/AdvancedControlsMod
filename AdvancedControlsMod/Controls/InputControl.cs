@@ -23,7 +23,7 @@ namespace Lench.AdvancedControls.Controls
                 if (spring != null) return spring;
                 return null;
             }
-            set
+            protected set
             {
                 cog = value as Cog;
                 steering = value as Steering;

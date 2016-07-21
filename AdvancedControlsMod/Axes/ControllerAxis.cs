@@ -6,7 +6,7 @@ namespace Lench.AdvancedControls.Axes
 {
     public class ControllerAxis : InputAxis
     {
-        public override string Name { get; set; } = "new controller axis";
+        public override string Name { get; internal set; } = "new controller axis";
         public override AxisType Type { get { return AxisType.Controller; } }
 
         private float sensitivity;

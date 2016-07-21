@@ -7,7 +7,7 @@ namespace Lench.AdvancedControls.Axes
 {
     public class CustomAxis : InputAxis
     {
-        public override string Name { get; set; } = "new custom axis";
+        public override string Name { get; internal set; } = "new custom axis";
         public override AxisType Type { get { return AxisType.Custom; } }
 
         private const string DefaultInitialisationCode =

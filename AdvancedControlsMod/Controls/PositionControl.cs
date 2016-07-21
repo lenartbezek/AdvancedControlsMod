@@ -25,7 +25,7 @@ namespace Lench.AdvancedControls.Controls
                 if (piston != null) return piston;
                 return null;
             }
-            set
+            protected set
             {
                 piston = value as Piston;
             }

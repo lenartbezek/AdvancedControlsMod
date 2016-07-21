@@ -23,9 +23,9 @@
     public abstract class InputAxis
     {
 
-        public virtual string Name { get; set; } = "new axis";
+        public virtual string Name { get; internal set; } = "new axis";
         public virtual float InputValue { get; } = 0;
-        public virtual float OutputValue { get; set; } = 0;
+        public virtual float OutputValue { get; internal set; } = 0;
         public virtual bool Connected { get; } = true;
         public virtual bool Saveable { get; } = true;
         public virtual AxisStatus Status { get; } = AxisStatus.OK;
@@ -58,11 +58,6 @@
         internal abstract void Load();
         internal abstract void Save();
         internal abstract void Delete();
-
-        public string StatusString()
-        {
-            return GetStatusString(Status);
-        }
 
         public static string GetStatusString(AxisStatus status)
         {

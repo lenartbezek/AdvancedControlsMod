@@ -24,7 +24,7 @@ namespace Lench.AdvancedControls.Controls
                 if (steering != null) return steering;
                 return null;
             }
-            set
+            protected set
             {
                 steering = value as Steering;
             }

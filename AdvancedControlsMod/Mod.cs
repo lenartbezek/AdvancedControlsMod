@@ -113,13 +113,11 @@ namespace Lench.AdvancedControls
                 if (BlockMapper.CurrentInstance.Block != null && BlockMapper.CurrentInstance.Block != ControlMapper.Block)
                     ControlMapper.ShowBlockControls(BlockMapper.CurrentInstance.Block);
 
-                if (BlockMapper.CurrentInstance.Block != null &&
-                    UnityEngine.Input.GetKey(KeyCode.LeftControl) ||
-                    UnityEngine.Input.GetKey(KeyCode.LeftCommand))
+                if (BlockMapper.CurrentInstance.Block != null)
                 {
-                    if (UnityEngine.Input.GetKey(KeyCode.C))
+                    if (InputManager.CopyKeys())
                         copy_source = BlockMapper.CurrentInstance.Block.Guid;
-                    if (copy_source != null && UnityEngine.Input.GetKey(KeyCode.V))
+                    if (InputManager.PasteKeys())
                         ControlManager.CopyBlockControls(copy_source, BlockMapper.CurrentInstance.Block.Guid);
                 }
             }
@@ -147,6 +145,7 @@ namespace Lench.AdvancedControls
         {
             ModEnabled = active;
             enabled = active;
+            if (!active) ControlMapper.Hide();
         }
 
         private string ControllerCommand(string[] args, IDictionary<string, string> namedArgs)

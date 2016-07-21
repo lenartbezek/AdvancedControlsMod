@@ -56,8 +56,18 @@ namespace Lench.AdvancedControls.Controls
             {
                 return new List<Control>()
                 {
-                    new InputControl(GUID),
-                    new SliderControl(GUID){ Slider = "SPEED"}
+                    new InputControl(GUID)
+                    {
+                        Description = "Directly controls block's input.\n"+
+                                      "Works like pressing the keys:\n"+
+                                      "<b>+1</b>\tForwards\n"+
+                                      "<b>-1</b>\tBackwards"
+                    },
+                    new SliderControl(GUID)
+                    {
+                        Slider = "SPEED",
+                        Description = "Controls the speed slider value."
+                    }
                 };
             }
 
@@ -65,8 +75,17 @@ namespace Lench.AdvancedControls.Controls
             {
                 return new List<Control>()
                 {
-                    new PositionControl(GUID),
-                    new SliderControl(GUID){ Slider = "SPEED"}
+                    new PositionControl(GUID)
+                    {
+                        Description = "Controls the piston position.\n"+
+                                      "<b>1</b>\tExtended\n"+
+                                      "<b>0</b>\tCompressed"
+                    },
+                    new SliderControl(GUID)
+                    {
+                        Slider = "SPEED",
+                        Description = "Controls the speed slider value."
+                    }
                 };
             }
 
@@ -75,19 +94,61 @@ namespace Lench.AdvancedControls.Controls
             {
                 return new List<Control>()
                 {
-                    new AngleControl(GUID),
-                    new InputControl(GUID),
-                    new SliderControl(GUID) { Slider = "ROTATION SPEED" }
+                    new AngleControl(GUID)
+                    {
+                        Description = "Directly controls block's angle."
+                    },
+                    new InputControl(GUID)
+                    {
+                        Description = "Directly controls block's input.\n"+
+                                      "Works like pressing the keys:\n"+
+                                      "<b>+1</b>\tLeft\n"+
+                                      "<b>-1</b>\tRight"
+                    },
+                    new SliderControl(GUID)
+                    {
+                        Slider = "ROTATION SPEED",
+                        Description = "Controls the speed slider value."
+                    }
                 };
             }
 
-            if (BlockID == (int)BlockType.Spring ||
-                BlockID == (int)BlockType.RopeWinch)
+            if (BlockID == (int)BlockType.Spring)
             {
                 return new List<Control>()
                 {
-                    new InputControl(GUID){ PositiveOnly = BlockID == (int)BlockType.Spring },
-                    new SliderControl(GUID){ Slider = BlockID == (int)BlockType.Spring ? "STRENGTH" : "SPEED" }
+                    new InputControl(GUID)
+                    {
+                        PositiveOnly = true,
+                        Description = "Directly controls block's input.\n"+
+                                      "Works like pressing the Contract key."+
+                                      "<b>1</b>\tKey down\n"+
+                                      "<b>0</b>\tKey up"
+                    },
+                    new SliderControl(GUID)
+                    {
+                        Slider = "STRENGTH",
+                        Description = "Controls the strength slider value."
+                    }
+                };
+            }
+
+            if (BlockID == (int)BlockType.RopeWinch)
+            {
+                return new List<Control>()
+                {
+                    new InputControl(GUID)
+                    {
+                        Description = "Directly controls block's input.\n"+
+                                      "Works like pressing the keys."+
+                                      "<b>+1</b>\tWind\n"+
+                                      "<b>-1</b>\tUnwind"
+                    },
+                    new SliderControl(GUID)
+                    {
+                        Slider = "SPEED",
+                        Description = "Controls the speed slider value."
+                    }
                 };
             }
 
@@ -95,7 +156,11 @@ namespace Lench.AdvancedControls.Controls
             {
                 return new List<Control>()
                 {
-                    new SliderControl(GUID){ Slider = "SPRING"}
+                    new SliderControl(GUID)
+                    {
+                        Slider = "SPRING",
+                        Description = "Controls the spring strength slider value."
+                    }
                 };
             }
 
@@ -103,7 +168,11 @@ namespace Lench.AdvancedControls.Controls
             {
                 return new List<Control>()
                 {
-                    new SliderControl(GUID){ Slider = "SPEED"}
+                    new SliderControl(GUID)
+                    {
+                        Slider = "SPEED",
+                        Description = "Controls the rotation speed."
+                    }
                 };
             }
 
@@ -111,7 +180,11 @@ namespace Lench.AdvancedControls.Controls
             {
                 return new List<Control>()
                 {
-                    new SliderControl(GUID){ Slider = "SPEED" }
+                    new SliderControl(GUID)
+                    {
+                        Slider = "SPEED",
+                        Description = "Controls the rotation speed."
+                    }
                 };
             }
             
@@ -119,7 +192,13 @@ namespace Lench.AdvancedControls.Controls
             {
                 return new List<Control>()
                 {
-                    new SliderControl(GUID){ Slider = "RANGE", PositiveOnly = true }
+                    new SliderControl(GUID)
+                    {
+                        Slider = "RANGE",
+                        PositiveOnly = true,
+                        Description = "Controls the flamethrower range.\n"+
+                                      "Positive values only."
+                    }
                 };
             }
 
@@ -127,7 +206,13 @@ namespace Lench.AdvancedControls.Controls
             {
                 return new List<Control>()
                 {
-                    new SliderControl(GUID){ Slider = "FLYING SPEED", PositiveOnly = true }
+                    new SliderControl(GUID)
+                    {
+                        Slider = "FLYING SPEED",
+                        PositiveOnly = true,
+                        Description = "Controls the speed slider value.\n"+
+                                      "Positive values only."
+                    }
                 };
             }
 
@@ -135,7 +220,14 @@ namespace Lench.AdvancedControls.Controls
             {
                 return new List<Control>()
                 {
-                    new SliderControl(GUID){ Slider = "POWER", PositiveOnly = true }
+                    new SliderControl(GUID)
+                    {
+                        Slider = "POWER",
+                        PositiveOnly = true,
+                        Description = "Controls the power slider value.\n"+
+                                      "Positive values only.\n"+
+                                      "Water animation only changes when the cannon is reactivated."
+                    }
                 };
             }
 
@@ -143,9 +235,25 @@ namespace Lench.AdvancedControls.Controls
             {
                 return new List<Control>()
                 {
-                    new SliderControl(GUID){ Slider = "THRUST", PositiveOnly = true },
-                    new SliderControl(GUID){ Slider = "FLIGHT DURATION", PositiveOnly = true },
-                    new SliderControl(GUID){ Slider = "EXPLOSIVE CHARGE", PositiveOnly = true },
+                    new SliderControl(GUID)
+                    {
+                        Slider = "THRUST",
+                        PositiveOnly = true,
+                        Description = "Controls the rocket thrust."
+                    },
+                    new SliderControl(GUID)
+                    {
+                        Slider = "FLIGHT DURATION",
+                        PositiveOnly = true,
+                        Description = "Controls the rocket flight duration.\n"+
+                                      "Setting it below current flight time will explode the rocket."
+                    },
+                    new SliderControl(GUID){
+                        Slider = "EXPLOSIVE CHARGE",
+                        PositiveOnly = true,
+                        Description = "Controls the rocket's explosive charge.\n"+
+                                      "Positive values only."
+                    },
                 };
             }
 
@@ -153,8 +261,20 @@ namespace Lench.AdvancedControls.Controls
             {
                 return new List<Control>()
                 {
-                    new SliderControl(GUID){ Slider = "BUOYANCY", PositiveOnly = true },
-                    new SliderControl(GUID){ Slider = "STRING LENGTH", PositiveOnly = true }
+                    new SliderControl(GUID)
+                    {
+                        Slider = "BUOYANCY",
+                        PositiveOnly = true,
+                        Description = "Controls the balloon buoyancy.\n"+
+                                      "Positive values only."
+                    },
+                    new SliderControl(GUID)
+                    {
+                        Slider = "STRING LENGTH",
+                        PositiveOnly = true,
+                        Description = "Controls the string length.\n"+
+                                      "Positive values only."
+                    }
                 };
             }
 
@@ -162,7 +282,13 @@ namespace Lench.AdvancedControls.Controls
             {
                 return new List<Control>()
                 {
-                    new SliderControl(GUID){ Slider = "MASS", PositiveOnly = true }
+                    new SliderControl(GUID)
+                    {
+                        Slider = "MASS",
+                        PositiveOnly = true,
+                        Description = "Controls the ballast mass.\n"+
+                                      "Positive values only."
+                    }
                 };
             }
 
@@ -170,9 +296,26 @@ namespace Lench.AdvancedControls.Controls
             {
                 return new List<Control>()
                 {
-                    new SliderControl(GUID){ Slider = "DISTANCE", PositiveOnly = true, Min = 40, Center = 60, Max = 80 },
-                    new SliderControl(GUID){ Slider = "HEIGHT", Min = 0, Center = 30, Max = 60 },
-                    new SliderControl(GUID){ Slider = "ROTATION", Min = -60, Center = 0, Max = 60 }
+                    new SliderControl(GUID)
+                    {
+                        Slider = "DISTANCE",
+                        PositiveOnly = true,
+                        Min = 40, Center = 60, Max = 80,
+                        Description = "Controls the camera distance.\n"+
+                                      "Positive values only."
+                    },
+                    new SliderControl(GUID)
+                    {
+                        Slider = "HEIGHT",
+                        Min = 0, Center = 30, Max = 60,
+                        Description = "Controls the camera pitch angle."
+                    },
+                    new SliderControl(GUID)
+                    {
+                        Slider = "ROTATION",
+                        Min = -60, Center = 0, Max = 60,
+                        Description = "Controls the camera yaw angle."
+                    }
                 };
             }
 

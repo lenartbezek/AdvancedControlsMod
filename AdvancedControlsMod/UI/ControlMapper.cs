@@ -79,13 +79,13 @@ namespace Lench.AdvancedControls.UI
 
         private void DrawControl(Control c)
         {
-
+            // Draw control label
             GUILayout.Label(c.Name, Elements.Labels.Title);
 
             // Draw axis select button
             GUILayout.BeginHorizontal();
 
-            var buttonRect = GUILayoutUtility.GetRect(new GUIContent(" "), Elements.Buttons.Default);
+            var buttonRect = GUILayoutUtility.GetRect(GUIContent.none, Elements.Buttons.Default);
             if (c.Axis == null)
             {
                 if (GUI.Button(buttonRect, "Select Input Axis", Elements.Buttons.Disabled))

@@ -9,11 +9,13 @@ namespace Lench.AdvancedControls.Controls
 {
     public abstract class Control
     {
-        public virtual string Name { get; set; } = "Control";
+        public virtual string Name { get; set; } = "CONTROL";
+        public virtual string Description { get; set; }
+
         public virtual bool Enabled { get; set; } = false;
         public virtual bool PositiveOnly { get; set; } = false;
         public virtual string Axis { get; set; }
-        public virtual Block Block { get; set; }
+        public virtual Block Block { get; protected set; }
         public virtual Guid BlockGUID { get; set; }
 
         public virtual float Min

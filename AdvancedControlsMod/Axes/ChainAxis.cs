@@ -15,7 +15,7 @@ namespace Lench.AdvancedControls.Axes
                 return base.Name;
             }
 
-            set
+            internal set
             {
                 base.Name = value;
                 var sub1 = AxisManager.Get(SubAxis1) as ChainAxis;

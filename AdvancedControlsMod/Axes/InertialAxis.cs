@@ -4,7 +4,7 @@ namespace Lench.AdvancedControls.Axes
 {
     public class InertialAxis : StandardAxis
     {
-        public override string Name { get; set; } = "new inertial axis";
+        public override string Name { get; internal set; } = "new inertial axis";
         public override AxisType Type { get { return AxisType.Inertial; } }
 
         private float speed = 0;

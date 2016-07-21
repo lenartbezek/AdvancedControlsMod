@@ -6,7 +6,7 @@ namespace Lench.AdvancedControls.Axes
 {
     public class StandardAxis : InputAxis
     {
-        public override string Name { get; set; } = "new standard axis";
+        public override string Name { get; internal set; } = "new standard axis";
         public override AxisType Type { get { return AxisType.Standard; } }
         public override bool Connected
         {
