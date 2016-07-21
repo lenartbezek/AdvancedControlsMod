@@ -1,0 +1,3 @@
+[submodule "LenchScripterMod"]
+	path = LenchScripterMod
+	url = git://github.com/lench4991/LenchScripterMod.git
