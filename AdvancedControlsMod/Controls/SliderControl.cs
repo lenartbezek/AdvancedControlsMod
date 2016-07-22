@@ -3,14 +3,23 @@ using UnityEngine;
 
 namespace Lench.AdvancedControls.Controls
 {
+    /// <summary>
+    /// Slider control can control any block's slider.
+    /// </summary>
     public class SliderControl : Control
     {
+        /// <summary>
+        /// Creates a slider control for a block with given GUID.
+        /// Slider property needs to be set before the control is used.
+        /// </summary>
+        /// <param name="guid">GUID of the block.</param>
         public SliderControl(Guid guid) : base(guid){}
 
-        public override string Name { get; set; } = "SLIDER";
-        public override bool PositiveOnly { get; set; } = false;
-
         private string slider;
+
+        /// <summary>
+        /// Slider display name that the block controls. Also sets the control's display name.
+        /// </summary>
         public string Slider {
             get
             {
@@ -23,6 +32,10 @@ namespace Lench.AdvancedControls.Controls
             }
         }
 
+        /// <summary>
+        /// Applies the slider value.
+        /// </summary>
+        /// <param name="value">Value to be applied.</param>
         protected override void Apply(float value)
         {
             if (value > 0)

@@ -31,6 +31,8 @@ using System;
 using System.Runtime.InteropServices;
 #endregion
 
+#pragma warning disable CS1570, CS1572, CS1574, CS1584, CS1658
+
 namespace Lench.AdvancedControls.Input
 {
     /// <summary>
@@ -4791,6 +4793,7 @@ namespace Lench.AdvancedControls.Input
 
         public const uint SDL_TOUCH_MOUSEID = uint.MaxValue;
 
+#pragma warning disable CS0649
         public struct SDL_Finger
         {
             public long id; // SDL_FingerID
@@ -4798,6 +4801,7 @@ namespace Lench.AdvancedControls.Input
             public float y;
             public float pressure;
         }
+#pragma warning restore CS0649
 
         /**
 		 *  \brief Get the number of registered touch devices.

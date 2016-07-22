@@ -3,7 +3,7 @@
 namespace Lench.AdvancedControls.Input
 {
     /// <summary>
-    /// Joystick button.
+    /// Joystick button for mapping in input axes.
     /// </summary>
     public class JoystickButton : Button
     {
@@ -15,14 +15,26 @@ namespace Lench.AdvancedControls.Input
         private bool pressed = false;
         private bool released = false;
 
+        /// <summary>
+        /// Joystick button identifying string of the following format:
+        /// joy:[index]:[device_guid]
+        /// </summary>
         public string ID { get { return "joy:" + index + ":" + guid; } }
+
+#pragma warning disable CS1591
         public bool IsDown { get { return down; } }
         public bool Pressed { get { return pressed; } }
         public bool Released { get { return released; } }
         public float Value { get { return down ? 1 : 0; } }
         public string Name { get { return controller != null ? controller.ButtonNames[index] : "<color=#FF0000>Unknown button</color>"; } }
         public bool Connected { get { return controller != null && controller.Connected; } }
+#pragma warning restore CS1591
 
+        /// <summary>
+        /// Creates a joystick button for a given controller.
+        /// </summary>
+        /// <param name="controller">Controller object.</param>
+        /// <param name="index">Index of the button.</param>
         public JoystickButton(Controller controller, int index)
         {
             this.controller = controller;
@@ -33,6 +45,10 @@ namespace Lench.AdvancedControls.Input
             ACM.Instance.DeviceManager.OnDeviceAdded += UpdateDevice;
         }
 
+        /// <summary>
+        /// Creates a joystick button from an identifier string.
+        /// </summary>
+        /// <param name="id"></param>
         public JoystickButton(string id)
         {
             var args = id.Split(':');

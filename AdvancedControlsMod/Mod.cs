@@ -10,8 +10,13 @@ using UnityEngine;
 
 namespace Lench.AdvancedControls
 {
+    /// <summary>
+    /// Mod class to be loaded by spaar's mod loader.
+    /// </summary>
     public class AdvancedControlsMod : Mod
     {
+
+#pragma warning disable CS1591
         public override string Name { get; } = "AdvancedControlsMod";
         public override string DisplayName { get; } = "Advanced Controls Mod";
         public override string Author { get; } = "Lench";
@@ -28,7 +33,11 @@ namespace Lench.AdvancedControls
         public override string BesiegeVersion { get; } = "v0.3";
         public override bool CanBeUnloaded { get; } = true;
         public override bool Preload { get; } = false;
+#pragma warning restore CS1591
 
+        /// <summary>
+        /// Creates main mod instance and subscribes to load and save events.
+        /// </summary>
         public override void OnLoad()
         {
             UnityEngine.Object.DontDestroyOnLoad(ACM.Instance);
@@ -37,6 +46,9 @@ namespace Lench.AdvancedControls
             XmlLoader.OnLoad += MachineData.Load;
         }
 
+        /// <summary>
+        /// Unsubscribes from all events and destroys the mod.
+        /// </summary>
         public override void OnUnload()
         {
             BlockHandlers.OnInitialisation -= ACM.Instance.Initialise;
@@ -48,12 +60,32 @@ namespace Lench.AdvancedControls
         }
     }
 
+    /// <summary>
+    /// Main mod script and entry point.
+    /// Access the instance with `ACM.Instance`
+    /// </summary>
     public class ACM : SingleInstance<ACM>
     {
+        /// <summary>
+        /// Name of the instance.
+        /// </summary>
         public override string Name { get { return "Advanced Controls"; } }
 
+        /// <summary>
+        /// Is mod enabled in the settings menu.
+        /// </summary>
         public bool ModEnabled = true;
+
+        /// <summary>
+        /// Is automatic game controller database updater enabled.
+        /// Changed with `acm dbupdate enable/disable` command.
+        /// </summary>
         public bool DBUpdaterEnabled = false;
+
+        /// <summary>
+        /// Is automatic mod update checker enabled.
+        /// Changed with `acm modupdate enable/disable` command.
+        /// </summary>
         public bool ModUpdaterEnabled = false;
 
         internal bool LoadedMachine = false;

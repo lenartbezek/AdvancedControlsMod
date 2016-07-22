@@ -37,7 +37,7 @@ namespace Lench.AdvancedControls
                     }
                     if (axis != null)
                     {
-                        AxisManager.Put(name, axis);
+                        AxisManager.Save(axis);
                     }
                 }
             }
@@ -66,7 +66,7 @@ namespace Lench.AdvancedControls
 
                 List<string> axis_names = new List<string>();
 
-                foreach (KeyValuePair<string, InputAxis> entry in AxisManager.Axes)
+                foreach (KeyValuePair<string, InputAxis> entry in AxisManager.LocalAxes)
                 {
                     log += "Attempting to save axis '"+entry.Key+ "'.\n";
                     axis_names.Add(entry.Key);
@@ -74,8 +74,8 @@ namespace Lench.AdvancedControls
                     log += "\tSuccessfully saved axis '" + entry.Key + "'.\n";
                 }
 
-                spaar.ModLoader.Configuration.SetInt("number-of-axes", AxisManager.Axes.Count);
-                log += "\nWrote new number of axes: " + AxisManager.Axes.Count + ".\n";
+                spaar.ModLoader.Configuration.SetInt("number-of-axes", AxisManager.LocalAxes.Count);
+                log += "\nWrote new number of axes: " + AxisManager.LocalAxes.Count + ".\n";
                 for (int i = 0; i < axis_names.Count; i++)
                     spaar.ModLoader.Configuration.SetString("axis-" + i + "-name", axis_names[i]);
                 log += "Successfully wrote axis list.\n";

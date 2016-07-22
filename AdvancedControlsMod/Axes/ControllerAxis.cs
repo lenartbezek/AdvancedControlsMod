@@ -4,62 +4,78 @@ using UnityEngine;
 
 namespace Lench.AdvancedControls.Axes
 {
+    /// <summary>
+    /// Controller axis takes input from hardware and processes it.
+    /// </summary>
     public class ControllerAxis : InputAxis
     {
-        public override string Name { get; internal set; } = "new controller axis";
-        public override AxisType Type { get { return AxisType.Controller; } }
-
-        private float sensitivity;
+        // TUNING
+#pragma warning disable CS1591
         public float Sensitivity
         {
             get { return sensitivity; }
             set { changed |= value != sensitivity; sensitivity = value; }
         }
+        private float sensitivity;
 
-        private float curvature;
+        
         public float Curvature
         {
             get { return curvature; }
             set { changed |= value != curvature; curvature = value; }
         }
+        private float curvature;
 
-        private float deadzone;
+        
         public float Deadzone
         {
             get { return deadzone; }
             set { changed |= value != deadzone; deadzone = value; }
         }
+        private float deadzone;
 
-        private float offx;
+        
         public float OffsetX
         {
             get { return offx; }
             set { changed |= value != offx; offx = value; }
         }
+        private float offx;
 
-        private float offy;
+        
         public float OffsetY
         {
             get { return offy; }
             set { changed |= value != offy; offy = value; }
         }
+        private float offy;
 
-        private bool invert;
+        
         public bool Invert
         {
             get { return invert; }
             set { changed |= value != invert; invert = value; }
         }
+        private bool invert;
 
         public bool Smooth { get; set; }
+#pragma warning restore CS1591
 
+        /// <summary>
+        /// Index of the device axis.
+        /// </summary>
         public int Axis { get; set; }
 
         private Guid guid;
         private Controller controller;
+
+        /// <summary>
+        /// GUID of the controller.
+        /// Just created axis returns zero value GUID.
+        /// </summary>
         public Guid GUID
         {
-            get{ return guid; }
+            get { return guid; }
             set
             {
                 guid = value;
@@ -68,13 +84,28 @@ namespace Lench.AdvancedControls.Axes
         }
 
         private bool changed = true;
-        internal bool Changed
+
+        /// <summary>
+        /// Is true if the axis tuning has been changed since the last call.
+        /// </summary>
+        public bool Changed
         {
             get { bool tmp = changed; changed = false; return tmp; }
         }
 
+        /// <summary>
+        /// Is the associated device currently connected.
+        /// </summary>
         public override bool Connected { get { return controller != null && controller.Connected; } }
+
+        /// <summary>
+        /// Axis is saveable if SDL engine is initialized and at least one device is connected.
+        /// </summary>
         public override bool Saveable { get { return DeviceManager.SDL_Initialized && Controller.NumDevices > 0; } }
+
+        /// <summary>
+        /// Controller axis status distinguishes between Engine Unavailable, Device Disconnected and OK.
+        /// </summary>
         public override AxisStatus Status
         {
             get
@@ -85,8 +116,13 @@ namespace Lench.AdvancedControls.Axes
             }
         }
 
+        /// <summary>
+        /// Creates a new controller axis with given name and default values.
+        /// </summary>
+        /// <param name="name">Name of the axis.</param>
         public ControllerAxis(string name) : base(name)
         {
+            Type = AxisType.Controller;
             Axis = 0;
             GUID = Controller.NumDevices > 0 ? Controller.DeviceList[0] : new Guid();
             Sensitivity = 1;
@@ -102,6 +138,9 @@ namespace Lench.AdvancedControls.Axes
             ACM.Instance.DeviceManager.OnDeviceRemoved += (SDL.SDL_Event e) => this.controller = Controller.Get(guid);
         }
 
+        /// <summary>
+        /// Raw input value.
+        /// </summary>
         public override float InputValue
         {
             get
@@ -112,6 +151,9 @@ namespace Lench.AdvancedControls.Axes
             }
         }
 
+        /// <summary>
+        /// Processed input value.
+        /// </summary>
         public override float OutputValue
         {
             get
@@ -120,6 +162,12 @@ namespace Lench.AdvancedControls.Axes
             }
         }
 
+        /// <summary>
+        /// Returns processed output value for given input value.
+        /// Intended for drawing graph.
+        /// </summary>
+        /// <param name="input">Input value in range [-1, +1]</param>
+        /// <returns>Output value in range [-1, +1]</returns>
         public float Process(float input)
         {
             input += OffsetX;
@@ -190,8 +238,14 @@ namespace Lench.AdvancedControls.Axes
             Dispose();
         }
 
+        /// <summary>
+        /// Controller axis requires no initialisation.
+        /// </summary>
         protected override void Initialise() { }
 
+        /// <summary>
+        /// Controller axis requires no update.
+        /// </summary>
         protected override void Update() { }
     }
 }

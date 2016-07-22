@@ -4,10 +4,19 @@ using Lench.AdvancedControls.Axes;
 
 namespace Lench.AdvancedControls.Controls
 {
+    /// <summary>
+    /// Control manager handles all controls bound to the machine.
+    /// </summary>
     public static class ControlManager
     {
         internal static Dictionary<Guid, List<Control>> Blocks = new Dictionary<Guid, List<Control>>();
 
+        /// <summary>
+        /// Gets controls for a block of type BlockID and given GUID.
+        /// </summary>
+        /// <param name="BlockID">BlockType enumerator value.</param>
+        /// <param name="GUID">GUID of the block.</param>
+        /// <returns>Returns a list of controls.</returns>
         public static List<Control> GetBlockControls(int BlockID, Guid GUID)
         {
             if (Blocks.ContainsKey(GUID)) return Blocks[GUID];
@@ -16,6 +25,11 @@ namespace Lench.AdvancedControls.Controls
             return controls;
         }
 
+        /// <summary>
+        /// Gets controls for a given BlockBehaviour object.
+        /// </summary>
+        /// <param name="block">BlockBehaviour of the block.</param>
+        /// <returns>Returns a list of controls.</returns>
         public static List<Control> GetBlockControls(BlockBehaviour block)
         {
             if (Blocks.ContainsKey(block.Guid)) return Blocks[block.Guid];
@@ -24,6 +38,14 @@ namespace Lench.AdvancedControls.Controls
             return controls;
         }
 
+        /// <summary>
+        /// Returns a control with given name.
+        /// If such a control is not found, returns null.
+        /// </summary>
+        /// <param name="BlockID">BlockType enumerator value.</param>
+        /// <param name="GUID">GUID of the block.</param>
+        /// <param name="name">Name of the control.</param>
+        /// <returns>Returns a Control object.</returns>
         public static Control GetBlockControl(int BlockID, Guid GUID, string name)
         {
             foreach (Control c in GetBlockControls(BlockID, GUID))
@@ -31,7 +53,13 @@ namespace Lench.AdvancedControls.Controls
             return null;
         }
 
-        internal static void CopyBlockControls(Guid source_block, Guid destination_block)
+        /// <summary>
+        /// Copies the controls from a block with GUID source_block to a block with GUID destination_block.
+        /// Ignores mismatching controls.
+        /// </summary>
+        /// <param name="source_block">GUID of the source block.</param>
+        /// <param name="destination_block">GUID of the target block.</param>
+        public static void CopyBlockControls(Guid source_block, Guid destination_block)
         {
             if (!Blocks.ContainsKey(source_block) || !Blocks.ContainsKey(destination_block)) return;
 
@@ -47,7 +75,7 @@ namespace Lench.AdvancedControls.Controls
                     }
         }
 
-        internal static List<Control> CreateBlockControls(int BlockID, Guid GUID)
+        private static List<Control> CreateBlockControls(int BlockID, Guid GUID)
         {
             if (BlockID == (int)BlockType.Wheel ||
                 BlockID == (int)BlockType.LargeWheel ||
@@ -56,17 +84,10 @@ namespace Lench.AdvancedControls.Controls
             {
                 return new List<Control>()
                 {
-                    new InputControl(GUID)
-                    {
-                        Description = "Directly controls block's input.\n"+
-                                      "Works like pressing the keys:\n"+
-                                      "<b>+1</b>\tForwards\n"+
-                                      "<b>-1</b>\tBackwards"
-                    },
+                    new InputControl(GUID),
                     new SliderControl(GUID)
                     {
-                        Slider = "SPEED",
-                        Description = "Controls the speed slider value."
+                        Slider = "SPEED"
                     }
                 };
             }
@@ -75,16 +96,10 @@ namespace Lench.AdvancedControls.Controls
             {
                 return new List<Control>()
                 {
-                    new PositionControl(GUID)
-                    {
-                        Description = "Controls the piston position.\n"+
-                                      "<b>1</b>\tExtended\n"+
-                                      "<b>0</b>\tCompressed"
-                    },
+                    new PositionControl(GUID),
                     new SliderControl(GUID)
                     {
-                        Slider = "SPEED",
-                        Description = "Controls the speed slider value."
+                        Slider = "SPEED"
                     }
                 };
             }
@@ -94,21 +109,11 @@ namespace Lench.AdvancedControls.Controls
             {
                 return new List<Control>()
                 {
-                    new AngleControl(GUID)
-                    {
-                        Description = "Directly controls block's angle."
-                    },
-                    new InputControl(GUID)
-                    {
-                        Description = "Directly controls block's input.\n"+
-                                      "Works like pressing the keys:\n"+
-                                      "<b>+1</b>\tLeft\n"+
-                                      "<b>-1</b>\tRight"
-                    },
+                    new AngleControl(GUID),
+                    new InputControl(GUID),
                     new SliderControl(GUID)
                     {
-                        Slider = "ROTATION SPEED",
-                        Description = "Controls the speed slider value."
+                        Slider = "ROTATION SPEED"
                     }
                 };
             }
@@ -119,16 +124,11 @@ namespace Lench.AdvancedControls.Controls
                 {
                     new InputControl(GUID)
                     {
-                        PositiveOnly = true,
-                        Description = "Directly controls block's input.\n"+
-                                      "Works like pressing the Contract key."+
-                                      "<b>1</b>\tKey down\n"+
-                                      "<b>0</b>\tKey up"
+                        PositiveOnly = true
                     },
                     new SliderControl(GUID)
                     {
-                        Slider = "STRENGTH",
-                        Description = "Controls the strength slider value."
+                        Slider = "STRENGTH"
                     }
                 };
             }
@@ -137,17 +137,10 @@ namespace Lench.AdvancedControls.Controls
             {
                 return new List<Control>()
                 {
-                    new InputControl(GUID)
-                    {
-                        Description = "Directly controls block's input.\n"+
-                                      "Works like pressing the keys."+
-                                      "<b>+1</b>\tWind\n"+
-                                      "<b>-1</b>\tUnwind"
-                    },
+                    new InputControl(GUID),
                     new SliderControl(GUID)
                     {
-                        Slider = "SPEED",
-                        Description = "Controls the speed slider value."
+                        Slider = "SPEED"
                     }
                 };
             }
@@ -158,8 +151,7 @@ namespace Lench.AdvancedControls.Controls
                 {
                     new SliderControl(GUID)
                     {
-                        Slider = "SPRING",
-                        Description = "Controls the spring strength slider value."
+                        Slider = "SPRING"
                     }
                 };
             }
@@ -170,8 +162,7 @@ namespace Lench.AdvancedControls.Controls
                 {
                     new SliderControl(GUID)
                     {
-                        Slider = "SPEED",
-                        Description = "Controls the rotation speed."
+                        Slider = "SPEED"
                     }
                 };
             }
@@ -182,8 +173,7 @@ namespace Lench.AdvancedControls.Controls
                 {
                     new SliderControl(GUID)
                     {
-                        Slider = "SPEED",
-                        Description = "Controls the rotation speed."
+                        Slider = "SPEED"
                     }
                 };
             }
@@ -195,9 +185,7 @@ namespace Lench.AdvancedControls.Controls
                     new SliderControl(GUID)
                     {
                         Slider = "RANGE",
-                        PositiveOnly = true,
-                        Description = "Controls the flamethrower range.\n"+
-                                      "Positive values only."
+                        PositiveOnly = true
                     }
                 };
             }
@@ -209,9 +197,7 @@ namespace Lench.AdvancedControls.Controls
                     new SliderControl(GUID)
                     {
                         Slider = "FLYING SPEED",
-                        PositiveOnly = true,
-                        Description = "Controls the speed slider value.\n"+
-                                      "Positive values only."
+                        PositiveOnly = true
                     }
                 };
             }
@@ -223,10 +209,7 @@ namespace Lench.AdvancedControls.Controls
                     new SliderControl(GUID)
                     {
                         Slider = "POWER",
-                        PositiveOnly = true,
-                        Description = "Controls the power slider value.\n"+
-                                      "Positive values only.\n"+
-                                      "Water animation only changes when the cannon is reactivated."
+                        PositiveOnly = true
                     }
                 };
             }
@@ -238,21 +221,16 @@ namespace Lench.AdvancedControls.Controls
                     new SliderControl(GUID)
                     {
                         Slider = "THRUST",
-                        PositiveOnly = true,
-                        Description = "Controls the rocket thrust."
+                        PositiveOnly = true
                     },
                     new SliderControl(GUID)
                     {
                         Slider = "FLIGHT DURATION",
-                        PositiveOnly = true,
-                        Description = "Controls the rocket flight duration.\n"+
-                                      "Setting it below current flight time will explode the rocket."
+                        PositiveOnly = true
                     },
                     new SliderControl(GUID){
                         Slider = "EXPLOSIVE CHARGE",
-                        PositiveOnly = true,
-                        Description = "Controls the rocket's explosive charge.\n"+
-                                      "Positive values only."
+                        PositiveOnly = true
                     },
                 };
             }
@@ -264,16 +242,12 @@ namespace Lench.AdvancedControls.Controls
                     new SliderControl(GUID)
                     {
                         Slider = "BUOYANCY",
-                        PositiveOnly = true,
-                        Description = "Controls the balloon buoyancy.\n"+
-                                      "Positive values only."
+                        PositiveOnly = true
                     },
                     new SliderControl(GUID)
                     {
                         Slider = "STRING LENGTH",
-                        PositiveOnly = true,
-                        Description = "Controls the string length.\n"+
-                                      "Positive values only."
+                        PositiveOnly = true
                     }
                 };
             }
@@ -285,9 +259,7 @@ namespace Lench.AdvancedControls.Controls
                     new SliderControl(GUID)
                     {
                         Slider = "MASS",
-                        PositiveOnly = true,
-                        Description = "Controls the ballast mass.\n"+
-                                      "Positive values only."
+                        PositiveOnly = true
                     }
                 };
             }
@@ -300,21 +272,17 @@ namespace Lench.AdvancedControls.Controls
                     {
                         Slider = "DISTANCE",
                         PositiveOnly = true,
-                        Min = 40, Center = 60, Max = 80,
-                        Description = "Controls the camera distance.\n"+
-                                      "Positive values only."
+                        Min = 40, Center = 60, Max = 80
                     },
                     new SliderControl(GUID)
                     {
                         Slider = "HEIGHT",
-                        Min = 0, Center = 30, Max = 60,
-                        Description = "Controls the camera pitch angle."
+                        Min = 0, Center = 30, Max = 60
                     },
                     new SliderControl(GUID)
                     {
                         Slider = "ROTATION",
-                        Min = -60, Center = 0, Max = 60,
-                        Description = "Controls the camera yaw angle."
+                        Min = -60, Center = 0, Max = 60
                     }
                 };
             }
@@ -322,6 +290,12 @@ namespace Lench.AdvancedControls.Controls
             return new List<Control>();
         }
 
+        /// <summary>
+        /// Returns a list of all active controls on a block.
+        /// A control is active if it is enabled and has bound an axis.
+        /// </summary>
+        /// <param name="GUID">GUID of the block.</param>
+        /// <returns>Returns a list of controls.</returns>
         public static List<Control> GetActiveBlockControls(Guid GUID)
         {
             var list = new List<Control>();
@@ -338,7 +312,11 @@ namespace Lench.AdvancedControls.Controls
             return list;
         }
 
-        internal static List<Control> GetActiveControls()
+        /// <summary>
+        /// Returns a list of all active controls in the machine.
+        /// </summary>
+        /// <returns>Returns a list of controls.</returns>
+        public static List<Control> GetActiveControls()
         {
             var list = new List<Control>();
             foreach(Guid guid in Blocks.Keys)

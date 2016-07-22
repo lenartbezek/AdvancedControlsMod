@@ -5,11 +5,11 @@ using spaar.ModLoader;
 
 namespace Lench.AdvancedControls.Axes
 {
+    /// <summary>
+    /// Custom axis executes Python code to determine it's output value.
+    /// </summary>
     public class CustomAxis : InputAxis
     {
-        public override string Name { get; internal set; } = "new custom axis";
-        public override AxisType Type { get { return AxisType.Custom; } }
-
         private const string DefaultInitialisationCode =
 @"time = 0";
         private const string DefaultUpdateCode =
@@ -19,11 +19,34 @@ axis_value";
 
         private bool initialised = false;
 
+        /// <summary>
+        /// Initialisation code is run once when the simulation is started.
+        /// </summary>
         public string InitialisationCode { get; set; }
+
+        /// <summary>
+        /// Update code runs again on every frame and returns output value.
+        /// </summary>
         public string UpdateCode { get; set; }
+
+        /// <summary>
+        /// Is axis set to run in global scope.
+        /// </summary>
         public bool GlobalScope { get; set; }
+
+        /// <summary>
+        /// Is axis code currently running.
+        /// </summary>
         public bool Running { get; set; }
+
+        /// <summary>
+        /// Axis is saveable if Python engine is ready.
+        /// </summary>
         public override bool Saveable { get { return PythonEnvironment.Loaded; } }
+
+        /// <summary>
+        /// Returns status of the code execution.
+        /// </summary>
         public override AxisStatus Status
         {
             get
@@ -35,14 +58,21 @@ axis_value";
             }
         }
 
-        public string Error { get; set; }
+        /// <summary>
+        /// Returns the exception that ocurred during Python code execution in Python style.
+        /// </summary>
+        public string Error { get; private set; }
 
         private PythonEnvironment python;
         private Func<object> update;
         private Func<object> init;
 
+        /// <summary>
+        /// Reads input value and updates output value depending on pressed keys and settings.
+        /// </summary>
         public CustomAxis(string name) : base(name)
         {
+            Type = AxisType.Custom;
             InitialisationCode = DefaultInitialisationCode;
             UpdateCode = DefaultUpdateCode;
             GlobalScope = false;
@@ -50,6 +80,9 @@ axis_value";
             editor = new UI.CustomAxisEditor(this);
         }
 
+        /// <summary>
+        /// Executes Python code and updates output value.
+        /// </summary>
         protected override void Update()
         {
             if (!PythonEnvironment.Loaded) return;
@@ -93,6 +126,9 @@ axis_value";
             }
         }
 
+        /// <summary>
+        /// Initializes Python environment and compiles code.
+        /// </summary>
         protected override void Initialise()
         {
             if (!PythonEnvironment.Loaded) return;

@@ -17,14 +17,27 @@ namespace Lench.AdvancedControls.Input
         private bool pressed = false;
         private bool released = false;
 
+        /// <summary>
+        /// Hat button identifying string of the following format:
+        /// hat:[index]:[down_state_byte]:[device_guid]
+        /// </summary>
         public string ID { get { return "hat:" + index + ":" + down_state + ":" + guid; } }
+
+#pragma warning disable CS1591
         public bool IsDown { get { return down; } }
         public bool Pressed { get { return pressed; } }
         public bool Released { get { return released; } }
         public float Value { get { return down ? 1 : 0; } }
         public string Name { get { return controller != null ? controller.HatNames[index] + " - " + direction : "<color=#FF0000>Unknown hat</color>"; } }
         public bool Connected { get { return controller != null && controller.Connected; } }
+#pragma warning restore CS1591
 
+        /// <summary>
+        /// Creates a hat button for given controller.
+        /// </summary>
+        /// <param name="controller">Controller class.</param>
+        /// <param name="index">Index of the hat button.</param>
+        /// <param name="down_state">Down state byte. For example SDL.SDL_HAT_UP</param>
         public HatButton(Controller controller, int index, byte down_state)
         {
             this.controller = controller;
@@ -43,6 +56,12 @@ namespace Lench.AdvancedControls.Input
             ACM.Instance.DeviceManager.OnDeviceAdded += UpdateDevice;
         }
 
+        /// <summary>
+        /// Creates a hat button from an identifier string.
+        /// Intended for loading buttons from xml.
+        /// Throws FormatException.
+        /// </summary>
+        /// <param name="id">Hat button identifier string.</param>
         public HatButton(string id)
         {
             var args = id.Split(':');

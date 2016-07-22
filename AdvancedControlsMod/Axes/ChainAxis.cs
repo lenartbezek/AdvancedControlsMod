@@ -4,10 +4,15 @@ using UnityEngine;
 
 namespace Lench.AdvancedControls.Axes
 {
+    /// <summary>
+    /// Chain axis links two axes together and combines them in a new axis.
+    /// </summary>
     public class ChainAxis : InputAxis
     {
-        public override AxisType Type { get { return AxisType.Chain; } }
-
+        /// <summary>
+        /// Name of the axis.
+        /// Changing it checks for chain cycles and removes links if a cycle is detected.
+        /// </summary>
         public override string Name
         {
             get
@@ -41,7 +46,10 @@ namespace Lench.AdvancedControls.Axes
             }
         }
 
-        private string sub_axis1;
+        /// <summary>
+        /// Name of the left linked axis.
+        /// Changing it checks for a created cycle.
+        /// </summary>
         public string SubAxis1
         {
             get
@@ -59,8 +67,12 @@ namespace Lench.AdvancedControls.Axes
                 }
             }
         }
+        private string sub_axis1;
 
-        private string sub_axis2;
+        /// <summary>
+        /// name of the right linked axis.
+        /// Changing it checks for a created cycle.
+        /// </summary>
         public string SubAxis2
         {
             get
@@ -78,19 +90,47 @@ namespace Lench.AdvancedControls.Axes
                 }
             }
         }
+        private string sub_axis2;
 
+        /// <summary>
+        /// The method that determines how the axes are combined into a single one.
+        /// </summary>
         public ChainMethod Method { get; set; }
 
+        /// <summary>
+        /// Chain method enumerator.
+        /// </summary>
         public enum ChainMethod
         {
+            /// <summary>
+            /// Sums both axis values.
+            /// </summary>
             Sum = 0,
+            /// <summary>
+            /// Subtracts right axis value from the left axis value.
+            /// </summary>
             Subtract = 1,
+            /// <summary>
+            /// Calculates average value.
+            /// </summary>
             Average = 2,
+            /// <summary>
+            /// Multiplies both axis values.
+            /// </summary>
             Multiply = 3,
+            /// <summary>
+            /// Takes the maximum value.
+            /// </summary>
             Maximum = 4,
+            /// <summary>
+            /// Takes the minimum value.
+            /// </summary>
             Minimum = 5
         }
 
+        /// <summary>
+        /// Output value based on linked axes values and the chaining method.
+        /// </summary>
         public override float OutputValue {
             get
             {
@@ -114,8 +154,13 @@ namespace Lench.AdvancedControls.Axes
             }
         }
 
+        /// <summary>
+        /// Creates a new chain axis with given name and no links.
+        /// </summary>
+        /// <param name="name">Name of the axis.</param>
         public ChainAxis(string name) : base(name)
         {
+            Type = AxisType.Chain;
             base.Name = name;
             SubAxis1 = null;
             SubAxis2 = null;
@@ -123,6 +168,9 @@ namespace Lench.AdvancedControls.Axes
             editor = new UI.ChainAxisEditor(this);
         }
 
+        /// <summary>
+        /// Chain axis status distinguishes between No Link and OK.
+        /// </summary>
         public override AxisStatus Status
         {
             get
@@ -195,7 +243,14 @@ namespace Lench.AdvancedControls.Axes
             Dispose();
         }
 
+        /// <summary>
+        /// Chain axis requires no initialisation.
+        /// </summary>
         protected override void Initialise() { }
+
+        /// <summary>
+        /// Chain axis requires no update.
+        /// </summary>
         protected override void Update(){ }
     }
 }

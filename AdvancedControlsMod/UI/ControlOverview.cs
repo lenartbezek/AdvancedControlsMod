@@ -39,7 +39,7 @@ namespace Lench.AdvancedControls.UI
             {
                 bool all = true;
                 foreach (string axis in instance.AxisList)
-                    all &= AxisManager.Axes.ContainsKey(axis);
+                    all &= AxisManager.LocalAxes.ContainsKey(axis);
                 if (all)
                 {
                     Destroy(instance);

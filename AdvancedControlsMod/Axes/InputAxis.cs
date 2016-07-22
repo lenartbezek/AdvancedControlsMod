@@ -1,5 +1,7 @@
 ﻿namespace Lench.AdvancedControls.Axes
 {
+
+#pragma warning disable CS1591
     public enum AxisType
     {
         Controller = 1,
@@ -19,20 +21,61 @@
         Error = 5,
         NoLink = 6
     }
+#pragma warning restore CS1591
 
+    /// <summary>
+    /// Abstract class that defines the input axis frame.
+    /// </summary>
     public abstract class InputAxis
     {
-
+        /// <summary>
+        /// Unique name of the axis.
+        /// </summary>
         public virtual string Name { get; internal set; } = "new axis";
+
+        /// <summary>
+        /// Raw input value.
+        /// </summary>
         public virtual float InputValue { get; } = 0;
-        public virtual float OutputValue { get; internal set; } = 0;
+
+        /// <summary>
+        /// Output value that is later processed by controls.
+        /// Axis only gives correct output value if status equals AxisStatus.OK
+        /// </summary>
+        public virtual float OutputValue { get; protected set; } = 0;
+
+        /// <summary>
+        /// Is the associated device connected.
+        /// </summary>
         public virtual bool Connected { get; } = true;
+
+        /// <summary>
+        /// Can axis be saved.
+        /// </summary>
         public virtual bool Saveable { get; } = true;
+
+        /// <summary>
+        /// Is axis saved locally.
+        /// </summary>
+        public bool Local { get; internal set; } = true;
+
+        /// <summary>
+        /// Current status of the axis.
+        /// Axis only gives correct output value if the status equals AxisStatus.OK
+        /// </summary>
         public virtual AxisStatus Status { get; } = AxisStatus.OK;
-        public abstract AxisType Type { get; }
+
+        /// <summary>
+        /// Type of the axis.
+        /// </summary>
+        public AxisType Type { get; protected set; }
 
         internal UI.AxisEditor editor;
 
+        /// <summary>
+        /// Initializes a new axis with given name.
+        /// </summary>
+        /// <param name="name">Name of the axis.</param>
         public InputAxis(string name)
         {
             Name = name;
@@ -40,13 +83,24 @@
             ACM.Instance.OnInitialisation += Initialise;
         }
 
-        internal void Dispose()
+        /// <summary>
+        /// Disposes axis and unsubscribes it from update events.
+        /// </summary>
+        public void Dispose()
         {
             ACM.Instance.OnUpdate -= Update;
             ACM.Instance.OnInitialisation -= Initialise;
         }
 
+        /// <summary>
+        /// Initializes axis. Called on simulation start by OnInitialisation event.
+        /// Intended to reset or initialize variables.
+        /// </summary>
         protected abstract void Initialise();
+
+        /// <summary>
+        /// Updates axis values. Called on every frame.
+        /// </summary>
         protected abstract void Update();
 
         internal virtual UI.AxisEditor GetEditor()
@@ -59,6 +113,17 @@
         internal abstract void Save();
         internal abstract void Delete();
 
+        /// <summary>
+        /// Returns string representation of the axis status.
+        /// </summary>
+        public string GetStatusString()
+        {
+            return GetStatusString(Status);
+        }
+
+        /// <summary>
+        /// Returns string representation of a given status enumerator.
+        /// </summary>
         public static string GetStatusString(AxisStatus status)
         {
             switch (status)

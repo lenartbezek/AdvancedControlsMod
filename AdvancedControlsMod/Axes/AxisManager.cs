@@ -3,43 +3,85 @@ using Lench.AdvancedControls.Controls;
 
 namespace Lench.AdvancedControls.Axes
 {
+    /// <summary>
+    /// Axis manager manages references to all locally saved and machine saved axes.
+    /// </summary>
     public static class AxisManager
     {
-        internal static Dictionary<string, InputAxis> Axes = new Dictionary<string, InputAxis>();
+        internal static Dictionary<string, InputAxis> LocalAxes = new Dictionary<string, InputAxis>();
+        internal static Dictionary<string, InputAxis> MachineAxes = new Dictionary<string, InputAxis>();
 
+        /// <summary>
+        /// Returns an axis with given name.
+        /// Returns null if such axis is not found.
+        /// If the axis with the same name is present in machine and locally, it returns the machine instance.
+        /// </summary>
+        /// <param name="name">Name of the axis.</param>
+        /// <returns>InputAxis object.</returns>
         public static InputAxis Get(string name)
         {
             if (name == null) return null;
-            try
-            {
-                return Axes[name];
-            }
-            catch (KeyNotFoundException)
-            {
-                return null;
-            }
+            if (MachineAxes.ContainsKey(name))
+                return MachineAxes[name];
+            if (LocalAxes.ContainsKey(name))
+                return LocalAxes[name];
+            return null;
         }
 
-        internal static void Put(string name, InputAxis axis)
+        /// <summary>
+        /// Saves the axis locally.
+        /// Overwrites axis if saved under an existing name.
+        /// </summary>
+        /// <param name="axis">InputAxis object.</param>
+        public static void Save(InputAxis axis)
         {
-            if (Axes.ContainsKey(name))
+            if (LocalAxes.ContainsKey(axis.Name))
             {
-                Axes[name].Delete();
-                Axes[name] = axis;
+                LocalAxes[axis.Name].Delete();
+                LocalAxes[axis.Name] = axis;
+                axis.Local = true;
             }
             else
             {
-                Axes.Add(name, axis);
+                LocalAxes.Add(axis.Name, axis);
             }
         }
 
-        internal static void Remove(string name)
+        /// <summary>
+        /// Adds the axis to the machine.
+        /// Intended to be called on loading the axes from the machine.
+        /// </summary>
+        /// <param name="axis">InputAxis object.</param>
+        public static void Add(InputAxis axis)
         {
-            Axes[name].Delete();
-            Axes.Remove(name);
+            if (MachineAxes.ContainsKey(axis.Name))
+            {
+                MachineAxes[axis.Name] = axis;
+                axis.Local = false;
+            }
+            else
+            {
+                MachineAxes.Add(axis.Name, axis);
+            }
         }
 
-        internal static Dictionary<string, InputAxis> GetActiveAxes(List<Control> controls)
+        /// <summary>
+        /// Deletes a locally saved axis.
+        /// </summary>
+        /// <param name="name">Name of the axis.</param>
+        public static void Delete(string name)
+        {
+            LocalAxes[name].Delete();
+            LocalAxes.Remove(name);
+        }
+
+        /// <summary>
+        /// Returns all active axes from a list of controls.
+        /// Does not include duplicates.
+        /// </summary>
+        /// <param name="controls">List of controls.</param>
+        /// <returns>Returns a dictionary of axes with their names as the keys.</returns>
+        public static Dictionary<string, InputAxis> GetActiveAxes(List<Control> controls)
         {
             var dict = new Dictionary<string, InputAxis>();
             foreach (Control c in controls)

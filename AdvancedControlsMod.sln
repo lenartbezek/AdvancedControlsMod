@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
-VisualStudioVersion = 14.0.25123.0
+VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AdvancedControlsMod", "AdvancedControlsMod\AdvancedControlsMod.csproj", "{6A16F1F7-31C2-4CAE-9FD3-0C56BBD29757}"
 EndProject
@@ -18,6 +18,7 @@ Global
 		{6A16F1F7-31C2-4CAE-9FD3-0C56BBD29757}.osx|Any CPU.Build.0 = osx|Any CPU
 		{6A16F1F7-31C2-4CAE-9FD3-0C56BBD29757}.windows|Any CPU.ActiveCfg = windows|Any CPU
 		{6A16F1F7-31C2-4CAE-9FD3-0C56BBD29757}.windows|Any CPU.Build.0 = windows|Any CPU
+		{6A16F1F7-31C2-4CAE-9FD3-0C56BBD29757}.windows|Any CPU.Deploy.0 = windows|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

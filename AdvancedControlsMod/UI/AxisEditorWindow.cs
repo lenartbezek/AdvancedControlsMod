@@ -29,12 +29,12 @@ namespace Lench.AdvancedControls.UI
 
         internal void SaveAxis()
         {
-            if (Axis.Name == SaveName || !AxisManager.Axes.ContainsKey(Axis.Name))
+            if (Axis.Name == SaveName || !AxisManager.LocalAxes.ContainsKey(Axis.Name))
                 Axis.Dispose();
             Axis = Axis.Clone();
             Axis.editor.Open();
             Axis.Name = SaveName;
-            AxisManager.Put(Axis.Name, Axis);
+            AxisManager.Save(Axis);
             Callback?.Invoke(Axis);
             Destroy(this);
         }

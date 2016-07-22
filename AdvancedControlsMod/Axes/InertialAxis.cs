@@ -2,22 +2,35 @@
 
 namespace Lench.AdvancedControls.Axes
 {
+    /// <summary>
+    /// Inertial axis takes input from one or two keys and moves the output value at variable speed.
+    /// </summary>
     public class InertialAxis : StandardAxis
     {
-        public override string Name { get; internal set; } = "new inertial axis";
-        public override AxisType Type { get { return AxisType.Inertial; } }
-
         private float speed = 0;
         private float last = 0;
 
-        public InertialAxis(string name) : base(name) { }
+        /// <summary>
+        /// Creates an inertial axis with given name.
+        /// </summary>
+        /// <param name="name">Name of the axis.</param>
+        public InertialAxis(string name) : base(name)
+        {
+            Type = AxisType.Inertial;
+        }
 
+        /// <summary>
+        /// Resets output value and it's speed to zero.
+        /// </summary>
         protected override void Initialise()
         {
             speed = 0;
             OutputValue = 0;
         }
 
+        /// <summary>
+        /// Reads input value and updates output value depending on pressed keys and settings.
+        /// </summary>
         protected override void Update()
         {
             float g_force = OutputValue > 0 ? -Gravity : Gravity;

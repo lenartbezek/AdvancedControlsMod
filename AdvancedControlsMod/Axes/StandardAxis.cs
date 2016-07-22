@@ -4,10 +4,14 @@ using System;
 
 namespace Lench.AdvancedControls.Axes
 {
+    /// <summary>
+    /// Standard axis takes input from one or two keys and moves the output value at constant speed.
+    /// </summary>
     public class StandardAxis : InputAxis
     {
-        public override string Name { get; internal set; } = "new standard axis";
-        public override AxisType Type { get { return AxisType.Standard; } }
+        /// <summary>
+        /// Are both bound keys associated devices connected.
+        /// </summary>
         public override bool Connected
         {
             get
@@ -15,6 +19,10 @@ namespace Lench.AdvancedControls.Axes
                 return (PositiveBind == null || PositiveBind.Connected) && (NegativeBind == null || NegativeBind.Connected);
             }
         }
+
+        /// <summary>
+        /// Status of the axis.
+        /// </summary>
         public override AxisStatus Status
         {
             get
@@ -24,16 +32,45 @@ namespace Lench.AdvancedControls.Axes
             }
         }
 
+        /// <summary>
+        /// Gravity value determines how fast the output value returns to the center.
+        /// </summary>
         public float Gravity { get; set; }
+
+        /// <summary>
+        /// Sensitivity value determines how fast the output value responds to input.
+        /// </summary>
         public float Sensitivity { get; set; }
+
+        /// <summary>
+        /// Snap toggle causes the axis to snap across the center when opposite key is pressed.
+        /// </summary>
         public bool Snap { get; set; }
+
+        /// <summary>
+        /// Inverts the key binds.
+        /// </summary>
         public bool Invert { get; set; }
+
+        /// <summary>
+        /// Positive (Right) button bind.
+        /// </summary>
         public Button PositiveBind { get; set; }
+
+        /// <summary>
+        /// Negative (Left) button bind.
+        /// </summary>
         public Button NegativeBind { get; set; }
+
         private float last = 0;
 
+        /// <summary>
+        /// Creates a standard axis with given name.
+        /// </summary>
+        /// <param name="name">Name of the axis.</param>
         public StandardAxis(string name) : base(name)
         {
+            Type = AxisType.Standard;
             editor = new UI.TwoKeyAxisEditor(this);
 
             PositiveBind = null;
@@ -44,6 +81,9 @@ namespace Lench.AdvancedControls.Axes
             Invert = false;
         }
 
+        /// <summary>
+        /// Input value is 1 if PositiveBind is pressed, -1 if NegativeBind is pressed and 0 if both or none are.
+        /// </summary>
         public override float InputValue
         {
             get
@@ -54,11 +94,17 @@ namespace Lench.AdvancedControls.Axes
             }
         }
 
+        /// <summary>
+        /// Returns the output value to zero.
+        /// </summary>
         protected override void Initialise()
         {
             OutputValue = 0;
         }
 
+        /// <summary>
+        /// Reads input value and updates output value depending on pressed keys and settings.
+        /// </summary>
         protected override void Update()
         {
             float g_force = OutputValue > 0 ? -Gravity : Gravity;

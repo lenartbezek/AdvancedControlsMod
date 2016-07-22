@@ -16,7 +16,6 @@ namespace Lench.AdvancedControls.UI
 
         private StandardAxis Axis;
 
-        internal string error;
         internal string note;
 
         private string sens_string;
@@ -158,7 +157,7 @@ namespace Lench.AdvancedControls.UI
 
         public string GetError()
         {
-            return error;
+            return null;
         }
     }
 }

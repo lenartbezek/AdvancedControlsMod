@@ -4,6 +4,9 @@ using UnityEngine;
 
 namespace Lench.AdvancedControls.Input
 {
+    /// <summary>
+    /// Controller class providing access to an SDL device with axis and button mapping.
+    /// </summary>
     public class Controller : IDisposable, IEquatable<Controller>
     {
         internal IntPtr device_pointer;
@@ -14,30 +17,68 @@ namespace Lench.AdvancedControls.Input
         private float[,] ball_values_raw;
         private float[,] ball_values_smooth;
 
-        public List<string> AxisNames;
-        public List<string> BallNames;
-        public List<string> HatNames;
-        public List<string> ButtonNames;
-
-        public readonly List<Button> Buttons;
-
-        public int Index { get { return SDL.SDL_JoystickInstanceID(device_pointer); } }
-        public string Name { get { return IsGameController ? SDL.SDL_GameControllerName(game_controller) : SDL.SDL_JoystickName(device_pointer); } }
-        public Guid GUID { get { return SDL.SDL_JoystickGetGUID(device_pointer); } }
-        public bool Connected { get { return SDL.SDL_JoystickGetAttached(device_pointer) == SDL.SDL_bool.SDL_TRUE; } }
-        public bool IsGameController { get; private set; }
+#pragma warning disable CS1591
 
         public int NumAxes { get { return SDL.SDL_JoystickNumAxes(device_pointer); } }
         public int NumBalls { get { return SDL.SDL_JoystickNumBalls(device_pointer); } }
         public int NumHats { get { return SDL.SDL_JoystickNumHats(device_pointer); } }
         public int NumButtons { get { return SDL.SDL_JoystickNumButtons(device_pointer); } }
 
+        public List<string> AxisNames { get; private set; }
+        public List<string> BallNames { get; private set; }
+        public List<string> HatNames { get; private set; }
+        public List<string> ButtonNames { get; private set; }
+
+#pragma warning restore CS1591
+
+        /// <summary>
+        /// List of all controller buttons, including hats (one for every direction).
+        /// Does not necessarily contain objects equal by reference to buttons bound at input axes.
+        /// </summary>
+        public readonly List<Button> Buttons;
+
+        /// <summary>
+        /// Index of the device needed to access it through SDL.
+        /// </summary>
+        public int Index { get { return SDL.SDL_JoystickInstanceID(device_pointer); } }
+
+        /// <summary>
+        /// Name of the device.
+        /// Returns name from GameControllerMappings.txt if found.
+        /// </summary>
+        public string Name { get { return IsGameController ? SDL.SDL_GameControllerName(game_controller) : SDL.SDL_JoystickName(device_pointer); } }
+
+        /// <summary>
+        /// GUID of the controller.
+        /// </summary>
+        public Guid GUID { get { return SDL.SDL_JoystickGetGUID(device_pointer); } }
+
+        /// <summary>
+        /// Is device currently connected.
+        /// </summary>
+        public bool Connected { get { return SDL.SDL_JoystickGetAttached(device_pointer) == SDL.SDL_bool.SDL_TRUE; } }
+
+        /// <summary>
+        /// Was device mapping found and is thus recognized as game controller.
+        /// </summary>
+        public bool IsGameController { get; private set; }
+
         internal static List<Guid> DeviceList = new List<Guid>();
         internal static Dictionary<Guid, Controller> Devices = new Dictionary<Guid, Controller>();
 
+        /// <summary>
+        /// Number of currently connected devices.
+        /// </summary>
         public static int NumDevices { get { return Devices.Count;}}
 
-        internal static void AddDevice(int index)
+        /// <summary>
+        /// Adds device connected at given index.
+        /// Does nothing if no device is connected at that index.
+        /// Checks for disconnected devices first.
+        /// Devices shouldn't be added twice.
+        /// </summary>
+        /// <param name="index"></param>
+        public static void AddDevice(int index)
         {
             RemoveDisconnected();
             if (index < NumDevices) return;
@@ -46,7 +87,10 @@ namespace Lench.AdvancedControls.Input
             Devices.Add(controller.GUID, controller);
         }
 
-        internal static void RemoveDisconnected()
+        /// <summary>
+        /// Removes and disposes all disconnected devices.
+        /// </summary>
+        public static void RemoveDisconnected()
         {
             var remove = new List<Guid>();
 
@@ -61,6 +105,11 @@ namespace Lench.AdvancedControls.Input
             }
         }
 
+        /// <summary>
+        /// Returns a Controller object for a device with given guid.
+        /// If such device is not found, returns null.
+        /// </summary>
+        /// <param name="guid">GUID of the device.</param>
         public static Controller Get(Guid guid)
         {
             if (Devices.ContainsKey(guid))
@@ -69,6 +118,11 @@ namespace Lench.AdvancedControls.Input
                 return null;
         }
 
+        /// <summary>
+        /// Returns a Controller object for a device at given index.
+        /// If such device is not found, returns null.
+        /// </summary>
+        /// <param name="id">Index of the device.</param>
         public static Controller Get(int id)
         {
             try
@@ -261,6 +315,12 @@ namespace Lench.AdvancedControls.Input
             }
         }
 
+        /// <summary>
+        /// Returns raw value of an axis.
+        /// </summary>
+        /// <param name="index">Index of the axis.</param>
+        /// <param name="smooth">Axis smoothing.</param>
+        /// <returns>value in range [-1, 1]</returns>
         public float GetAxis(int index, bool smooth = false)
         {
             if (smooth)
@@ -269,6 +329,10 @@ namespace Lench.AdvancedControls.Input
                 return axis_values_raw[index];
         }
 
+        /// <summary>
+        /// Closes the device and unsubscribes it from poll events.
+        /// Is called on disconnected devices.
+        /// </summary>
         public void Dispose()
         {
             if (IsGameController)
@@ -280,6 +344,9 @@ namespace Lench.AdvancedControls.Input
             ACM.Instance.OnUpdate -= Update;
         }
 
+        /// <summary>
+        /// Does this object represent the same device as other.
+        /// </summary>
         public bool Equals(Controller other)
         {
             return device_pointer == other.device_pointer;

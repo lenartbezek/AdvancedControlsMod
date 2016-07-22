@@ -4,19 +4,29 @@ using Lench.Scripter.Blocks;
 
 namespace Lench.AdvancedControls.Controls
 {
+    /// <summary>
+    /// Angle control that applies angle value to steering blocks and steering hinges.
+    /// </summary>
     public class AngleControl : Control
     {
-        public override string Name { get; set; } = "ANGLE";
-
         private Steering steering;
 
+        /// <summary>
+        /// Creates an angle control for a block with given GUID.
+        /// </summary>
+        /// <param name="guid">GUID of the block.</param>
         public AngleControl(Guid guid) : base(guid)
         {
+            Name = "ANGLE";
             Min = -45;
             Center = 0;
             Max = 45;
         }
 
+        /// <summary>
+        /// Control's block handler.
+        /// Angle control only accepts Lench.ScripterMod.Blocks.Steering handlers.
+        /// </summary>
         public override Block Block
         {
             get
@@ -30,6 +40,10 @@ namespace Lench.AdvancedControls.Controls
             }
         }
 
+        /// <summary>
+        /// Applies the angle to the block.
+        /// </summary>
+        /// <param name="value">Angle in degrees.</param>
         protected override void Apply(float value)
         {
             if (value > 0)

@@ -45,14 +45,14 @@ namespace Lench.AdvancedControls.UI
 
         private void DoWindow(int id)
         {
-            if (AxisManager.Axes.Count > 0)
+            if (AxisManager.LocalAxes.Count > 0)
             {
                 scrollPosition = GUILayout.BeginScrollView(scrollPosition,
-                    GUILayout.Height(Mathf.Clamp(AxisManager.Axes.Count * 36 + 8, 180, 480)));
+                    GUILayout.Height(Mathf.Clamp(AxisManager.LocalAxes.Count * 36 + 8, 180, 480)));
 
                 string toBeRemoved = null;
 
-                foreach (KeyValuePair<string, InputAxis> pair in AxisManager.Axes)
+                foreach (KeyValuePair<string, InputAxis> pair in AxisManager.LocalAxes)
                 {
                     var name = pair.Key;
                     var axis = pair.Value;
@@ -83,7 +83,7 @@ namespace Lench.AdvancedControls.UI
                 }
 
                 if (toBeRemoved != null)
-                    AxisManager.Remove(toBeRemoved);
+                    AxisManager.Delete(toBeRemoved);
 
                 GUILayout.EndScrollView();
             }

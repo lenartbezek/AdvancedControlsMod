@@ -4,16 +4,28 @@ using UnityEngine;
 
 namespace Lench.AdvancedControls.Controls
 {
+    /// <summary>
+    /// Input control creates analog input for otherwise one or two key actions.
+    /// </summary>
     public class InputControl : Control
     {
-        public override string Name { get; set; } = "INPUT";
-
         private Cog cog;
         private Steering steering;
         private Spring spring;
 
-        public InputControl(Guid guid) : base(guid){}
+        /// <summary>
+        /// Creates an input control for a block with given GUID.
+        /// </summary>
+        /// <param name="guid">GUID of the block.</param>
+        public InputControl(Guid guid) : base(guid)
+        {
+            Name = "INPUT";
+        }
 
+        /// <summary>
+        /// Control's block handler.
+        /// Angle control accepts Lench.ScripterMod.Blocks.Steering, Cog and Spring handlers.
+        /// </summary>
         public override Block Block
         {
             get
@@ -31,6 +43,10 @@ namespace Lench.AdvancedControls.Controls
             }
         }
 
+        /// <summary>
+        /// Applies input to the block.
+        /// </summary>
+        /// <param name="value">Input value.</param>
         protected override void Apply(float value)
         {
             if (value > 0)

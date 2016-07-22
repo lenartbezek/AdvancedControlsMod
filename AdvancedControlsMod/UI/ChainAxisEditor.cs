@@ -14,7 +14,6 @@ namespace Lench.AdvancedControls.UI
 
         private ChainAxis Axis;
 
-        internal string note;
         internal string error;
 
         private AxisSelector popup;
@@ -258,7 +257,7 @@ namespace Lench.AdvancedControls.UI
 
         public string GetNote()
         {
-            return note;
+            return null;
         }
 
         public string GetError()

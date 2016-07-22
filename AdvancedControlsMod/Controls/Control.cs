@@ -7,17 +7,55 @@ using spaar.ModLoader;
 
 namespace Lench.AdvancedControls.Controls
 {
+    /// <summary>
+    /// Control class that takes value from an input axis, interpolates it in given range and applies it to the block.
+    /// </summary>
     public abstract class Control
     {
-        public virtual string Name { get; set; } = "CONTROL";
-        public virtual string Description { get; set; }
+        /// <summary>
+        /// Name of the control. Displayed in the control mapper.
+        /// </summary>
+        public string Name { get; set; } = "CONTROL";
 
-        public virtual bool Enabled { get; set; } = false;
+        /// <summary>
+        /// Is the control enabled and applies value to the block on each frame.
+        /// </summary>
+        public bool Enabled { get; set; } = false;
+
+        /// <summary>
+        /// Are control intervals set to be positive only.
+        /// </summary>
         public virtual bool PositiveOnly { get; set; } = false;
-        public virtual string Axis { get; set; }
+
+        /// <summary>
+        /// Bound axis name.
+        /// </summary>
+        public string Axis
+        {
+            get
+            {
+                return axis_name;
+            }
+            set
+            {
+                axis_name = value;
+                axis = AxisManager.Get(axis_name);
+            }
+        }
+
+        /// <summary>
+        /// BlockHandler object of the control's block.
+        /// </summary>
         public virtual Block Block { get; protected set; }
+
+        /// <summary>
+        /// GUID of the block the control is bound to.
+        /// </summary>
         public virtual Guid BlockGUID { get; set; }
 
+        /// <summary>
+        /// Minimum (Left) interval value. Applied when bound axis value is -1.
+        /// </summary>
         public virtual float Min
         {
             get { return min; }
@@ -28,6 +66,9 @@ namespace Lench.AdvancedControls.Controls
             }
         }
 
+        /// <summary>
+        /// Center interval value. Applied when bound axis value is 0.
+        /// </summary>
         public virtual float Center
         {
             get { return cen; }
@@ -38,6 +79,9 @@ namespace Lench.AdvancedControls.Controls
             }
         }
 
+        /// <summary>
+        /// Maximum (Right) interval value. Applied when bound axis value is +1.
+        /// </summary>
         public virtual float Max
         {
             get { return max; }
@@ -48,6 +92,9 @@ namespace Lench.AdvancedControls.Controls
             }
         }
 
+        private string axis_name;
+        private InputAxis axis;
+
         private float min = -1;
         private float cen = 0;
         private float max = 1;
@@ -56,6 +103,10 @@ namespace Lench.AdvancedControls.Controls
         internal string cen_string;
         internal string max_string;
 
+        /// <summary>
+        /// Creates a control for a block with given GUID.
+        /// </summary>
+        /// <param name="guid">GUID of the block.</param>
         public Control(Guid guid)
         {
             BlockGUID = guid;
@@ -67,6 +118,10 @@ namespace Lench.AdvancedControls.Controls
             max_string = (Mathf.Round(Max * 100) / 100).ToString();
         }
 
+        /// <summary>
+        /// Is called on OnInitialisation to retrieve BlockHandler reference.
+        /// If the control has no associated block, it is deleted.
+        /// </summary>
         protected virtual void Initialise()
         {
             try
@@ -80,22 +135,32 @@ namespace Lench.AdvancedControls.Controls
             }
         }
 
+        /// <summary>
+        /// Called on every frame to apply the value.
+        /// </summary>
         protected virtual void Update()
         {
             if (Game.IsSimulating)
             {
-                var a = AxisManager.Get(Axis);
-                if (Enabled && Block != null && a != null && a.Saveable)
+                if (Enabled && Block != null && axis != null && axis.Status == AxisStatus.OK)
                 {
-                    Apply(a.OutputValue);
+                    Apply(axis.OutputValue);
                 }
             }
         }
 
+        /// <summary>
+        /// Applies the value to the block.
+        /// </summary>
+        /// <param name="value">Value to be applied.</param>
         protected abstract void Apply(float value);
 
         internal abstract Control Clone();
 
+        /// <summary>
+        /// Loads the control from BlockInfo and enables it.
+        /// </summary>
+        /// <param name="blockInfo"></param>
         internal virtual void Load(BlockInfo blockInfo)
         {
             Axis = blockInfo.BlockData.ReadString("ac-control-" + Name + "-axis");
@@ -108,6 +173,10 @@ namespace Lench.AdvancedControls.Controls
             Enabled = true;
         }
 
+        /// <summary>
+        /// Saves the control to BlockInfo.
+        /// </summary>
+        /// <param name="blockInfo"></param>
         internal virtual void Save(BlockInfo blockInfo)
         {
             blockInfo.BlockData.Write("ac-control-" + Name + "-axis", Axis);
