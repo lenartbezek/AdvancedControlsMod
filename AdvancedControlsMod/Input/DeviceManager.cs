@@ -65,6 +65,8 @@ namespace Lench.AdvancedControls.Input
         {
             ControllerAxisEditor.downloading_in_progress = true;
             ControllerAxisEditor.download_button_text = "0 %";
+            if (File.Exists(Application.dataPath + @"\Mods\Resources\AdvancedControls\lib\SDL2.dll"))
+                File.Delete(Application.dataPath + @"\Mods\Resources\AdvancedControls\lib\SDL2.dll");
             if (!Directory.Exists(Application.dataPath + @"\Mods\Resources\AdvancedControls\lib\"))
                 Directory.CreateDirectory(Application.dataPath + @"\Mods\Resources\AdvancedControls\lib\");
             using (var client = new WebClient())
@@ -81,6 +83,8 @@ namespace Lench.AdvancedControls.Input
                         if (e.Error != null)
                         {
                             ControllerAxisEditor.download_button_text = "Error";
+                            Debug.Log("[ACM]: Error downloading file:");
+                            Debug.LogException(e.Error);
                         }
                         else
                         {
@@ -92,10 +96,12 @@ namespace Lench.AdvancedControls.Input
                         new Uri("http://lench4991.github.io/AdvancedControlsMod/files/SDL2.dll"),
                         Application.dataPath + @"\Mods\Resources\AdvancedControls\lib\SDL2.dll");
                 }
-                catch
+                catch (Exception e)
                 {
                     ControllerAxisEditor.downloading_in_progress = false;
                     ControllerAxisEditor.download_button_text = "Error";
+                    Debug.Log("[ACM]: Error downloading file:");
+                    Debug.LogException(e);
                 }
             }
         }

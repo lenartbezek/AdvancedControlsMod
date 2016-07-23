@@ -147,7 +147,7 @@ namespace Lench.AdvancedControls.UI
             return error;
         }
 
-        private static void InstallIronPython()
+        private void InstallIronPython()
         {
             downloading_in_progress = true;
             download_button_text = "0 % (" + (files_downloaded) + "/" + files_required + ")";
@@ -167,6 +167,9 @@ namespace Lench.AdvancedControls.UI
                         if (e.Error != null)
                         {
                             download_button_text = "Error";
+                            Debug.Log("[ACM]: Error downloading file:");
+                            Debug.LogException(e.Error);
+                            error = "<b>" + e.Error.GetType().Name + "</b>\nSee console for more info.";
                         }
                         else
                         {
@@ -188,10 +191,13 @@ namespace Lench.AdvancedControls.UI
                     };
                     DownloadNextFile(client);
                 }
-                catch
+                catch (Exception e)
                 {
-                    ControllerAxisEditor.downloading_in_progress = false;
-                    ControllerAxisEditor.download_button_text = "Error";
+                    error = "<b>"+e.GetType().Name + "</b>\nSee console for more info.";
+                    Debug.Log("[ACM]: Error downloading file:");
+                    Debug.LogException(e);
+                    downloading_in_progress = false;
+                    download_button_text = "Error";
                 }
             }
         }
@@ -217,6 +223,8 @@ namespace Lench.AdvancedControls.UI
 
         private static void DownloadNextFile(WebClient client)
         {
+            if (File.Exists(Application.dataPath + file_paths[files_downloaded]))
+                File.Delete(Application.dataPath + file_paths[files_downloaded]);
             client.DownloadFileAsync(
                 file_uris[files_downloaded],
                 Application.dataPath + file_paths[files_downloaded]);

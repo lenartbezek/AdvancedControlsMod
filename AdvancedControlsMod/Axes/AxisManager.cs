@@ -141,14 +141,22 @@ namespace Lench.AdvancedControls.Axes
                 var joybutton = button as JoystickButton;
                 var controller = Controller.Get(joybutton.GUID);
                 if (controller == null && Controller.NumDevices > 0)
-                        joybutton.GUID = Controller.Get(0).GUID;
+                {
+                    controller = Controller.Get(0);
+                    joybutton.GUID = controller.GUID;
+                    joybutton.Index %= controller.NumButtons;
+                }
             }
             if (button.GetType() == typeof(HatButton))
             {
                 var hatbutton = button as HatButton;
                 var controller = Controller.Get(hatbutton.GUID);
                 if (controller == null && Controller.NumDevices > 0)
-                    hatbutton.GUID = Controller.Get(0).GUID;
+                {
+                    controller = Controller.Get(0);
+                    hatbutton.GUID = controller.GUID;
+                    hatbutton.Index %= controller.NumHats;
+                }
             }
         }
 
@@ -159,7 +167,12 @@ namespace Lench.AdvancedControls.Axes
         {
             var controller = Controller.Get(axis.GUID);
             if (controller == null && Controller.NumDevices > 0)
-                axis.GUID = Controller.Get(0).GUID;
+            {
+                controller = Controller.Get(0);
+                axis.GUID = controller.GUID;
+                axis.Axis %= controller.NumAxes;
+            }
+                
         }
     }
 }
