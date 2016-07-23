@@ -49,7 +49,9 @@ namespace Lench.AdvancedControls.UI
             if (AxisManager.LocalAxes.Count > 0)
             {
                 scrollPosition = GUILayout.BeginScrollView(scrollPosition,
-                    GUILayout.Height(Mathf.Clamp(AxisManager.LocalAxes.Count * 36 + 8, 180, 480)));
+                    GUILayout.Height(Mathf.Clamp(AxisManager.LocalAxes.Count * 36 + 30, 138, 246)));
+
+                GUILayout.Label("LOCALLY SAVED AXES", new GUIStyle(Elements.Labels.Title) { alignment = TextAnchor.MiddleCenter });
 
                 string toBeRemoved = null;
 
@@ -84,17 +86,18 @@ namespace Lench.AdvancedControls.UI
                 }
 
                 if (toBeRemoved != null)
-                    AxisManager.Delete(toBeRemoved);
+                    AxisManager.RemoveLocalAxis(toBeRemoved);
 
                 GUILayout.EndScrollView();
             }
 
             // Draw machine axes
-            GUILayout.Label("Machine axes", Elements.Labels.Title);
             if (AxisManager.MachineAxes.Count > 0)
             {
                 scrollPosition = GUILayout.BeginScrollView(scrollPosition,
-                    GUILayout.Height(Mathf.Clamp(AxisManager.LocalAxes.Count * 36 + 8, 180, 480)));
+                    GUILayout.Height(Mathf.Clamp(AxisManager.LocalAxes.Count * 36 + 30, 138, 246)));
+
+                GUILayout.Label("MACHINE EMBEDDED AXES", new GUIStyle(Elements.Labels.Title) { alignment = TextAnchor.MiddleCenter });
 
                 string toBeRemoved = null;
 
@@ -129,7 +132,7 @@ namespace Lench.AdvancedControls.UI
                 }
 
                 if (toBeRemoved != null)
-                    AxisManager.Delete(toBeRemoved);
+                    AxisManager.RemoveMachineAxis(toBeRemoved);
 
                 GUILayout.EndScrollView();
             }

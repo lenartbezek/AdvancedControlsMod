@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using Lench.AdvancedControls.Controls;
+using Lench.AdvancedControls.Input;
 
 namespace Lench.AdvancedControls.Axes
 {
@@ -33,52 +34,55 @@ namespace Lench.AdvancedControls.Axes
         /// Overwrites axis if saved under an existing name.
         /// </summary>
         /// <param name="axis">InputAxis object.</param>
-        public static void Save(InputAxis axis)
+        public static void AddLocalAxis(InputAxis axis)
         {
+            // overwrite existing axis or create new
             if (LocalAxes.ContainsKey(axis.Name))
             {
                 LocalAxes[axis.Name].Delete();
                 LocalAxes[axis.Name] = axis;
-                axis.Local = true;
             }
             else
             {
                 LocalAxes.Add(axis.Name, axis);
             }
+            // delete identical axis in machine embedded axis list
+            if (MachineAxes.ContainsKey(axis.Name) && axis.Equals(MachineAxes[axis.Name]))
+                RemoveMachineAxis(axis.Name);
         }
 
         /// <summary>
         /// Adds the axis to the machine.
         /// Intended to be called on loading the axes from the machine.
+        /// If there is an identical axis already locally saved, it does nothing.
         /// </summary>
         /// <param name="axis">InputAxis object.</param>
-        public static void Add(InputAxis axis)
+        public static void AddMachineAxis(InputAxis axis)
         {
-            if (MachineAxes.ContainsKey(axis.Name))
-            {
-                MachineAxes[axis.Name] = axis;
-                axis.Local = false;
-            }
-            else
-            {
-                MachineAxes.Add(axis.Name, axis);
-            }
+            if (LocalAxes.ContainsKey(axis.Name) && axis.Equals(LocalAxes[axis.Name]))
+                return;
+            MachineAxes[axis.Name] = axis;
+        }
+
+        /// <summary>
+        /// Removes a machine bound axis.
+        /// </summary>
+        /// <param name="name">Name of the axis.</param>
+        public static void RemoveMachineAxis(string name)
+        {
+            MachineAxes.Remove(name);
         }
 
         /// <summary>
         /// Deletes a locally saved axis.
         /// </summary>
         /// <param name="name">Name of the axis.</param>
-        public static void Delete(string name)
+        public static void RemoveLocalAxis(string name)
         {
             if (LocalAxes.ContainsKey(name))
             {
                 LocalAxes[name].Delete();
                 LocalAxes.Remove(name);
-            }
-            if (MachineAxes.ContainsKey(name))
-            {
-                MachineAxes.Remove(name);
             }
         }
 
@@ -97,6 +101,65 @@ namespace Lench.AdvancedControls.Axes
                     dict[c.Axis] = Get(c.Axis);
             }
             return dict;
+        }
+
+        /// <summary>
+        /// For every axis embedded in machine save, checks if associated controller is connected.
+        /// If not, it attempts to bind it to another controller.
+        /// </summary>
+        public static void ResolveMachineAxes()
+        {
+            foreach (var entry in MachineAxes)
+            {
+                var name = entry.Key;
+                var axis = entry.Value;
+
+                switch (axis.Type)
+                {
+                    case AxisType.Standard:
+                        ResolveButton((axis as StandardAxis).PositiveBind);
+                        ResolveButton((axis as StandardAxis).NegativeBind);
+                        continue;
+                    case AxisType.Inertial:
+                        ResolveButton((axis as InertialAxis).PositiveBind);
+                        ResolveButton((axis as InertialAxis).NegativeBind);
+                        continue;
+                    case AxisType.Controller:
+                        ResolveControllerAxis(axis as ControllerAxis);
+                        continue;
+                }
+            }
+        }
+
+        /// <summary>
+        /// If the button is a controller button and the associated controller is not found, it remaps it to the first connected device.
+        /// </summary>
+        public static void ResolveButton(Button button)
+        {
+            if (button.GetType() == typeof(JoystickButton))
+            {
+                var joybutton = button as JoystickButton;
+                var controller = Controller.Get(joybutton.GUID);
+                if (controller == null && Controller.NumDevices > 0)
+                        joybutton.GUID = Controller.Get(0).GUID;
+            }
+            if (button.GetType() == typeof(HatButton))
+            {
+                var hatbutton = button as HatButton;
+                var controller = Controller.Get(hatbutton.GUID);
+                if (controller == null && Controller.NumDevices > 0)
+                    hatbutton.GUID = Controller.Get(0).GUID;
+            }
+        }
+
+        /// <summary>
+        /// If the associated controller is not found, it remaps it to the first connected device.
+        /// </summary>
+        public static void ResolveControllerAxis(ControllerAxis axis)
+        {
+            var controller = Controller.Get(axis.GUID);
+            if (controller == null && Controller.NumDevices > 0)
+                axis.GUID = Controller.Get(0).GUID;
         }
     }
 }

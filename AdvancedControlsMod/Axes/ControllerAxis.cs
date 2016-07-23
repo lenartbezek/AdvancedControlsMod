@@ -283,5 +283,26 @@ namespace Lench.AdvancedControls.Axes
         /// Controller axis requires no update.
         /// </summary>
         protected override void Update() { }
+
+        /// <summary>
+        /// Compares axis tuning parameters.
+        /// </summary>
+        /// <param name="other">Axis to compare with.</param>
+        /// <returns>Returns true if axes are identical.</returns>
+        public override bool Equals(InputAxis other)
+        {
+            var cast = other as ControllerAxis;
+            if (cast == null) return false;
+            return this.Name == cast.Name &&
+                   this.GUID == cast.GUID &&
+                   this.Axis == cast.Axis &&
+                   this.Sensitivity == cast.Sensitivity &&
+                   this.Curvature == cast.Curvature &&
+                   this.Deadzone == cast.Deadzone &&
+                   this.OffsetX == cast.OffsetX &&
+                   this.OffsetY == cast.OffsetY &&
+                   this.Invert == cast.Invert &&
+                   this.Smooth == cast.Smooth;
+        }
     }
 }

@@ -127,6 +127,8 @@ namespace Lench.AdvancedControls
                 CheckForDBUpdate();
 
             enabled = ModEnabled;
+
+            DeviceManager.OnDeviceAdded += (SDL.SDL_Event e) => { Axes.AxisManager.ResolveMachineAxes(); };
         }
 
         private void OnDestroy()

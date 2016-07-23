@@ -11,10 +11,12 @@ namespace Lench.AdvancedControls
         {
             try
             {
+                // load mod configuration
                 ACM.Instance.ModEnabled = spaar.ModLoader.Configuration.GetBool("acm-enabled", true);
                 ACM.Instance.ModUpdaterEnabled = spaar.ModLoader.Configuration.GetBool("mod-updater-enabled", true);
                 ACM.Instance.DBUpdaterEnabled = spaar.ModLoader.Configuration.GetBool("db-updater-enabled", true);
 
+                // read input axes
                 int count = spaar.ModLoader.Configuration.GetInt("number-of-axes", 0);
                 for (int i = 0; i < count; i++)
                 {
@@ -37,8 +39,15 @@ namespace Lench.AdvancedControls
                     if (axis != null)
                     {
                         axis?.Load();
-                        AxisManager.Save(axis);
+                        AxisManager.AddLocalAxis(axis);
                     }
+                }
+
+                // refresh chain axis links
+                foreach (var entry in AxisManager.LocalAxes)
+                {
+                    if (entry.Value.Type == AxisType.Chain)
+                        (entry.Value as ChainAxis).RefreshLinks();
                 }
             }
             catch (Exception e)

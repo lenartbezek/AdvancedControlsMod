@@ -15,15 +15,19 @@ namespace Lench.AdvancedControls
             {
                 AxisManager.MachineAxes.Clear();
 
+                // read mod version
                 if (!machineInfo.MachineData.HasKey("ac-version")) return;
                 var version = new Version(machineInfo.MachineData.ReadString("ac-version").TrimStart('v'));
 
+                // version alert
                 if (version < Assembly.GetExecutingAssembly().GetName().Version)
-                    Debug.Log("[ACM]: " + machineInfo.Name + " was saved last with mod version " + version + ". It may not support some newer features.");
+                    Debug.Log("[ACM]: " + machineInfo.Name + " was saved with mod version " + version + ".\n\tIt may not support some newer features.");
 
+                // return if no input axes are present
                 if (!machineInfo.MachineData.HasKey("ac-axislist")) return;
                 var axes = machineInfo.MachineData.ReadStringArray("ac-axislist");
 
+                // load all axes
                 foreach (var name in axes)
                 {
                     InputAxis axis = null;
@@ -43,10 +47,21 @@ namespace Lench.AdvancedControls
                     if (axis != null)
                     {
                         axis?.Load(machineInfo);
-                        AxisManager.Add(axis);
+                        AxisManager.AddMachineAxis(axis);
                     }
                 }
 
+                // refresh chain axis links
+                foreach (var entry in AxisManager.MachineAxes)
+                {
+                    if (entry.Value.Type == AxisType.Chain)
+                        (entry.Value as ChainAxis).RefreshLinks();
+                }
+
+                // resolve from foreign controllers
+                AxisManager.ResolveMachineAxes();
+
+                // load all controls
                 foreach (BlockInfo blockInfo in machineInfo.Blocks)
                 {
                     if (!blockInfo.BlockData.HasKey("ac-controllist")) continue;
@@ -75,8 +90,6 @@ namespace Lench.AdvancedControls
         {
             try
             {
-                AxisManager.MachineAxes.Clear();
-
                 var axes = new List<string>();
 
                 foreach (BlockInfo blockInfo in machineInfo.Blocks)
@@ -107,7 +120,7 @@ namespace Lench.AdvancedControls
                 {
                     var a = AxisManager.Get(axis);
                     a.Save(machineInfo);
-                    AxisManager.Add(a);
+                    AxisManager.AddMachineAxis(a);
                 }
             }
             catch (Exception e)

@@ -63,5 +63,23 @@ namespace Lench.AdvancedControls.Axes
             clone.Invert = Snap;
             return clone;
         }
+
+        /// <summary>
+        /// Compares axis tuning parameters.
+        /// </summary>
+        /// <param name="other">Axis to compare with.</param>
+        /// <returns>Returns true if axes are identical.</returns>
+        public override bool Equals(InputAxis other)
+        {
+            var cast = other as InertialAxis;
+            if (cast == null) return false;
+            return this.Name == cast.Name &&
+                   this.Sensitivity == cast.Sensitivity &&
+                   this.Gravity == cast.Gravity &&
+                   this.Snap == cast.Snap &&
+                   this.Invert == cast.Invert &&
+                   this.PositiveBind.ID == cast.PositiveBind.ID &&
+                   this.NegativeBind.ID == cast.NegativeBind.ID;
+        }
     }
 }

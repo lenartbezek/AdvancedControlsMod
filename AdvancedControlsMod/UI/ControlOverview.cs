@@ -37,10 +37,11 @@ namespace Lench.AdvancedControls.UI
 
             if (onload)
             {
-                bool all = true;
-                foreach (string axis in instance.AxisList)
-                    all &= AxisManager.LocalAxes.ContainsKey(axis);
-                if (all)
+                if (instance.AxisList.TrueForAll(name =>
+                {
+                    var axis = AxisManager.Get(name);
+                    return axis != null && (axis.Status == AxisStatus.OK || axis.Status == AxisStatus.NotRunning);
+                }))
                 {
                     Destroy(instance);
                     return null;
@@ -188,7 +189,7 @@ namespace Lench.AdvancedControls.UI
                 GUILayout.Label("<b>" + Machine.Active().Name + "</b> uses no advanced controls.");
             else
             {
-                GUILayout.Label("<b>" + Machine.Active().Name + "</b> uses these input axes:\n");
+                GUILayout.Label("To use this machine as intended,\nmake sure all axes report no problems.\n\n<b>" + Machine.Active().Name + "</b> uses these input axes:");
 
                 // Draw axes
                 foreach (string axis in AxisList)

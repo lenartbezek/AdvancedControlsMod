@@ -212,5 +212,20 @@ axis_value";
             spaar.ModLoader.Configuration.RemoveKey("axis-" + Name + "-global");
             Dispose();
         }
+
+        /// <summary>
+        /// Compares axis tuning parameters.
+        /// </summary>
+        /// <param name="other">Axis to compare with.</param>
+        /// <returns>Returns true if axes are identical.</returns>
+        public override bool Equals(InputAxis other)
+        {
+            var cast = other as CustomAxis;
+            if (cast == null) return false;
+            return this.Name == cast.Name &&
+                   this.InitialisationCode == cast.InitialisationCode &&
+                   this.UpdateCode == cast.UpdateCode &&
+                   this.GlobalScope == cast.GlobalScope;
+        }
     }
 }

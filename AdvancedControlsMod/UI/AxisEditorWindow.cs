@@ -34,7 +34,7 @@ namespace Lench.AdvancedControls.UI
             Axis = Axis.Clone();
             Axis.editor.Open();
             Axis.Name = SaveName;
-            AxisManager.Save(Axis);
+            AxisManager.AddLocalAxis(Axis);
             Callback?.Invoke(Axis);
             Destroy(this);
         }

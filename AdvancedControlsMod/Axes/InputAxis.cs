@@ -1,4 +1,6 @@
-﻿namespace Lench.AdvancedControls.Axes
+﻿using System;
+
+namespace Lench.AdvancedControls.Axes
 {
 
 #pragma warning disable CS1591
@@ -26,7 +28,7 @@
     /// <summary>
     /// Abstract class that defines the input axis frame.
     /// </summary>
-    public abstract class InputAxis
+    public abstract class InputAxis : IEquatable<InputAxis>
     {
         /// <summary>
         /// Unique name of the axis.
@@ -53,11 +55,6 @@
         /// Can axis be saved.
         /// </summary>
         public virtual bool Saveable { get; } = true;
-
-        /// <summary>
-        /// Is axis saved locally.
-        /// </summary>
-        public bool Local { get; internal set; } = true;
 
         /// <summary>
         /// Current status of the axis.
@@ -148,5 +145,12 @@
                     return "UNKNOWN";
             }
         }
+
+        /// <summary>
+        /// Compares axis tuning parameters.
+        /// </summary>
+        /// <param name="other">Axis to compare with.</param>
+        /// <returns>Returns true if axes are identical.</returns>
+        public abstract bool Equals(InputAxis other);
     }
 }

@@ -282,5 +282,20 @@ namespace Lench.AdvancedControls.Axes
         /// Chain axis requires no update.
         /// </summary>
         protected override void Update(){ }
+
+        /// <summary>
+        /// Compares axis tuning parameters.
+        /// </summary>
+        /// <param name="other">Axis to compare with.</param>
+        /// <returns>Returns true if axes are identical.</returns>
+        public override bool Equals(InputAxis other)
+        {
+            var cast = other as ChainAxis;
+            if (cast == null) return false;
+            return this.Name == cast.Name &&
+                   this.Method == cast.Method &&
+                   this.SubAxis1 == cast.SubAxis1 &&
+                   this.SubAxis2 == cast.SubAxis2;
+        }
     }
 }

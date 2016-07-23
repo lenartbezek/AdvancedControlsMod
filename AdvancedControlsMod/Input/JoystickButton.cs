@@ -21,6 +21,29 @@ namespace Lench.AdvancedControls.Input
         /// </summary>
         public string ID { get { return "joy:" + index + ":" + guid; } }
 
+        /// <summary>
+        /// Guid of the associated controller.
+        /// Changing it updates the controller.
+        /// </summary>
+        public Guid GUID
+        {
+            get { return guid; }
+            set
+            {
+                guid = value;
+                controller = Controller.Get(guid);
+            }
+        }
+
+        /// <summary>
+        /// Index of the button on a device.
+        /// </summary>
+        public int Index
+        {
+            get { return index; }
+            set { value = index; }
+        }
+
 #pragma warning disable CS1591
         public bool IsDown { get { return down; } }
         public bool Pressed { get { return pressed; } }
