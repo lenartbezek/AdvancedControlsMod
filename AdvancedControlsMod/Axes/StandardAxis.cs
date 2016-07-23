@@ -139,6 +139,22 @@ namespace Lench.AdvancedControls.Axes
             NegativeBind = ParseButtonID(spaar.ModLoader.Configuration.GetString("axis-" + Name + "-negative", null));
         }
 
+        internal override void Load(MachineInfo machineInfo)
+        {
+            if (machineInfo.MachineData.HasKey("axis-" + Name + "-sensitivity"))
+                Sensitivity = machineInfo.MachineData.ReadFloat("axis-" + Name + "-sensitivity");
+            if (machineInfo.MachineData.HasKey("axis-" + Name + "-gravity"))
+                Gravity = machineInfo.MachineData.ReadFloat("axis-" + Name + "-gravity");
+            if (machineInfo.MachineData.HasKey("axis-" + Name + "-snap"))
+                Snap = machineInfo.MachineData.ReadBool("axis-" + Name + "-snap");
+            if (machineInfo.MachineData.HasKey("axis-" + Name + "-invert"))
+                Invert = machineInfo.MachineData.ReadBool("axis-" + Name + "-invert");
+            if (machineInfo.MachineData.HasKey("axis-" + Name + "-positive"))
+                PositiveBind = ParseButtonID(machineInfo.MachineData.ReadString("axis-" + Name + "-positive"));
+            if (machineInfo.MachineData.HasKey("axis-" + Name + "-negative"))
+                NegativeBind = ParseButtonID(machineInfo.MachineData.ReadString("axis-" + Name + "-negative"));
+        }
+
         internal override void Save()
         {
             spaar.ModLoader.Configuration.SetString("axis-" + Name + "-type", Type.ToString());
@@ -148,6 +164,17 @@ namespace Lench.AdvancedControls.Axes
             spaar.ModLoader.Configuration.SetBool("axis-" + Name + "-invert", Invert);
             spaar.ModLoader.Configuration.SetString("axis-" + Name + "-positive", PositiveBind != null ? PositiveBind.ID : "None");
             spaar.ModLoader.Configuration.SetString("axis-" + Name + "-negative", NegativeBind != null ? NegativeBind.ID : "None");
+        }
+
+        internal override void Save(MachineInfo machineInfo)
+        {
+            machineInfo.MachineData.Write("axis-" + Name + "-type", Type.ToString());
+            machineInfo.MachineData.Write("axis-" + Name + "-sensitivity", Sensitivity);
+            machineInfo.MachineData.Write("axis-" + Name + "-gravity", Gravity);
+            machineInfo.MachineData.Write("axis-" + Name + "-snap", Snap);
+            machineInfo.MachineData.Write("axis-" + Name + "-invert", Invert);
+            machineInfo.MachineData.Write("axis-" + Name + "-positive", PositiveBind != null ? PositiveBind.ID : "None");
+            machineInfo.MachineData.Write("axis-" + Name + "-negative", NegativeBind != null ? NegativeBind.ID : "None");
         }
 
         internal override void Delete()

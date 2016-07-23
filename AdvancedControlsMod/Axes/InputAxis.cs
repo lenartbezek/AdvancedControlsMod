@@ -110,7 +110,9 @@
 
         internal abstract InputAxis Clone();
         internal abstract void Load();
+        internal abstract void Load(MachineInfo machineInfo);
         internal abstract void Save();
+        internal abstract void Save(MachineInfo machineInfo);
         internal abstract void Delete();
 
         /// <summary>

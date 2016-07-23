@@ -169,6 +169,16 @@ namespace Lench.AdvancedControls.Axes
         }
 
         /// <summary>
+        /// Retrieves linked axes again.
+        /// Intended to be called after loading.
+        /// </summary>
+        public void RefreshLinks()
+        {
+            SubAxis1 = sub_axis1;
+            SubAxis2 = sub_axis2;
+        }
+
+        /// <summary>
         /// Chain axis status distinguishes between No Link and OK.
         /// </summary>
         public override AxisStatus Status
@@ -220,6 +230,16 @@ namespace Lench.AdvancedControls.Axes
             SubAxis2 = spaar.ModLoader.Configuration.GetString("axis-" + Name + "-subaxis2", null);
         }
 
+        internal override void Load(MachineInfo machineInfo)
+        {
+            if (machineInfo.MachineData.HasKey("axis-" + Name + "-method"))
+                Method = (ChainMethod)Enum.Parse(typeof(ChainMethod), machineInfo.MachineData.ReadString("axis-" + Name + "-method"));
+            if (machineInfo.MachineData.HasKey("axis-" + Name + "-subaxis1"))
+                SubAxis1 = machineInfo.MachineData.ReadString("axis-" + Name + "-subaxis1");
+            if (machineInfo.MachineData.HasKey("axis-" + Name + "-subaxis2"))
+                SubAxis2 = machineInfo.MachineData.ReadString("axis-" + Name + "-subaxis2");
+        }
+
         internal override void Save()
         {
             spaar.ModLoader.Configuration.SetString("axis-" + Name + "-type", Type.ToString());
@@ -232,6 +252,16 @@ namespace Lench.AdvancedControls.Axes
                 spaar.ModLoader.Configuration.SetString("axis-" + Name + "-subaxis2", SubAxis2);
             else
                 spaar.ModLoader.Configuration.RemoveKey("axis-" + Name + "-subaxis2");
+        }
+
+        internal override void Save(MachineInfo machineInfo)
+        {
+            machineInfo.MachineData.Write("axis-" + Name + "-type", Type.ToString());
+            machineInfo.MachineData.Write("axis-" + Name + "-method", Method.ToString());
+            if (SubAxis1 != null)
+                machineInfo.MachineData.Write("axis-" + Name + "-subaxis1", SubAxis1);
+            if (SubAxis2 != null)
+                machineInfo.MachineData.Write("axis-" + Name + "-subaxis2", SubAxis2);
         }
 
         internal override void Delete()

@@ -30,18 +30,7 @@ namespace Lench.AdvancedControls.Controls
         /// <summary>
         /// Bound axis name.
         /// </summary>
-        public string Axis
-        {
-            get
-            {
-                return axis_name;
-            }
-            set
-            {
-                axis_name = value;
-                axis = AxisManager.Get(axis_name);
-            }
-        }
+        public string Axis { get; set; }
 
         /// <summary>
         /// BlockHandler object of the control's block.
@@ -92,9 +81,6 @@ namespace Lench.AdvancedControls.Controls
             }
         }
 
-        private string axis_name;
-        private InputAxis axis;
-
         private float min = -1;
         private float cen = 0;
         private float max = 1;
@@ -142,6 +128,7 @@ namespace Lench.AdvancedControls.Controls
         {
             if (Game.IsSimulating)
             {
+                var axis = AxisManager.Get(Axis);
                 if (Enabled && Block != null && axis != null && axis.Status == AxisStatus.OK)
                 {
                     Apply(axis.OutputValue);

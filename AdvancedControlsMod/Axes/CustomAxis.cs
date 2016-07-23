@@ -178,12 +178,30 @@ axis_value";
             GlobalScope = spaar.ModLoader.Configuration.GetBool("axis-" + Name + "-global", GlobalScope);
         }
 
+        internal override void Load(MachineInfo machineInfo)
+        {
+            if (machineInfo.MachineData.HasKey("axis-" + Name + "-init"))
+                InitialisationCode = machineInfo.MachineData.ReadString("axis-" + Name + "-init");
+            if (machineInfo.MachineData.HasKey("axis-" + Name + "-update"))
+                UpdateCode = machineInfo.MachineData.ReadString("axis-" + Name + "-update");
+            if (machineInfo.MachineData.HasKey("axis-" + Name + "-global"))
+                GlobalScope = machineInfo.MachineData.ReadBool("axis-" + Name + "-global");
+        }
+
         internal override void Save()
         {
             spaar.ModLoader.Configuration.SetString("axis-" + Name + "-type", Type.ToString());
             spaar.ModLoader.Configuration.SetString("axis-" + Name + "-init", InitialisationCode);
             spaar.ModLoader.Configuration.SetString("axis-" + Name + "-update", UpdateCode);
             spaar.ModLoader.Configuration.SetBool("axis-" + Name + "-global", GlobalScope);
+        }
+
+        internal override void Save(MachineInfo machineInfo)
+        {
+            machineInfo.MachineData.Write("axis-" + Name + "-type", Type.ToString());
+            machineInfo.MachineData.Write("axis-" + Name + "-init", InitialisationCode);
+            machineInfo.MachineData.Write("axis-" + Name + "-update", UpdateCode);
+            machineInfo.MachineData.Write("axis-" + Name + "-global", GlobalScope);
         }
 
         internal override void Delete()

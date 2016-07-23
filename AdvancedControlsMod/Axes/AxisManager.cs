@@ -71,8 +71,15 @@ namespace Lench.AdvancedControls.Axes
         /// <param name="name">Name of the axis.</param>
         public static void Delete(string name)
         {
-            LocalAxes[name].Delete();
-            LocalAxes.Remove(name);
+            if (LocalAxes.ContainsKey(name))
+            {
+                LocalAxes[name].Delete();
+                LocalAxes.Remove(name);
+            }
+            if (MachineAxes.ContainsKey(name))
+            {
+                MachineAxes.Remove(name);
+            }
         }
 
         /// <summary>

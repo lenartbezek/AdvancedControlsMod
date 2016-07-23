@@ -33,10 +33,10 @@ namespace Lench.AdvancedControls
                             axis = new InertialAxis(name);
                         if (type == AxisType.Standard.ToString())
                             axis = new StandardAxis(name);
-                        axis?.Load();
                     }
                     if (axis != null)
                     {
+                        axis?.Load();
                         AxisManager.Save(axis);
                     }
                 }

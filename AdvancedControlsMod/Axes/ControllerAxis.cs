@@ -209,6 +209,28 @@ namespace Lench.AdvancedControls.Axes
             Smooth = spaar.ModLoader.Configuration.GetBool("axis-" + Name + "-smooth", Smooth);
         }
 
+        internal override void Load(MachineInfo machineInfo)
+        {
+            if (machineInfo.MachineData.HasKey("axis-" + Name + "-controller"))
+                GUID = new Guid(machineInfo.MachineData.ReadString("axis-" + Name + "-controller"));
+            if (machineInfo.MachineData.HasKey("axis-" + Name + "-axis"))
+                Axis = machineInfo.MachineData.ReadInt("axis-" + Name + "-axis");
+            if (machineInfo.MachineData.HasKey("axis-" + Name + "-sensitivity"))
+                Sensitivity = machineInfo.MachineData.ReadFloat("axis-" + Name + "-sensitivity");
+            if (machineInfo.MachineData.HasKey("axis-" + Name + "-curvature"))
+                Curvature = machineInfo.MachineData.ReadFloat("axis-" + Name + "-curvature");
+            if (machineInfo.MachineData.HasKey("axis-" + Name + "-deadzone"))
+                Deadzone = machineInfo.MachineData.ReadFloat("axis-" + Name + "-deadzone");
+            if (machineInfo.MachineData.HasKey("axis-" + Name + "-offsetx"))
+                OffsetX = machineInfo.MachineData.ReadFloat("axis-" + Name + "-offsetx");
+            if (machineInfo.MachineData.HasKey("axis-" + Name + "-offsety"))
+                OffsetY = machineInfo.MachineData.ReadFloat("axis-" + Name + "-offsety");
+            if (machineInfo.MachineData.HasKey("axis-" + Name + "-invert"))
+                Invert = machineInfo.MachineData.ReadBool("axis-" + Name + "-invert");
+            if (machineInfo.MachineData.HasKey("axis-" + Name + "-smooth"))
+                Smooth = machineInfo.MachineData.ReadBool("axis-" + Name + "-smooth");
+        }
+
         internal override void Save()
         {
             spaar.ModLoader.Configuration.SetString("axis-" + Name + "-type", Type.ToString());
@@ -221,6 +243,20 @@ namespace Lench.AdvancedControls.Axes
             spaar.ModLoader.Configuration.SetFloat("axis-" + Name + "-offsety", OffsetY);
             spaar.ModLoader.Configuration.SetBool("axis-" + Name + "-invert", Invert);
             spaar.ModLoader.Configuration.SetBool("axis-" + Name + "-smooth", Smooth);
+        }
+
+        internal override void Save(MachineInfo machineInfo)
+        {
+            machineInfo.MachineData.Write("axis-" + Name + "-type", Type.ToString());
+            machineInfo.MachineData.Write("axis-" + Name + "-controller", GUID.ToString());
+            machineInfo.MachineData.Write("axis-" + Name + "-axis", Axis);
+            machineInfo.MachineData.Write("axis-" + Name + "-sensitivity", Sensitivity);
+            machineInfo.MachineData.Write("axis-" + Name + "-curvature", Curvature);
+            machineInfo.MachineData.Write("axis-" + Name + "-deadzone", Deadzone);
+            machineInfo.MachineData.Write("axis-" + Name + "-offsetx", OffsetX);
+            machineInfo.MachineData.Write("axis-" + Name + "-offsety", OffsetY);
+            machineInfo.MachineData.Write("axis-" + Name + "-invert", Invert);
+            machineInfo.MachineData.Write("axis-" + Name + "-smooth", Smooth);
         }
 
         internal override void Delete()

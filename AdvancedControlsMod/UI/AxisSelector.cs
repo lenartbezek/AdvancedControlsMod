@@ -1,6 +1,6 @@
 ﻿using Lench.AdvancedControls.Axes;
-using spaar.ModLoader.UI;
 using System.Collections.Generic;
+using spaar.ModLoader.UI;
 using UnityEngine;
 
 namespace Lench.AdvancedControls.UI
@@ -45,6 +45,7 @@ namespace Lench.AdvancedControls.UI
 
         private void DoWindow(int id)
         {
+            // Draw local axes
             if (AxisManager.LocalAxes.Count > 0)
             {
                 scrollPosition = GUILayout.BeginScrollView(scrollPosition,
@@ -59,13 +60,13 @@ namespace Lench.AdvancedControls.UI
 
                     GUILayout.BeginHorizontal();
 
-                    if (GUILayout.Button(name, axis.Saveable ? spaar.ModLoader.UI.Elements.Buttons.Default : spaar.ModLoader.UI.Elements.Buttons.Disabled))
+                    if (GUILayout.Button(name, axis.Saveable ? Elements.Buttons.Default : Elements.Buttons.Disabled))
                     {
                         Callback?.Invoke(axis);
                         Destroy(this);
                     }
 
-                    if (GUILayout.Button("✎", new GUIStyle(spaar.ModLoader.UI.Elements.Buttons.Default) { fontSize = 20, padding = new RectOffset(-3, 0, 0, 0) }, GUILayout.Width(30), GUILayout.MaxHeight(28)))
+                    if (GUILayout.Button("✎", new GUIStyle(Elements.Buttons.Default) { fontSize = 20, padding = new RectOffset(-3, 0, 0, 0) }, GUILayout.Width(30), GUILayout.MaxHeight(28)))
                     {
                         var Editor = ACM.Instance.gameObject.AddComponent<AxisEditorWindow>();
                         Editor.windowRect.x = Mathf.Clamp(windowRect.x + windowRect.width,
@@ -74,7 +75,7 @@ namespace Lench.AdvancedControls.UI
                         Editor.EditAxis(axis);
                     }
 
-                    if (GUILayout.Button("×", spaar.ModLoader.UI.Elements.Buttons.Red, GUILayout.Width(30)))
+                    if (GUILayout.Button("×", Elements.Buttons.Red, GUILayout.Width(30)))
                     {
                         toBeRemoved = name;
                     }
@@ -88,7 +89,52 @@ namespace Lench.AdvancedControls.UI
                 GUILayout.EndScrollView();
             }
 
-            if (GUILayout.Button("Create new axis", spaar.ModLoader.UI.Elements.Buttons.Disabled))
+            // Draw machine axes
+            GUILayout.Label("Machine axes", Elements.Labels.Title);
+            if (AxisManager.MachineAxes.Count > 0)
+            {
+                scrollPosition = GUILayout.BeginScrollView(scrollPosition,
+                    GUILayout.Height(Mathf.Clamp(AxisManager.LocalAxes.Count * 36 + 8, 180, 480)));
+
+                string toBeRemoved = null;
+
+                foreach (KeyValuePair<string, InputAxis> pair in AxisManager.MachineAxes)
+                {
+                    var name = pair.Key;
+                    var axis = pair.Value;
+
+                    GUILayout.BeginHorizontal();
+
+                    if (GUILayout.Button(name, axis.Saveable ? Elements.Buttons.Default : Elements.Buttons.Disabled))
+                    {
+                        Callback?.Invoke(axis);
+                        Destroy(this);
+                    }
+
+                    if (GUILayout.Button("✎", new GUIStyle(Elements.Buttons.Default) { fontSize = 20, padding = new RectOffset(-3, 0, 0, 0) }, GUILayout.Width(30), GUILayout.MaxHeight(28)))
+                    {
+                        var Editor = ACM.Instance.gameObject.AddComponent<AxisEditorWindow>();
+                        Editor.windowRect.x = Mathf.Clamp(windowRect.x + windowRect.width,
+                            -320 + GUI.skin.window.padding.top, Screen.width - GUI.skin.window.padding.top);
+                        Editor.windowRect.y = Mathf.Clamp(windowRect.y - 40, 0, Screen.height - GUI.skin.window.padding.top);
+                        Editor.EditAxis(axis);
+                    }
+
+                    if (GUILayout.Button("×", Elements.Buttons.Red, GUILayout.Width(30)))
+                    {
+                        toBeRemoved = name;
+                    }
+
+                    GUILayout.EndHorizontal();
+                }
+
+                if (toBeRemoved != null)
+                    AxisManager.Delete(toBeRemoved);
+
+                GUILayout.EndScrollView();
+            }
+
+            if (GUILayout.Button("Create new axis", Elements.Buttons.Disabled))
             {
                 var Editor = ACM.Instance.gameObject.AddComponent<AxisEditorWindow>();
                 Editor.windowRect.x = Mathf.Clamp(windowRect.x + windowRect.width,
@@ -101,7 +147,7 @@ namespace Lench.AdvancedControls.UI
             // Draw close button
             if (!compact)
                 if (GUI.Button(new Rect(windowRect.width - 38, 8, 30, 30),
-                    "×", spaar.ModLoader.UI.Elements.Buttons.Red))
+                    "×", Elements.Buttons.Red))
                     Destroy(this);
         }
     }
