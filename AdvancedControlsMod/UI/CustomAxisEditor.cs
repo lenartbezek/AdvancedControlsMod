@@ -6,6 +6,7 @@ using System.IO;
 using System.Net;
 using System.ComponentModel;
 using System;
+using System.Linq;
 
 namespace Lench.AdvancedControls.UI
 {
@@ -147,63 +148,91 @@ namespace Lench.AdvancedControls.UI
             return error;
         }
 
-        private void InstallIronPython()
+        private static void InstallIronPython()
         {
             downloading_in_progress = true;
-            download_button_text = "0 % (" + (files_downloaded) + "/" + files_required + ")";
+            download_button_text = "0.00 %";
             if (!Directory.Exists(Application.dataPath + @"\Mods\Resources\LenchScripter\lib\"))
                 Directory.CreateDirectory(Application.dataPath + @"\Mods\Resources\LenchScripter\lib\");
-            using (var client = new WebClient())
+            try
             {
-                try
+                for (int file_index = 0; file_index < files_required; file_index++)
                 {
-                    client.DownloadProgressChanged += (object sender, DownloadProgressChangedEventArgs e) =>
+                    using (var client = new WebClient())
                     {
-                        download_button_text = e.ProgressPercentage + " % (" + (files_downloaded+1) +"/" + files_required + ")";
-                    };
-                    client.DownloadFileCompleted += (object sender, AsyncCompletedEventArgs e) =>
-                    {
-                        downloading_in_progress = false;
-                        if (e.Error != null)
+                        var i = file_index;
+
+                        // delete existing file
+                        if (File.Exists(Application.dataPath + file_paths[i]))
+                            File.Delete(Application.dataPath + file_paths[i]);
+
+                        // progress handler
+                        client.DownloadProgressChanged += (object sender, DownloadProgressChangedEventArgs e) =>
                         {
-                            download_button_text = "Error";
-                            Debug.Log("[ACM]: Error downloading file:");
-                            Debug.LogException(e.Error);
-                            error = "<b>" + e.Error.GetType().Name + "</b>\nSee console for more info.";
-                        }
-                        else
+                            received_size[i] = e.BytesReceived;
+                            float progress = (Convert.ToSingle(received_size.Sum()) / Convert.ToSingle(total_size.Sum()) * 100f);
+                            download_button_text = progress.ToString("0.00") + " %";
+                        };
+
+                        // completion handler
+                        client.DownloadFileCompleted += (object sender, AsyncCompletedEventArgs e) =>
                         {
-                            files_downloaded++;
-                            if (files_downloaded == files_required)
+                            if (e.Error != null)
                             {
-                                download_button_text = "Complete";
-                                if (ScripterMod.LoadPythonAssembly())
-                                {
-                                    ScripterMod.LoadScripter();
-                                    ScripterMod.UpdateCheckerEnabled = false;
-                                }
+                                // set error message
+                                downloading_in_progress = false;
+                                download_button_text = "Error: " + e.Error.GetType().Name;
+
+                                // delete failed file
+                                if (File.Exists(Application.dataPath + file_paths[i]))
+                                    File.Delete(Application.dataPath + file_paths[i]);
                             }
                             else
                             {
-                                DownloadNextFile(client);
+                                spaar.ModLoader.ModConsole.AddMessage(LogType.Log, "File downloaded: " + file_paths[i]);
+                                files_downloaded++;
+                                if (files_downloaded == files_required)
+                                {
+                                    // finish download and load assemblies
+                                    download_button_text = "Complete";
+                                    if (ScripterMod.LoadPythonAssembly())
+                                    {
+                                        ScripterMod.LoadScripter();
+                                        ScripterMod.UpdateCheckerEnabled = false;
+                                    }
+                                }
                             }
-                        }
-                    };
-                    DownloadNextFile(client);
+                        };
+
+                        // start download
+                        client.DownloadFileAsync(
+                            file_uris[i],
+                            Application.dataPath + file_paths[i]);
+                    }
                 }
-                catch (Exception e)
-                {
-                    error = "<b>"+e.GetType().Name + "</b>\nSee console for more info.";
-                    Debug.Log("[ACM]: Error downloading file:");
-                    Debug.LogException(e);
-                    downloading_in_progress = false;
-                    download_button_text = "Error";
-                }
+            }
+            catch (Exception e)
+            {
+                Debug.Log("[ACM]: Error while downloading:");
+                Debug.LogException(e);
+                downloading_in_progress = false;
+                download_button_text = "Error";
             }
         }
 
         private static int files_downloaded = 0;
         private static int files_required = 5;
+
+        private static long[] received_size = new long[files_required];
+        private static long[] total_size = new long[]
+        {
+            1805824,
+            727040,
+            1033728,
+            142848,
+            383488
+        };
+
         private static Uri[] file_uris = new Uri[]
         {
             new Uri("http://lench4991.github.io/AdvancedControlsMod/files/IronPython.dll"),
@@ -220,14 +249,5 @@ namespace Lench.AdvancedControls.UI
             @"\Mods\Resources\LenchScripter\lib\Microsoft.Scripting.dll",
             @"\Mods\Resources\LenchScripter\lib\Microsoft.Scripting.Core.dll"
         };
-
-        private static void DownloadNextFile(WebClient client)
-        {
-            if (File.Exists(Application.dataPath + file_paths[files_downloaded]))
-                File.Delete(Application.dataPath + file_paths[files_downloaded]);
-            client.DownloadFileAsync(
-                file_uris[files_downloaded],
-                Application.dataPath + file_paths[files_downloaded]);
-        }
     }
 }
