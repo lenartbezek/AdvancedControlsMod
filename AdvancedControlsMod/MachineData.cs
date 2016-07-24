@@ -92,8 +92,10 @@ namespace Lench.AdvancedControls
         {
             try
             {
-                var axes = new List<string>();
+                var axisStack = new Stack<string>();
+                var axisList = new List<string>();
 
+                // save all controls and collect all bound axes
                 foreach (BlockInfo blockInfo in machineInfo.Blocks)
                 {
                     if (ControlManager.Blocks.ContainsKey(blockInfo.Guid))
@@ -103,8 +105,8 @@ namespace Lench.AdvancedControls
                         var control_names = new List<string>();
                         foreach (Control c in controls)
                         {
-                            if (!axes.Contains(c.Axis))
-                                axes.Add(c.Axis);
+                            if (!axisStack.Contains(c.Axis))
+                                axisStack.Push(c.Axis);
                             control_names.Add(c.Name);
                             c.Save(blockInfo);
                         }
@@ -112,17 +114,26 @@ namespace Lench.AdvancedControls
                     }
                 }
 
-                if (axes.Count != 0)
+                // go through stack and save all axes and chained axes
+                while (axisStack.Count > 0)
                 {
-                    machineInfo.MachineData.Write("ac-version", Assembly.GetExecutingAssembly().GetName().Version.ToString());
-                    machineInfo.MachineData.Write("ac-axislist", axes.ToArray());
+                    var a = AxisManager.Get(axisStack.Pop());
+                    if (a == null || axisList.Contains(a.Name)) continue;
+                    axisList.Add(a.Name);
+                    if (a.Type == AxisType.Chain)
+                    {
+                        var chain = a as ChainAxis;
+                        axisStack.Push(chain.SubAxis1);
+                        axisStack.Push(chain.SubAxis2);
+                    }
+                    a.Save(machineInfo);
                 }
 
-                foreach (var axis in axes)
+                // save axis list and metadata
+                if (axisList.Count != 0)
                 {
-                    var a = AxisManager.Get(axis);
-                    a.Save(machineInfo);
-                    AxisManager.AddMachineAxis(a);
+                    machineInfo.MachineData.Write("ac-version", Assembly.GetExecutingAssembly().GetName().Version.ToString());
+                    machineInfo.MachineData.Write("ac-axislist", axisList.ToArray());
                 }
             }
             catch (Exception e)

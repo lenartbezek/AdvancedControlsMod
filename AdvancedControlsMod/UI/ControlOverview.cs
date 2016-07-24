@@ -139,7 +139,7 @@ namespace Lench.AdvancedControls.UI
                         graphRect.height),
                 Color.gray);
 
-            if (a != null && a.Connected)
+            if (a != null && a.Status != AxisStatus.OK)
                 Util.FillRect(new Rect(
                                       graphRect.x + graphRect.width / 2 + graphRect.width / 2 * a.OutputValue,
                                       graphRect.y,
@@ -189,11 +189,15 @@ namespace Lench.AdvancedControls.UI
                 GUILayout.Label("<b>" + Machine.Active().Name + "</b> uses no advanced controls.");
             else
             {
+                scrollPosition = GUILayout.BeginScrollView(scrollPosition, new GUIStyle(Elements.Scrollview.ThumbVertical) { normal = new GUIStyleState() }, GUILayout.Width(304), GUILayout.Height(500));
+                
                 GUILayout.Label("To use this machine as intended,\nmake sure all axes report no problems.\n\n<b>" + Machine.Active().Name + "</b> uses these input axes:");
 
                 // Draw axes
                 foreach (string axis in AxisList)
                     DrawAxis(axis);
+
+                GUILayout.EndScrollView();
             }
 
             // Draw help button

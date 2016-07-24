@@ -35,6 +35,11 @@ namespace Lench.AdvancedControls.UI
                     "  <color=#808080><b>" + Axis.OutputValue.ToString("0.00") + "</b></color>",
                     new GUIStyle(Elements.Labels.Default) { richText = true, alignment = TextAnchor.MiddleLeft });
 
+            // Screen size
+            GUI.Label(new Rect(graphRect.x, graphRect.y + graphRect.height - 20, graphRect.width, 20),
+                    "  <color=#808080><b>" + Screen.width + " / " + Screen.height + "</b></color>",
+                    new GUIStyle(Elements.Labels.Default) { richText = true, alignment = TextAnchor.MiddleCenter });
+
             // Screen frame
             Util.DrawRect(graphRect, Color.gray);
 
@@ -64,8 +69,9 @@ namespace Lench.AdvancedControls.UI
                          Color.white);
 
                 // Draw mouse position
+                float line_pos = Mathf.Clamp((mouse_pos / screen_size), 0, 1);
                 Util.FillRect(new Rect(
-                                  graphRect.x + graphRect.width * (mouse_pos/ screen_size),
+                                  graphRect.x + graphRect.width * line_pos,
                                   graphRect.y,
                                   1,
                                   graphRect.height),
@@ -92,9 +98,10 @@ namespace Lench.AdvancedControls.UI
                          Color.white);
 
                 // Draw mouse position
+                float line_pos = Mathf.Clamp(((screen_size - mouse_pos) / screen_size), 0, 1);
                 Util.FillRect(new Rect(
                                   graphRect.x,
-                                  graphRect.y + graphRect.height * ((screen_size - mouse_pos) / screen_size),
+                                  graphRect.y + graphRect.height * line_pos,
                                   graphRect.width,
                                   1),
                          Color.yellow);
@@ -102,12 +109,12 @@ namespace Lench.AdvancedControls.UI
 
             // Draw axis toggles
             GUILayout.BeginHorizontal();
-            if (GUILayout.Button("Horizontal", Axis.Axis == global::Axis.X ? Elements.Buttons.Default : Elements.Buttons.Disabled,
-                GUILayout.MinWidth(graphRect.width / 2 - 4)))
+            GUILayout.FlexibleSpace();
+            if (GUILayout.Button("X", Axis.Axis == global::Axis.X ? Elements.Buttons.Default : Elements.Buttons.Disabled, GUILayout.Width(80)))
                 Axis.Axis = global::Axis.X;
-            if (GUILayout.Button("Vertical", Axis.Axis == global::Axis.Y ? Elements.Buttons.Default : Elements.Buttons.Disabled,
-                GUILayout.MinWidth(graphRect.width / 2 - 4)))
+            if (GUILayout.Button("Y", Axis.Axis == global::Axis.Y ? Elements.Buttons.Default : Elements.Buttons.Disabled, GUILayout.Width(80)))
                 Axis.Axis = global::Axis.Y;
+            GUILayout.FlexibleSpace();
             GUILayout.EndHorizontal();
 
             // Draw sliders

@@ -6,7 +6,7 @@ using System.Collections.Generic;
 namespace Lench.AdvancedControls
 {
     /// <summary>
-    /// Function container exposed to Python script in n AdvancedControls module.
+    /// Function container exposed to Python script in AdvancedControls module.
     /// </summary>
     public static class AdvancedControls
     {
@@ -65,7 +65,7 @@ namespace Lench.AdvancedControls
         /// Looks in machine axes first, then in locally saved axes.
         /// This is the preferred method.
         /// </summary>
-        /// <param name="name"></param>
+        /// <param name="name">Name of the axis.</param>
         /// <returns></returns>
         public static InputAxis GetAxis(string name)
         {

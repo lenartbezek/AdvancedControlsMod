@@ -67,11 +67,12 @@ namespace Lench.AdvancedControls.UI
 
             // Draw overview button
             if (GUI.Button(new Rect(windowRect.width - 78, 8, 16, 16),
-                GUIContent.none, Elements.Buttons.ArrowCollapsed))
+                GUIContent.none, Elements.Buttons.ArrowCollapsed) ||
+                GUI.Button(new Rect(windowRect.width - 62, 12, 50, 16),
+                "<size=9><b>OVERVIEW</b></size>", Elements.Labels.Default))
             {
                 ControlOverview.Open();
             }
-            GUI.Label(new Rect(windowRect.width - 62, 12, 16, 16), "<size=9><b>OVERVIEW</b></size>");
 
             // Drag window
             GUI.DragWindow(new Rect(0, 0, windowRect.width, GUI.skin.window.padding.top));
