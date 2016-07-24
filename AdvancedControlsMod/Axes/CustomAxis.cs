@@ -2,6 +2,8 @@
 using UnityEngine;
 using Lench.Scripter;
 using spaar.ModLoader;
+using System.Collections.Generic;
+using System.Text.RegularExpressions;
 
 namespace Lench.AdvancedControls.Axes
 {
@@ -43,6 +45,11 @@ axis_value";
         /// Axis is saveable if Python engine is ready.
         /// </summary>
         public override bool Saveable { get { return PythonEnvironment.Loaded; } }
+
+        /// <summary>
+        /// List of axes retrieved in initialisation code.
+        /// </summary>
+        public HashSet<string> LinkedAxes { get; private set; } = new HashSet<string>();
 
         /// <summary>
         /// Returns status of the code execution.
@@ -151,6 +158,7 @@ axis_value";
                 update = python.Compile(UpdateCode);
 
                 init.Invoke();
+                LookForLinkedAxes();
             }
             catch (Exception e)
             {
@@ -160,6 +168,25 @@ axis_value";
             }
             Running = true;
             initialised = true;
+        }
+
+        private void LookForLinkedAxes()
+        {
+            LinkedAxes.Clear();
+            var names = Regex.Replace(InitialisationCode, "=.+", " ").Split(' ');
+            foreach (var name in names)
+            {
+                try
+                {
+                    var axis = python.GetVariable<InputAxis>(name);
+                    if (axis != null)
+                        LinkedAxes.Add(axis.Name);
+                }
+                catch
+                {
+                    continue;
+                }
+            }
         }
 
         internal override InputAxis Clone()

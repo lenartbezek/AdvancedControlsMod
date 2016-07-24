@@ -126,6 +126,12 @@ namespace Lench.AdvancedControls
                         axisStack.Push(chain.SubAxis1);
                         axisStack.Push(chain.SubAxis2);
                     }
+                    if (a.Type == AxisType.Custom)
+                    {
+                        var custom = a as CustomAxis;
+                        foreach (var linked in custom.LinkedAxes)
+                            axisStack.Push(linked);
+                    }
                     a.Save(machineInfo);
                 }
 
