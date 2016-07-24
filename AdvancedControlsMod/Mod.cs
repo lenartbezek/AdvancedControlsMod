@@ -29,7 +29,7 @@ namespace Lench.AdvancedControls
             }
         }
         
-        public override string VersionExtra { get; } = "";
+        public override string VersionExtra { get; } = "indev";
         public override string BesiegeVersion { get; } = "v0.3";
         public override bool CanBeUnloaded { get; } = true;
         public override bool Preload { get; } = false;

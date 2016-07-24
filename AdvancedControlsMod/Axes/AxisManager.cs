@@ -46,8 +46,8 @@ namespace Lench.AdvancedControls.Axes
             {
                 LocalAxes.Add(axis.Name, axis);
             }
-            // delete identical axis in machine embedded axis list
-            if (MachineAxes.ContainsKey(axis.Name) && axis.Equals(MachineAxes[axis.Name]))
+            // remove axis in machine embedded axis list
+            if (MachineAxes.ContainsKey(axis.Name))
                 RemoveMachineAxis(axis.Name);
         }
 

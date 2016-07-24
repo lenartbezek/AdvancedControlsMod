@@ -179,9 +179,12 @@ namespace Lench.AdvancedControls.UI
                         {
                             if (e.Error != null)
                             {
-                                // set error message
+                                // set error messages
+                                spaar.ModLoader.ModConsole.AddMessage(LogType.Log, "[ACM]: Error downloading file:" + file_paths[i].Split('\\').Last());
+                                spaar.ModLoader.ModConsole.AddMessage(LogType.Error, "\t" + e.Error.Message);
+
                                 downloading_in_progress = false;
-                                download_button_text = "Error: " + e.Error.GetType().Name;
+                                download_button_text = "Error";
 
                                 // delete failed file
                                 if (File.Exists(Application.dataPath + file_paths[i]))
@@ -189,7 +192,7 @@ namespace Lench.AdvancedControls.UI
                             }
                             else
                             {
-                                spaar.ModLoader.ModConsole.AddMessage(LogType.Log, "File downloaded: " + file_paths[i]);
+                                spaar.ModLoader.ModConsole.AddMessage(LogType.Log, "[ACM]: File downloaded: " + file_paths[i].Split('\\').Last());
                                 files_downloaded++;
                                 if (files_downloaded == files_required)
                                 {

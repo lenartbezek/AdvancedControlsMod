@@ -101,6 +101,11 @@ namespace Lench.AdvancedControls.UI
                     Axis = new CustomAxis("new custom axis");
                     WindowName = "Create new custom axis";
                 }
+                if (GUILayout.Button("Mouse Axis", Elements.Buttons.ComponentField))
+                {
+                    Axis = new MouseAxis("new mouse axis");
+                    WindowName = "Create new mouse axis";
+                }
                 if (Axis != null)
                 {
                     SaveName = Axis.Name;

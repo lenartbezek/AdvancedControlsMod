@@ -39,8 +39,6 @@ namespace Lench.AdvancedControls.UI
         private string curv_string;
         private string dead_string;
 
-        private bool first_draw = true;
-
         private void FindIndex()
         {
             if (Controller.DeviceList.Contains(Axis.GUID))
@@ -72,24 +70,22 @@ namespace Lench.AdvancedControls.UI
                     graphTex.SetPixel(Mathf.RoundToInt(x_pixel), Mathf.RoundToInt(y_pixel), Color.white);
                 }
                 graphTex.Apply();
-                last_graphRect = graphRect;
             }
+            last_graphRect = graphRect;
             GUILayout.Box(graphTex);
         }
 
-        public void Open() { }
+        public void Open()
+        {
+            sens_string = Axis.Sensitivity.ToString("0.00");
+            curv_string = Axis.Curvature.ToString("0.00");
+            dead_string = Axis.Deadzone.ToString("0.00");
+        }
+
         public void Close() { }
 
         public void DrawAxis(Rect windowRect)
         {
-            if (first_draw)
-            {
-                sens_string = Axis.Sensitivity.ToString("0.00");
-                curv_string = Axis.Curvature.ToString("0.00");
-                dead_string = Axis.Deadzone.ToString("0.00");
-                first_draw = false;
-            }
-
             var controller = Controller.Get(Axis.GUID);
 
             if (!DeviceManager.SDL_Initialized)
@@ -178,13 +174,12 @@ namespace Lench.AdvancedControls.UI
 
                 // Draw graph
                 DrawGraph();
-                graphRect = GUILayoutUtility.GetLastRect();
 
                 // Listen for drag
                 var mousePos = UnityEngine.Input.mousePosition;
                 mousePos.y = Screen.height - mousePos.y;
                 var drag_handle = new Rect(windowRect.x + graphRect.x, windowRect.y + graphRect.y, graphRect.width, graphRect.height);
-                var drag_range = (windowRect.width - GUI.skin.window.padding.left - GUI.skin.window.padding.right) / 2f;
+                var drag_range = (graphRect.width) / 2f;
 
                 if (!dragging && UnityEngine.Input.GetMouseButtonDown(0) && drag_handle.Contains(mousePos))
                 {

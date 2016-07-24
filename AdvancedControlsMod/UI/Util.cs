@@ -66,6 +66,20 @@ namespace Lench.AdvancedControls.UI
             get { return Elements.Windows.Default; }
         }
 
+        internal static GUIStyle InvisibleWindowStyle
+        {
+            get
+            {
+                return new GUIStyle
+                {
+                    normal = new GUIStyleState(),
+                    border = new RectOffset(4, 4, 4, 4),
+                    padding = Elements.Settings.DefaultPadding,
+                    margin = Elements.Settings.DefaultMargin
+                };
+            }
+        }
+
         internal static void DrawEnabledBadge(bool enabled)
         {
             if (enabled)
@@ -116,28 +130,28 @@ namespace Lench.AdvancedControls.UI
                 position.y,
                 position.width,
                 1),
-                Color.gray);
+                color);
 
             FillRect(new Rect(
                 position.x,
                 position.y + position.height - 1,
                 position.width,
                 1),
-                Color.gray);
+                color);
 
             FillRect(new Rect(
                 position.x,
                 position.y,
                 1,
                 position.height),
-                Color.gray);
+                color);
 
             FillRect(new Rect(
                 position.x + position.width - 1,
                 position.y,
                 1,
                 position.height),
-                Color.gray);
+                color);
         }
 
         internal static void FillRect(Rect position, Color color)

@@ -10,7 +10,8 @@ namespace Lench.AdvancedControls.Axes
         Inertial = 2,
         Standard = 3,
         Custom = 4,
-        Chain = 5
+        Chain = 5,
+        Mouse = 6
     }
 
     public enum AxisStatus

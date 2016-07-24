@@ -75,7 +75,7 @@ namespace Lench.AdvancedControls.Input
                 {
                     client.DownloadProgressChanged += (object sender, DownloadProgressChangedEventArgs e) =>
                     {
-                        ControllerAxisEditor.download_button_text = e.ProgressPercentage + " % ";
+                        ControllerAxisEditor.download_button_text = (Convert.ToSingle(e.BytesReceived) / Convert.ToSingle(e.TotalBytesToReceive) * 100).ToString("0.00") + " %";
                     };
                     client.DownloadFileCompleted += (object sender, AsyncCompletedEventArgs e) =>
                     {
@@ -83,11 +83,12 @@ namespace Lench.AdvancedControls.Input
                         if (e.Error != null)
                         {
                             ControllerAxisEditor.download_button_text = "Error";
-                            Debug.Log("[ACM]: Error downloading file:");
-                            Debug.LogException(e.Error);
+                            spaar.ModLoader.ModConsole.AddMessage(LogType.Log, "[ACM]: Error downloading file: SDL2.dll");
+                            spaar.ModLoader.ModConsole.AddMessage(LogType.Error, "\t" + e.Error.Message);
                         }
                         else
                         {
+                            spaar.ModLoader.ModConsole.AddMessage(LogType.Log, "[ACM]: File downloaded: SDL2.dll");
                             ControllerAxisEditor.download_button_text = "Please restart Besiege";
                             SDL_Installed = true;
                         } 
@@ -100,8 +101,8 @@ namespace Lench.AdvancedControls.Input
                 {
                     ControllerAxisEditor.downloading_in_progress = false;
                     ControllerAxisEditor.download_button_text = "Error";
-                    Debug.Log("[ACM]: Error downloading file:");
-                    Debug.LogException(e);
+                    spaar.ModLoader.ModConsole.AddMessage(LogType.Log, "[ACM]: Error downloading file: SDL2.dll");
+                    spaar.ModLoader.ModConsole.AddMessage(LogType.Error, "\t" + e.Message);
                 }
             }
         }

@@ -24,7 +24,8 @@ namespace Lench.AdvancedControls.UI
         internal SelectAxisDelegate Callback;
 
         private bool compact;
-        private Vector2 scrollPosition = Vector2.zero;
+        private Vector2 localScrollPosition = Vector2.zero;
+        private Vector2 machineScrollPosition = Vector2.zero;
 
         internal static AxisSelector Open(SelectAxisDelegate callback, bool compact = false)
         {
@@ -48,7 +49,7 @@ namespace Lench.AdvancedControls.UI
             // Draw local axes
             if (AxisManager.LocalAxes.Count > 0)
             {
-                scrollPosition = GUILayout.BeginScrollView(scrollPosition,
+                localScrollPosition = GUILayout.BeginScrollView(localScrollPosition,
                     GUILayout.Height(Mathf.Clamp(AxisManager.LocalAxes.Count * 36 + 30, 138, 246)));
 
                 GUILayout.Label("LOCALLY SAVED AXES", new GUIStyle(Elements.Labels.Title) { alignment = TextAnchor.MiddleCenter });
@@ -94,8 +95,8 @@ namespace Lench.AdvancedControls.UI
             // Draw machine axes
             if (AxisManager.MachineAxes.Count > 0)
             {
-                scrollPosition = GUILayout.BeginScrollView(scrollPosition,
-                    GUILayout.Height(Mathf.Clamp(AxisManager.LocalAxes.Count * 36 + 30, 138, 246)));
+                machineScrollPosition = GUILayout.BeginScrollView(machineScrollPosition,
+                    GUILayout.Height(Mathf.Clamp(AxisManager.MachineAxes.Count * 36 + 30, 138, 246)));
 
                 GUILayout.Label("MACHINE EMBEDDED AXES", new GUIStyle(Elements.Labels.Title) { alignment = TextAnchor.MiddleCenter });
 

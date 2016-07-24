@@ -44,6 +44,8 @@ namespace Lench.AdvancedControls
                         axis = new InertialAxis(name);
                     if (type == AxisType.Standard.ToString())
                         axis = new StandardAxis(name);
+                    if (type == AxisType.Mouse.ToString())
+                        axis = new MouseAxis(name);
                     if (axis != null)
                     {
                         axis?.Load(machineInfo);
