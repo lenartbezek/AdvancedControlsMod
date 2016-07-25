@@ -100,7 +100,7 @@ namespace Lench.AdvancedControls.UI
                 else
                     popup.Callback = callback;
                 popup.windowRect.x = windowRect.x + buttonRect.x - 8;
-                popup.windowRect.y = windowRect.y + buttonRect.y - 8;
+                popup.windowRect.y = windowRect.y + GUI.skin.window.padding.top + buttonRect.y - scrollPosition.y - 8;
             }
 
             if (a != null && GUILayout.Button("✎", new GUIStyle(Elements.Buttons.Default) { fontSize = 20, padding = new RectOffset(-3, 0, 0, 0) }, GUILayout.Width(30), GUILayout.MaxHeight(28)))
@@ -187,7 +187,7 @@ namespace Lench.AdvancedControls.UI
                 GUILayout.Label("<b>" + Machine.Active().Name + "</b> uses no advanced controls.");
             else
             {
-                scrollPosition = GUILayout.BeginScrollView(scrollPosition, new GUIStyle(Elements.Scrollview.ThumbVertical) { normal = new GUIStyleState() }, GUILayout.Width(304), GUILayout.Height(500));
+                scrollPosition = GUILayout.BeginScrollView(scrollPosition, new GUIStyle(Elements.Scrollview.ThumbVertical) { normal = new GUIStyleState(), padding = new RectOffset() }, GUILayout.Width(304), GUILayout.Height(500));
                 
                 GUILayout.Label("To use this machine as intended,\nmake sure all axes report no problems.\n\n<b>" + Machine.Active().Name + "</b> uses these input axes:");
 
