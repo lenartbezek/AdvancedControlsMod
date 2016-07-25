@@ -31,10 +31,10 @@ namespace Lench.AdvancedControls
                             axis = new ControllerAxis(name);
                         if (type == AxisType.Custom.ToString())
                             axis = new CustomAxis(name);
-                        if (type == AxisType.Inertial.ToString())
-                            axis = new InertialAxis(name);
-                        if (type == AxisType.Standard.ToString())
-                            axis = new StandardAxis(name);
+                        if (type == AxisType.Standard.ToString() || // backwards compatibility
+                            type == AxisType.Inertial.ToString() || // backwards compatibility
+                            type == AxisType.Key.ToString())
+                            axis = new KeyAxis(name);
                         if (type == AxisType.Mouse.ToString())
                             axis = new MouseAxis(name);
                     }

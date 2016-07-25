@@ -116,13 +116,9 @@ namespace Lench.AdvancedControls.Axes
 
                 switch (axis.Type)
                 {
-                    case AxisType.Standard:
-                        ResolveButton((axis as StandardAxis).PositiveBind);
-                        ResolveButton((axis as StandardAxis).NegativeBind);
-                        continue;
-                    case AxisType.Inertial:
-                        ResolveButton((axis as InertialAxis).PositiveBind);
-                        ResolveButton((axis as InertialAxis).NegativeBind);
+                    case AxisType.Key:
+                        ResolveButton((axis as KeyAxis).PositiveBind);
+                        ResolveButton((axis as KeyAxis).NegativeBind);
                         continue;
                     case AxisType.Controller:
                         ResolveControllerAxis(axis as ControllerAxis);
@@ -136,6 +132,7 @@ namespace Lench.AdvancedControls.Axes
         /// </summary>
         public static void ResolveButton(Button button)
         {
+            if (button == null) return;
             if (button.GetType() == typeof(JoystickButton))
             {
                 var joybutton = button as JoystickButton;

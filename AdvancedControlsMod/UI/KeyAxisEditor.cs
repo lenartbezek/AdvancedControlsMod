@@ -7,24 +7,26 @@ using System.Collections.Generic;
 
 namespace Lench.AdvancedControls.UI
 {
-    internal class TwoKeyAxisEditor : AxisEditor
+    internal class KeyAxisEditor : AxisEditor
     {
-        public TwoKeyAxisEditor(InputAxis axis)
+        public KeyAxisEditor(InputAxis axis)
         {
-            Axis = axis as StandardAxis;
+            Axis = axis as KeyAxis;
         }
 
-        private StandardAxis Axis;
+        private KeyAxis Axis;
 
         internal string note;
 
         private string sens_string;
         private string grav_string;
+        private string momn_string;
 
         public void Open()
         {
             sens_string = Axis.Sensitivity.ToString("0.00");
             grav_string = Axis.Gravity.ToString("0.00");
+            momn_string = Axis.Momentum.ToString("0.00");
         }
 
         public void Close() { }
@@ -104,18 +106,21 @@ namespace Lench.AdvancedControls.UI
             // Draw Sensitivity slider
             Axis.Sensitivity = Util.DrawSlider("Sensitivity", Axis.Sensitivity, 0, 10, sens_string, out sens_string);
 
-            // Draw Curvature slider
+            // Draw Gravity slider
             Axis.Gravity = Util.DrawSlider("Gravity", Axis.Gravity, 0, 10, grav_string, out grav_string);
+
+            // Draw Momentum slider
+            Axis.Momentum = Util.DrawSlider("Momentum", Axis.Momentum, 0, 10, momn_string, out momn_string);
 
             // Draw toggles
             GUILayout.BeginHorizontal();
 
-            Axis.Invert = GUILayout.Toggle(Axis.Invert, "",
+            Axis.Raw = GUILayout.Toggle(Axis.Raw, "",
                 Util.ToggleStyle,
                 GUILayout.Width(20),
                 GUILayout.Height(20));
 
-            GUILayout.Label("Invert ",
+            GUILayout.Label("Raw ",
                 new GUIStyle(Elements.Labels.Default) { margin = new RectOffset(0, 0, 14, 0) });
 
             Axis.Snap = GUILayout.Toggle(Axis.Snap, "",

@@ -113,13 +113,12 @@
   <ItemGroup>
     <Compile Include="AdvancedControls.cs" />
     <Compile Include="Axes\ChainAxis.cs" />
-    <Compile Include="Axes\InertialAxis.cs" />
     <Compile Include="Axes\InputAxis.cs" />
     <Compile Include="Axes\AxisManager.cs" />
     <Compile Include="Axes\ControllerAxis.cs" />
     <Compile Include="Axes\CustomAxis.cs" />
     <Compile Include="Axes\MouseAxis.cs" />
-    <Compile Include="Axes\StandardAxis.cs" />
+    <Compile Include="Axes\KeyAxis.cs" />
     <Compile Include="Configuration.cs" />
     <Compile Include="Controls\AngleControl.cs" />
     <Compile Include="Controls\Control.cs" />
@@ -146,7 +145,7 @@
     <Compile Include="UI\CustomAxisEditor.cs" />
     <Compile Include="UI\AxisSelector.cs" />
     <Compile Include="UI\MouseAxisEditor.cs" />
-    <Compile Include="UI\TwoKeyAxisEditor.cs" />
+    <Compile Include="UI\KeyAxisEditor.cs" />
     <Compile Include="UI\Util.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

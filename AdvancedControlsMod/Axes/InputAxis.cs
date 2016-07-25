@@ -7,11 +7,12 @@ namespace Lench.AdvancedControls.Axes
     public enum AxisType
     {
         Controller = 1,
-        Inertial = 2,
-        Standard = 3,
+        Inertial = 2, // deprecated
+        Standard = 3, // deprecated
         Custom = 4,
         Chain = 5,
-        Mouse = 6
+        Mouse = 6,
+        Key = 7,
     }
 
     public enum AxisStatus

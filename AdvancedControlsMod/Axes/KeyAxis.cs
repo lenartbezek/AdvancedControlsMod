@@ -7,7 +7,7 @@ namespace Lench.AdvancedControls.Axes
     /// <summary>
     /// Standard axis takes input from one or two keys and moves the output value at constant speed.
     /// </summary>
-    public class StandardAxis : InputAxis
+    public class KeyAxis : InputAxis
     {
         /// <summary>
         /// Are both bound keys associated devices connected.
@@ -43,6 +43,11 @@ namespace Lench.AdvancedControls.Axes
         public float Sensitivity { get; set; }
 
         /// <summary>
+        /// Momentum value determines how fast the speed of the value changes.
+        /// </summary>
+        public float Momentum { get; set; }
+
+        /// <summary>
         /// Snap toggle causes the axis to snap across the center when opposite key is pressed.
         /// </summary>
         public bool Snap { get; set; }
@@ -50,7 +55,7 @@ namespace Lench.AdvancedControls.Axes
         /// <summary>
         /// Inverts the key binds.
         /// </summary>
-        public bool Invert { get; set; }
+        public bool Raw { get; set; }
 
         /// <summary>
         /// Positive (Right) button bind.
@@ -63,22 +68,24 @@ namespace Lench.AdvancedControls.Axes
         public Button NegativeBind { get; set; }
 
         private float last = 0;
+        private float speed = 0;
+        private float value = 0;
 
         /// <summary>
         /// Creates a standard axis with given name.
         /// </summary>
         /// <param name="name">Name of the axis.</param>
-        public StandardAxis(string name) : base(name)
+        public KeyAxis(string name) : base(name)
         {
-            Type = AxisType.Standard;
-            editor = new UI.TwoKeyAxisEditor(this);
+            Type = AxisType.Key;
+            editor = new UI.KeyAxisEditor(this);
 
             PositiveBind = null;
             NegativeBind = null;
             Sensitivity = 1;
             Gravity = 1;
             Snap = false;
-            Invert = false;
+            Raw = false;
         }
 
         /// <summary>
@@ -90,7 +97,23 @@ namespace Lench.AdvancedControls.Axes
             {
                 float p = PositiveBind != null ? PositiveBind.Value : 0;
                 float n = NegativeBind != null ? NegativeBind.Value * -1 : 0;
-                return (p + n) * (Invert ? -1 : 1);
+                return p + n;
+            }
+        }
+
+        /// <summary>
+        /// Returns output value of the axis.
+        /// </summary>
+        public override float OutputValue
+        {
+            get
+            {
+                return Raw ? InputValue : value;
+            }
+
+            protected set
+            {
+                this.value = value;
             }
         }
 
@@ -99,7 +122,8 @@ namespace Lench.AdvancedControls.Axes
         /// </summary>
         protected override void Initialise()
         {
-            OutputValue = 0;
+            speed = 0;
+            value = 0;
         }
 
         /// <summary>
@@ -109,23 +133,36 @@ namespace Lench.AdvancedControls.Axes
         {
             float g_force = OutputValue > 0 ? -Gravity : Gravity;
             float force = InputValue * Sensitivity + (1 - Mathf.Abs(InputValue)) * g_force;
-            OutputValue = Mathf.Clamp(OutputValue + force * Time.deltaTime, -1, 1);
+            if (Momentum == 0)
+                speed = force;
+            else
+                speed += force * Time.deltaTime / Momentum;
+            OutputValue = Mathf.Clamp(OutputValue + speed * Time.deltaTime, -1, 1);
             if (Snap && Mathf.Abs(OutputValue - InputValue) > 1)
+            {
+                speed = 0;
                 OutputValue = 0;
-            if (InputValue == 0 && (last > 0 != OutputValue > 0))
+            }
+            if (InputValue == 0 && Gravity != 0 && (last > 0 != OutputValue > 0))
+            {
+                speed = 0;
                 OutputValue = 0;
+            }
             last = OutputValue;
+            if (OutputValue == -1 || OutputValue == 1)
+                speed = 0;
         }
 
         internal override InputAxis Clone()
         {
-            var clone = new StandardAxis(Name);
+            var clone = new KeyAxis(Name);
             clone.PositiveBind = PositiveBind;
             clone.NegativeBind = NegativeBind;
             clone.Sensitivity = Sensitivity;
             clone.Gravity = Gravity;
             clone.Snap = Snap;
-            clone.Invert = Invert;
+            clone.Raw = Raw;
+            clone.Momentum = Momentum;
             return clone;
         }
 
@@ -133,8 +170,9 @@ namespace Lench.AdvancedControls.Axes
         {
             Sensitivity = spaar.ModLoader.Configuration.GetFloat("axis-" + Name + "-sensitivity", Sensitivity);
             Gravity = spaar.ModLoader.Configuration.GetFloat("axis-" + Name + "-gravity", Gravity);
+            Momentum = spaar.ModLoader.Configuration.GetFloat("axis-" + Name + "-momentum", Momentum);
             Snap = spaar.ModLoader.Configuration.GetBool("axis-" + Name + "-snap", Snap);
-            Invert = spaar.ModLoader.Configuration.GetBool("axis-" + Name + "-invert", Invert);
+            Raw = spaar.ModLoader.Configuration.GetBool("axis-" + Name + "-raw", Raw);
             PositiveBind = ParseButtonID(spaar.ModLoader.Configuration.GetString("axis-" + Name + "-positive", null));
             NegativeBind = ParseButtonID(spaar.ModLoader.Configuration.GetString("axis-" + Name + "-negative", null));
         }
@@ -145,10 +183,12 @@ namespace Lench.AdvancedControls.Axes
                 Sensitivity = machineInfo.MachineData.ReadFloat("axis-" + Name + "-sensitivity");
             if (machineInfo.MachineData.HasKey("axis-" + Name + "-gravity"))
                 Gravity = machineInfo.MachineData.ReadFloat("axis-" + Name + "-gravity");
+            if (machineInfo.MachineData.HasKey("axis-" + Name + "-momentum"))
+                Momentum = machineInfo.MachineData.ReadFloat("axis-" + Name + "-momentum");
             if (machineInfo.MachineData.HasKey("axis-" + Name + "-snap"))
                 Snap = machineInfo.MachineData.ReadBool("axis-" + Name + "-snap");
-            if (machineInfo.MachineData.HasKey("axis-" + Name + "-invert"))
-                Invert = machineInfo.MachineData.ReadBool("axis-" + Name + "-invert");
+            if (machineInfo.MachineData.HasKey("axis-" + Name + "-raw"))
+                Raw = machineInfo.MachineData.ReadBool("axis-" + Name + "-raw");
             if (machineInfo.MachineData.HasKey("axis-" + Name + "-positive"))
                 PositiveBind = ParseButtonID(machineInfo.MachineData.ReadString("axis-" + Name + "-positive"));
             if (machineInfo.MachineData.HasKey("axis-" + Name + "-negative"))
@@ -160,8 +200,9 @@ namespace Lench.AdvancedControls.Axes
             spaar.ModLoader.Configuration.SetString("axis-" + Name + "-type", Type.ToString());
             spaar.ModLoader.Configuration.SetFloat("axis-" + Name + "-sensitivity", Sensitivity);
             spaar.ModLoader.Configuration.SetFloat("axis-" + Name + "-gravity", Gravity);
+            spaar.ModLoader.Configuration.SetFloat("axis-" + Name + "-momentum", Momentum);
             spaar.ModLoader.Configuration.SetBool("axis-" + Name + "-snap", Snap);
-            spaar.ModLoader.Configuration.SetBool("axis-" + Name + "-invert", Invert);
+            spaar.ModLoader.Configuration.SetBool("axis-" + Name + "-raw", Raw);
             spaar.ModLoader.Configuration.SetString("axis-" + Name + "-positive", PositiveBind != null ? PositiveBind.ID : "None");
             spaar.ModLoader.Configuration.SetString("axis-" + Name + "-negative", NegativeBind != null ? NegativeBind.ID : "None");
         }
@@ -171,8 +212,9 @@ namespace Lench.AdvancedControls.Axes
             machineInfo.MachineData.Write("axis-" + Name + "-type", Type.ToString());
             machineInfo.MachineData.Write("axis-" + Name + "-sensitivity", Sensitivity);
             machineInfo.MachineData.Write("axis-" + Name + "-gravity", Gravity);
+            machineInfo.MachineData.Write("axis-" + Name + "-momentum", Momentum);
             machineInfo.MachineData.Write("axis-" + Name + "-snap", Snap);
-            machineInfo.MachineData.Write("axis-" + Name + "-invert", Invert);
+            machineInfo.MachineData.Write("axis-" + Name + "-raw", Raw);
             machineInfo.MachineData.Write("axis-" + Name + "-positive", PositiveBind != null ? PositiveBind.ID : "None");
             machineInfo.MachineData.Write("axis-" + Name + "-negative", NegativeBind != null ? NegativeBind.ID : "None");
         }
@@ -182,8 +224,9 @@ namespace Lench.AdvancedControls.Axes
             spaar.ModLoader.Configuration.RemoveKey("axis-" + Name + "-type");
             spaar.ModLoader.Configuration.RemoveKey("axis-" + Name + "-sensitivity");
             spaar.ModLoader.Configuration.RemoveKey("axis-" + Name + "-gravity");
+            spaar.ModLoader.Configuration.RemoveKey("axis-" + Name + "-momentum");
             spaar.ModLoader.Configuration.RemoveKey("axis-" + Name + "-snap");
-            spaar.ModLoader.Configuration.RemoveKey("axis-" + Name + "-invert");
+            spaar.ModLoader.Configuration.RemoveKey("axis-" + Name + "-raw");
             spaar.ModLoader.Configuration.RemoveKey("axis-" + Name + "-positive");
             spaar.ModLoader.Configuration.RemoveKey("axis-" + Name + "-negative");
             Dispose();
@@ -221,13 +264,13 @@ namespace Lench.AdvancedControls.Axes
         /// <returns>Returns true if axes are identical.</returns>
         public override bool Equals(InputAxis other)
         {
-            var cast = other as StandardAxis;
+            var cast = other as KeyAxis;
             if (cast == null) return false;
             return this.Name == cast.Name &&
                    this.Sensitivity == cast.Sensitivity &&
                    this.Gravity == cast.Gravity &&
                    this.Snap == cast.Snap &&
-                   this.Invert == cast.Invert &&
+                   this.Raw == cast.Raw &&
                    this.PositiveBind.ID == cast.PositiveBind.ID &&
                    this.NegativeBind.ID == cast.NegativeBind.ID;
         }

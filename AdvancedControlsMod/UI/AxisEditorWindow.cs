@@ -81,15 +81,15 @@ namespace Lench.AdvancedControls.UI
                     Axis = new ControllerAxis("new controller axis");
                     WindowName = "Create new controller axis";
                 }
-                if (GUILayout.Button("Inertial Axis", Elements.Buttons.ComponentField))
+                if (GUILayout.Button("Key Axis", Elements.Buttons.ComponentField))
                 {
-                    Axis = new InertialAxis("new inertial axis");
-                    WindowName = "Create new inertial key axis";
+                    Axis = new KeyAxis("new key axis");
+                    WindowName = "Create new key axis";
                 }
-                if (GUILayout.Button("Standard Axis", Elements.Buttons.ComponentField))
+                if (GUILayout.Button("Mouse Axis", Elements.Buttons.ComponentField))
                 {
-                    Axis = new StandardAxis("new standard axis");
-                    WindowName = "Create new standard axis";
+                    Axis = new MouseAxis("new mouse axis");
+                    WindowName = "Create new mouse axis";
                 }
                 if (GUILayout.Button("Chain Axis", Elements.Buttons.ComponentField))
                 {
@@ -100,11 +100,6 @@ namespace Lench.AdvancedControls.UI
                 {
                     Axis = new CustomAxis("new custom axis");
                     WindowName = "Create new custom axis";
-                }
-                if (GUILayout.Button("Mouse Axis", Elements.Buttons.ComponentField))
-                {
-                    Axis = new MouseAxis("new mouse axis");
-                    WindowName = "Create new mouse axis";
                 }
                 if (Axis != null)
                 {

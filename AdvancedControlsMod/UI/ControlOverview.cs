@@ -124,12 +124,10 @@ namespace Lench.AdvancedControls.UI
                 text = "";
 
             GUILayout.Label("  <color=#808080><b>" + text + "</b></color>",
-                new GUIStyle(Elements.Labels.Default) { richText = true, alignment = TextAnchor.MiddleLeft },
+                new GUIStyle(Elements.Labels.Default) { richText = true, alignment = TextAnchor.MiddleLeft, margin = new RectOffset(8, 8, 8, 8) },
                 GUILayout.Height(20));
 
             var graphRect = GUILayoutUtility.GetLastRect();
-
-            GUILayout.Box(GUIContent.none, GUILayout.Height(8));
 
             Util.DrawRect(graphRect, Color.gray);
             Util.FillRect(new Rect(
@@ -139,7 +137,7 @@ namespace Lench.AdvancedControls.UI
                         graphRect.height),
                 Color.gray);
 
-            if (a != null && a.Status != AxisStatus.OK)
+            if (a != null && a.Status == AxisStatus.OK)
                 Util.FillRect(new Rect(
                                       graphRect.x + graphRect.width / 2 + graphRect.width / 2 * a.OutputValue,
                                       graphRect.y,

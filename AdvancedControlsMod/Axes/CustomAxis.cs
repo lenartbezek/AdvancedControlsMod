@@ -1,7 +1,8 @@
-﻿using System;
-using UnityEngine;
+﻿using UnityEngine;
 using Lench.Scripter;
 using spaar.ModLoader;
+using System;
+using System.Linq;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
 
@@ -158,7 +159,7 @@ axis_value";
                 update = python.Compile(UpdateCode);
 
                 init.Invoke();
-                LookForLinkedAxes();
+                LinkAxes();
             }
             catch (Exception e)
             {
@@ -170,17 +171,19 @@ axis_value";
             initialised = true;
         }
 
-        private void LookForLinkedAxes()
+        private void LinkAxes()
         {
             LinkedAxes.Clear();
-            var names = Regex.Replace(InitialisationCode, "=.+", " ").Split(' ');
+            var names = Regex.Split(InitialisationCode, "=.+$", RegexOptions.Multiline);
             foreach (var name in names)
             {
                 try
                 {
-                    var axis = python.GetVariable<InputAxis>(name);
+                    var axis = python.GetVariable<InputAxis>(name.Trim());
                     if (axis != null)
+                    {
                         LinkedAxes.Add(axis.Name);
+                    }
                 }
                 catch
                 {
@@ -203,6 +206,8 @@ axis_value";
             InitialisationCode = spaar.ModLoader.Configuration.GetString("axis-" + Name + "-init", InitialisationCode);
             UpdateCode = spaar.ModLoader.Configuration.GetString("axis-" + Name + "-update", UpdateCode);
             GlobalScope = spaar.ModLoader.Configuration.GetBool("axis-" + Name + "-global", GlobalScope);
+            for (int i = 0; spaar.ModLoader.Configuration.DoesKeyExist("axis-" + Name + "-link" + i); i++)
+                LinkedAxes.Add(spaar.ModLoader.Configuration.GetString("axis-" + Name + "-link" + i, " "));
         }
 
         internal override void Load(MachineInfo machineInfo)
@@ -213,6 +218,8 @@ axis_value";
                 UpdateCode = machineInfo.MachineData.ReadString("axis-" + Name + "-update");
             if (machineInfo.MachineData.HasKey("axis-" + Name + "-global"))
                 GlobalScope = machineInfo.MachineData.ReadBool("axis-" + Name + "-global");
+            if (machineInfo.MachineData.HasKey("axis-" + Name + "-links"))
+                LinkedAxes.Union<string>(machineInfo.MachineData.ReadStringArray("axis-" + Name + "-links"));
         }
 
         internal override void Save()
@@ -221,6 +228,9 @@ axis_value";
             spaar.ModLoader.Configuration.SetString("axis-" + Name + "-init", InitialisationCode);
             spaar.ModLoader.Configuration.SetString("axis-" + Name + "-update", UpdateCode);
             spaar.ModLoader.Configuration.SetBool("axis-" + Name + "-global", GlobalScope);
+            var list = LinkedAxes.ToArray<string>();
+            for (int i = 0; i < list.Length; i++)
+                spaar.ModLoader.Configuration.SetString("axis-" + Name + "-link"+i, list[i]);
         }
 
         internal override void Save(MachineInfo machineInfo)
@@ -229,6 +239,7 @@ axis_value";
             machineInfo.MachineData.Write("axis-" + Name + "-init", InitialisationCode);
             machineInfo.MachineData.Write("axis-" + Name + "-update", UpdateCode);
             machineInfo.MachineData.Write("axis-" + Name + "-global", GlobalScope);
+            machineInfo.MachineData.Write("axis-" + Name + "-links", LinkedAxes.ToArray<string>());
         }
 
         internal override void Delete()
@@ -237,6 +248,8 @@ axis_value";
             spaar.ModLoader.Configuration.RemoveKey("axis-" + Name + "-init");
             spaar.ModLoader.Configuration.RemoveKey("axis-" + Name + "-update");
             spaar.ModLoader.Configuration.RemoveKey("axis-" + Name + "-global");
+            for (int i = 0; spaar.ModLoader.Configuration.DoesKeyExist("axis-" + Name + "-link" + i); i++)
+                spaar.ModLoader.Configuration.RemoveKey("axis-" + Name + "-link" + i);
             Dispose();
         }
 
