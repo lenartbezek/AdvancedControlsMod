@@ -83,14 +83,14 @@ namespace Lench.AdvancedControls.Input
                         if (e.Error != null)
                         {
                             ControllerAxisEditor.download_button_text = "Error";
-                            spaar.ModLoader.ModConsole.AddMessage(LogType.Log, "[ACM]: Error downloading file: SDL2.dll");
-                            spaar.ModLoader.ModConsole.AddMessage(LogType.Error, "\t" + e.Error.Message);
+                            spaar.ModLoader.ModConsole.AddMessage(LogType.Log, "[ACM]: Error downloading file: SDL2.dll", e.Error.Message);
                         }
                         else
                         {
                             spaar.ModLoader.ModConsole.AddMessage(LogType.Log, "[ACM]: File downloaded: SDL2.dll");
                             ControllerAxisEditor.download_button_text = "Please restart Besiege";
                             SDL_Installed = true;
+                            InitSDL();
                         } 
                     };
                     client.DownloadFileAsync(
@@ -101,8 +101,7 @@ namespace Lench.AdvancedControls.Input
                 {
                     ControllerAxisEditor.downloading_in_progress = false;
                     ControllerAxisEditor.download_button_text = "Error";
-                    spaar.ModLoader.ModConsole.AddMessage(LogType.Log, "[ACM]: Error downloading file: SDL2.dll");
-                    spaar.ModLoader.ModConsole.AddMessage(LogType.Error, "\t" + e.Message);
+                    spaar.ModLoader.ModConsole.AddMessage(LogType.Error, "[ACM]: Error downloading file: SDL2.dll", e.Message);
                 }
             }
         }
@@ -188,6 +187,7 @@ namespace Lench.AdvancedControls.Input
 
         private void Update()
         {
+            if (SDL_Installed && !SDL_Initialized) InitSDL();
             if (!SDL_Initialized) return;
 
             SDL.SDL_Event e;
