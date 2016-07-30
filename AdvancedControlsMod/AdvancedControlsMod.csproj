@@ -137,6 +137,7 @@
     <Compile Include="Controls\InputControl.cs" />
     <Compile Include="Controls\PositionControl.cs" />
     <Compile Include="Controls\SliderControl.cs" />
+    <Compile Include="Functions.cs" />
     <Compile Include="Input\Button.cs" />
     <Compile Include="Input\Controller.cs" />
     <Compile Include="Input\DeviceManager.cs" />
@@ -147,6 +148,7 @@
     <Compile Include="Input\LPUtf8StrMarshaler.cs" />
     <Compile Include="Input\SDL2.cs" />
     <Compile Include="PythonEnvironment.cs" />
+    <Compile Include="TrackedCollider.cs" />
     <Compile Include="UI\ControlOverview.cs" />
     <Compile Include="UI\AxisEditorWindow.cs" />
     <Compile Include="UI\ChainAxisEditor.cs" />

@@ -36,10 +36,7 @@ namespace Lench.AdvancedControls.UI
             if (!PythonEnvironment.Loaded)
             {
                 GUILayout.Label("<b>Python engine not available</b>\n" +
-                                "Press download to install it automatically.\n\n" +
-                                "<b>Note</b>\n" +
-                                "This will install full Lench Scripter Mod.\n"+
-                                "Please read about it's features on the forum.");
+                                "Press download to install it automatically.");
                 if (GUILayout.Button(download_button_text) && !downloading_in_progress)
                     InstallIronPython();
             }
@@ -118,13 +115,7 @@ namespace Lench.AdvancedControls.UI
 
                 GUILayout.Box(GUIContent.none, GUILayout.Height(20));
 
-                // Draw notes
-                if (!PythonEnvironment.Enabled && Axis.GlobalScope)
-                {
-                    note = "<color=#FFFF00><b>Script not enabled in settings menu</b></color>\n" +
-                           "Axis code will be run in local scope.";
-                }
-
+                // Draw error
                 if (Axis.Error != null)
                 {
                     error = "<color=#FF0000><b>Python error</b></color>\n" +
@@ -151,7 +142,7 @@ namespace Lench.AdvancedControls.UI
         private static void InstallIronPython()
         {
             downloading_in_progress = true;
-            download_button_text = "0.00 %";
+            download_button_text = "0.0 %";
             if (!Directory.Exists(Application.dataPath + @"\Mods\Resources\LenchScripter\lib\"))
                 Directory.CreateDirectory(Application.dataPath + @"\Mods\Resources\LenchScripter\lib\");
             try
@@ -171,7 +162,7 @@ namespace Lench.AdvancedControls.UI
                         {
                             received_size[i] = e.BytesReceived;
                             float progress = (Convert.ToSingle(received_size.Sum()) / Convert.ToSingle(total_size.Sum()) * 100f);
-                            download_button_text = progress.ToString("0.00") + " %";
+                            download_button_text = progress.ToString("0.0") + " %";
                         };
 
                         // completion handler
@@ -198,11 +189,7 @@ namespace Lench.AdvancedControls.UI
                                 {
                                     // finish download and load assemblies
                                     download_button_text = "Complete";
-                                    if (ScripterMod.LoadPythonAssembly())
-                                    {
-                                        ScripterMod.LoadScripter();
-                                        ScripterMod.UpdateCheckerEnabled = false;
-                                    }
+                                    PythonEnvironment.LoadPythonAssembly();
                                 }
                             }
                         };

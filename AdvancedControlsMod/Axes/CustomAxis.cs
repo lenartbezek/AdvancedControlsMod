@@ -88,6 +88,17 @@ axis_value";
             editor = new UI.CustomAxisEditor(this);
         }
 
+        static CustomAxis()
+        {
+            ACM.Instance.OnInitialisation += InitGlobalScope;
+        }
+
+        private static void InitGlobalScope()
+        {
+            if (PythonEnvironment.Loaded)
+                PythonEnvironment.MainInstance = new PythonEnvironment();
+        }
+
         /// <summary>
         /// Executes Python code and updates output value.
         /// </summary>
@@ -148,11 +159,16 @@ axis_value";
             if (!Running && !Game.IsSimulating) return;
             Error = null;
             Running = false;
-            if (GlobalScope && PythonEnvironment.Enabled)
-                python = PythonEnvironment.ScripterEnvironment;
+            if (GlobalScope)
+            {
+                if (PythonEnvironment.MainInstance == null)
+                    InitGlobalScope();
+                python = PythonEnvironment.MainInstance;
+            }
             else
+            {
                 python = new PythonEnvironment();
-            if (python == null) return;
+            }
             try
             {
                 init = python.Compile(InitialisationCode);

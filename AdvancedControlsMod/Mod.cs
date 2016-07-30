@@ -41,9 +41,12 @@ namespace Lench.AdvancedControls
         public override void OnLoad()
         {
             UnityEngine.Object.DontDestroyOnLoad(ACM.Instance);
+            Game.OnSimulationToggle += SimulationToggle;
             BlockHandlers.OnInitialisation += ACM.Instance.Initialise;
             XmlSaver.OnSave += MachineData.Save;
             XmlLoader.OnLoad += MachineData.Load;
+
+            PythonEnvironment.LoadPythonAssembly();
         }
 
         /// <summary>
@@ -51,12 +54,22 @@ namespace Lench.AdvancedControls
         /// </summary>
         public override void OnUnload()
         {
+            Game.OnSimulationToggle -= SimulationToggle;
             BlockHandlers.OnInitialisation -= ACM.Instance.Initialise;
             XmlSaver.OnSave -= MachineData.Save;
             XmlLoader.OnLoad -= MachineData.Load;
             Configuration.Save();
 
             UnityEngine.Object.Destroy(ACM.Instance);
+        }
+
+        /// <summary>
+        /// Destroys old block handlers on every simulation toggle,
+        /// so they can be created again after block array is populated.
+        /// </summary>
+        private void SimulationToggle(bool simulating)
+        {
+            BlockHandlers.DestroyBlockHandlers();
         }
     }
 
@@ -142,6 +155,11 @@ namespace Lench.AdvancedControls
 
         private void Update()
         {
+            // Initialize block handlers
+            if (Game.IsSimulating && !BlockHandlers.Initialised)
+                BlockHandlers.InitializeBlockHandlers();
+
+            // Open or hide ACM mapper
             if (BlockMapper.CurrentInstance != null)
             {
                 if (BlockMapper.CurrentInstance.Block != null && BlockMapper.CurrentInstance.Block != ControlMapper.Block)
@@ -168,6 +186,21 @@ namespace Lench.AdvancedControls
             }
 
             OnUpdate?.Invoke();
+
+            if (Game.IsSimulating)
+                BlockHandlers.CallUpdate();
+        }
+
+        private void LateUpdate()
+        {
+            if (Game.IsSimulating)
+                BlockHandlers.CallLateUpdate();
+        }
+
+        private void FixedUpdate()
+        {
+            if (Game.IsSimulating)
+                BlockHandlers.CallFixedUpdate();
         }
 
         internal void Initialise()
@@ -281,15 +314,15 @@ namespace Lench.AdvancedControls
 
         private void CheckForModUpdate(bool verbose = false)
         {
-            var updater = gameObject.AddComponent<Updater>();
+            var updater = gameObject.AddComponent<Updater.Updater>();
             updater.Check(
                 "Advanced Controls Mod",
                 "https://api.github.com/repos/lench4991/AdvancedControlsMod/releases",
                 Assembly.GetExecutingAssembly().GetName().Version,
-                new List<Updater.Link>()
+                new List<Updater.Updater.Link>()
                     {
-                            new Updater.Link() { DisplayName = "Spiderling forum page", URL = "http://forum.spiderlinggames.co.uk/index.php?threads/3150/" },
-                            new Updater.Link() { DisplayName = "GitHub release page", URL = "https://github.com/lench4991/AdvancedControlsMod/releases/latest" }
+                            new Updater.Updater.Link() { DisplayName = "Spiderling forum page", URL = "http://forum.spiderlinggames.co.uk/index.php?threads/3150/" },
+                            new Updater.Updater.Link() { DisplayName = "GitHub release page", URL = "https://github.com/lench4991/AdvancedControlsMod/releases/latest" }
                     },
                 verbose);
         }

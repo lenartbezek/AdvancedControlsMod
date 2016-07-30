@@ -64,7 +64,7 @@ namespace Lench.AdvancedControls.Input
         internal static void InstallSDL()
         {
             ControllerAxisEditor.downloading_in_progress = true;
-            ControllerAxisEditor.download_button_text = "0 %";
+            ControllerAxisEditor.download_button_text = "0.0 %";
             if (File.Exists(Application.dataPath + @"\Mods\Resources\AdvancedControls\lib\SDL2.dll"))
                 File.Delete(Application.dataPath + @"\Mods\Resources\AdvancedControls\lib\SDL2.dll");
             if (!Directory.Exists(Application.dataPath + @"\Mods\Resources\AdvancedControls\lib\"))
@@ -75,7 +75,7 @@ namespace Lench.AdvancedControls.Input
                 {
                     client.DownloadProgressChanged += (object sender, DownloadProgressChangedEventArgs e) =>
                     {
-                        ControllerAxisEditor.download_button_text = (Convert.ToSingle(e.BytesReceived) / Convert.ToSingle(e.TotalBytesToReceive) * 100).ToString("0.00") + " %";
+                        ControllerAxisEditor.download_button_text = (Convert.ToSingle(e.BytesReceived) / Convert.ToSingle(e.TotalBytesToReceive) * 100).ToString("0.0") + " %";
                     };
                     client.DownloadFileCompleted += (object sender, AsyncCompletedEventArgs e) =>
                     {

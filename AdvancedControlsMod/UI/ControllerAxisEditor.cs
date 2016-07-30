@@ -88,6 +88,9 @@ namespace Lench.AdvancedControls.UI
         {
             var controller = Controller.Get(Axis.GUID);
 
+            Axis.Axis %= controller.NumAxes;
+            controller_index %= Controller.NumDevices;
+
             if (!DeviceManager.SDL_Initialized)
             {
 #if windows
@@ -222,8 +225,6 @@ namespace Lench.AdvancedControls.UI
                          Color.yellow);
 
                 // Draw controller selection
-                controller_index %= Controller.NumDevices;
-
                 GUILayout.BeginHorizontal();
                 if (GUILayout.Button("<", controller_index > 0 ? Elements.Buttons.Default : Elements.Buttons.Disabled, GUILayout.Width(30)) 
                     && controller_index > 0)
@@ -247,8 +248,6 @@ namespace Lench.AdvancedControls.UI
                 GUILayout.EndHorizontal();
 
                 // Draw axis selection
-                Axis.Axis = Axis.Axis % controller.NumAxes;
-
                 GUILayout.BeginHorizontal();
                 if (GUILayout.Button("<", Axis.Axis > 0 ? Elements.Buttons.Default : Elements.Buttons.Disabled, GUILayout.Width(30)) 
                     && Axis.Axis > 0)
