@@ -31,8 +31,7 @@ namespace Lench.AdvancedControls.Controls
         {
             get
             {
-                if (steering != null) return steering;
-                return null;
+                return steering;
             }
             protected set
             {

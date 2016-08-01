@@ -21,6 +21,7 @@ namespace Lench.AdvancedControls.UI
         }
 
         private ControllerAxis Axis;
+        private Controller controller;
 
         private Rect graphRect;
         private Rect last_graphRect;
@@ -86,11 +87,6 @@ namespace Lench.AdvancedControls.UI
 
         public void DrawAxis(Rect windowRect)
         {
-            var controller = Controller.Get(Axis.GUID);
-
-            Axis.Axis %= controller.NumAxes;
-            controller_index %= Controller.NumDevices;
-
             if (!DeviceManager.SDL_Initialized)
             {
 #if windows
@@ -141,6 +137,9 @@ namespace Lench.AdvancedControls.UI
             {
                 error = null;
                 note = null;
+
+                controller = Controller.Get(Axis.GUID);
+                Axis.Axis %= controller.NumAxes;
 
                 // Graph rect
                 graphRect = new Rect(

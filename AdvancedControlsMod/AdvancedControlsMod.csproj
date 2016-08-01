@@ -129,6 +129,7 @@
     <Compile Include="Blocks\Rocket.cs" />
     <Compile Include="Blocks\Spring.cs" />
     <Compile Include="Blocks\Steering.cs" />
+    <Compile Include="Blocks\VectorThruster.cs" />
     <Compile Include="Blocks\WaterCannon.cs" />
     <Compile Include="Configuration.cs" />
     <Compile Include="Controls\AngleControl.cs" />
@@ -137,6 +138,7 @@
     <Compile Include="Controls\InputControl.cs" />
     <Compile Include="Controls\PositionControl.cs" />
     <Compile Include="Controls\SliderControl.cs" />
+    <Compile Include="Controls\VectorControl.cs" />
     <Compile Include="Functions.cs" />
     <Compile Include="Input\Button.cs" />
     <Compile Include="Input\Controller.cs" />

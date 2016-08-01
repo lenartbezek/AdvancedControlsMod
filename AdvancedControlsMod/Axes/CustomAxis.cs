@@ -96,7 +96,7 @@ axis_value";
         private static void InitGlobalScope()
         {
             if (PythonEnvironment.Loaded)
-                PythonEnvironment.MainInstance = new PythonEnvironment();
+                PythonEnvironment.ScripterEnvironment = new PythonEnvironment();
         }
 
         /// <summary>
@@ -161,9 +161,9 @@ axis_value";
             Running = false;
             if (GlobalScope)
             {
-                if (PythonEnvironment.MainInstance == null)
+                if (PythonEnvironment.ScripterEnvironment == null)
                     InitGlobalScope();
-                python = PythonEnvironment.MainInstance;
+                python = PythonEnvironment.ScripterEnvironment;
             }
             else
             {

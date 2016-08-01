@@ -47,6 +47,7 @@ namespace Lench.AdvancedControls
             XmlLoader.OnLoad += MachineData.Load;
 
             PythonEnvironment.LoadPythonAssembly();
+            Scripter.Blocks.Block.LoadBlockLoaderAssembly();
         }
 
         /// <summary>

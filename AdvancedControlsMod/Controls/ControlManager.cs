@@ -287,6 +287,20 @@ namespace Lench.AdvancedControls.Controls
                 };
             }
 
+            if (BlockID == 790)
+            {
+                return new List<Control>()
+                {
+                    new VectorControl(GUID, Axis.X),
+                    new VectorControl(GUID, Axis.Y),
+                    new VectorControl(GUID, Axis.Z)
+                    {
+                        Min = -1.25f,
+                        Max = 1.25f
+                    },
+                };
+            }
+
             return new List<Control>();
         }
 

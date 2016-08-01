@@ -31,8 +31,7 @@ namespace Lench.AdvancedControls.Controls
         {
             get
             {
-                if (piston != null) return piston;
-                return null;
+                return piston;
             }
             protected set
             {
