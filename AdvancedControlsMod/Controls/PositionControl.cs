@@ -1,6 +1,6 @@
 ﻿using System;
 using UnityEngine;
-using Lench.Scripter.Blocks;
+using Lench.AdvancedControls.Blocks;
 
 namespace Lench.AdvancedControls.Controls
 {

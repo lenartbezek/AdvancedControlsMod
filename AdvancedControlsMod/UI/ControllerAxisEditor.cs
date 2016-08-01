@@ -9,7 +9,7 @@ namespace Lench.AdvancedControls.UI
     {
 
         internal static bool downloading_in_progress = false;
-        internal static string download_button_text = "Download SDL2.dll";
+        internal static string download_button_text = "Download";
 
         public ControllerAxisEditor(InputAxis axis)
         {
@@ -90,7 +90,8 @@ namespace Lench.AdvancedControls.UI
             if (!DeviceManager.SDL_Initialized)
             {
 #if windows
-                GUILayout.Label("<b>SDL2 library not found</b>\n" +
+                GUILayout.Label("<b>Additional library needed</b>\n" +
+                                "Controller axis requires SDL2 library to work.\n" +
                                 "Press download to install it automatically.\n\n"+
                                 "<b>Platform</b>\n" +
                                 "You are using Windows version of ACM.\n"+
@@ -99,7 +100,8 @@ namespace Lench.AdvancedControls.UI
                 if (GUILayout.Button(download_button_text) && !downloading_in_progress && !DeviceManager.SDL_Installed)
                     DeviceManager.InstallSDL();
 #elif linux
-                GUILayout.Label("<b>SDL2 library not found</b>\n" +
+                GUILayout.Label("<b>Additional library needed</b>\n" +
+                                "Controller axis requires SDL2 library to work.\n" +
                                 "Run the command below to install it.\n\n"+
                                 "<b>Platform</b>\n" +
                                 "You are using Linux version of ACM.\n" +
@@ -107,7 +109,8 @@ namespace Lench.AdvancedControls.UI
                                 "download the correct version of the mod.");
                 GUILayout.TextField("sudo apt-get install libsdl2-2.0-0");
 #elif osx
-                GUILayout.Label("<b>SDL2 library not found</b>\n" +
+                GUILayout.Label("<b>Additional library needed</b>\n" +
+                                "Controller axis requires SDL2 library to work.\n" +
                                 "Download it at the link below.\n\n"+
                                 "<b>Platform</b>\n" +
                                 "You are using OSX version of ACM.\n" +

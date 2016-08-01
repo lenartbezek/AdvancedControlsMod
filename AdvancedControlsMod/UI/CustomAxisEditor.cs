@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using Lench.Scripter;
 using Lench.AdvancedControls.Axes;
 using spaar.ModLoader.UI;
 using System.IO;
@@ -35,7 +34,8 @@ namespace Lench.AdvancedControls.UI
         {
             if (!PythonEnvironment.Loaded)
             {
-                GUILayout.Label("<b>Python engine not available</b>\n" +
+                GUILayout.Label("<b>Additional library needed</b>\n" +
+                                "Custom axis runs on IronPython engine.\n" +
                                 "Press download to install it automatically.");
                 if (GUILayout.Button(download_button_text) && !downloading_in_progress)
                     InstallIronPython();
@@ -113,9 +113,17 @@ namespace Lench.AdvancedControls.UI
 
                 GUILayout.EndHorizontal();
 
-                GUILayout.Box(GUIContent.none, GUILayout.Height(20));
+                GUILayout.Box(GUIContent.none, GUILayout.Height(8));
 
-                // Draw error
+                // Display linked axes
+                if (Axis.LinkedAxes.Count > 0)
+                {
+                    GUILayout.Label("Linked axes", new GUIStyle(Elements.Labels.Title) { alignment = TextAnchor.MiddleCenter });
+                    foreach (var name in Axis.LinkedAxes)
+                        GUILayout.Label(name, new GUIStyle(Elements.Labels.Default) { alignment = TextAnchor.MiddleCenter });
+                }
+
+                // Display error
                 if (Axis.Error != null)
                 {
                     error = "<color=#FF0000><b>Python error</b></color>\n" +

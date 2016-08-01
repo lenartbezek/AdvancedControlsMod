@@ -1,6 +1,5 @@
 ﻿using Lench.AdvancedControls.Axes;
 using Lench.AdvancedControls.Controls;
-using Lench.Scripter;
 using spaar.ModLoader.UI;
 using System;
 using System.Collections.Generic;

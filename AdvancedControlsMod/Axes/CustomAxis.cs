@@ -1,10 +1,8 @@
 ﻿using UnityEngine;
-using Lench.Scripter;
 using spaar.ModLoader;
 using System;
 using System.Linq;
 using System.Collections.Generic;
-using System.Text.RegularExpressions;
 
 namespace Lench.AdvancedControls.Axes
 {
@@ -190,8 +188,7 @@ axis_value";
         private void LinkAxes()
         {
             LinkedAxes.Clear();
-            var names = Regex.Split(InitialisationCode, "=.+$", RegexOptions.Multiline);
-            foreach (var name in names)
+            foreach (var name in python.GetVariableNames())
             {
                 try
                 {

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Reflection;
 using spaar.ModLoader;
-using Lench.Scripter;
 using Lench.AdvancedControls.UI;
 using Lench.AdvancedControls.Input;
 using Lench.AdvancedControls.Controls;
@@ -47,7 +46,8 @@ namespace Lench.AdvancedControls
             XmlLoader.OnLoad += MachineData.Load;
 
             PythonEnvironment.LoadPythonAssembly();
-            Scripter.Blocks.Block.LoadBlockLoaderAssembly();
+            Blocks.Block.LoadBlockLoaderAssembly();
+            AddScripterModModule();
         }
 
         /// <summary>
@@ -62,6 +62,28 @@ namespace Lench.AdvancedControls
             Configuration.Save();
 
             UnityEngine.Object.Destroy(ACM.Instance);
+        }
+
+        /// <summary>
+        /// Checks if LenchScripterMod is present and adds initialisation statements
+        /// that import AdvancedControls module.
+        /// </summary>
+        private void AddScripterModModule()
+        {
+            try
+            {
+                var assembly = Assembly.LoadFrom(Application.dataPath + "/Mods/LenchScripterMod.dll");
+                var type = assembly.GetType("Lench.Scripter.PythonEnvironment");
+                var method = type.GetMethod("AddInitStatement", BindingFlags.Public | BindingFlags.Static);
+                method.Invoke(null, new[] { "clr.AddReference(\"AdvancedControlsMod\")\n" +
+                                            "from Lench.AdvancedControls import AdvancedControls\n" +
+                                            "from Lench.AdvancedControls.Axes import AxisType\n" +
+                                            "from Lench.AdvancedControls.Axes.ChainAxis import ChainMethod" });
+            }
+            catch
+            {
+                return;
+            }
         }
 
         /// <summary>
@@ -119,11 +141,6 @@ namespace Lench.AdvancedControls
         {
             ControlMapper = gameObject.AddComponent<ControlMapper>();
             DeviceManager = gameObject.AddComponent<DeviceManager>();
-
-            PythonEnvironment.AddInitStatement("clr.AddReference(\"AdvancedControlsMod\")");
-            PythonEnvironment.AddInitStatement("from Lench.AdvancedControls import AdvancedControls");
-            PythonEnvironment.AddInitStatement("from Lench.AdvancedControls.Axes import AxisType");
-            PythonEnvironment.AddInitStatement("from Lench.AdvancedControls.Axes.ChainAxis import ChainMethod");
 
             Commands.RegisterCommand("controller", ControllerCommand, "Enter 'controller' for all available controller commands.");
             Commands.RegisterCommand("acm", ConfigurationCommand, "Enter 'acm' for all available configuration commands.");
