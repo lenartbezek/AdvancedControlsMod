@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using Lench.AdvancedControls.Controls;
 using Lench.AdvancedControls.Input;
 
 namespace Lench.AdvancedControls.Axes
@@ -84,23 +83,6 @@ namespace Lench.AdvancedControls.Axes
                 LocalAxes[name].Delete();
                 LocalAxes.Remove(name);
             }
-        }
-
-        /// <summary>
-        /// Returns all active axes from a list of controls.
-        /// Does not include duplicates.
-        /// </summary>
-        /// <param name="controls">List of controls.</param>
-        /// <returns>Returns a dictionary of axes with their names as the keys.</returns>
-        public static Dictionary<string, InputAxis> GetActiveAxes(List<Control> controls)
-        {
-            var dict = new Dictionary<string, InputAxis>();
-            foreach (Control c in controls)
-            {
-                if (c.Enabled && Get(c.Axis) != null)
-                    dict[c.Axis] = Get(c.Axis);
-            }
-            return dict;
         }
 
         /// <summary>

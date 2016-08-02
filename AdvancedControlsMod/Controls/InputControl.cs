@@ -24,7 +24,7 @@ namespace Lench.AdvancedControls.Controls
 
         /// <summary>
         /// Control's block handler.
-        /// Angle control accepts Lench.ScripterMod.Blocks.Steering, Cog and Spring handlers.
+        /// Angle control accepts Lench.AdvancedControls.Blocks.Steering, Cog and Spring handlers.
         /// </summary>
         public override Block Block
         {

@@ -190,13 +190,19 @@ namespace Lench.AdvancedControls.Axes
             }
         }
 
+        /* Recursively traverse the chain axis tree depth-first.
+         * Keeps list of already visited names as path.
+         * Duplicate in path means there is a cycle.
+         */
         private bool CheckCycle(List<string> path)
         {
+            // Check for duplicate
             if (path.Contains(Name))
                 return true;
             var sub1 = AxisManager.Get(SubAxis1) as ChainAxis;
             var sub2 = AxisManager.Get(SubAxis2) as ChainAxis;
             bool cycle = false;
+            // Traverse left node
             if (sub1 != null)
             {
                 var new_path = new List<string>();
@@ -204,6 +210,7 @@ namespace Lench.AdvancedControls.Axes
                 new_path.Add(Name);
                 cycle |= sub1.CheckCycle(new_path);
             }
+            // Traverse right node
             if (sub2 != null)
             {
                 var new_path = new List<string>();

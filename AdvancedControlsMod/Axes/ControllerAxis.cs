@@ -9,8 +9,11 @@ namespace Lench.AdvancedControls.Axes
     /// </summary>
     public class ControllerAxis : InputAxis
     {
-        // TUNING
 #pragma warning disable CS1591
+        /* TUNING:
+         * Following properties flip the changed flag on edit.
+         * Changed flag is used for redrawing the graph.
+         */
         public float Sensitivity
         {
             get { return sensitivity; }
@@ -18,7 +21,6 @@ namespace Lench.AdvancedControls.Axes
         }
         private float sensitivity;
 
-        
         public float Curvature
         {
             get { return curvature; }
@@ -26,7 +28,6 @@ namespace Lench.AdvancedControls.Axes
         }
         private float curvature;
 
-        
         public float Deadzone
         {
             get { return deadzone; }
@@ -34,7 +35,6 @@ namespace Lench.AdvancedControls.Axes
         }
         private float deadzone;
 
-        
         public float OffsetX
         {
             get { return offx; }
@@ -42,7 +42,6 @@ namespace Lench.AdvancedControls.Axes
         }
         private float offx;
 
-        
         public float OffsetY
         {
             get { return offy; }
@@ -50,7 +49,6 @@ namespace Lench.AdvancedControls.Axes
         }
         private float offy;
 
-        
         public bool Invert
         {
             get { return invert; }

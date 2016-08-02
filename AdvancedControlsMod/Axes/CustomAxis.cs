@@ -86,6 +86,10 @@ axis_value";
             editor = new UI.CustomAxisEditor(this);
         }
 
+        /// <summary>
+        /// Static constructor subscribes global scope initialisation to OnInitialisation event.
+        /// This needs to be done so global scopes are only initialized once, instead each time for every axis.
+        /// </summary>
         static CustomAxis()
         {
             ACM.Instance.OnInitialisation += InitGlobalScope;
@@ -112,7 +116,7 @@ axis_value";
             if (initialised)
             {
                 try
-                {
+                {   // Attempts to run the update code.
                     var result = update.Invoke();
                     if (result == null)
                     {
@@ -130,7 +134,7 @@ axis_value";
                     }
                 }
                 catch (Exception e)
-                {
+                {   // On raised exception, it displays it and stops execution.
                     if (e.InnerException != null) e = e.InnerException;
                     Error = PythonEnvironment.FormatException(e);
                     Running = false;
@@ -168,10 +172,11 @@ axis_value";
                 python = new PythonEnvironment();
             }
             try
-            {
+            {   // Attempts to compile initialisation and update code.
                 init = python.Compile(InitialisationCode);
                 update = python.Compile(UpdateCode);
 
+                // Executes initialisation code and checks it's scope for linked axes.
                 init.Invoke();
                 LinkAxes();
             }
@@ -185,6 +190,9 @@ axis_value";
             initialised = true;
         }
 
+        /// <summary>
+        /// Goes through all global names in scope and checks if they represent an InputAxis object.
+        /// </summary>
         private void LinkAxes()
         {
             LinkedAxes.Clear();
@@ -192,7 +200,7 @@ axis_value";
             {
                 try
                 {
-                    var axis = python.GetVariable<InputAxis>(name.Trim());
+                    var axis = python.GetVariable<InputAxis>(name);
                     if (axis != null)
                     {
                         LinkedAxes.Add(axis.Name);

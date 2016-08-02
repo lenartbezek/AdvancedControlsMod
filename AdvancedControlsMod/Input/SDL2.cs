@@ -33,6 +33,7 @@ using System.Runtime.InteropServices;
 
 #pragma warning disable CS1570, CS1572, CS1574, CS1584, CS1658
 
+// Altered namespace.
 namespace Lench.AdvancedControls.Input
 {
     /// <summary>
@@ -45,7 +46,7 @@ namespace Lench.AdvancedControls.Input
         /// <summary>
         /// Used by DllImport to load the native library.
         /// </summary>
-
+        // Altered for use in Besiege on different platforms.
 #if windows
         private const string nativeLibName = "Besiege_Data/Mods/Resources/AdvancedControls/lib/SDL2.dll";
 #elif linux
