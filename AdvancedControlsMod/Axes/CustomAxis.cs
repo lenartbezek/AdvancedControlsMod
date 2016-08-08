@@ -108,7 +108,7 @@ axis_value";
         {
             if (!PythonEnvironment.Loaded) return;
             if (!Running && initialised)
-            {
+            {   // Stops running if not initialised
                 initialised = false;
                 Running = false;
             }
@@ -143,12 +143,14 @@ axis_value";
             }
             else
             {
+                // Initializes axis when starting through Running toggle.
                 Initialise();
             }
         }
 
         /// <summary>
         /// Initializes Python environment and compiles code.
+        /// Sets Running to true if successfull.
         /// </summary>
         protected override void Initialise()
         {
@@ -172,7 +174,8 @@ axis_value";
                 python = new PythonEnvironment();
             }
             try
-            {   // Attempts to compile initialisation and update code.
+            {   
+                // Attempts to compile initialisation and update code.
                 init = python.Compile(InitialisationCode);
                 update = python.Compile(UpdateCode);
 
