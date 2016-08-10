@@ -37,6 +37,16 @@ namespace Lench.AdvancedControls.UI
             Destroy(popup);
         }
 
+        internal bool ContainsMouse
+        {
+            get
+            {
+                var mousePos = UnityEngine.Input.mousePosition;
+                mousePos.y = Screen.height - mousePos.y;
+                return windowRect.Contains(mousePos);
+            }
+        }
+
         /// <summary>
         /// Render window.
         /// </summary>

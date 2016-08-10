@@ -28,7 +28,7 @@ namespace Lench.AdvancedControls
             }
         }
         
-        public override string VersionExtra { get; } = "test";
+        public override string VersionExtra { get; } = "";
         public override string BesiegeVersion { get; } = "v0.32";
         public override bool CanBeUnloaded { get; } = true;
         public override bool Preload { get; } = false;

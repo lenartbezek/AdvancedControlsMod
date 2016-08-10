@@ -178,6 +178,16 @@ namespace Lench.AdvancedControls.UI
                 Destroy(popup);
         }
 
+        internal bool ContainsMouse
+        {
+            get
+            {
+                var mousePos = UnityEngine.Input.mousePosition;
+                mousePos.y = Screen.height - mousePos.y;
+                return windowRect.Contains(mousePos);
+            }
+        }
+
         protected virtual void DoWindow(int id)
         {
             RefreshOverview();

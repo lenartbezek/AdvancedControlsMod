@@ -25,6 +25,16 @@ namespace Lench.AdvancedControls.UI
         private string SaveName = "";
         private InputAxis Axis;
 
+        internal bool ContainsMouse
+        {
+            get
+            {
+                var mousePos = UnityEngine.Input.mousePosition;
+                mousePos.y = Screen.height - mousePos.y;
+                return windowRect.Contains(mousePos);
+            }
+        }
+
         internal SelectAxisDelegate Callback;
 
         internal void SaveAxis()

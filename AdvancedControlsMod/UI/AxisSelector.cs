@@ -21,6 +21,7 @@ namespace Lench.AdvancedControls.UI
                 return windowRect.Contains(mousePos);
             }
         }
+
         internal SelectAxisDelegate Callback;
 
         private bool compact;
