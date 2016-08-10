@@ -81,14 +81,14 @@ namespace Lench.AdvancedControls.Blocks
                 throw new ArgumentException("Value is not a number (NaN).");
             if (sw.allowLimits && limitsSlider.IsActive)
             {
-                if (!sw.flipped)
+                if (!sw.Flipped)
                     desired_angle = Mathf.Clamp(angle, -limitsSlider.Min, limitsSlider.Max);
                 else
                     desired_angle = Mathf.Clamp(angle * -1, -limitsSlider.Max, limitsSlider.Min);
             }
             else
             {
-                desired_angle = angle * (sw.flipped ? -1 : 1);
+                desired_angle = angle * (sw.Flipped ? -1 : 1);
             }
 
             setAngleFlag = true;
@@ -133,7 +133,7 @@ namespace Lench.AdvancedControls.Blocks
                     float new_angle = current_angle + speed * Time.deltaTime;
                     if (sw.allowLimits && limitsSlider.IsActive)
                     {
-                        if (!sw.flipped)
+                        if (!sw.Flipped)
                             new_angle = Mathf.Clamp(new_angle, -limitsSlider.Min, limitsSlider.Max);
                         else
                             new_angle = Mathf.Clamp(new_angle, -limitsSlider.Max, limitsSlider.Min);
