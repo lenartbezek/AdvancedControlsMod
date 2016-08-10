@@ -28,7 +28,7 @@ namespace Lench.AdvancedControls
             }
         }
         
-        public override string VersionExtra { get; } = "";
+        public override string VersionExtra { get; } = "test";
         public override string BesiegeVersion { get; } = "v0.32";
         public override bool CanBeUnloaded { get; } = true;
         public override bool Preload { get; } = false;
@@ -47,7 +47,8 @@ namespace Lench.AdvancedControls
 
             PythonEnvironment.LoadPythonAssembly();
             Blocks.Block.LoadBlockLoaderAssembly();
-            AddScripterModModule();
+
+            ImportPythonModules();
         }
 
         /// <summary>
@@ -68,7 +69,7 @@ namespace Lench.AdvancedControls
         /// Checks if LenchScripterMod is present and adds initialisation statements
         /// that import AdvancedControls module.
         /// </summary>
-        private void AddScripterModModule()
+        private void ImportPythonModules()
         {
             try
             {
@@ -92,6 +93,7 @@ namespace Lench.AdvancedControls
         /// </summary>
         private void SimulationToggle(bool simulating)
         {
+            if (simulating) Functions.ResetTimer();
             BlockHandlers.DestroyBlockHandlers();
         }
     }
@@ -126,9 +128,6 @@ namespace Lench.AdvancedControls
 
         internal bool LoadedMachine = false;
 
-        internal ControlMapper ControlMapper;
-        internal DeviceManager DeviceManager;
-
         internal delegate void UpdateEventHandler();
         internal event UpdateEventHandler OnUpdate;
 
@@ -139,8 +138,9 @@ namespace Lench.AdvancedControls
 
         private void Awake()
         {
-            ControlMapper = gameObject.AddComponent<ControlMapper>();
-            DeviceManager = gameObject.AddComponent<DeviceManager>();
+            gameObject.AddComponent<BlockHandlers>();
+            gameObject.AddComponent<ControlMapper>();
+            gameObject.AddComponent<DeviceManager>();
 
             Commands.RegisterCommand("controller", ControllerCommand, "Enter 'controller' for all available controller commands.");
             Commands.RegisterCommand("acm", ConfigurationCommand, "Enter 'acm' for all available configuration commands.");
@@ -166,8 +166,9 @@ namespace Lench.AdvancedControls
         {
             OnUpdate = null;
             OnInitialisation = null;
-            Destroy(ControlMapper);
-            Destroy(DeviceManager);
+            Destroy(BlockHandlers.Instance);
+            Destroy(ControlMapper.Instance);
+            Destroy(DeviceManager.Instance);
             Destroy(GameObject.Find("Advanced Controls").transform.gameObject);
         }
 
@@ -180,8 +181,8 @@ namespace Lench.AdvancedControls
             // Open or hide ACM mapper
             if (BlockMapper.CurrentInstance != null)
             {
-                if (BlockMapper.CurrentInstance.Block != null && BlockMapper.CurrentInstance.Block != ControlMapper.Block)
-                    ControlMapper.ShowBlockControls(BlockMapper.CurrentInstance.Block);
+                if (BlockMapper.CurrentInstance.Block != null && BlockMapper.CurrentInstance.Block != ControlMapper.Instance.Block)
+                    ControlMapper.Instance.ShowBlockControls(BlockMapper.CurrentInstance.Block);
 
                 if (BlockMapper.CurrentInstance.Block != null)
                 {
@@ -193,8 +194,8 @@ namespace Lench.AdvancedControls
             }
             else
             {
-                if (ControlMapper.Visible)
-                    ControlMapper.Hide();
+                if (ControlMapper.Instance.Visible)
+                    ControlMapper.Instance.Hide();
             }
 
             if (LoadedMachine)
@@ -204,21 +205,6 @@ namespace Lench.AdvancedControls
             }
 
             OnUpdate?.Invoke();
-
-            if (Game.IsSimulating)
-                BlockHandlers.CallUpdate();
-        }
-
-        private void LateUpdate()
-        {
-            if (Game.IsSimulating)
-                BlockHandlers.CallLateUpdate();
-        }
-
-        private void FixedUpdate()
-        {
-            if (Game.IsSimulating)
-                BlockHandlers.CallFixedUpdate();
         }
 
         internal void Initialise()
@@ -230,7 +216,7 @@ namespace Lench.AdvancedControls
         {
             ModEnabled = active;
             enabled = active;
-            if (!active) ControlMapper.Hide();
+            if (!active) ControlMapper.Instance.Hide();
         }
 
         private string ControllerCommand(string[] args, IDictionary<string, string> namedArgs)

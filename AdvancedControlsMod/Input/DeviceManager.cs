@@ -11,28 +11,28 @@ namespace Lench.AdvancedControls.Input
     internal class DeviceManager : SingleInstance<DeviceManager>
     {
         internal delegate void AxisMotionEventHandler(SDL.SDL_Event e);
-        internal event AxisMotionEventHandler OnAxisMotion;
+        internal static event AxisMotionEventHandler OnAxisMotion;
 
         internal delegate void BallMotionEventHandler(SDL.SDL_Event e);
-        internal event BallMotionEventHandler OnBallMotion;
+        internal static event BallMotionEventHandler OnBallMotion;
 
         internal delegate void HatMotionEventHandler(SDL.SDL_Event e);
-        internal event HatMotionEventHandler OnHatMotion;
+        internal static event HatMotionEventHandler OnHatMotion;
 
         internal delegate void ButtonEventHandler(SDL.SDL_Event e, bool down);
-        internal event ButtonEventHandler OnButton;
+        internal static event ButtonEventHandler OnButton;
 
         internal delegate void KeyEventHandler(SDL.SDL_Event e, bool down);
-        internal event KeyEventHandler OnKey;
+        internal static event KeyEventHandler OnKey;
 
         internal delegate void DeviceAddedEventHandler(SDL.SDL_Event e);
-        internal event DeviceAddedEventHandler OnDeviceAdded;
+        internal static event DeviceAddedEventHandler OnDeviceAdded;
 
         internal delegate void DeviceRemovedEventHandler(SDL.SDL_Event e);
-        internal event DeviceRemovedEventHandler OnDeviceRemoved;
+        internal static event DeviceRemovedEventHandler OnDeviceRemoved;
 
         internal delegate void DeviceRemappedEventHandler(SDL.SDL_Event e);
-        internal event DeviceRemappedEventHandler OnDeviceRemapped;
+        internal static event DeviceRemappedEventHandler OnDeviceRemapped;
 
         public static bool SDL_Initialized = false;
         public static bool SDL_Installed = false;
@@ -58,7 +58,7 @@ namespace Lench.AdvancedControls.Input
             }
 
             if (SDL_Initialized)
-                ACM.Instance.DeviceManager.StartCoroutine(AssignMappings(false));
+                Instance.StartCoroutine(AssignMappings(false));
         }
 
         internal static void InstallSDL()

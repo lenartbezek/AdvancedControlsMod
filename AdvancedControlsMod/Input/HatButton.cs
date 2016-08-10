@@ -75,8 +75,8 @@ namespace Lench.AdvancedControls.Input
                 direction = "LEFT";
             else if ((down_state & SDL.SDL_HAT_RIGHT) > 0)
                 direction = "RIGHT";
-            ACM.Instance.DeviceManager.OnHatMotion += HandleEvent;
-            ACM.Instance.DeviceManager.OnDeviceAdded += UpdateDevice;
+            DeviceManager.OnHatMotion += HandleEvent;
+            DeviceManager.OnDeviceAdded += UpdateDevice;
         }
 
         /// <summary>
@@ -107,8 +107,8 @@ namespace Lench.AdvancedControls.Input
             else if ((down_state & SDL.SDL_HAT_RIGHT) > 0)
                 direction = "RIGHT";
 
-            ACM.Instance.DeviceManager.OnHatMotion += HandleEvent;
-            ACM.Instance.DeviceManager.OnDeviceAdded += UpdateDevice;
+            DeviceManager.OnHatMotion += HandleEvent;
+            DeviceManager.OnDeviceAdded += UpdateDevice;
         }
 
         private void HandleEvent(SDL.SDL_Event e)

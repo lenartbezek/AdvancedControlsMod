@@ -132,8 +132,8 @@ namespace Lench.AdvancedControls.Axes
             Smooth = false;
             editor = new UI.ControllerAxisEditor(this);
 
-            ACM.Instance.DeviceManager.OnDeviceAdded += (SDL.SDL_Event e) => this.controller = Controller.Get(guid);
-            ACM.Instance.DeviceManager.OnDeviceRemoved += (SDL.SDL_Event e) => this.controller = Controller.Get(guid);
+            DeviceManager.OnDeviceAdded += (SDL.SDL_Event e) => this.controller = Controller.Get(guid);
+            DeviceManager.OnDeviceRemoved += (SDL.SDL_Event e) => this.controller = Controller.Get(guid);
         }
 
         /// <summary>

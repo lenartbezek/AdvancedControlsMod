@@ -64,8 +64,8 @@ namespace Lench.AdvancedControls.Input
             this.index = index;
             this.guid = controller.GUID;
 
-            ACM.Instance.DeviceManager.OnButton += HandleEvent;
-            ACM.Instance.DeviceManager.OnDeviceAdded += UpdateDevice;
+            DeviceManager.OnButton += HandleEvent;
+            DeviceManager.OnDeviceAdded += UpdateDevice;
         }
 
         /// <summary>
@@ -84,8 +84,8 @@ namespace Lench.AdvancedControls.Input
             else
                 throw new FormatException("Specified ID does not represent a joystick button.");
 
-            ACM.Instance.DeviceManager.OnButton += HandleEvent;
-            ACM.Instance.DeviceManager.OnDeviceAdded += UpdateDevice;
+            DeviceManager.OnButton += HandleEvent;
+            DeviceManager.OnDeviceAdded += UpdateDevice;
         }
 
         private void HandleEvent(SDL.SDL_Event e, bool down)

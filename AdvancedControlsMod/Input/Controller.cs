@@ -174,7 +174,7 @@ namespace Lench.AdvancedControls.Input
                 Buttons.Add(new JoystickButton(this, i));
             }
 
-            ACM.Instance.DeviceManager.OnDeviceRemapped += UpdateMappings;
+            DeviceManager.OnDeviceRemapped += UpdateMappings;
             ACM.Instance.OnUpdate += Update;
 
             // Debug
@@ -340,7 +340,7 @@ namespace Lench.AdvancedControls.Input
             else
                 SDL.SDL_JoystickClose(device_pointer);
 
-            ACM.Instance.DeviceManager.OnDeviceRemapped -= UpdateMappings;
+            DeviceManager.OnDeviceRemapped -= UpdateMappings;
             ACM.Instance.OnUpdate -= Update;
         }
 

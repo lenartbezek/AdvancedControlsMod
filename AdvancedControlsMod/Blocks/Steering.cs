@@ -10,7 +10,6 @@ namespace Lench.AdvancedControls.Blocks
     public class Steering : Block
     {
         private static FieldInfo angleyToBeField = typeof(SteeringWheel).GetField("angleyToBe", BindingFlags.NonPublic | BindingFlags.Instance);
-        private static FieldInfo angleMultiplierField = typeof(SteeringWheel).GetField("angleMultiplier", BindingFlags.NonPublic | BindingFlags.Instance);
         private static FieldInfo speedSliderField = typeof(SteeringWheel).GetField("speedSlider", BindingFlags.NonPublic | BindingFlags.Instance);
         private static FieldInfo limitsSliderField = typeof(SteeringWheel).GetField("limitsSlider", BindingFlags.NonPublic | BindingFlags.Instance);
 
@@ -65,7 +64,7 @@ namespace Lench.AdvancedControls.Blocks
         {
             if (float.IsNaN(value))
                 throw new ArgumentException("Value is not a number (NaN).");
-            desired_input = value;
+            desired_input = value * (sw.Flipped ? -1 : 1);
             setInputFlag = true;
             setAngleFlag = false;
         }
@@ -77,18 +76,19 @@ namespace Lench.AdvancedControls.Blocks
         public void SetAngle(float angle)
         {
             angle /= convertToRadians;
+            angle *= (sw.Flipped ? -1 : 1);
             if (float.IsNaN(angle))
                 throw new ArgumentException("Value is not a number (NaN).");
             if (sw.allowLimits && limitsSlider.IsActive)
             {
-                if (!sw.Flipped)
+                if (sw.Flipped)
                     desired_angle = Mathf.Clamp(angle, -limitsSlider.Min, limitsSlider.Max);
                 else
-                    desired_angle = Mathf.Clamp(angle * -1, -limitsSlider.Max, limitsSlider.Min);
+                    desired_angle = Mathf.Clamp(angle, -limitsSlider.Max, limitsSlider.Min);
             }
             else
             {
-                desired_angle = angle * (sw.Flipped ? -1 : 1);
+                desired_angle = angle;
             }
 
             setAngleFlag = true;
@@ -117,8 +117,8 @@ namespace Lench.AdvancedControls.Blocks
                 }
                 else
                 {
-                    desired_input = Mathf.DeltaAngle(current_angle, desired_angle) / 
-                        ((float)angleMultiplierField.GetValue(sw) * speedSlider.Value * Time.deltaTime);
+                    desired_input = Mathf.DeltaAngle(current_angle, desired_angle) /
+                        (100f * sw.targetAngleSpeed * speedSlider.Value * Time.deltaTime);
                     desired_input = Mathf.Clamp(desired_input, -1, 1);
                     setInputFlag = true;
                 }
@@ -128,20 +128,23 @@ namespace Lench.AdvancedControls.Blocks
             {
                 if (speedSlider.Value != 0)
                 {
-                    float speed = desired_input * (float)angleMultiplierField.GetValue(sw) * speedSlider.Value;
+                    float speed = desired_input * 100f * sw.targetAngleSpeed * speedSlider.Value;
+
                     float current_angle = (float)angleyToBeField.GetValue(sw);
                     float new_angle = current_angle + speed * Time.deltaTime;
+
                     if (sw.allowLimits && limitsSlider.IsActive)
                     {
-                        if (!sw.Flipped)
+                        if (sw.Flipped)
                             new_angle = Mathf.Clamp(new_angle, -limitsSlider.Min, limitsSlider.Max);
                         else
                             new_angle = Mathf.Clamp(new_angle, -limitsSlider.Max, limitsSlider.Min);
                     }
                     else if (new_angle > 180)
-                        new_angle = new_angle - 360;
+                        new_angle -= 360;
                     else if (new_angle < -180)
-                        new_angle = new_angle + 360;
+                        new_angle += 360;
+
                     angleyToBeField.SetValue(sw, new_angle);
                 }
                 setInputFlag = false;

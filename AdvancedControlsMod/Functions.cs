@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 using Lench.AdvancedControls.Blocks;
 
@@ -10,6 +11,17 @@ namespace Lench.AdvancedControls
     /// </summary>
     public static class Functions
     {
+        // Measuring time since the start of simulation
+        private static float startTime = 0;
+
+        /// <summary>
+        /// Resets the timer returned by GetTime()
+        /// </summary>
+        public static void ResetTimer()
+        {
+            startTime = Time.time;
+        }
+
         /// <summary>
         /// Logs message into console.
         /// </summary>
@@ -62,7 +74,7 @@ namespace Lench.AdvancedControls
         /// <returns>Float value.</returns>
         public static float GetTime()
         {
-            return Time.time;
+            return Time.time - startTime;
         }
 
         /// <summary>
@@ -71,7 +83,7 @@ namespace Lench.AdvancedControls
         /// <param name="name">Name of the global variable.</param>
         public static void Watch(string name)
         {
-            throw new InvalidOperationException("Watchlist is unavailable in ACM.");
+            throw new InvalidOperationException("Watchlist not available in ACM.");
         }
 
         /// <summary>
@@ -81,7 +93,7 @@ namespace Lench.AdvancedControls
         /// <param name="value">Variable value to be reported.</param>
         public static void Watch(string name, object value)
         {
-            throw new InvalidOperationException("Watchlist is unavailable in ACM.");
+            throw new InvalidOperationException("Watchlist not available in ACM.");
         }
 
         /// <summary>
@@ -89,7 +101,7 @@ namespace Lench.AdvancedControls
         /// </summary>
         public static void ClearWatchlist()
         {
-            throw new InvalidOperationException("Watchlist is unavailable in ACM.");
+            throw new InvalidOperationException("Watchlist not available in ACM.");
         }
 
         /// <summary>
@@ -97,7 +109,7 @@ namespace Lench.AdvancedControls
         /// </summary>
         public static void UseDegrees()
         {
-            Block.UseDegrees();
+            throw new InvalidOperationException("Angle unit switch not available in ACM.");
         }
 
         /// <summary>
@@ -105,7 +117,7 @@ namespace Lench.AdvancedControls
         /// </summary>
         public static void UseRadians()
         {
-            Block.UseRadians();
+            throw new InvalidOperationException("Angle unit switch not available in ACM.");
         }
 
         /// <summary>
@@ -196,25 +208,6 @@ namespace Lench.AdvancedControls
                 return new TrackedCollider(hit.collider, hit.point);
             }
             throw new Exception("Your raycast does not intersect with a collider.");
-        }
-
-        /// <summary>
-        /// Creates a mark at a given position.
-        /// </summary>
-        /// <param name="pos">Vector3 specifying position.</param>
-        /// <returns>Reference to the mark.</returns>
-        public static void CreateMark(Vector3 pos)
-        {
-            throw new InvalidOperationException("Mark functionality is unavailable in ACM.");
-        }
-
-        /// <summary>
-        /// Clears all marks.
-        /// Called by user or at the end of the simulation.
-        /// </summary>
-        public static void ClearMarks(bool manual_call = true)
-        {
-            throw new InvalidOperationException("Mark functionality is unavailable in ACM.");
         }
     }
 }

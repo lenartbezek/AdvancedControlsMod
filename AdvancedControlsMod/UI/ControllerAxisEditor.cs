@@ -16,8 +16,8 @@ namespace Lench.AdvancedControls.UI
             Axis = axis as ControllerAxis;
 
             FindIndex();
-            ACM.Instance.DeviceManager.OnDeviceAdded += (SDL.SDL_Event e) => FindIndex();
-            ACM.Instance.DeviceManager.OnDeviceRemoved += (SDL.SDL_Event e) => FindIndex();
+            DeviceManager.OnDeviceAdded += (SDL.SDL_Event e) => FindIndex();
+            DeviceManager.OnDeviceRemoved += (SDL.SDL_Event e) => FindIndex();
         }
 
         private ControllerAxis Axis;
@@ -32,7 +32,7 @@ namespace Lench.AdvancedControls.UI
 
         internal string note;
         internal string error;
-
+         
         private Vector2 click_position;
         private bool dragging;
 

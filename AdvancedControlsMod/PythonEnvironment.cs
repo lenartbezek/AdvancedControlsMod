@@ -183,8 +183,18 @@ namespace Lench.AdvancedControls
             Execute("from Lench.AdvancedControls import AdvancedControls");
             Execute("from Lench.AdvancedControls.Axes import AxisType");
             Execute("from Lench.AdvancedControls.Axes.ChainAxis import ChainMethod");
-            Execute("clr.AddReference(\"AdvancedControlsMod\")");
-            Execute("from Lench.AdvancedControls import Functions as Besiege");
+
+            // Execute additional init statements
+            for (int i = 0; i < init_statements.Count;)
+                try
+                {
+                    Execute(init_statements[i]);
+                    i++;
+                }
+                catch
+                {
+                    init_statements.RemoveAt(i);
+                }
 
             // Redirect standard output
             Execute("import sys");
@@ -360,7 +370,9 @@ namespace Lench.AdvancedControls
         public void write(object s)
         {
             if (s.ToString().Trim().Length != 0)
+            {
                 Debug.Log(s.ToString().TrimEnd());
+            }
         }
     }
 }
