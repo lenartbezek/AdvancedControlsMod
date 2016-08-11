@@ -14,15 +14,15 @@ namespace Lench.AdvancedControls.Input
         /// Keyboard button identifying string of the following format:
         /// key:[UnityEngine.KeyCode]
         /// </summary>
-        public string ID { get { return "key:" + keycode.ToString(); } }
+        public override string ID { get { return "key:" + keycode.ToString(); } }
 
 #pragma warning disable CS1591
-        public bool IsDown { get { return UnityEngine.Input.GetKey(keycode); } }
-        public bool Pressed { get { return UnityEngine.Input.GetKeyDown(keycode); } }
-        public bool Released { get { return UnityEngine.Input.GetKeyUp(keycode); } }
-        public float Value { get { return IsDown ? 1 : 0; } }
-        public string Name { get { return keycode.ToString(); } }
-        public bool Connected { get; } = true;
+        public override bool IsDown { get { return UnityEngine.Input.GetKey(keycode); } }
+        public override bool Pressed { get { return UnityEngine.Input.GetKeyDown(keycode); } }
+        public override bool Released { get { return UnityEngine.Input.GetKeyUp(keycode); } }
+        public override float Value { get { return IsDown ? 1 : 0; } }
+        public override string Name { get { return keycode.ToString(); } }
+        public override bool Connected { get; } = true;
 #pragma warning restore CS1591
 
         /// <summary>

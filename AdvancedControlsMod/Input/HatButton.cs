@@ -21,7 +21,7 @@ namespace Lench.AdvancedControls.Input
         /// Hat button identifying string of the following format:
         /// hat:[index]:[down_state_byte]:[device_guid]
         /// </summary>
-        public string ID { get { return "hat:" + index + ":" + down_state + ":" + guid; } }
+        public override string ID { get { return "hat:" + index + ":" + down_state + ":" + guid; } }
 
         /// <summary>
         /// Guid of the associated controller.
@@ -47,12 +47,12 @@ namespace Lench.AdvancedControls.Input
         }
 
 #pragma warning disable CS1591
-        public bool IsDown { get { return down; } }
-        public bool Pressed { get { return pressed; } }
-        public bool Released { get { return released; } }
-        public float Value { get { return down ? 1 : 0; } }
-        public string Name { get { return controller != null ? controller.HatNames[index] + " - " + direction : "<color=#FF0000>Unknown hat</color>"; } }
-        public bool Connected { get { return controller != null && controller.Connected; } }
+        public override bool IsDown { get { return down; } }
+        public override bool Pressed { get { return pressed; } }
+        public override bool Released { get { return released; } }
+        public override float Value { get { return down ? 1 : 0; } }
+        public override string Name { get { return controller != null ? controller.HatNames[index] + " - " + direction : "<color=#FF0000>Unknown hat</color>"; } }
+        public override bool Connected { get { return controller != null && controller.Connected; } }
 #pragma warning restore CS1591
 
         /// <summary>

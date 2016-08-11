@@ -14,6 +14,7 @@ namespace Lench.AdvancedControls
             try
             {
                 AxisManager.MachineAxes.Clear();
+                ControlManager.Blocks.Clear();
 
                 // read mod version
                 if (!machineInfo.MachineData.HasKey("ac-version")) return;

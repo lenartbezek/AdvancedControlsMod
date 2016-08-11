@@ -19,7 +19,7 @@ namespace Lench.AdvancedControls.Input
         /// Joystick button identifying string of the following format:
         /// joy:[index]:[device_guid]
         /// </summary>
-        public string ID { get { return "joy:" + index + ":" + guid; } }
+        public override string ID { get { return "joy:" + index + ":" + guid; } }
 
         /// <summary>
         /// Guid of the associated controller.
@@ -45,12 +45,12 @@ namespace Lench.AdvancedControls.Input
         }
 
 #pragma warning disable CS1591
-        public bool IsDown { get { return down; } }
-        public bool Pressed { get { return pressed; } }
-        public bool Released { get { return released; } }
-        public float Value { get { return down ? 1 : 0; } }
-        public string Name { get { return controller != null ? controller.ButtonNames[index] : "<color=#FF0000>Unknown button</color>"; } }
-        public bool Connected { get { return controller != null && controller.Connected; } }
+        public override bool IsDown { get { return down; } }
+        public override bool Pressed { get { return pressed; } }
+        public override bool Released { get { return released; } }
+        public override float Value { get { return down ? 1 : 0; } }
+        public override string Name { get { return controller != null ? controller.ButtonNames[index] : "<color=#FF0000>Unknown button</color>"; } }
+        public override bool Connected { get { return controller != null && controller.Connected; } }
 #pragma warning restore CS1591
 
         /// <summary>

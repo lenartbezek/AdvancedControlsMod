@@ -271,8 +271,8 @@ namespace Lench.AdvancedControls.Axes
                    this.Gravity == cast.Gravity &&
                    this.Snap == cast.Snap &&
                    this.Raw == cast.Raw &&
-                   this.PositiveBind.ID == cast.PositiveBind.ID &&
-                   this.NegativeBind.ID == cast.NegativeBind.ID;
+                   this.PositiveBind == cast.PositiveBind &&
+                   this.NegativeBind == cast.NegativeBind;
         }
     }
 }
