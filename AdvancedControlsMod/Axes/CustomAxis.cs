@@ -263,7 +263,8 @@ axis_value";
             machineInfo.MachineData.Write("axis-" + Name + "-init", InitialisationCode);
             machineInfo.MachineData.Write("axis-" + Name + "-update", UpdateCode);
             machineInfo.MachineData.Write("axis-" + Name + "-global", GlobalScope);
-            machineInfo.MachineData.Write("axis-" + Name + "-links", LinkedAxes.ToArray<string>());
+            if (LinkedAxes.Count > 0)
+                machineInfo.MachineData.Write("axis-" + Name + "-links", LinkedAxes.ToArray<string>());
         }
 
         internal override void Delete()

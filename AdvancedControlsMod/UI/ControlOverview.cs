@@ -153,7 +153,16 @@ namespace Lench.AdvancedControls.UI
                     c.Axis = null;
                     c.Enabled = false;
                 }
-                GUILayout.Label("<b>" + c.Name + "</b> for " + BlockHandlers.GetID(c.BlockGUID), Elements.Labels.LogEntry);
+                string block_name;
+                try
+                {
+                    block_name = BlockHandlers.GetID(c.BlockGUID);
+                }
+                catch
+                {
+                    block_name = "...";
+                }
+                GUILayout.Label("<b>" + c.Name + "</b> for " + block_name, Elements.Labels.LogEntry);
                 GUILayout.EndHorizontal();
             }
 
