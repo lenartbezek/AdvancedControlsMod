@@ -190,6 +190,10 @@ namespace Lench.AdvancedControls.UI
                                           graphRect.height),
                                  Color.yellow);
 
+                // Draw invert button
+                if (GUI.Button(new Rect(graphRect.x + graphRect.width - 28, graphRect.y, 28, 28), "<size=24><color=#808080>⇄</color></size>", Elements.Labels.Default))
+                    c.Invert();
+
                 // Draw interval input fields
                 GUILayout.BeginHorizontal();
                 {

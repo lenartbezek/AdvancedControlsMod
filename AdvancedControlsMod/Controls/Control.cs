@@ -89,6 +89,19 @@ namespace Lench.AdvancedControls.Controls
         internal string max_string;
 
         /// <summary>
+        /// Swaps the Min and Max control interval limits.
+        /// </summary>
+        public void Invert()
+        {
+            var tmp = min;
+            min = max;
+            max = tmp;
+            var tmp_string = min_string;
+            min_string = max_string;
+            max_string = tmp_string;
+        }
+
+        /// <summary>
         /// Creates a control for a block with given GUID.
         /// </summary>
         /// <param name="guid">GUID of the block.</param>

@@ -116,8 +116,8 @@ namespace Lench.AdvancedControls.UI
                                 "You are using OSX version of ACM.\n" +
                                 "If you are using some other operating system,\n" +
                                 "download the correct version of the mod.");
-                if (GUILayout.Button("www.libsdl.org/download-2.0.php."))
-                    Application.OpenURL("www.libsdl.org/download-2.0.php.");
+                if (GUILayout.Button("www.libsdl.org/download-2.0.php"))
+                    Application.OpenURL("www.libsdl.org/download-2.0.php");
 #endif
             }
             else if (Controller.NumDevices == 0)
