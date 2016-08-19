@@ -52,6 +52,15 @@ namespace Lench.AdvancedControls.Controls
             steering?.SetAngle(value);
         }
 
+        /// <summary>
+        /// Clears Left and Right keys.
+        /// </summary>
+        protected override void ClearKeys()
+        {
+            Block.ClearKeys("LEFT");
+            Block.ClearKeys("RIGHT");
+        }
+
         internal override Control Clone()
         {
             var clone = new AngleControl(BlockGUID);

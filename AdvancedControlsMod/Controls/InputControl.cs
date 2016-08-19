@@ -58,6 +58,24 @@ namespace Lench.AdvancedControls.Controls
             spring?.SetInput(value);
         }
 
+        /// <summary>
+        /// Clears Left and Right keys for steering.
+        /// Clears Contract key for springs.
+        /// Cog input is overriden without clearing keys.
+        /// </summary>
+        protected override void ClearKeys()
+        {
+            if (steering != null)
+            {
+                Block.ClearKeys("LEFT");
+                Block.ClearKeys("RIGHT");
+            }
+            if (spring != null)
+            {
+                Block.ClearKeys("CONTRACT");
+            }
+        }
+
         internal override Control Clone()
         {
             var clone = new InputControl(BlockGUID);

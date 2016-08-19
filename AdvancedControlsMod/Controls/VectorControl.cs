@@ -66,6 +66,15 @@ namespace Lench.AdvancedControls.Controls
                 vt.Power = value;
         }
 
+        /// <summary>
+        /// VectorThruster control is disabled on external control.
+        /// No clearing keys needed.
+        /// </summary>
+        protected override void ClearKeys()
+        {
+            // pass
+        }
+
         internal override Control Clone()
         {
             var clone = new VectorControl(BlockGUID, vectorAxis);

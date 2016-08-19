@@ -82,6 +82,14 @@ namespace Lench.AdvancedControls.Controls
             piston?.SetPosition(value);
         }
 
+        /// <summary>
+        /// Clears Extend key from piston.
+        /// </summary>
+        protected override void ClearKeys()
+        {
+            Block.ClearKeys("EXTEND");
+        }
+
         internal override Control Clone()
         {
             var clone = new PositionControl(BlockGUID);

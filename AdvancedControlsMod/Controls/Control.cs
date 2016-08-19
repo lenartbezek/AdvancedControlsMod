@@ -125,6 +125,12 @@ namespace Lench.AdvancedControls.Controls
             try
             {
                 Block = BlockHandlers.GetBlock(BlockGUID);
+
+                var axis = AxisManager.Get(Axis);
+                if (Enabled && Block != null && axis != null && axis.Status == AxisStatus.OK)
+                {
+                    ClearKeys();
+                }
             }
             catch (BlockNotFoundException)
             {
@@ -153,6 +159,11 @@ namespace Lench.AdvancedControls.Controls
         /// </summary>
         /// <param name="value">Value to be applied.</param>
         protected abstract void Apply(float value);
+
+        /// <summary>
+        /// Clears keys to disable interference from vanilla controls.
+        /// </summary>
+        protected abstract void ClearKeys();
 
         internal abstract Control Clone();
 

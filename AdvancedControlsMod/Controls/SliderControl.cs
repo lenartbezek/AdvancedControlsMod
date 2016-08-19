@@ -45,6 +45,14 @@ namespace Lench.AdvancedControls.Controls
             Block?.SetSliderValue(Slider, value);
         }
 
+        /// <summary>
+        /// Nothing to clear.
+        /// </summary>
+        protected override void ClearKeys()
+        {
+            // pass
+        }
+
         internal override Control Clone()
         {
             var clone = new SliderControl(BlockGUID);
