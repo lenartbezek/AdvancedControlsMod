@@ -6,7 +6,7 @@ namespace Lench.AdvancedControls.Blocks
     /// <summary>
     /// Handler for all wheel and cog blocks.
     /// </summary>
-    public class Cog : Block
+    public class Cog : BlockHandler
     {
         private static FieldInfo input = typeof(CogMotorControllerHinge).GetField("input", BindingFlags.NonPublic | BindingFlags.Instance);
 
@@ -21,7 +21,7 @@ namespace Lench.AdvancedControls.Blocks
         /// <param name="bb">BlockBehaviour object.</param>
         public Cog(BlockBehaviour bb) : base(bb)
         {
-            cmc = bb .GetComponent<CogMotorControllerHinge>();
+            cmc = bb.GetComponent<CogMotorControllerHinge>();
         }
 
         /// <summary>

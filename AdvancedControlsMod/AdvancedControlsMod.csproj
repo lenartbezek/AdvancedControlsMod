@@ -115,9 +115,9 @@
     <Compile Include="Axes\CustomAxis.cs" />
     <Compile Include="Axes\MouseAxis.cs" />
     <Compile Include="Axes\KeyAxis.cs" />
-    <Compile Include="BlockHandlers.cs" />
+    <Compile Include="BlockHandlerController.cs" />
     <Compile Include="Blocks\Automatron.cs" />
-    <Compile Include="Blocks\Block.cs" />
+    <Compile Include="Blocks\BlockHandler.cs" />
     <Compile Include="Blocks\Cannon.cs" />
     <Compile Include="Blocks\Cog.cs" />
     <Compile Include="Blocks\Decoupler.cs" />

@@ -149,6 +149,12 @@ namespace Lench.AdvancedControls.UI
 
         private static void InstallIronPython()
         {
+            if (PythonEnvironment.LoadPythonAssembly())
+            {
+                download_button_text = "Complete";
+                return;
+            }
+
             downloading_in_progress = true;
             download_button_text = "0.0 %";
             if (!Directory.Exists(Application.dataPath + @"\Mods\Resources\LenchScripter\lib\"))

@@ -5,7 +5,7 @@ namespace Lench.AdvancedControls.Blocks
     /// <summary>
     /// Handler for the Rocket block.
     /// </summary>
-    public class Rocket : Block
+    public class Rocket : BlockHandler
     {
         private TimedRocket tr;
 

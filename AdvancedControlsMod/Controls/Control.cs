@@ -34,7 +34,7 @@ namespace Lench.AdvancedControls.Controls
         /// <summary>
         /// BlockHandler object of the control's block.
         /// </summary>
-        public virtual Block Block { get; protected set; }
+        public virtual BlockHandler Block { get; protected set; }
 
         /// <summary>
         /// GUID of the block the control is bound to.
@@ -124,7 +124,7 @@ namespace Lench.AdvancedControls.Controls
         {
             try
             {
-                Block = BlockHandlers.GetBlock(BlockGUID);
+                Block = BlockHandlerController.GetBlock(BlockGUID);
 
                 var axis = AxisManager.Get(Axis);
                 if (Enabled && Block != null && axis != null && axis.Status == AxisStatus.OK)

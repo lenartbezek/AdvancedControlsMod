@@ -36,15 +36,15 @@ namespace Lench.AdvancedControls
         /// </summary>
         /// <param name="blockId">Block identifier string.</param>
         /// <returns>Block object.</returns>
-        public static Block GetBlock(string blockId)
+        public static BlockHandler GetBlock(string blockId)
         {
             try
             {
-                return BlockHandlers.GetBlock(new Guid(blockId));
+                return BlockHandlerController.GetBlock(new Guid(blockId));
             }
             catch (FormatException)
             {
-                return BlockHandlers.GetBlock(blockId);
+                return BlockHandlerController.GetBlock(blockId);
             }
         }
 
@@ -57,7 +57,7 @@ namespace Lench.AdvancedControls
         {
             try
             {
-                Block b = GetBlock(blockId);
+                BlockHandler b = GetBlock(blockId);
                 return b.Exists;
             }
             catch (Exception)
@@ -83,7 +83,7 @@ namespace Lench.AdvancedControls
         /// <param name="name">Name of the global variable.</param>
         public static void Watch(string name)
         {
-            throw new InvalidOperationException("Watchlist not available in ACM.");
+            throw new InvalidOperationException("Watchlist unavailable in ACM.");
         }
 
         /// <summary>
@@ -93,7 +93,7 @@ namespace Lench.AdvancedControls
         /// <param name="value">Variable value to be reported.</param>
         public static void Watch(string name, object value)
         {
-            throw new InvalidOperationException("Watchlist not available in ACM.");
+            throw new InvalidOperationException("Watchlist unavailable in ACM.");
         }
 
         /// <summary>
@@ -101,7 +101,7 @@ namespace Lench.AdvancedControls
         /// </summary>
         public static void ClearWatchlist()
         {
-            throw new InvalidOperationException("Watchlist not available in ACM.");
+            throw new InvalidOperationException("Watchlist unavailable in ACM.");
         }
 
         /// <summary>
@@ -109,7 +109,7 @@ namespace Lench.AdvancedControls
         /// </summary>
         public static void UseDegrees()
         {
-            throw new InvalidOperationException("Angle unit switch not available in ACM.");
+            BlockHandler.UseDegrees();
         }
 
         /// <summary>
@@ -117,7 +117,7 @@ namespace Lench.AdvancedControls
         /// </summary>
         public static void UseRadians()
         {
-            throw new InvalidOperationException("Angle unit switch not available in ACM.");
+            BlockHandler.UseRadians();
         }
 
         /// <summary>

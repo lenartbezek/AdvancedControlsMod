@@ -21,7 +21,7 @@ namespace Lench.AdvancedControls.UI
 
         internal static ControlOverview Open(bool onload = false)
         {
-            BlockHandlers.InitializeBuildingBlockIDs();
+            BlockHandlerController.InitializeBuildingBlockIDs();
 
             foreach (ControlOverview x in ACM.Instance.gameObject.GetComponents<ControlOverview>())
                 Destroy(x);
@@ -72,7 +72,7 @@ namespace Lench.AdvancedControls.UI
             {
                 foreach (Control c in entry.Value)
                 {
-                    try { BlockHandlers.GetID(c.BlockGUID); } catch { continue; }
+                    try { BlockHandlerController.GetID(c.BlockGUID); } catch { continue; }
                     if (c.Axis == null)
                         continue;
                     if (!Controls.ContainsKey(c.Axis))
@@ -156,7 +156,7 @@ namespace Lench.AdvancedControls.UI
                 string block_name;
                 try
                 {
-                    block_name = BlockHandlers.GetID(c.BlockGUID);
+                    block_name = BlockHandlerController.GetID(c.BlockGUID);
                 }
                 catch
                 {

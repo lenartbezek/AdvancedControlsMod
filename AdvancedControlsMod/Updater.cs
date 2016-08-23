@@ -5,7 +5,7 @@ using UnityEngine;
 using spaar.ModLoader.UI;
 using System.Collections.Generic;
 
-namespace Lench.Updater
+namespace Lench.AdvancedControls
 {
     /// <summary>
     /// Overridable update checker.
