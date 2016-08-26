@@ -320,7 +320,7 @@ namespace Lench.AdvancedControls
             var updater = gameObject.AddComponent<Updater>();
             updater.Check(
                 "Advanced Controls Mod",
-                "https://api.github.com/repos/lench4991/AdvancedControlsMod/releases",
+                "https://api.github.com/repos/lench4991/AdvancedControlsMod/releases/latest",
                 Assembly.GetExecutingAssembly().GetName().Version,
                 new List<Updater.Link>()
                     {
