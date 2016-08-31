@@ -65,10 +65,10 @@ namespace Lench.AdvancedControls.Input
         {
             ControllerAxisEditor.downloading_in_progress = true;
             ControllerAxisEditor.download_button_text = "0.0 %";
-            if (File.Exists(Application.dataPath + @"\Mods\Resources\AdvancedControls\lib\SDL2.dll"))
-                File.Delete(Application.dataPath + @"\Mods\Resources\AdvancedControls\lib\SDL2.dll");
-            if (!Directory.Exists(Application.dataPath + @"\Mods\Resources\AdvancedControls\lib\"))
-                Directory.CreateDirectory(Application.dataPath + @"\Mods\Resources\AdvancedControls\lib\");
+            if (File.Exists(Application.dataPath + "/Mods/Resources/AdvancedControls/lib/SDL2.dll"))
+                File.Delete(Application.dataPath + "/Mods/Resources/AdvancedControls/lib/SDL2.dll");
+            if (!Directory.Exists(Application.dataPath + "/Mods/Resources/AdvancedControls/lib/"))
+                Directory.CreateDirectory(Application.dataPath + "/Mods/Resources/AdvancedControls/lib/");
             using (var client = new WebClient())
             {
                 try
@@ -95,7 +95,7 @@ namespace Lench.AdvancedControls.Input
                     };
                     client.DownloadFileAsync(
                         new Uri("http://lench4991.github.io/AdvancedControlsMod/files/SDL2.dll"),
-                        Application.dataPath + @"\Mods\Resources\AdvancedControls\lib\SDL2.dll");
+                        Application.dataPath + "/Mods/Resources/AdvancedControls/lib/SDL2.dll");
                 }
                 catch (Exception e)
                 {
@@ -121,7 +121,7 @@ namespace Lench.AdvancedControls.Input
                     if (verbose) Debug.Log("=> Unable to connect.");
             }
 
-            var dir = Application.dataPath + @"\Mods\Resources\AdvancedControls\";
+            var dir = Application.dataPath + "/Mods/Resources/AdvancedControls/";
             var file = "GameControllerMappings.txt";
 
             if (File.Exists(dir + file))

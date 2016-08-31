@@ -157,8 +157,8 @@ namespace Lench.AdvancedControls.UI
 
             downloading_in_progress = true;
             download_button_text = "0.0 %";
-            if (!Directory.Exists(Application.dataPath + @"\Mods\Resources\LenchScripter\lib\"))
-                Directory.CreateDirectory(Application.dataPath + @"\Mods\Resources\LenchScripter\lib\");
+            if (!Directory.Exists(Application.dataPath + "/Mods/Resources/LenchScripter/lib/"))
+                Directory.CreateDirectory(Application.dataPath + "/Mods/Resources/LenchScripter/lib/");
             try
             {
                 for (int file_index = 0; file_index < files_required; file_index++)
@@ -247,11 +247,11 @@ namespace Lench.AdvancedControls.UI
         };
         private static string[] file_paths = new string[]
         {
-            @"\Mods\Resources\LenchScripter\lib\IronPython.dll",
-            @"\Mods\Resources\LenchScripter\lib\IronPython.Modules.dll",
-            @"\Mods\Resources\LenchScripter\lib\Microsoft.Dynamic.dll",
-            @"\Mods\Resources\LenchScripter\lib\Microsoft.Scripting.dll",
-            @"\Mods\Resources\LenchScripter\lib\Microsoft.Scripting.Core.dll"
+            "/Mods/Resources/LenchScripter/lib/IronPython.dll",
+            "/Mods/Resources/LenchScripter/lib/IronPython.Modules.dll",
+            "/Mods/Resources/LenchScripter/lib/Microsoft.Dynamic.dll",
+            "/Mods/Resources/LenchScripter/lib/Microsoft.Scripting.dll",
+            "/Mods/Resources/LenchScripter/lib/Microsoft.Scripting.Core.dll"
         };
     }
 }
