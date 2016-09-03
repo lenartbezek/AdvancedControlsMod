@@ -185,7 +185,7 @@ namespace Lench.AdvancedControls.UI
                             if (e.Error != null)
                             {
                                 // set error messages
-                                spaar.ModLoader.ModConsole.AddMessage(LogType.Log, "[ACM]: Error downloading file:" + file_paths[i].Split('\\').Last());
+                                spaar.ModLoader.ModConsole.AddMessage(LogType.Log, "[ACM]: Error downloading file:" + file_paths[i].Split('/').Last());
                                 spaar.ModLoader.ModConsole.AddMessage(LogType.Error, "\t" + e.Error.Message);
 
                                 downloading_in_progress = false;
@@ -197,7 +197,7 @@ namespace Lench.AdvancedControls.UI
                             }
                             else
                             {
-                                spaar.ModLoader.ModConsole.AddMessage(LogType.Log, "[ACM]: File downloaded: " + file_paths[i].Split('\\').Last());
+                                spaar.ModLoader.ModConsole.AddMessage(LogType.Log, "[ACM]: File downloaded: " + file_paths[i].Split('/').Last());
                                 files_downloaded++;
                                 if (files_downloaded == files_required)
                                 {
