@@ -123,7 +123,6 @@ namespace Lench.AdvancedControls.Axes
                 {
                     controller = Controller.Get(0);
                     joybutton.GUID = controller.GUID;
-                    joybutton.Index %= controller.NumButtons;
                 }
             }
             if (button.GetType() == typeof(HatButton))
@@ -134,7 +133,6 @@ namespace Lench.AdvancedControls.Axes
                 {
                     controller = Controller.Get(0);
                     hatbutton.GUID = controller.GUID;
-                    hatbutton.Index %= controller.NumHats;
                 }
             }
         }
@@ -149,7 +147,6 @@ namespace Lench.AdvancedControls.Axes
             {
                 controller = Controller.Get(0);
                 axis.GUID = controller.GUID;
-                axis.Axis %= controller.NumAxes;
             }
                 
         }

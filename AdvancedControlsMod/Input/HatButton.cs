@@ -51,8 +51,8 @@ namespace Lench.AdvancedControls.Input
         public override bool Pressed { get { return pressed; } }
         public override bool Released { get { return released; } }
         public override float Value { get { return down ? 1 : 0; } }
-        public override string Name { get { return controller != null ? controller.HatNames[index] + " - " + direction : "<color=#FF0000>Unknown hat</color>"; } }
-        public override bool Connected { get { return controller != null && controller.Connected; } }
+        public override string Name { get { return controller != null ? controller.GetHatName(index) + " - " + direction : "Unknown hat" + " - " + direction; } }
+        public override bool Connected { get { return controller != null && controller.Connected && index < controller.NumHats; } }
 #pragma warning restore CS1591
 
         /// <summary>

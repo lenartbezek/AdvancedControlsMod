@@ -24,11 +24,6 @@ namespace Lench.AdvancedControls.Input
         public int NumHats { get { return SDL.SDL_JoystickNumHats(device_pointer); } }
         public int NumButtons { get { return SDL.SDL_JoystickNumButtons(device_pointer); } }
 
-        public List<string> AxisNames { get; private set; }
-        public List<string> BallNames { get; private set; }
-        public List<string> HatNames { get; private set; }
-        public List<string> ButtonNames { get; private set; }
-
 #pragma warning restore CS1591
 
         /// <summary>
@@ -36,6 +31,87 @@ namespace Lench.AdvancedControls.Input
         /// Does not necessarily contain objects equal by reference to buttons bound at input axes.
         /// </summary>
         public readonly List<Button> Buttons;
+
+        private List<string> axisNames;
+        private List<string> ballNames;
+        private List<string> hatNames;
+        private List<string> buttonNames;
+
+        /// <summary>
+        /// Returns name of the axis at given index.
+        /// Takes into account controller mappings.
+        /// Returns 'Unknown axis' if the controller has no such axis.
+        /// </summary>
+        /// <param name="index">Index of the axis.</param>
+        /// <returns>String name.</returns>
+        public string GetAxisName(int index)
+        {
+            if (index >= 0 && index < NumAxes)
+            {
+                return axisNames[index];
+            }
+            else
+            {
+                return "Unknown axis";
+            }
+        }
+
+        /// <summary>
+        /// Returns name of the ball at given index.
+        /// Takes into account controller mappings.
+        /// Returns 'Unknown ball' if the controller has no such ball.
+        /// </summary>
+        /// <param name="index">Index of the ball.</param>
+        /// <returns>String name.</returns>
+        public string GetBallName(int index)
+        {
+            if (index >= 0 && index < NumBalls)
+            {
+                return ballNames[index];
+            }
+            else
+            {
+                return "Unknown ball";
+            }
+        }
+
+        /// <summary>
+        /// Returns name of the hat at given index.
+        /// Takes into account controller mappings.
+        /// Returns 'Unknown hat' if the controller has no such hat.
+        /// </summary>
+        /// <param name="index">Index of the hat.</param>
+        /// <returns>String name.</returns>
+        public string GetHatName(int index)
+        {
+            if (index >= 0 && index < NumHats)
+            {
+                return hatNames[index];
+            }
+            else
+            {
+                return "Unknown hat";
+            }
+        }
+
+        /// <summary>
+        /// Returns name of the button at given index.
+        /// Takes into account controller mappings.
+        /// Returns 'Unknown button' if the controller has no such button.
+        /// </summary>
+        /// <param name="index">Index of the button.</param>
+        /// <returns>String name.</returns>
+        public string GetButtonName(int index)
+        {
+            if (index >= 0 && index < NumButtons)
+            {
+                return buttonNames[index];
+            }
+            else
+            {
+                return "Unknown button";
+            }
+        }
 
         /// <summary>
         /// Index of the device needed to access it through SDL.
@@ -271,7 +347,7 @@ namespace Lench.AdvancedControls.Input
         {
             if (!Connected) return;
 
-            AxisNames = new List<string>();
+            axisNames = new List<string>();
             for (int i = 0; i < SDL.SDL_JoystickNumAxes(device_pointer); i++)
             {
                 string name = null;
@@ -285,21 +361,21 @@ namespace Lench.AdvancedControls.Input
                     else if (i == 1) name = "Y Axis";
                     else name = "Axis " + (i + 1);
                 }
-                AxisNames.Add(name);
+                axisNames.Add(name);
             }
 
-            BallNames = new List<string>();
+            ballNames = new List<string>();
             for (int i = 0; i < SDL.SDL_JoystickNumBalls(device_pointer); i++)
-                BallNames.Add("Ball " + (i + 1));
+                ballNames.Add("Ball " + (i + 1));
 
-            HatNames = new List<string>();
+            hatNames = new List<string>();
             for (int i = 0; i < SDL.SDL_JoystickNumHats(device_pointer); i++)
                 if (IsGameController)
-                    HatNames.Add("DPAD");
+                    hatNames.Add("DPAD");
                 else
-                    HatNames.Add("Hat " + (i + 1));
+                    hatNames.Add("Hat " + (i + 1));
 
-            ButtonNames = new List<string>();
+            buttonNames = new List<string>();
             for (int i = 0; i < SDL.SDL_JoystickNumButtons(device_pointer); i++)
             {
                 string name = null;
@@ -311,7 +387,7 @@ namespace Lench.AdvancedControls.Input
                 {
                     name = "Button " + (i + 1);
                 }
-                ButtonNames.Add(name);
+                buttonNames.Add(name);
             }
         }
 

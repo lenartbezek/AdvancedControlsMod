@@ -49,8 +49,8 @@ namespace Lench.AdvancedControls.Input
         public override bool Pressed { get { return pressed; } }
         public override bool Released { get { return released; } }
         public override float Value { get { return down ? 1 : 0; } }
-        public override string Name { get { return controller != null ? controller.ButtonNames[index] : "<color=#FF0000>Unknown button</color>"; } }
-        public override bool Connected { get { return controller != null && controller.Connected; } }
+        public override string Name { get { return controller != null ? controller.GetButtonName(index) : "Unknown button"; } }
+        public override bool Connected { get { return controller != null && controller.Connected && index < controller.NumButtons; } }
 #pragma warning restore CS1591
 
         /// <summary>

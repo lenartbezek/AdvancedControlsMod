@@ -94,7 +94,7 @@ namespace Lench.AdvancedControls.Axes
         /// <summary>
         /// Is the associated device currently connected.
         /// </summary>
-        public override bool Connected { get { return controller != null && controller.Connected; } }
+        public override bool Connected { get { return controller != null && controller.Connected && Axis < controller.NumAxes; } }
 
         /// <summary>
         /// Axis is saveable if SDL engine is initialized and at least one device is connected.
@@ -143,8 +143,7 @@ namespace Lench.AdvancedControls.Axes
         {
             get
             {
-                if (controller == null)
-                    return 0;
+                if (!Connected) return 0;
                 return controller.GetAxis(Axis, Smooth);
             }
         }
