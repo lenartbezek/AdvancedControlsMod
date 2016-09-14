@@ -142,7 +142,6 @@ namespace Lench.AdvancedControls.UI
                 note = null;
 
                 controller = Controller.Get(Axis.GUID);
-                Axis.Axis %= controller.NumAxes;
 
                 // Graph rect
                 graphRect = new Rect(
@@ -219,6 +218,7 @@ namespace Lench.AdvancedControls.UI
                         1),
                     Color.gray);
 
+                if (Axis.Status == AxisStatus.OK)
                 Util.FillRect(new Rect(
                                   graphRect.x + graphRect.width / 2 + graphRect.width / 2 * Axis.InputValue,
                                   graphRect.y,
@@ -235,8 +235,7 @@ namespace Lench.AdvancedControls.UI
                     Axis.GUID = Controller.DeviceList[controller_index];
                 }
 
-                GUILayout.Label(controller != null ? controller.Name : "<color=#FF0000>Disconnected controller</color>",
-                    new GUIStyle(Elements.InputFields.Default) { alignment = TextAnchor.MiddleCenter });
+                GUILayout.Label(controller.Name, new GUIStyle(Elements.InputFields.Default) { alignment = TextAnchor.MiddleCenter });
 
                 if (GUILayout.Button(">", controller_index < Controller.NumDevices - 1 ? Elements.Buttons.Default : Elements.Buttons.Disabled, GUILayout.Width(30)) 
                     && controller_index < Controller.NumDevices - 1)
@@ -255,7 +254,7 @@ namespace Lench.AdvancedControls.UI
                     && Axis.Axis > 0)
                     Axis.Axis--;
 
-                GUILayout.Label(controller.AxisNames[Axis.Axis], new GUIStyle(Elements.InputFields.Default) { alignment = TextAnchor.MiddleCenter });
+                GUILayout.Label(controller.GetAxisName(Axis.Axis), new GUIStyle(Elements.InputFields.Default) { alignment = TextAnchor.MiddleCenter });
 
                 if (GUILayout.Button(">", Axis.Axis < Controller.Get(Axis.GUID).NumAxes - 1 ? Elements.Buttons.Default : Elements.Buttons.Disabled, GUILayout.Width(30)) 
                     && Axis.Axis < Controller.Get(Axis.GUID).NumAxes - 1)
