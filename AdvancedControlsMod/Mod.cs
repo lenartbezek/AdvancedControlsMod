@@ -29,7 +29,7 @@ namespace Lench.AdvancedControls
         }
         
         public override string VersionExtra { get; } = "";
-        public override string BesiegeVersion { get; } = "v0.32";
+        public override string BesiegeVersion { get; } = "v0.35";
         public override bool CanBeUnloaded { get; } = true;
         public override bool Preload { get; } = false;
 #pragma warning restore CS1591

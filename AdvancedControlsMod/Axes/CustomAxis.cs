@@ -84,6 +84,8 @@ axis_value";
             GlobalScope = false;
             Running = false;
             editor = new UI.CustomAxisEditor(this);
+
+            Game.OnSimulationToggle += (bool value) => { if (!value) { Stop(); } };
         }
 
         /// <summary>
@@ -108,9 +110,8 @@ axis_value";
         {
             if (!PythonEnvironment.Loaded) return;
             if (!Running && initialised)
-            {   // Stops running if not initialised
-                initialised = false;
-                Running = false;
+            {
+                Stop();
             }
             if (!Running) return;
             if (initialised)
@@ -137,8 +138,7 @@ axis_value";
                 {   // On raised exception, it displays it and stops execution.
                     if (e.InnerException != null) e = e.InnerException;
                     Error = PythonEnvironment.FormatException(e);
-                    Running = false;
-                    initialised = false;
+                    Stop();
                 }
             }
             else
@@ -191,6 +191,12 @@ axis_value";
             }
             Running = true;
             initialised = true;
+        }
+
+        private void Stop()
+        {
+            Running = false;
+            initialised = false;
         }
 
         /// <summary>
