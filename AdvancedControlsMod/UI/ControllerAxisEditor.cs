@@ -42,8 +42,8 @@ namespace Lench.AdvancedControls.UI
 
         private void FindIndex()
         {
-            if (Controller.DeviceList.Contains(Axis.GUID))
-                controller_index = Controller.DeviceList.FindIndex(guid => guid == Axis.GUID);
+            if (Controller.ControllerList.Exists((c) => c.GUID == Axis.GUID))
+                controller_index = Controller.ControllerList.FindIndex((c) => c.GUID == Axis.GUID);
             else
                 controller_index = -1;
         }
@@ -133,7 +133,7 @@ namespace Lench.AdvancedControls.UI
                 if (GUILayout.Button("Use another controller"))
                 {
                     controller_index = 0;
-                    Axis.GUID = Controller.DeviceList[controller_index];
+                    Axis.GUID = Controller.ControllerList[controller_index].GUID;
                 }
             }
             else
@@ -232,7 +232,7 @@ namespace Lench.AdvancedControls.UI
                     && controller_index > 0)
                 {
                     controller_index--;
-                    Axis.GUID = Controller.DeviceList[controller_index];
+                    Axis.GUID = Controller.ControllerList[controller_index].GUID;
                 }
 
                 GUILayout.Label(controller.Name, new GUIStyle(Elements.InputFields.Default) { alignment = TextAnchor.MiddleCenter });
@@ -241,7 +241,7 @@ namespace Lench.AdvancedControls.UI
                     && controller_index < Controller.NumDevices - 1)
                 {
                     controller_index++;
-                    Axis.GUID = Controller.DeviceList[controller_index];
+                    Axis.GUID = Controller.ControllerList[controller_index].GUID;
                 }
 
                 if (controller == null) return;

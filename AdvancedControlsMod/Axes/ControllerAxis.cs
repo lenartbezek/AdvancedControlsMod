@@ -122,7 +122,7 @@ namespace Lench.AdvancedControls.Axes
         {
             Type = AxisType.Controller;
             Axis = 0;
-            GUID = Controller.NumDevices > 0 ? Controller.DeviceList[0] : new Guid();
+            GUID = Controller.NumDevices > 0 ? Controller.ControllerList[0].GUID : new Guid();
             Sensitivity = 1;
             Curvature = 1;
             Deadzone = 0;

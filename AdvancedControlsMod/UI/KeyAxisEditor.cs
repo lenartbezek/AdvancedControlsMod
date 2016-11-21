@@ -65,8 +65,8 @@ namespace Lench.AdvancedControls.UI
             GUILayout.Button(new GUIContent(Axis.NegativeBind != null ? Axis.NegativeBind.Name : "None", "Key Mapper Negative"), Elements.Buttons.Red);
             if (GUI.tooltip == "Key Mapper Negative")
             {
-                foreach (KeyValuePair<Guid, Controller> entry in Controller.Devices)
-                    foreach (Button b in entry.Value.Buttons)
+                foreach (var c in Controller.ControllerList)
+                    foreach (var b in c.Buttons)
                     {
                         if (b.IsDown) Axis.NegativeBind = b;
                     }
@@ -84,8 +84,8 @@ namespace Lench.AdvancedControls.UI
             GUILayout.Button(new GUIContent(Axis.PositiveBind != null ? Axis.PositiveBind.Name : "None", "Key Mapper Positive"), Elements.Buttons.Red);
             if (GUI.tooltip == "Key Mapper Positive")
             {
-                foreach (KeyValuePair<Guid, Controller> entry in Controller.Devices)
-                    foreach (Button b in entry.Value.Buttons)
+                foreach (var c in Controller.ControllerList)
+                    foreach (var b in c.Buttons)
                     {
                         if (b.IsDown) Axis.PositiveBind = b;
                     }

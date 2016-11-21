@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 namespace Lench.AdvancedControls.Input
@@ -116,36 +117,35 @@ namespace Lench.AdvancedControls.Input
         /// <summary>
         /// Index of the device needed to access it through SDL.
         /// </summary>
-        public int Index { get { return SDL.SDL_JoystickInstanceID(device_pointer); } }
+        public int Index => SDL.SDL_JoystickInstanceID(device_pointer);
 
         /// <summary>
         /// Name of the device.
         /// Returns name from GameControllerMappings.txt if found.
         /// </summary>
-        public string Name { get { return IsGameController ? SDL.SDL_GameControllerName(game_controller) : SDL.SDL_JoystickName(device_pointer); } }
+        public string Name => IsGameController ? SDL.SDL_GameControllerName(game_controller) : SDL.SDL_JoystickName(device_pointer);
 
         /// <summary>
         /// GUID of the controller.
         /// </summary>
-        public Guid GUID { get { return SDL.SDL_JoystickGetGUID(device_pointer); } }
+        public Guid GUID => SDL.SDL_JoystickGetGUID(device_pointer);
 
         /// <summary>
         /// Is device currently connected.
         /// </summary>
-        public bool Connected { get { return SDL.SDL_JoystickGetAttached(device_pointer) == SDL.SDL_bool.SDL_TRUE; } }
+        public bool Connected => SDL.SDL_JoystickGetAttached(device_pointer) == SDL.SDL_bool.SDL_TRUE;
 
         /// <summary>
         /// Was device mapping found and is thus recognized as game controller.
         /// </summary>
         public bool IsGameController { get; private set; }
 
-        internal static List<Guid> DeviceList = new List<Guid>();
-        internal static Dictionary<Guid, Controller> Devices = new Dictionary<Guid, Controller>();
+        internal static List<Controller> ControllerList = new List<Controller>();
 
         /// <summary>
         /// Number of currently connected devices.
         /// </summary>
-        public static int NumDevices { get { return Devices.Count;}}
+        public static int NumDevices => ControllerList.Count;
 
         /// <summary>
         /// Adds device connected at given index.
@@ -158,9 +158,7 @@ namespace Lench.AdvancedControls.Input
         {
             RemoveDisconnected();
             if (index < NumDevices) return;
-            var controller = new Controller(NumDevices);
-            DeviceList.Add(controller.GUID);
-            Devices.Add(controller.GUID, controller);
+            ControllerList.Add(new Controller(NumDevices));
         }
 
         /// <summary>
@@ -168,17 +166,7 @@ namespace Lench.AdvancedControls.Input
         /// </summary>
         public static void RemoveDisconnected()
         {
-            var remove = new List<Guid>();
-
-            foreach (KeyValuePair<Guid, Controller> entry in Devices)
-                if (!entry.Value.Connected) remove.Add(entry.Key);
-
-            foreach (Guid c in remove)
-            {
-                Devices[c].Dispose();
-                Devices.Remove(c);
-                DeviceList.Remove(c);
-            }
+            ControllerList.RemoveAll((c) => !c.Connected);
         }
 
         /// <summary>
@@ -188,10 +176,14 @@ namespace Lench.AdvancedControls.Input
         /// <param name="guid">GUID of the device.</param>
         public static Controller Get(Guid guid)
         {
-            if (Devices.ContainsKey(guid))
-                return Devices[guid];
-            else
+            try
+            {
+                return ControllerList.First((c) => c.GUID == guid);
+            }
+            catch
+            {
                 return null;
+            }
         }
 
         /// <summary>
@@ -203,7 +195,7 @@ namespace Lench.AdvancedControls.Input
         {
             try
             {
-                return Devices[DeviceList[id]];
+                return ControllerList[0];
             }
             catch
             {
