@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Lench.AdvancedControls.Axes;
 
 namespace Lench.AdvancedControls.Controls
@@ -124,7 +125,8 @@ namespace Lench.AdvancedControls.Controls
                 {
                     new InputControl(GUID)
                     {
-                        PositiveOnly = true
+                        PositiveOnly = true,
+                        Min = 0, Center = 1, Max = 2
                     },
                     new SliderControl(GUID)
                     {
@@ -185,7 +187,8 @@ namespace Lench.AdvancedControls.Controls
                     new SliderControl(GUID)
                     {
                         Slider = "RANGE",
-                        PositiveOnly = true
+                        PositiveOnly = true,
+                        Min = 0, Center = 1, Max = 2
                     }
                 };
             }
@@ -197,7 +200,8 @@ namespace Lench.AdvancedControls.Controls
                     new SliderControl(GUID)
                     {
                         Slider = "FLYING SPEED",
-                        PositiveOnly = true
+                        PositiveOnly = true,
+                        Min = 0, Center = 1, Max = 2
                     }
                 };
             }
@@ -209,7 +213,8 @@ namespace Lench.AdvancedControls.Controls
                     new SliderControl(GUID)
                     {
                         Slider = "POWER",
-                        PositiveOnly = true
+                        PositiveOnly = true,
+                        Min = 0, Center = 1, Max = 2
                     }
                 };
             }
@@ -221,16 +226,19 @@ namespace Lench.AdvancedControls.Controls
                     new SliderControl(GUID)
                     {
                         Slider = "THRUST",
-                        PositiveOnly = true
+                        PositiveOnly = true,
+                        Min = 0, Center = 1, Max = 2
                     },
                     new SliderControl(GUID)
                     {
                         Slider = "FLIGHT DURATION",
-                        PositiveOnly = true
+                        PositiveOnly = true,
+                        Min = 0, Center = 5, Max = 10
                     },
                     new SliderControl(GUID){
                         Slider = "EXPLOSIVE CHARGE",
-                        PositiveOnly = true
+                        PositiveOnly = true,
+                        Min = 0, Center = 1, Max = 2
                     },
                 };
             }
@@ -242,12 +250,14 @@ namespace Lench.AdvancedControls.Controls
                     new SliderControl(GUID)
                     {
                         Slider = "BUOYANCY",
-                        PositiveOnly = true
+                        PositiveOnly = true,
+                        Min = 0, Center = 1, Max = 2
                     },
                     new SliderControl(GUID)
                     {
                         Slider = "STRING LENGTH",
-                        PositiveOnly = true
+                        PositiveOnly = true,
+                        Min = 0, Center = 1, Max = 2
                     }
                 };
             }
@@ -259,7 +269,8 @@ namespace Lench.AdvancedControls.Controls
                     new SliderControl(GUID)
                     {
                         Slider = "MASS",
-                        PositiveOnly = true
+                        PositiveOnly = true,
+                        Min = 0, Center = 1, Max = 2
                     }
                 };
             }

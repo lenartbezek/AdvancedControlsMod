@@ -37,7 +37,7 @@ namespace Lench.AdvancedControls.Input
         public static bool SDL_Initialized = false;
         public static bool SDL_Installed = false;
 
-        public override string Name { get { return "ACM: Device Manager"; } }
+        public override string Name => "ACM: Device Manager";
 
         private void Start()
         {
@@ -73,11 +73,11 @@ namespace Lench.AdvancedControls.Input
             {
                 try
                 {
-                    client.DownloadProgressChanged += (object sender, DownloadProgressChangedEventArgs e) =>
+                    client.DownloadProgressChanged += (sender, e) =>
                     {
                         ControllerAxisEditor.download_button_text = (Convert.ToSingle(e.BytesReceived) / Convert.ToSingle(e.TotalBytesToReceive) * 100).ToString("0.0") + " %";
                     };
-                    client.DownloadFileCompleted += (object sender, AsyncCompletedEventArgs e) =>
+                    client.DownloadFileCompleted += (sender, e) =>
                     {
                         ControllerAxisEditor.downloading_in_progress = false;
                         if (e.Error != null)
@@ -126,10 +126,10 @@ namespace Lench.AdvancedControls.Input
 
             if (File.Exists(dir + file))
             {
-                var current_mappings = File.ReadAllText(dir + file);
+                var currentMappings = File.ReadAllText(dir + file);
                 if (update && mappings != null)
                 {
-                    if (mappings == current_mappings)
+                    if (mappings == currentMappings)
                     {
                         if (verbose) Debug.Log("=> Game Controller DB is up to date.");
                     }
@@ -141,7 +141,7 @@ namespace Lench.AdvancedControls.Input
                 }
                 else
                 {
-                    mappings = current_mappings;
+                    mappings = currentMappings;
                 }
             }
             else
@@ -162,15 +162,15 @@ namespace Lench.AdvancedControls.Input
 
             try
             {
-                var env_var = Environment.GetEnvironmentVariable("SDL_GAMECONTROLLERCONFIG", EnvironmentVariableTarget.User);
-                if (string.IsNullOrEmpty(env_var))
+                var envVar = Environment.GetEnvironmentVariable("SDL_GAMECONTROLLERCONFIG", EnvironmentVariableTarget.User);
+                if (string.IsNullOrEmpty(envVar))
                 {
                     if (verbose) Debug.Log("=> SDL_GAMECONTROLLERCONFIG environment variable not set.");
                 }
                 else
                 {
                     if (verbose) Debug.Log("=> Successfully read SDL_GAMECONTROLLERCONFIG environment variable.");
-                    SDL.SDL_GameControllerAddMapping(env_var);
+                    SDL.SDL_GameControllerAddMapping(envVar);
                 }
             }
             catch

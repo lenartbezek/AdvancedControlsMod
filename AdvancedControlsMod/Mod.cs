@@ -68,7 +68,7 @@ namespace Lench.AdvancedControls
         /// Checks if LenchScripterMod is present and adds initialisation statements
         /// that import AdvancedControls module.
         /// </summary>
-        private void ImportPythonModules()
+        private static void ImportPythonModules()
         {
             try
             {
@@ -90,7 +90,7 @@ namespace Lench.AdvancedControls
         /// Destroys old block handlers on every simulation toggle,
         /// so they can be created again after block array is populated.
         /// </summary>
-        private void SimulationToggle(bool simulating)
+        private static void SimulationToggle(bool simulating)
         {
             if (simulating) Functions.ResetTimer();
             BlockHandlerController.DestroyBlockHandlers();
@@ -158,7 +158,7 @@ namespace Lench.AdvancedControls
 
             enabled = ModEnabled;
 
-            DeviceManager.OnDeviceAdded += (SDL.SDL_Event e) => { Axes.AxisManager.ResolveMachineAxes(); };
+            DeviceManager.OnDeviceAdded += (e) => { Axes.AxisManager.ResolveMachineAxes(); };
         }
 
         private void OnDestroy()
