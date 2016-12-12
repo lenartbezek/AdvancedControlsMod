@@ -1,26 +1,27 @@
-﻿using System;
-using UnityEngine;
-using Lench.AdvancedControls.Axes;
+﻿using Lench.AdvancedControls.Axes;
 using spaar.ModLoader.UI;
+using UnityEngine;
+
+// ReSharper disable CompareOfFloatsByEqualityOperator
 
 namespace Lench.AdvancedControls.UI
 {
     internal class MouseAxisEditor : IAxisEditor
     {
-        private MouseAxis Axis;
+        private readonly MouseAxis _axis;
 
         public MouseAxisEditor(InputAxis axis)
         {
-            Axis = axis as MouseAxis;
+            _axis = axis as MouseAxis;
         }
 
-        private string center_string;
-        private string range_string;
+        private string _centerString;
+        private string _rangeString;
 
         public void Open()
         {
-            center_string = Axis.Center.ToString("0.00");
-            range_string = Axis.Range.ToString("0.00");
+            _centerString = _axis.Center.ToString("0.00");
+            _rangeString = _axis.Range.ToString("0.00");
         }
 
         public void Close() { }
@@ -28,11 +29,11 @@ namespace Lench.AdvancedControls.UI
         public void DrawAxis(Rect windowRect)
         {
             // Graph rect
-            Rect graphRect = GUILayoutUtility.GetAspectRect((float)Screen.width / (float)Screen.height);
+            Rect graphRect = GUILayoutUtility.GetAspectRect(Screen.width / (float)Screen.height);
 
             // Axis value
             GUI.Label(new Rect(graphRect.x, graphRect.y, graphRect.width, 20),
-                    "  <color=#808080><b>" + Axis.OutputValue.ToString("0.00") + "</b></color>",
+                    "  <color=#808080><b>" + _axis.OutputValue.ToString("0.00") + "</b></color>",
                     new GUIStyle(Elements.Labels.Default) { richText = true, alignment = TextAnchor.MiddleLeft });
 
             // Screen size
@@ -43,35 +44,35 @@ namespace Lench.AdvancedControls.UI
             // Screen frame
             Util.DrawRect(graphRect, Color.gray);
 
-            float mouse_pos = Axis.Axis == global::Axis.X ? UnityEngine.Input.mousePosition.x : UnityEngine.Input.mousePosition.y;
-            float screen_size = Axis.Axis == global::Axis.X ? Screen.width : Screen.height;
-            float range_size = Axis.Range == 0 ? 1 : screen_size * Axis.Range / 2f;
-            float center = screen_size / 2f + screen_size / 2f * Axis.Center;
+            float mousePos = _axis.Axis == Axis.X ? UnityEngine.Input.mousePosition.x : UnityEngine.Input.mousePosition.y;
+            float screenSize = _axis.Axis == Axis.X ? Screen.width : Screen.height;
+            float rangeSize = _axis.Range == 0 ? 1 : screenSize * _axis.Range / 2f;
+            float center = screenSize / 2f + screenSize / 2f * _axis.Center;
 
-            if (Axis.Axis == global::Axis.X)
+            if (_axis.Axis == Axis.X)
             {
                 // Draw range frame
-                float frame_left = Mathf.Clamp(graphRect.width * ((center - range_size) / screen_size), 0, graphRect.width);
-                float frame_right = Mathf.Clamp(graphRect.width * ((center + range_size) / screen_size), 0, graphRect.width);
+                float frameLeft = Mathf.Clamp(graphRect.width * ((center - rangeSize) / screenSize), 0, graphRect.width);
+                float frameRight = Mathf.Clamp(graphRect.width * ((center + rangeSize) / screenSize), 0, graphRect.width);
                 Util.DrawRect(new Rect(
-                                  graphRect.x + frame_left,
+                                  graphRect.x + frameLeft,
                                   graphRect.y,
-                                  frame_right - frame_left,
+                                  frameRight - frameLeft,
                                   graphRect.height),
                          Color.white);
 
                 // Draw center line
                 Util.FillRect(new Rect(
-                                  graphRect.x + graphRect.width  * (center / screen_size),
+                                  graphRect.x + graphRect.width  * (center / screenSize),
                                   graphRect.y,
                                   1,
                                   graphRect.height),
                          Color.white);
 
                 // Draw mouse position
-                float line_pos = Mathf.Clamp((mouse_pos / screen_size), 0, 1);
+                float linePos = Mathf.Clamp((mousePos / screenSize), 0, 1);
                 Util.FillRect(new Rect(
-                                  graphRect.x + graphRect.width * line_pos,
+                                  graphRect.x + graphRect.width * linePos,
                                   graphRect.y,
                                   1,
                                   graphRect.height),
@@ -80,28 +81,28 @@ namespace Lench.AdvancedControls.UI
             else
             {
                 // Draw range frame
-                float frame_top = Mathf.Clamp(graphRect.height * ((screen_size - center - range_size) / screen_size), 0, graphRect.height);
-                float frame_bottom = Mathf.Clamp(graphRect.height * ((screen_size - center + range_size) / screen_size), 0, graphRect.height);
+                float frameTop = Mathf.Clamp(graphRect.height * ((screenSize - center - rangeSize) / screenSize), 0, graphRect.height);
+                float frameBottom = Mathf.Clamp(graphRect.height * ((screenSize - center + rangeSize) / screenSize), 0, graphRect.height);
                 Util.DrawRect(new Rect(
                                   graphRect.x,
-                                  graphRect.y + frame_top,
+                                  graphRect.y + frameTop,
                                   graphRect.width,
-                                  frame_bottom - frame_top),
+                                  frameBottom - frameTop),
                          Color.white);
 
                 // Draw center line
                 Util.FillRect(new Rect(
                                   graphRect.x,
-                                  graphRect.y + graphRect.height * ((screen_size - center) / screen_size),
+                                  graphRect.y + graphRect.height * ((screenSize - center) / screenSize),
                                   graphRect.width,
                                   1),
                          Color.white);
 
                 // Draw mouse position
-                float line_pos = Mathf.Clamp(((screen_size - mouse_pos) / screen_size), 0, 1);
+                float linePos = Mathf.Clamp(((screenSize - mousePos) / screenSize), 0, 1);
                 Util.FillRect(new Rect(
                                   graphRect.x,
-                                  graphRect.y + graphRect.height * line_pos,
+                                  graphRect.y + graphRect.height * linePos,
                                   graphRect.width,
                                   1),
                          Color.yellow);
@@ -110,16 +111,16 @@ namespace Lench.AdvancedControls.UI
             // Draw axis toggles
             GUILayout.BeginHorizontal();
             GUILayout.FlexibleSpace();
-            if (GUILayout.Button("X", Axis.Axis == global::Axis.X ? Elements.Buttons.Default : Elements.Buttons.Disabled, GUILayout.Width(80)))
-                Axis.Axis = global::Axis.X;
-            if (GUILayout.Button("Y", Axis.Axis == global::Axis.Y ? Elements.Buttons.Default : Elements.Buttons.Disabled, GUILayout.Width(80)))
-                Axis.Axis = global::Axis.Y;
+            if (GUILayout.Button("X", _axis.Axis == Axis.X ? Elements.Buttons.Default : Elements.Buttons.Disabled, GUILayout.Width(80)))
+                _axis.Axis = Axis.X;
+            if (GUILayout.Button("Y", _axis.Axis == Axis.Y ? Elements.Buttons.Default : Elements.Buttons.Disabled, GUILayout.Width(80)))
+                _axis.Axis = Axis.Y;
             GUILayout.FlexibleSpace();
             GUILayout.EndHorizontal();
 
             // Draw sliders
-            Axis.Center = Util.DrawSlider("Center", Axis.Center, -1, 1, center_string, out center_string);
-            Axis.Range = Util.DrawSlider("Range", Axis.Range, 0, 1, range_string, out range_string);
+            _axis.Center = Util.DrawSlider("Center", _axis.Center, -1, 1, _centerString, out _centerString);
+            _axis.Range = Util.DrawSlider("Range", _axis.Range, 0, 1, _rangeString, out _rangeString);
         }
 
         public string GetError()

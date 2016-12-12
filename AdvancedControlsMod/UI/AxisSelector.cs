@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using spaar.ModLoader.UI;
 using UnityEngine;
+// ReSharper disable UnusedMember.Local
+// ReSharper disable LocalVariableHidesMember
 
 namespace Lench.AdvancedControls.UI
 {
@@ -9,8 +11,8 @@ namespace Lench.AdvancedControls.UI
 
     internal class AxisSelector : MonoBehaviour
     {
-        internal int windowID = spaar.ModLoader.Util.GetWindowID();
-        internal Rect windowRect = new Rect(0, 0, 320, 42);
+        internal int WindowID = spaar.ModLoader.Util.GetWindowID();
+        internal Rect WindowRect = new Rect(0, 0, 320, 42);
 
         internal bool ContainsMouse
         {
@@ -18,29 +20,29 @@ namespace Lench.AdvancedControls.UI
             {
                 var mousePos = UnityEngine.Input.mousePosition;
                 mousePos.y = Screen.height - mousePos.y;
-                return windowRect.Contains(mousePos);
+                return WindowRect.Contains(mousePos);
             }
         }
 
         internal SelectAxisDelegate Callback;
 
-        private bool compact;
-        private Vector2 localScrollPosition = Vector2.zero;
-        private Vector2 machineScrollPosition = Vector2.zero;
+        private bool _compact;
+        private Vector2 _localScrollPosition = Vector2.zero;
+        private Vector2 _machineScrollPosition = Vector2.zero;
 
         internal static AxisSelector Open(SelectAxisDelegate callback, bool compact = false)
         {
             var window = ACM.Instance.gameObject.AddComponent<AxisSelector>();
             window.Callback = callback;
-            window.compact = compact;
+            window._compact = compact;
             return window;
         }
 
         private void OnGUI()
         {
             GUI.skin = Util.Skin;
-            GUIStyle windowStyle = compact ? Util.CompactWindowStyle : Util.FullWindowStyle;
-            windowRect = GUILayout.Window(windowID, windowRect, DoWindow, compact ? "" : "Select axis", windowStyle,
+            GUIStyle windowStyle = _compact ? Util.CompactWindowStyle : Util.FullWindowStyle;
+            WindowRect = GUILayout.Window(WindowID, WindowRect, DoWindow, _compact ? "" : "Select axis", windowStyle,
                         GUILayout.Width(320),
                         GUILayout.Height(42));
         }
@@ -50,7 +52,7 @@ namespace Lench.AdvancedControls.UI
             // Draw local axes
             if (AxisManager.LocalAxes.Count > 0)
             {
-                localScrollPosition = GUILayout.BeginScrollView(localScrollPosition,
+                _localScrollPosition = GUILayout.BeginScrollView(_localScrollPosition,
                     GUILayout.Height(Mathf.Clamp(AxisManager.LocalAxes.Count * 36 + 30, 138, 246)));
 
                 GUILayout.Label("LOCALLY SAVED AXES", new GUIStyle(Elements.Labels.Title) { alignment = TextAnchor.MiddleCenter });
@@ -72,11 +74,11 @@ namespace Lench.AdvancedControls.UI
 
                     if (GUILayout.Button("✎", new GUIStyle(Elements.Buttons.Default) { fontSize = 20, padding = new RectOffset(-3, 0, 0, 0) }, GUILayout.Width(30), GUILayout.MaxHeight(28)))
                     {
-                        var Editor = ACM.Instance.gameObject.AddComponent<AxisEditorWindow>();
-                        Editor.WindowRect.x = Mathf.Clamp(windowRect.x + windowRect.width,
+                        var editor = ACM.Instance.gameObject.AddComponent<AxisEditorWindow>();
+                        editor.WindowRect.x = Mathf.Clamp(WindowRect.x + WindowRect.width,
                             - 320 + GUI.skin.window.padding.top, Screen.width - GUI.skin.window.padding.top);
-                        Editor.WindowRect.y = Mathf.Clamp(windowRect.y - 40, 0, Screen.height - GUI.skin.window.padding.top);
-                        Editor.EditAxis(axis);
+                        editor.WindowRect.y = Mathf.Clamp(WindowRect.y - 40, 0, Screen.height - GUI.skin.window.padding.top);
+                        editor.EditAxis(axis);
                     }
 
                     if (GUILayout.Button("×", Elements.Buttons.Red, GUILayout.Width(30)))
@@ -96,7 +98,7 @@ namespace Lench.AdvancedControls.UI
             // Draw machine axes
             if (AxisManager.MachineAxes.Count > 0)
             {
-                machineScrollPosition = GUILayout.BeginScrollView(machineScrollPosition,
+                _machineScrollPosition = GUILayout.BeginScrollView(_machineScrollPosition,
                     GUILayout.Height(Mathf.Clamp(AxisManager.MachineAxes.Count * 36 + 30, 138, 246)));
 
                 GUILayout.Label("MACHINE EMBEDDED AXES", new GUIStyle(Elements.Labels.Title) { alignment = TextAnchor.MiddleCenter });
@@ -118,11 +120,11 @@ namespace Lench.AdvancedControls.UI
 
                     if (GUILayout.Button("✎", new GUIStyle(Elements.Buttons.Default) { fontSize = 20, padding = new RectOffset(-3, 0, 0, 0) }, GUILayout.Width(30), GUILayout.MaxHeight(28)))
                     {
-                        var Editor = ACM.Instance.gameObject.AddComponent<AxisEditorWindow>();
-                        Editor.WindowRect.x = Mathf.Clamp(windowRect.x + windowRect.width,
+                        var editor = ACM.Instance.gameObject.AddComponent<AxisEditorWindow>();
+                        editor.WindowRect.x = Mathf.Clamp(WindowRect.x + WindowRect.width,
                             -320 + GUI.skin.window.padding.top, Screen.width - GUI.skin.window.padding.top);
-                        Editor.WindowRect.y = Mathf.Clamp(windowRect.y - 40, 0, Screen.height - GUI.skin.window.padding.top);
-                        Editor.EditAxis(axis);
+                        editor.WindowRect.y = Mathf.Clamp(WindowRect.y - 40, 0, Screen.height - GUI.skin.window.padding.top);
+                        editor.EditAxis(axis);
                     }
 
                     if (GUILayout.Button("×", Elements.Buttons.Red, GUILayout.Width(30)))
@@ -141,17 +143,17 @@ namespace Lench.AdvancedControls.UI
 
             if (GUILayout.Button("Create new axis", Elements.Buttons.Disabled))
             {
-                var Editor = ACM.Instance.gameObject.AddComponent<AxisEditorWindow>();
-                Editor.WindowRect.x = Mathf.Clamp(windowRect.x + windowRect.width,
+                var editor = ACM.Instance.gameObject.AddComponent<AxisEditorWindow>();
+                editor.WindowRect.x = Mathf.Clamp(WindowRect.x + WindowRect.width,
                     -320 + GUI.skin.window.padding.top, Screen.width - GUI.skin.window.padding.top);
-                Editor.WindowRect.y = Mathf.Clamp(windowRect.y - 40, 0, Screen.height - GUI.skin.window.padding.top);
-                Editor.CreateAxis(new SelectAxisDelegate(Callback));
+                editor.WindowRect.y = Mathf.Clamp(WindowRect.y - 40, 0, Screen.height - GUI.skin.window.padding.top);
+                editor.CreateAxis(Callback);
                 Destroy(this);
             }
 
             // Draw close button
-            if (!compact)
-                if (GUI.Button(new Rect(windowRect.width - 38, 8, 30, 30),
+            if (!_compact)
+                if (GUI.Button(new Rect(WindowRect.width - 38, 8, 30, 30),
                     "×", Elements.Buttons.Red))
                     Destroy(this);
         }

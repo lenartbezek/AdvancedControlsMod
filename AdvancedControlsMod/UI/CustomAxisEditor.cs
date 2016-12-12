@@ -3,7 +3,6 @@ using Lench.AdvancedControls.Axes;
 using spaar.ModLoader.UI;
 using System.IO;
 using System.Net;
-using System.ComponentModel;
 using System;
 using System.Linq;
 
@@ -11,21 +10,21 @@ namespace Lench.AdvancedControls.UI
 {
     internal class CustomAxisEditor : IAxisEditor
     {
-        internal static bool downloading_in_progress = false;
-        internal static string download_button_text = "Download";
+        internal static bool DownloadingInProgress;
+        internal static string DownloadButtonText = "Download";
 
         internal CustomAxisEditor(InputAxis axis)
         {
-            Axis = axis as CustomAxis;
+            _axis = axis as CustomAxis;
         }
 
-        private CustomAxis Axis;
+        private readonly CustomAxis _axis;
 
-        internal string note;
-        internal string error;
+        internal string Note;
+        internal string Error;
 
-        private Vector2 initialisationScrollPosition = Vector2.zero;
-        private Vector2 updateScrollPosition = Vector2.zero;
+        private Vector2 _initialisationScrollPosition = Vector2.zero;
+        private Vector2 _updateScrollPosition = Vector2.zero;
 
         public void Open() { }
         public void Close() { }
@@ -37,22 +36,20 @@ namespace Lench.AdvancedControls.UI
                 GUILayout.Label("<b>Additional library needed</b>\n" +
                                 "Custom axis runs on IronPython engine.\n" +
                                 "Press download to install it automatically.");
-                if (GUILayout.Button(download_button_text) && !downloading_in_progress)
+                if (GUILayout.Button(DownloadButtonText) && !DownloadingInProgress)
                     InstallIronPython();
             }
             else
             {
-                error = null;
-                note = null;
+                Error = null;
+                Note = null;
 
                 // Draw graph
                 GUILayout.BeginHorizontal();
 
-                string text;
-                if (Axis.Status == AxisStatus.OK)
-                    text = Axis.OutputValue.ToString("0.00");
-                else
-                    text = InputAxis.GetStatusString(Axis.Status);
+                var text = _axis.Status == AxisStatus.OK 
+                    ? _axis.OutputValue.ToString("0.00") 
+                    : InputAxis.GetStatusString(_axis.Status);
 
                 GUILayout.Label("  <color=#808080><b>" + text + "</b></color>",
                     new GUIStyle(Elements.Labels.Default) { richText = true, alignment = TextAnchor.MiddleLeft },
@@ -68,17 +65,17 @@ namespace Lench.AdvancedControls.UI
                         graphRect.height),
                     Color.gray);
 
-                if (Axis.Status == AxisStatus.OK)
+                if (_axis.Status == AxisStatus.OK)
                     Util.FillRect(new Rect(
-                                          graphRect.x + graphRect.width / 2 + graphRect.width / 2 * Axis.OutputValue,
+                                          graphRect.x + graphRect.width / 2 + graphRect.width / 2 * _axis.OutputValue,
                                           graphRect.y,
                                           1,
                                           graphRect.height),
                                  Color.yellow);
 
                 // Draw start/stop button
-                if (GUILayout.Button(Axis.Running ? "STOP" : "START", new GUIStyle(Elements.Buttons.Red) { margin = new RectOffset(8, 8, 0, 0) }, GUILayout.Width(80)))
-                    Axis.Running = !Axis.Running;
+                if (GUILayout.Button(_axis.Running ? "STOP" : "START", new GUIStyle(Elements.Buttons.Red) { margin = new RectOffset(8, 8, 0, 0) }, GUILayout.Width(80)))
+                    _axis.Running = !_axis.Running;
 
                 GUILayout.EndHorizontal();
 
@@ -86,24 +83,24 @@ namespace Lench.AdvancedControls.UI
                 GUILayout.Label("Initialisation code",
                     Util.LabelStyle);
 
-                initialisationScrollPosition = GUILayout.BeginScrollView(initialisationScrollPosition,
+                _initialisationScrollPosition = GUILayout.BeginScrollView(_initialisationScrollPosition,
                     GUILayout.Height(100));
-                Axis.InitialisationCode = GUILayout.TextArea(Axis.InitialisationCode);
+                _axis.InitialisationCode = GUILayout.TextArea(_axis.InitialisationCode);
                 GUILayout.EndScrollView();
 
                 // Draw update code text area
                 GUILayout.Label("Update code",
                     Util.LabelStyle);
 
-                updateScrollPosition = GUILayout.BeginScrollView(updateScrollPosition,
+                _updateScrollPosition = GUILayout.BeginScrollView(_updateScrollPosition,
                     GUILayout.Height(200));
-                Axis.UpdateCode = GUILayout.TextArea(Axis.UpdateCode);
+                _axis.UpdateCode = GUILayout.TextArea(_axis.UpdateCode);
                 GUILayout.EndScrollView();
 
                 // Draw Global toggle
                 GUILayout.BeginHorizontal();
 
-                Axis.GlobalScope = GUILayout.Toggle(Axis.GlobalScope, "",
+                _axis.GlobalScope = GUILayout.Toggle(_axis.GlobalScope, "",
                     Util.ToggleStyle,
                     GUILayout.Width(20),
                     GUILayout.Height(20));
@@ -116,18 +113,18 @@ namespace Lench.AdvancedControls.UI
                 GUILayout.Box(GUIContent.none, GUILayout.Height(8));
 
                 // Display linked axes
-                if (Axis.LinkedAxes.Count > 0)
+                if (_axis.LinkedAxes.Count > 0)
                 {
                     GUILayout.Label("Linked axes", new GUIStyle(Elements.Labels.Title) { alignment = TextAnchor.MiddleCenter });
-                    foreach (var name in Axis.LinkedAxes)
+                    foreach (var name in _axis.LinkedAxes)
                         GUILayout.Label(name, new GUIStyle(Elements.Labels.Default) { alignment = TextAnchor.MiddleCenter });
                 }
 
                 // Display error
-                if (Axis.Error != null)
+                if (_axis.Error != null)
                 {
-                    error = "<color=#FF0000><b>Python error</b></color>\n" +
-                            Axis.Error;
+                    Error = "<color=#FF0000><b>Python error</b></color>\n" +
+                            _axis.Error;
                 }
             }
         }
@@ -139,79 +136,78 @@ namespace Lench.AdvancedControls.UI
 
         public string GetNote()
         {
-            return note;
+            return Note;
         }
 
         public string GetError()
         {
-            return error;
+            return Error;
         }
 
         private static void InstallIronPython()
         {
             if (PythonEnvironment.LoadPythonAssembly())
             {
-                download_button_text = "Complete";
+                DownloadButtonText = "Complete";
                 return;
             }
 
-            downloading_in_progress = true;
-            download_button_text = "0.0 %";
-            if (!Directory.Exists(Application.dataPath + "/Mods/Resources/LenchScripter/lib/"))
-                Directory.CreateDirectory(Application.dataPath + "/Mods/Resources/LenchScripter/lib/");
+            DownloadingInProgress = true;
+            DownloadButtonText = "0.0 %";
+            if (!Directory.Exists(PythonEnvironment.LibPath))
+                Directory.CreateDirectory(PythonEnvironment.LibPath);
             try
             {
-                for (int file_index = 0; file_index < files_required; file_index++)
+                for (int fileIndex = 0; fileIndex < FilesRequired; fileIndex++)
                 {
                     using (var client = new WebClient())
                     {
-                        var i = file_index;
+                        var i = fileIndex;
 
                         // delete existing file
-                        if (File.Exists(Application.dataPath + file_paths[i]))
-                            File.Delete(Application.dataPath + file_paths[i]);
+                        if (File.Exists(PythonEnvironment.LibPath + FileNames[i]))
+                            File.Delete(PythonEnvironment.LibPath + FileNames[i]);
 
                         // progress handler
-                        client.DownloadProgressChanged += (object sender, DownloadProgressChangedEventArgs e) =>
+                        client.DownloadProgressChanged += (sender, e) =>
                         {
-                            received_size[i] = e.BytesReceived;
-                            float progress = (Convert.ToSingle(received_size.Sum()) / Convert.ToSingle(total_size.Sum()) * 100f);
-                            download_button_text = progress.ToString("0.0") + " %";
+                            ReceivedSize[i] = e.BytesReceived;
+                            float progress = (Convert.ToSingle(ReceivedSize.Sum()) / Convert.ToSingle(TotalSize.Sum()) * 100f);
+                            DownloadButtonText = progress.ToString("0.0") + " %";
                         };
 
                         // completion handler
-                        client.DownloadFileCompleted += (object sender, AsyncCompletedEventArgs e) =>
+                        client.DownloadFileCompleted += (sender, e) =>
                         {
                             if (e.Error != null)
                             {
                                 // set error messages
-                                spaar.ModLoader.ModConsole.AddMessage(LogType.Log, "[ACM]: Error downloading file:" + file_paths[i].Split('/').Last());
+                                spaar.ModLoader.ModConsole.AddMessage(LogType.Log, "[ACM]: Error downloading file:" + FileNames[i]);
                                 spaar.ModLoader.ModConsole.AddMessage(LogType.Error, "\t" + e.Error.Message);
 
-                                downloading_in_progress = false;
-                                download_button_text = "Error";
+                                DownloadingInProgress = false;
+                                DownloadButtonText = "Error";
 
                                 // delete failed file
-                                if (File.Exists(Application.dataPath + file_paths[i]))
-                                    File.Delete(Application.dataPath + file_paths[i]);
+                                if (File.Exists(PythonEnvironment.LibPath + FileNames[i]))
+                                    File.Delete(PythonEnvironment.LibPath + FileNames[i]);
                             }
                             else
                             {
-                                spaar.ModLoader.ModConsole.AddMessage(LogType.Log, "[ACM]: File downloaded: " + file_paths[i].Split('/').Last());
-                                files_downloaded++;
-                                if (files_downloaded == files_required)
+                                spaar.ModLoader.ModConsole.AddMessage(LogType.Log, "[ACM]: File downloaded: " + FileNames[i]);
+                                _filesDownloaded++;
+                                if (_filesDownloaded == FilesRequired)
                                 {
                                     // finish download and load assemblies
-                                    download_button_text = "Complete";
-                                    PythonEnvironment.LoadPythonAssembly();
+                                    DownloadButtonText = PythonEnvironment.LoadPythonAssembly() ? "Complete" : "Error";
                                 }
                             }
                         };
 
                         // start download
                         client.DownloadFileAsync(
-                            file_uris[i],
-                            Application.dataPath + file_paths[i]);
+                            new Uri(BaseUri + FileNames[i]),
+                            PythonEnvironment.LibPath + FileNames[i]);
                     }
                 }
             }
@@ -219,17 +215,16 @@ namespace Lench.AdvancedControls.UI
             {
                 Debug.Log("[ACM]: Error while downloading:");
                 Debug.LogException(e);
-                downloading_in_progress = false;
-                download_button_text = "Error";
+                DownloadingInProgress = false;
+                DownloadButtonText = "Error";
             }
         }
 
-        private static int files_downloaded = 0;
-        private static int files_required = 5;
+        private static int _filesDownloaded;
+        private const int FilesRequired = 5;
 
-        private static long[] received_size = new long[files_required];
-        private static long[] total_size = new long[]
-        {
+        private static readonly long[] ReceivedSize = new long[FilesRequired];
+        private static readonly long[] TotalSize = {
             1805824,
             727040,
             1033728,
@@ -237,21 +232,13 @@ namespace Lench.AdvancedControls.UI
             383488
         };
 
-        private static Uri[] file_uris = new Uri[]
-        {
-            new Uri("http://lench4991.github.io/AdvancedControlsMod/files/IronPython.dll"),
-            new Uri("http://lench4991.github.io/AdvancedControlsMod/files/IronPython.Modules.dll"),
-            new Uri("http://lench4991.github.io/AdvancedControlsMod/files/Microsoft.Dynamic.dll"),
-            new Uri("http://lench4991.github.io/AdvancedControlsMod/files/Microsoft.Scripting.dll"),
-            new Uri("http://lench4991.github.io/AdvancedControlsMod/files/Microsoft.Scripting.Core.dll")
-        };
-        private static string[] file_paths = new string[]
-        {
-            "/Mods/Resources/LenchScripter/lib/IronPython.dll",
-            "/Mods/Resources/LenchScripter/lib/IronPython.Modules.dll",
-            "/Mods/Resources/LenchScripter/lib/Microsoft.Dynamic.dll",
-            "/Mods/Resources/LenchScripter/lib/Microsoft.Scripting.dll",
-            "/Mods/Resources/LenchScripter/lib/Microsoft.Scripting.Core.dll"
+        private static readonly string BaseUri = "http://lench4991.github.io/AdvancedControlsMod/files/";
+        private static readonly string[] FileNames = {
+            "IronPython.dll",
+            "IronPython.Modules.dll",
+            "Microsoft.Dynamic.dll",
+            "Microsoft.Scripting.dll",
+            "Microsoft.Scripting.Core.dll"
         };
     }
 }

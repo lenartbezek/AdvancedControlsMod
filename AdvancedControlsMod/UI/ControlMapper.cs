@@ -106,8 +106,8 @@ namespace Lench.AdvancedControls.UI
                         Popup = AxisSelector.Open(callback, true);
                     else
                         Popup.Callback = callback;
-                    Popup.windowRect.x = WindowRect.x + buttonRect.x - 8;
-                    Popup.windowRect.y = WindowRect.y + buttonRect.y - 8;
+                    Popup.WindowRect.x = WindowRect.x + buttonRect.x - 8;
+                    Popup.WindowRect.y = WindowRect.y + buttonRect.y - 8;
                 }
             }
             else
@@ -120,8 +120,8 @@ namespace Lench.AdvancedControls.UI
                         Popup = AxisSelector.Open(callback, true);
                     else
                         Popup.Callback = callback;
-                    Popup.windowRect.x = WindowRect.x + buttonRect.x - 8;
-                    Popup.windowRect.y = WindowRect.y + buttonRect.y - 8;
+                    Popup.WindowRect.x = WindowRect.x + buttonRect.x - 8;
+                    Popup.WindowRect.y = WindowRect.y + buttonRect.y - 8;
                 }
                 if (a != null && GUILayout.Button("✎", new GUIStyle(Elements.Buttons.Default) { fontSize = 20, padding = new RectOffset(-3, 0, 0, 0) }, GUILayout.Width(30), GUILayout.MaxHeight(28)))
                 {

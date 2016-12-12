@@ -42,7 +42,7 @@ namespace Lench.AdvancedControls.Axes
                 }
                 if (error)
                 {
-                    (Editor as UI.ChainAxisEditor).error = "<color=#FFFF00><b>Chain cycle error</b></color>\n" + errorMessage;
+                    (Editor as UI.ChainAxisEditor).Error = "<color=#FFFF00><b>Chain cycle error</b></color>\n" + errorMessage;
                 }
             }
         }

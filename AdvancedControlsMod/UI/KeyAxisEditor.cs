@@ -3,7 +3,6 @@ using UnityEngine;
 using spaar.ModLoader.UI;
 using Lench.AdvancedControls.Axes;
 using Lench.AdvancedControls.Input;
-using System.Collections.Generic;
 
 namespace Lench.AdvancedControls.UI
 {
@@ -11,22 +10,22 @@ namespace Lench.AdvancedControls.UI
     {
         public KeyAxisEditor(InputAxis axis)
         {
-            Axis = axis as KeyAxis;
+            _axis = axis as KeyAxis;
         }
 
-        private KeyAxis Axis;
+        private readonly KeyAxis _axis;
 
-        internal string note;
+        internal string Note;
 
-        private string sens_string;
-        private string grav_string;
-        private string momn_string;
+        private string _sensString;
+        private string _gravString;
+        private string _momnString;
 
         public void Open()
         {
-            sens_string = Axis.Sensitivity.ToString("0.00");
-            grav_string = Axis.Gravity.ToString("0.00");
-            momn_string = Axis.Momentum.ToString("0.00");
+            _sensString = _axis.Sensitivity.ToString("0.00");
+            _gravString = _axis.Gravity.ToString("0.00");
+            _momnString = _axis.Momentum.ToString("0.00");
         }
 
         public void Close() { }
@@ -40,7 +39,7 @@ namespace Lench.AdvancedControls.UI
                 windowRect.width - GUI.skin.window.padding.left - GUI.skin.window.padding.right,
                 20);
 
-            GUILayout.Label("  <color=#808080><b>"+ Axis.OutputValue.ToString("0.00") + "</b></color>",
+            GUILayout.Label("  <color=#808080><b>"+ _axis.OutputValue.ToString("0.00") + "</b></color>",
                 new GUIStyle(Elements.Labels.Default) { richText = true, alignment = TextAnchor.MiddleLeft },
                 GUILayout.Height(20));
 
@@ -53,7 +52,7 @@ namespace Lench.AdvancedControls.UI
                 Color.gray);
 
             Util.FillRect(new Rect(
-                                  graphRect.x + graphRect.width / 2 + graphRect.width / 2 * Axis.OutputValue,
+                                  graphRect.x + graphRect.width / 2 + graphRect.width / 2 * _axis.OutputValue,
                                   graphRect.y,
                                   1,
                                   graphRect.height),
@@ -62,13 +61,13 @@ namespace Lench.AdvancedControls.UI
             // Draw key mappers 
             GUILayout.BeginHorizontal();
 
-            GUILayout.Button(new GUIContent(Axis.NegativeBind != null ? Axis.NegativeBind.Name : "None", "Key Mapper Negative"), Elements.Buttons.Red);
+            GUILayout.Button(new GUIContent(_axis.NegativeBind != null ? _axis.NegativeBind.Name : "None", "Key Mapper Negative"), Elements.Buttons.Red);
             if (GUI.tooltip == "Key Mapper Negative")
             {
                 foreach (var c in Controller.ControllerList)
                     foreach (var b in c.Buttons)
                     {
-                        if (b.IsDown) Axis.NegativeBind = b;
+                        if (b.IsDown) _axis.NegativeBind = b;
                     }
                 foreach (KeyCode key in Enum.GetValues(typeof(KeyCode)))
                 {
@@ -76,18 +75,18 @@ namespace Lench.AdvancedControls.UI
                         continue;
                     if (UnityEngine.Input.GetKey(key))
                     {
-                        Axis.NegativeBind = key == KeyCode.Backspace ? null : new Key(key);
+                        _axis.NegativeBind = key == KeyCode.Backspace ? null : new Key(key);
                         break;
                     }
                 }
             }
-            GUILayout.Button(new GUIContent(Axis.PositiveBind != null ? Axis.PositiveBind.Name : "None", "Key Mapper Positive"), Elements.Buttons.Red);
+            GUILayout.Button(new GUIContent(_axis.PositiveBind != null ? _axis.PositiveBind.Name : "None", "Key Mapper Positive"), Elements.Buttons.Red);
             if (GUI.tooltip == "Key Mapper Positive")
             {
                 foreach (var c in Controller.ControllerList)
                     foreach (var b in c.Buttons)
                     {
-                        if (b.IsDown) Axis.PositiveBind = b;
+                        if (b.IsDown) _axis.PositiveBind = b;
                     }
                 foreach (KeyCode key in Enum.GetValues(typeof(KeyCode)))
                 {
@@ -95,7 +94,7 @@ namespace Lench.AdvancedControls.UI
                         continue;
                     if (UnityEngine.Input.GetKey(key))
                     {
-                        Axis.PositiveBind = key == KeyCode.Backspace ? null : new Key(key);
+                        _axis.PositiveBind = key == KeyCode.Backspace ? null : new Key(key);
                         break;
                     }
                 }   
@@ -104,18 +103,18 @@ namespace Lench.AdvancedControls.UI
             GUILayout.EndHorizontal();
 
             // Draw Sensitivity slider
-            Axis.Sensitivity = Util.DrawSlider("Sensitivity", Axis.Sensitivity, 0, 10, sens_string, out sens_string);
+            _axis.Sensitivity = Util.DrawSlider("Sensitivity", _axis.Sensitivity, 0, 10, _sensString, out _sensString);
 
             // Draw Gravity slider
-            Axis.Gravity = Util.DrawSlider("Gravity", Axis.Gravity, 0, 10, grav_string, out grav_string);
+            _axis.Gravity = Util.DrawSlider("Gravity", _axis.Gravity, 0, 10, _gravString, out _gravString);
 
             // Draw Momentum slider
-            Axis.Momentum = Util.DrawSlider("Momentum", Axis.Momentum, 0, 10, momn_string, out momn_string);
+            _axis.Momentum = Util.DrawSlider("Momentum", _axis.Momentum, 0, 10, _momnString, out _momnString);
 
             // Draw toggles
             GUILayout.BeginHorizontal();
 
-            Axis.Raw = GUILayout.Toggle(Axis.Raw, "",
+            _axis.Raw = GUILayout.Toggle(_axis.Raw, "",
                 Util.ToggleStyle,
                 GUILayout.Width(20),
                 GUILayout.Height(20));
@@ -123,7 +122,7 @@ namespace Lench.AdvancedControls.UI
             GUILayout.Label("Raw ",
                 new GUIStyle(Elements.Labels.Default) { margin = new RectOffset(0, 0, 14, 0) });
 
-            Axis.Snap = GUILayout.Toggle(Axis.Snap, "",
+            _axis.Snap = GUILayout.Toggle(_axis.Snap, "",
                 Util.ToggleStyle,
                 GUILayout.Width(20),
                 GUILayout.Height(20));
@@ -134,20 +133,20 @@ namespace Lench.AdvancedControls.UI
             GUILayout.EndHorizontal();
 
             // Set notes
-            note = "<color=#FFFF00><b>Device disconnected</b></color>";
+            Note = "<color=#FFFF00><b>Device disconnected</b></color>";
             var disconnected = false;
-            if (Axis.PositiveBind != null && !Axis.PositiveBind.Connected)
+            if (_axis.PositiveBind != null && !_axis.PositiveBind.Connected)
             {
                 disconnected = true;
-                note += "\n'" + Axis.PositiveBind.Name + "' is not connected.";
+                Note += "\n'" + _axis.PositiveBind.Name + "' is not connected.";
             }
-            if (Axis.NegativeBind != null && !Axis.NegativeBind.Connected)
+            if (_axis.NegativeBind != null && !_axis.NegativeBind.Connected)
             {
                 disconnected = true;
-                note += "\n'" + Axis.NegativeBind.Name + "' is not connected.";
+                Note += "\n'" + _axis.NegativeBind.Name + "' is not connected.";
             }
             if (!disconnected)
-                note = null;
+                Note = null;
         }
 
         public string GetHelpURL()
@@ -157,7 +156,7 @@ namespace Lench.AdvancedControls.UI
 
         public string GetNote()
         {
-            return note;
+            return Note;
         }
 
         public string GetError()

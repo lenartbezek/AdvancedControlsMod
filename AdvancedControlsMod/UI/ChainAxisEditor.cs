@@ -1,7 +1,10 @@
-﻿using Lench.AdvancedControls.Axes;
+﻿using System;
+using Lench.AdvancedControls.Axes;
 using spaar.ModLoader.UI;
-using System;
 using UnityEngine;
+using Object = UnityEngine.Object;
+
+// ReSharper disable PossibleNullReferenceException
 
 namespace Lench.AdvancedControls.UI
 {
@@ -9,14 +12,14 @@ namespace Lench.AdvancedControls.UI
     {
         internal ChainAxisEditor(InputAxis axis)
         {
-            Axis = axis as ChainAxis;
+            _axis = axis as ChainAxis;
         }
 
-        private ChainAxis Axis;
+        private readonly ChainAxis _axis;
 
-        internal string error;
+        internal string Error;
 
-        private AxisSelector popup;
+        private AxisSelector _popup;
 
         public void Open()
         {
@@ -25,7 +28,7 @@ namespace Lench.AdvancedControls.UI
 
         public void Close()
         {
-            GameObject.Destroy(popup);
+            Object.Destroy(_popup);
         }
 
         public void DrawAxis(Rect windowRect)
@@ -71,44 +74,44 @@ namespace Lench.AdvancedControls.UI
                     rightGraphRect.height),
                 Color.gray);
 
-            var axis_a = AxisManager.Get(Axis.SubAxis1);
-            var axis_b = AxisManager.Get(Axis.SubAxis2);
-            float a = axis_a != null ? axis_a.OutputValue : 0;
-            float b = axis_b != null ? axis_b.OutputValue : 0;
+            var axisA = AxisManager.Get(_axis.SubAxis1);
+            var axisB = AxisManager.Get(_axis.SubAxis2);
+            float a = axisA?.OutputValue ?? 0;
+            float b = axisB?.OutputValue ?? 0;
 
             // Draw axis value
-            GUILayout.Label("  <color=#808080><b>" + Axis.OutputValue.ToString("0.00") + "</b></color>",
+            GUILayout.Label("  <color=#808080><b>" + _axis.OutputValue.ToString("0.00") + "</b></color>",
                 new GUIStyle(Elements.Labels.Default) { richText = true, alignment = TextAnchor.MiddleLeft },
                 GUILayout.Height(20));
 
             // Draw method select
-            int i = (int)Axis.Method;
-            int num_methods = Enum.GetValues(typeof(ChainAxis.ChainMethod)).Length;
+            int i = (int)_axis.Method;
+            int numMethods = Enum.GetValues(typeof(ChainAxis.ChainMethod)).Length;
 
             GUILayout.BeginHorizontal();
             if (GUILayout.Button("<", Elements.Buttons.Default, GUILayout.Width(30)))
                 i--;
-            if (i < 0) i += num_methods;
+            if (i < 0) i += numMethods;
 
             GUILayout.Label(Enum.GetNames(typeof(ChainAxis.ChainMethod))[i], new GUIStyle(Elements.InputFields.Default) { alignment = TextAnchor.MiddleCenter });
 
             if (GUILayout.Button(">", Elements.Buttons.Default, GUILayout.Width(30)))
                 i++;
-            if (i == num_methods) i = 0;
+            if (i == numMethods) i = 0;
 
-            Axis.Method = (ChainAxis.ChainMethod)i;
+            _axis.Method = (ChainAxis.ChainMethod)i;
 
             GUILayout.EndHorizontal();
 
             // Draw sub axis values
             GUILayout.BeginHorizontal(GUILayout.Height(20));
 
-            GUILayout.Label("  <color=#808080><b>" + (axis_a == null ? "" : axis_a.Status == AxisStatus.OK ? a.ToString("0.00") : InputAxis.GetStatusString(axis_a.Status)) + "</b></color>",
+            GUILayout.Label("  <color=#808080><b>" + (axisA == null ? "" : axisA.Status == AxisStatus.OK ? a.ToString("0.00") : InputAxis.GetStatusString(axisA.Status)) + "</b></color>",
                 new GUIStyle(Elements.Labels.Default) { richText = true, alignment = TextAnchor.MiddleLeft },
                 GUILayout.MinWidth(leftGraphRect.width),
                 GUILayout.Height(20));
 
-            GUILayout.Label("  <color=#808080><b>" + (axis_b == null ? "" : axis_b.Status == AxisStatus.OK ? b.ToString("0.00") : InputAxis.GetStatusString(axis_a.Status)) + "</b></color>",
+            GUILayout.Label("  <color=#808080><b>" + (axisB == null ? "" : axisB.Status == AxisStatus.OK ? b.ToString("0.00") : InputAxis.GetStatusString(axisA.Status)) + "</b></color>",
                 new GUIStyle(Elements.Labels.Default) { richText = true, alignment = TextAnchor.MiddleLeft, margin = new RectOffset(8, 0, 0, 0) },
                 GUILayout.MinWidth(rightGraphRect.width),
                 GUILayout.Height(20));
@@ -116,15 +119,15 @@ namespace Lench.AdvancedControls.UI
             GUILayout.EndHorizontal();
 
             // Draw yellow lines
-            if (Axis.Status == AxisStatus.OK)
+            if (_axis.Status == AxisStatus.OK)
                 Util.FillRect(new Rect(
-                                        graphRect.x + graphRect.width / 2 + graphRect.width / 2 * Axis.OutputValue,
+                                        graphRect.x + graphRect.width / 2 + graphRect.width / 2 * _axis.OutputValue,
                                         graphRect.y,
                                         1,
                                         graphRect.height),
                                 Color.yellow);
 
-            if (axis_a != null && Axis.Status == AxisStatus.OK)
+            if (axisA != null && _axis.Status == AxisStatus.OK)
                 Util.FillRect(new Rect(
                                       leftGraphRect.x + leftGraphRect.width / 2 + leftGraphRect.width / 2 * a,
                                       leftGraphRect.y,
@@ -132,7 +135,7 @@ namespace Lench.AdvancedControls.UI
                                       leftGraphRect.height),
                              Color.yellow);
 
-            if (axis_b != null && Axis.Status == AxisStatus.OK)
+            if (axisB != null && _axis.Status == AxisStatus.OK)
                 Util.FillRect(new Rect(
                                   rightGraphRect.x + rightGraphRect.width / 2 + rightGraphRect.width / 2 * b,
                                   rightGraphRect.y,
@@ -143,111 +146,111 @@ namespace Lench.AdvancedControls.UI
             // Draw axis select buttons
             GUILayout.BeginHorizontal();
 
-            var buttonRect = GUILayoutUtility.GetRect(new GUIContent(" "), spaar.ModLoader.UI.Elements.Buttons.Default, GUILayout.MaxWidth(leftGraphRect.width));
-            if (Axis.SubAxis1 == null)
+            var buttonRect = GUILayoutUtility.GetRect(new GUIContent(" "), Elements.Buttons.Default, GUILayout.MaxWidth(leftGraphRect.width));
+            if (_axis.SubAxis1 == null)
             {
-                if (GUI.Button(buttonRect, "Select Input Axis", spaar.ModLoader.UI.Elements.Buttons.Disabled))
+                if (GUI.Button(buttonRect, "Select Input Axis", Elements.Buttons.Disabled))
                 {
-                    error = null;
-                    var callback = new SelectAxisDelegate((InputAxis axis) =>
+                    Error = null;
+                    var callback = new SelectAxisDelegate(axis =>
                     {
                         try
                         {
-                            Axis.SubAxis1 = axis.Name;
+                            _axis.SubAxis1 = axis.Name;
                         }
                         catch (InvalidOperationException e)
                         {
-                            error = "<color=#FFFF00><b>Chain cycle error</b></color>\n" + e.Message;
+                            Error = "<color=#FFFF00><b>Chain cycle error</b></color>\n" + e.Message;
                         }
                     });
-                    if (popup == null)
-                        popup = AxisSelector.Open(callback, true);
+                    if (_popup == null)
+                        _popup = AxisSelector.Open(callback, true);
                     else
-                        popup.Callback = callback;
-                    popup.windowRect.x = windowRect.x + buttonRect.x - 8;
-                    popup.windowRect.y = windowRect.y + buttonRect.y - 8;
+                        _popup.Callback = callback;
+                    _popup.WindowRect.x = windowRect.x + buttonRect.x - 8;
+                    _popup.WindowRect.y = windowRect.y + buttonRect.y - 8;
                 }
             }
             else
             {
-                if (GUI.Button(buttonRect, Axis.SubAxis1, axis_a != null ? axis_a.Saveable ? spaar.ModLoader.UI.Elements.Buttons.Default : spaar.ModLoader.UI.Elements.Buttons.Disabled : spaar.ModLoader.UI.Elements.Buttons.Red))
+                if (GUI.Button(buttonRect, _axis.SubAxis1, axisA != null ? axisA.Saveable ? Elements.Buttons.Default : Elements.Buttons.Disabled : Elements.Buttons.Red))
                 {
-                    error = null;
-                    var callback = new SelectAxisDelegate((InputAxis axis) =>
+                    Error = null;
+                    var callback = new SelectAxisDelegate(axis =>
                     {
                         try
                         {
-                            Axis.SubAxis1 = axis.Name;
+                            _axis.SubAxis1 = axis.Name;
                         }
                         catch (InvalidOperationException e)
                         {
-                            error = "<color=#FFFF00><b>Chain cycle error</b></color>\n" + e.Message;
+                            Error = "<color=#FFFF00><b>Chain cycle error</b></color>\n" + e.Message;
                         }
                     });
-                    if (popup == null)
-                        popup = AxisSelector.Open(callback, true);
+                    if (_popup == null)
+                        _popup = AxisSelector.Open(callback, true);
                     else
-                        popup.Callback = callback;
-                    popup.windowRect.x = windowRect.x + buttonRect.x - 8;
-                    popup.windowRect.y = windowRect.y + buttonRect.y - 8;
+                        _popup.Callback = callback;
+                    _popup.WindowRect.x = windowRect.x + buttonRect.x - 8;
+                    _popup.WindowRect.y = windowRect.y + buttonRect.y - 8;
                 }
             }
 
-            if (Axis.SubAxis2 == null)
+            if (_axis.SubAxis2 == null)
             {
-                if (GUILayout.Button("Select Input Axis", spaar.ModLoader.UI.Elements.Buttons.Disabled, GUILayout.MaxWidth(rightGraphRect.width)))
+                if (GUILayout.Button("Select Input Axis", Elements.Buttons.Disabled, GUILayout.MaxWidth(rightGraphRect.width)))
                 {
-                    error = null;
-                    var callback = new SelectAxisDelegate((InputAxis axis) =>
+                    Error = null;
+                    var callback = new SelectAxisDelegate(axis =>
                     {
                         try
                         {
-                            Axis.SubAxis2 = axis.Name;
+                            _axis.SubAxis2 = axis.Name;
                         }
                         catch (InvalidOperationException e)
                         {
-                            error = "<color=#FFFF00><b>Chain cycle error</b></color>\n" + e.Message;
+                            Error = "<color=#FFFF00><b>Chain cycle error</b></color>\n" + e.Message;
                         }
                     });
-                    if (popup == null)
-                        popup = AxisSelector.Open(callback, true);
+                    if (_popup == null)
+                        _popup = AxisSelector.Open(callback, true);
                     else
-                        popup.Callback = callback;
-                    popup.windowRect.x = windowRect.x + buttonRect.x - 8;
-                    popup.windowRect.y = windowRect.y + buttonRect.y - 8;
+                        _popup.Callback = callback;
+                    _popup.WindowRect.x = windowRect.x + buttonRect.x - 8;
+                    _popup.WindowRect.y = windowRect.y + buttonRect.y - 8;
                 }
             }
             else
             {
-                if (GUILayout.Button(Axis.SubAxis2, axis_b != null ? axis_b.Saveable ? spaar.ModLoader.UI.Elements.Buttons.Default : spaar.ModLoader.UI.Elements.Buttons.Disabled : spaar.ModLoader.UI.Elements.Buttons.Red,
+                if (GUILayout.Button(_axis.SubAxis2, axisB != null ? axisB.Saveable ? Elements.Buttons.Default : Elements.Buttons.Disabled : Elements.Buttons.Red,
                     GUILayout.MaxWidth(rightGraphRect.width)))
                 {
-                    error = null;
-                    var callback = new SelectAxisDelegate((InputAxis axis) =>
+                    Error = null;
+                    var callback = new SelectAxisDelegate(axis =>
                     {
                         try
                         {
-                            Axis.SubAxis2 = axis.Name;
+                            _axis.SubAxis2 = axis.Name;
                         }
                         catch (InvalidOperationException e)
                         {
-                            error = "<color=#FFFF00><b>Chain cycle error</b></color>\n" + e.Message;
+                            Error = "<color=#FFFF00><b>Chain cycle error</b></color>\n" + e.Message;
                         }
                     });
-                    if (popup == null)
-                        popup = AxisSelector.Open(callback, true);
+                    if (_popup == null)
+                        _popup = AxisSelector.Open(callback, true);
                     else
-                        popup.Callback = callback;
-                    popup.windowRect.x = windowRect.x + buttonRect.x - 8;
-                    popup.windowRect.y = windowRect.y + buttonRect.y - 8;
+                        _popup.Callback = callback;
+                    _popup.WindowRect.x = windowRect.x + buttonRect.x - 8;
+                    _popup.WindowRect.y = windowRect.y + buttonRect.y - 8;
                 }
             }
 
             GUILayout.EndHorizontal();
 
             // Check for mouse exit
-            if (popup != null && !popup.ContainsMouse)
-                GameObject.Destroy(popup);
+            if (_popup != null && !_popup.ContainsMouse)
+                Object.Destroy(_popup);
         }
 
         public string GetHelpURL()
@@ -262,7 +265,7 @@ namespace Lench.AdvancedControls.UI
 
         public string GetError()
         {
-            return error;
+            return Error;
         }
     }
 }
