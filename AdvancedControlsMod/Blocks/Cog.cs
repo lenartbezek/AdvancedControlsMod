@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Reflection;
+// ReSharper disable RedundantArgumentDefaultValue
 
 namespace Lench.AdvancedControls.Blocks
 {
@@ -8,12 +9,12 @@ namespace Lench.AdvancedControls.Blocks
     /// </summary>
     public class Cog : BlockHandler
     {
-        private static FieldInfo input = typeof(CogMotorControllerHinge).GetField("input", BindingFlags.NonPublic | BindingFlags.Instance);
+        private static readonly FieldInfo InputFieldInfo = typeof(CogMotorControllerHinge).GetField("input", BindingFlags.NonPublic | BindingFlags.Instance);
 
-        private CogMotorControllerHinge cmc;
+        private readonly CogMotorControllerHinge _cmc;
 
-        private float desired_input;
-        private bool setInputFlag = false;
+        private float _desiredInput;
+        private bool _setInputFlag;
 
         /// <summary>
         /// Creates a Block handler.
@@ -21,7 +22,7 @@ namespace Lench.AdvancedControls.Blocks
         /// <param name="bb">BlockBehaviour object.</param>
         public Cog(BlockBehaviour bb) : base(bb)
         {
-            cmc = bb.GetComponent<CogMotorControllerHinge>();
+            _cmc = bb.GetComponent<CogMotorControllerHinge>();
         }
 
         /// <summary>
@@ -53,8 +54,8 @@ namespace Lench.AdvancedControls.Blocks
         {
             if (float.IsNaN(value))
                 throw new ArgumentException("Value is not a number (NaN).");
-            desired_input = value;
-            setInputFlag = true;
+            _desiredInput = value;
+            _setInputFlag = true;
         }
 
         /// <summary>
@@ -62,10 +63,10 @@ namespace Lench.AdvancedControls.Blocks
         /// </summary>
         protected override void LateUpdate()
         {
-            if (setInputFlag)
+            if (_setInputFlag)
             {
-                input.SetValue(cmc, desired_input);
-                setInputFlag = false;
+                InputFieldInfo.SetValue(_cmc, _desiredInput);
+                _setInputFlag = false;
             }
         }
     }

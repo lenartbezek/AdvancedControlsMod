@@ -2,9 +2,9 @@
 using System.IO;
 using System.Collections;
 using System.Net;
-using System.ComponentModel;
 using UnityEngine;
 using Lench.AdvancedControls.UI;
+// ReSharper disable UnusedMember.Local
 
 namespace Lench.AdvancedControls.Input
 {
@@ -34,37 +34,37 @@ namespace Lench.AdvancedControls.Input
         internal delegate void DeviceRemappedEventHandler(SDL.SDL_Event e);
         internal static event DeviceRemappedEventHandler OnDeviceRemapped;
 
-        public static bool SDL_Initialized = false;
-        public static bool SDL_Installed = false;
+        public static bool SdlInitialized;
+        public static bool SdlInstalled;
 
         public override string Name => "ACM: Device Manager";
 
         private void Start()
         {
-            InitSDL();
+            InitSdl();
         }
 
-        internal static void InitSDL()
+        internal static void InitSdl()
         {
             try
             {
                 SDL.SDL_SetMainReady();
                 SDL.SDL_Init(SDL.SDL_INIT_GAMECONTROLLER | SDL.SDL_INIT_JOYSTICK);
-                SDL_Initialized = true;
+                SdlInitialized = true;
             }
             catch (DllNotFoundException)
             {
-                SDL_Initialized = false;
+                SdlInitialized = false;
             }
 
-            if (SDL_Initialized)
+            if (SdlInitialized)
                 Instance.StartCoroutine(AssignMappings(false));
         }
 
-        internal static void InstallSDL()
+        internal static void InstallSdl()
         {
-            ControllerAxisEditor.downloading_in_progress = true;
-            ControllerAxisEditor.download_button_text = "0.0 %";
+            ControllerAxisEditor.DownloadingInProgress = true;
+            ControllerAxisEditor.DownloadButtonText = "0.0 %";
             if (File.Exists(Application.dataPath + "/Mods/Resources/AdvancedControls/lib/SDL2.dll"))
                 File.Delete(Application.dataPath + "/Mods/Resources/AdvancedControls/lib/SDL2.dll");
             if (!Directory.Exists(Application.dataPath + "/Mods/Resources/AdvancedControls/lib/"))
@@ -75,22 +75,22 @@ namespace Lench.AdvancedControls.Input
                 {
                     client.DownloadProgressChanged += (sender, e) =>
                     {
-                        ControllerAxisEditor.download_button_text = (Convert.ToSingle(e.BytesReceived) / Convert.ToSingle(e.TotalBytesToReceive) * 100).ToString("0.0") + " %";
+                        ControllerAxisEditor.DownloadButtonText = (Convert.ToSingle(e.BytesReceived) / Convert.ToSingle(e.TotalBytesToReceive) * 100).ToString("0.0") + " %";
                     };
                     client.DownloadFileCompleted += (sender, e) =>
                     {
-                        ControllerAxisEditor.downloading_in_progress = false;
+                        ControllerAxisEditor.DownloadingInProgress = false;
                         if (e.Error != null)
                         {
-                            ControllerAxisEditor.download_button_text = "Error";
+                            ControllerAxisEditor.DownloadButtonText = "Error";
                             spaar.ModLoader.ModConsole.AddMessage(LogType.Log, "[ACM]: Error downloading file: SDL2.dll", e.Error.Message);
                         }
                         else
                         {
                             spaar.ModLoader.ModConsole.AddMessage(LogType.Log, "[ACM]: File downloaded: SDL2.dll");
-                            ControllerAxisEditor.download_button_text = "Please restart Besiege";
-                            SDL_Installed = true;
-                            InitSDL();
+                            ControllerAxisEditor.DownloadButtonText = "Please restart Besiege";
+                            SdlInstalled = true;
+                            InitSdl();
                         } 
                     };
                     client.DownloadFileAsync(
@@ -99,8 +99,8 @@ namespace Lench.AdvancedControls.Input
                 }
                 catch (Exception e)
                 {
-                    ControllerAxisEditor.downloading_in_progress = false;
-                    ControllerAxisEditor.download_button_text = "Error";
+                    ControllerAxisEditor.DownloadingInProgress = false;
+                    ControllerAxisEditor.DownloadButtonText = "Error";
                     spaar.ModLoader.ModConsole.AddMessage(LogType.Error, "[ACM]: Error downloading file: SDL2.dll", e.Message);
                 }
             }
@@ -155,7 +155,7 @@ namespace Lench.AdvancedControls.Input
                 }
             }
 
-            if (!SDL_Initialized) yield break;
+            if (!SdlInitialized) yield break;
 
             if (mappings != null)
                 SDL.SDL_GameControllerAddMapping(mappings);
@@ -181,14 +181,14 @@ namespace Lench.AdvancedControls.Input
 
         private void OnDestroy()
         {
-            if (SDL_Initialized)
+            if (SdlInitialized)
                 SDL.SDL_Quit();
         }
 
         private void Update()
         {
-            if (SDL_Installed && !SDL_Initialized) InitSDL();
-            if (!SDL_Initialized) return;
+            if (SdlInstalled && !SdlInitialized) InitSdl();
+            if (!SdlInitialized) return;
 
             SDL.SDL_Event e;
 
@@ -244,8 +244,6 @@ namespace Lench.AdvancedControls.Input
                     case SDL.SDL_EventType.SDL_JOYDEVICEREMOVED:
                         Controller.RemoveDisconnected();
                         OnDeviceRemoved?.Invoke(e);
-                        break;
-                    default:
                         break;
                 }
             }

@@ -8,20 +8,20 @@ namespace Lench.AdvancedControls.Input
     /// </summary>
     public class Key : Button
     {
-        private KeyCode keycode;
+        private readonly KeyCode _keycode;
 
         /// <summary>
         /// Keyboard button identifying string of the following format:
         /// key:[UnityEngine.KeyCode]
         /// </summary>
-        public override string ID { get { return "key:" + keycode.ToString(); } }
+        public override string ID => "key:" + _keycode;
 
 #pragma warning disable CS1591
-        public override bool IsDown { get { return UnityEngine.Input.GetKey(keycode); } }
-        public override bool Pressed { get { return UnityEngine.Input.GetKeyDown(keycode); } }
-        public override bool Released { get { return UnityEngine.Input.GetKeyUp(keycode); } }
-        public override float Value { get { return IsDown ? 1 : 0; } }
-        public override string Name { get { return keycode.ToString(); } }
+        public override bool IsDown => UnityEngine.Input.GetKey(_keycode);
+        public override bool Pressed => UnityEngine.Input.GetKeyDown(_keycode);
+        public override bool Released => UnityEngine.Input.GetKeyUp(_keycode);
+        public override float Value => IsDown ? 1 : 0;
+        public override string Name => _keycode.ToString();
         public override bool Connected { get; } = true;
 #pragma warning restore CS1591
 
@@ -31,7 +31,7 @@ namespace Lench.AdvancedControls.Input
         /// <param name="keycode">UnityEngine.KeyCode</param>
         public Key(KeyCode keycode)
         {
-            this.keycode = keycode;
+            _keycode = keycode;
         }
 
         /// <summary>
@@ -42,7 +42,7 @@ namespace Lench.AdvancedControls.Input
         {
             var args = id.Split(':');
             if (args[0].Equals("key"))
-                keycode = (KeyCode)Enum.Parse(typeof(KeyCode), args[1]);
+                _keycode = (KeyCode)Enum.Parse(typeof(KeyCode), args[1]);
             else
                 throw new FormatException("Specified ID does not represent a key.");
         }

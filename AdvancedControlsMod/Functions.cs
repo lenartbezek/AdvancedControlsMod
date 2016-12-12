@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using UnityEngine;
 using Lench.AdvancedControls.Blocks;
 
@@ -12,14 +11,14 @@ namespace Lench.AdvancedControls
     public static class Functions
     {
         // Measuring time since the start of simulation
-        private static float startTime = 0;
+        private static float _startTime;
 
         /// <summary>
         /// Resets the timer returned by GetTime()
         /// </summary>
         public static void ResetTimer()
         {
-            startTime = Time.time;
+            _startTime = Time.time;
         }
 
         /// <summary>
@@ -57,8 +56,7 @@ namespace Lench.AdvancedControls
         {
             try
             {
-                BlockHandler b = GetBlock(blockId);
-                return b.Exists;
+                return GetBlock(blockId).Exists;
             }
             catch (Exception)
             {
@@ -74,7 +72,7 @@ namespace Lench.AdvancedControls
         /// <returns>Float value.</returns>
         public static float GetTime()
         {
-            return Time.time - startTime;
+            return Time.time - _startTime;
         }
 
         /// <summary>

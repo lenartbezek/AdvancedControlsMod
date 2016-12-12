@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using Lench.AdvancedControls.Input;
 using System;
+// ReSharper disable CompareOfFloatsByEqualityOperator
 
 namespace Lench.AdvancedControls.Axes
 {
@@ -67,9 +68,9 @@ namespace Lench.AdvancedControls.Axes
         /// </summary>
         public Button NegativeBind { get; set; }
 
-        private float last = 0;
-        private float speed = 0;
-        private float value = 0;
+        private float _last;
+        private float _speed;
+        private float _value;
 
         /// <summary>
         /// Creates a standard axis with given name.
@@ -78,7 +79,7 @@ namespace Lench.AdvancedControls.Axes
         public KeyAxis(string name) : base(name)
         {
             Type = AxisType.Key;
-            editor = new UI.KeyAxisEditor(this);
+            Editor = new UI.KeyAxisEditor(this);
 
             PositiveBind = null;
             NegativeBind = null;
@@ -108,12 +109,12 @@ namespace Lench.AdvancedControls.Axes
         {
             get
             {
-                return Raw ? InputValue : value;
+                return Raw ? InputValue : _value;
             }
 
             protected set
             {
-                this.value = value;
+                _value = value;
             }
         }
 
@@ -122,8 +123,8 @@ namespace Lench.AdvancedControls.Axes
         /// </summary>
         protected override void Initialise()
         {
-            speed = 0;
-            value = 0;
+            _speed = 0;
+            _value = 0;
         }
 
         /// <summary>
@@ -131,26 +132,26 @@ namespace Lench.AdvancedControls.Axes
         /// </summary>
         protected override void Update()
         {
-            float g_force = OutputValue > 0 ? -Gravity : Gravity;
-            float force = InputValue * Sensitivity + (1 - Mathf.Abs(InputValue)) * g_force;
+            float gForce = OutputValue > 0 ? -Gravity : Gravity;
+            float force = InputValue * Sensitivity + (1 - Mathf.Abs(InputValue)) * gForce;
             if (Momentum == 0)
-                speed = force;
+                _speed = force;
             else
-                speed += force * Time.deltaTime / Momentum;
-            OutputValue = Mathf.Clamp(OutputValue + speed * Time.deltaTime, -1, 1);
+                _speed += force * Time.deltaTime / Momentum;
+            OutputValue = Mathf.Clamp(OutputValue + _speed * Time.deltaTime, -1, 1);
             if (Snap && Mathf.Abs(OutputValue - InputValue) > 1)
             {
-                speed = 0;
+                _speed = 0;
                 OutputValue = 0;
             }
-            if (InputValue == 0 && Gravity != 0 && (last > 0 != OutputValue > 0))
+            if (InputValue == 0 && Gravity != 0 && (_last > 0 != OutputValue > 0))
             {
-                speed = 0;
+                _speed = 0;
                 OutputValue = 0;
             }
-            last = OutputValue;
+            _last = OutputValue;
             if (OutputValue == -1 || OutputValue == 1)
-                speed = 0;
+                _speed = 0;
         }
 
         internal override InputAxis Clone()
@@ -266,13 +267,13 @@ namespace Lench.AdvancedControls.Axes
         {
             var cast = other as KeyAxis;
             if (cast == null) return false;
-            return this.Name == cast.Name &&
-                   this.Sensitivity == cast.Sensitivity &&
-                   this.Gravity == cast.Gravity &&
-                   this.Snap == cast.Snap &&
-                   this.Raw == cast.Raw &&
-                   this.PositiveBind == cast.PositiveBind &&
-                   this.NegativeBind == cast.NegativeBind;
+            return Name == cast.Name &&
+                   Sensitivity == cast.Sensitivity &&
+                   Gravity == cast.Gravity &&
+                   Snap == cast.Snap &&
+                   Raw == cast.Raw &&
+                   PositiveBind == cast.PositiveBind &&
+                   NegativeBind == cast.NegativeBind;
         }
     }
 }

@@ -3,6 +3,8 @@ using UnityEngine;
 using Lench.AdvancedControls.Blocks;
 using Lench.AdvancedControls.Axes;
 using spaar.ModLoader;
+// ReSharper disable SpecifyACultureInStringConversionExplicitly
+// ReSharper disable VirtualMemberCallInConstructor
 
 namespace Lench.AdvancedControls.Controls
 {
@@ -19,7 +21,7 @@ namespace Lench.AdvancedControls.Controls
         /// <summary>
         /// Is the control enabled and applies value to the block on each frame.
         /// </summary>
-        public bool Enabled { get; set; } = false;
+        public bool Enabled { get; set; }
 
         /// <summary>
         /// Are control intervals set to be positive only.
@@ -46,11 +48,11 @@ namespace Lench.AdvancedControls.Controls
         /// </summary>
         public virtual float Min
         {
-            get { return min; }
+            get { return _min; }
             set
             {
-                min = PositiveOnly && value < 0 ? 0 : value;
-                min_string = (Mathf.Round(min * 100) / 100).ToString();
+                _min = PositiveOnly && value < 0 ? 0 : value;
+                MinString = (Mathf.Round(_min * 100) / 100).ToString();
             }
         }
 
@@ -59,11 +61,11 @@ namespace Lench.AdvancedControls.Controls
         /// </summary>
         public virtual float Center
         {
-            get { return cen; }
+            get { return _cen; }
             set
             {
-                cen = PositiveOnly && value < 0 ? 0 : value;
-                cen_string = (Mathf.Round(cen * 100) / 100).ToString();
+                _cen = PositiveOnly && value < 0 ? 0 : value;
+                CenString = (Mathf.Round(_cen * 100) / 100).ToString();
             }
         }
 
@@ -72,48 +74,48 @@ namespace Lench.AdvancedControls.Controls
         /// </summary>
         public virtual float Max
         {
-            get { return max; }
+            get { return _max; }
             set
             {
-                max = PositiveOnly && value < 0 ? 0 : value;
-                max_string = (Mathf.Round(max * 100) / 100).ToString();
+                _max = PositiveOnly && value < 0 ? 0 : value;
+                MaxString = (Mathf.Round(_max * 100) / 100).ToString();
             }
         }
 
-        private float min = -1;
-        private float cen = 0;
-        private float max = 1;
+        private float _min = -1;
+        private float _cen;
+        private float _max = 1;
 
-        internal string min_string;
-        internal string cen_string;
-        internal string max_string;
+        internal string MinString;
+        internal string CenString;
+        internal string MaxString;
 
         /// <summary>
         /// Swaps the Min and Max control interval limits.
         /// </summary>
         public void Invert()
         {
-            var tmp = min;
-            min = max;
-            max = tmp;
-            var tmp_string = min_string;
-            min_string = max_string;
-            max_string = tmp_string;
+            var tmp = _min;
+            _min = _max;
+            _max = tmp;
+            var tmpString = MinString;
+            MinString = MaxString;
+            MaxString = tmpString;
         }
 
         /// <summary>
         /// Creates a control for a block with given GUID.
         /// </summary>
         /// <param name="guid">GUID of the block.</param>
-        public Control(Guid guid)
+        protected Control(Guid guid)
         {
             BlockGUID = guid;
             ACM.Instance.OnUpdate += Update;
             ACM.Instance.OnInitialisation += Initialise;
 
-            min_string = (Mathf.Round(Min * 100) / 100).ToString();
-            cen_string = (Mathf.Round(Center * 100) / 100).ToString();
-            max_string = (Mathf.Round(Max * 100) / 100).ToString();
+            MinString = (Mathf.Round(Min * 100) / 100).ToString();
+            CenString = (Mathf.Round(Center * 100) / 100).ToString();
+            MaxString = (Mathf.Round(Max * 100) / 100).ToString();
         }
 
         /// <summary>
@@ -144,13 +146,11 @@ namespace Lench.AdvancedControls.Controls
         /// </summary>
         protected virtual void Update()
         {
-            if (Game.IsSimulating)
+            if (!Game.IsSimulating) return;
+            var axis = AxisManager.Get(Axis);
+            if (Enabled && Block != null && axis != null && axis.Status == AxisStatus.OK)
             {
-                var axis = AxisManager.Get(Axis);
-                if (Enabled && Block != null && axis != null && axis.Status == AxisStatus.OK)
-                {
-                    Apply(axis.OutputValue);
-                }
+                Apply(axis.OutputValue);
             }
         }
 

@@ -7,19 +7,18 @@ namespace Lench.AdvancedControls.Input
     /// </summary>
     public class JoystickButton : Button
     {
-        private Controller controller;
-        private int index;
-        private Guid guid;
+        private Controller _controller;
+        private Guid _guid;
 
-        private bool down = false;
-        private bool pressed = false;
-        private bool released = false;
+        private bool _down;
+        private bool _pressed;
+        private bool _released;
 
         /// <summary>
         /// Joystick button identifying string of the following format:
         /// joy:[index]:[device_guid]
         /// </summary>
-        public override string ID { get { return "joy:" + index + ":" + guid; } }
+        public override string ID => "joy:" + Index + ":" + _guid;
 
         /// <summary>
         /// Guid of the associated controller.
@@ -27,30 +26,26 @@ namespace Lench.AdvancedControls.Input
         /// </summary>
         public Guid GUID
         {
-            get { return guid; }
+            get { return _guid; }
             set
             {
-                guid = value;
-                controller = Controller.Get(guid);
+                _guid = value;
+                _controller = Controller.Get(_guid);
             }
         }
 
         /// <summary>
         /// Index of the button on a device.
         /// </summary>
-        public int Index
-        {
-            get { return index; }
-            set { value = index; }
-        }
+        public int Index { get; }
 
 #pragma warning disable CS1591
-        public override bool IsDown { get { return down; } }
-        public override bool Pressed { get { return pressed; } }
-        public override bool Released { get { return released; } }
-        public override float Value { get { return down ? 1 : 0; } }
-        public override string Name { get { return controller != null ? controller.GetButtonName(index) : "Unknown button"; } }
-        public override bool Connected { get { return controller != null && controller.Connected && index < controller.NumButtons; } }
+        public override bool IsDown => _down;
+        public override bool Pressed => _pressed;
+        public override bool Released => _released;
+        public override float Value => _down ? 1 : 0;
+        public override string Name => _controller != null ? _controller.GetButtonName(Index) : "Unknown button";
+        public override bool Connected => _controller != null && _controller.Connected && Index < _controller.NumButtons;
 #pragma warning restore CS1591
 
         /// <summary>
@@ -60,9 +55,9 @@ namespace Lench.AdvancedControls.Input
         /// <param name="index">Index of the button.</param>
         public JoystickButton(Controller controller, int index)
         {
-            this.controller = controller;
-            this.index = index;
-            this.guid = controller.GUID;
+            Index = index;
+            _controller = controller;
+            _guid = controller.GUID;
 
             DeviceManager.OnButton += HandleEvent;
             DeviceManager.OnDeviceAdded += UpdateDevice;
@@ -77,9 +72,9 @@ namespace Lench.AdvancedControls.Input
             var args = id.Split(':');
             if (args[0].Equals("joy"))
             {
-                index = int.Parse(args[1]);
-                guid = new Guid(args[2]);
-                controller = Controller.Get(guid);
+                Index = int.Parse(args[1]);
+                _guid = new Guid(args[2]);
+                _controller = Controller.Get(_guid);
             }
             else
                 throw new FormatException("Specified ID does not represent a joystick button.");
@@ -90,34 +85,34 @@ namespace Lench.AdvancedControls.Input
 
         private void HandleEvent(SDL.SDL_Event e, bool down)
         {
-            if (controller == null) return;
-            if (e.cdevice.which != controller.Index &&
-                e.jdevice.which != controller.Index)
+            if (_controller == null) return;
+            if (e.cdevice.which != _controller.Index &&
+                e.jdevice.which != _controller.Index)
                 return;
-            if (controller.IsGameController)
+            if (_controller.IsGameController)
             {
-                var button = SDL.SDL_GameControllerGetBindForButton(controller.game_controller, (SDL.SDL_GameControllerButton)index).button;
+                var button = SDL.SDL_GameControllerGetBindForButton(_controller.GameController, (SDL.SDL_GameControllerButton)Index).button;
                 if (e.cbutton.button == button)
                 {
-                    pressed = this.down != down && down;
-                    released = this.down != down && !down;
-                    this.down = down;
+                    _pressed = _down != down && down;
+                    _released = _down != down && !down;
+                    _down = down;
                 }
             }
             else
             {
-                if (e.jbutton.button == index)
+                if (e.jbutton.button == Index)
                 {
-                    pressed = this.down != down && down;
-                    released = this.down != down && !down;
-                    this.down = down;
+                    _pressed = _down != down && down;
+                    _released = _down != down && !down;
+                    _down = down;
                 }
             }
         }
 
         private void UpdateDevice(SDL.SDL_Event e)
         {
-            controller = Controller.Get(guid);
+            _controller = Controller.Get(_guid);
         }
     }
 }

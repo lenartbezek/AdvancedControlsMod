@@ -10,20 +10,20 @@ namespace Lench.AdvancedControls.Input
     /// </summary>
     public class Controller : IDisposable, IEquatable<Controller>
     {
-        internal IntPtr device_pointer;
-        internal IntPtr game_controller;
+        internal IntPtr DevicePointer;
+        internal IntPtr GameController;
 
-        private float[] axis_values_raw;
-        private float[] axis_values_smooth;
-        private float[,] ball_values_raw;
-        private float[,] ball_values_smooth;
+        private readonly float[] _axisValuesRaw;
+        private readonly float[] _axisValuesSmooth;
+        private readonly float[,] _ballValuesRaw;
+        private readonly float[,] _ballValuesSmooth;
 
 #pragma warning disable CS1591
 
-        public int NumAxes { get { return SDL.SDL_JoystickNumAxes(device_pointer); } }
-        public int NumBalls { get { return SDL.SDL_JoystickNumBalls(device_pointer); } }
-        public int NumHats { get { return SDL.SDL_JoystickNumHats(device_pointer); } }
-        public int NumButtons { get { return SDL.SDL_JoystickNumButtons(device_pointer); } }
+        public int NumAxes => SDL.SDL_JoystickNumAxes(DevicePointer);
+        public int NumBalls => SDL.SDL_JoystickNumBalls(DevicePointer);
+        public int NumHats => SDL.SDL_JoystickNumHats(DevicePointer);
+        public int NumButtons => SDL.SDL_JoystickNumButtons(DevicePointer);
 
 #pragma warning restore CS1591
 
@@ -33,10 +33,10 @@ namespace Lench.AdvancedControls.Input
         /// </summary>
         public readonly List<Button> Buttons;
 
-        private List<string> axisNames;
-        private List<string> ballNames;
-        private List<string> hatNames;
-        private List<string> buttonNames;
+        private List<string> _axisNames;
+        private List<string> _ballNames;
+        private List<string> _hatNames;
+        private List<string> _buttonNames;
 
         /// <summary>
         /// Returns name of the axis at given index.
@@ -49,7 +49,7 @@ namespace Lench.AdvancedControls.Input
         {
             if (index >= 0 && index < NumAxes)
             {
-                return axisNames[index];
+                return _axisNames[index];
             }
             else
             {
@@ -68,7 +68,7 @@ namespace Lench.AdvancedControls.Input
         {
             if (index >= 0 && index < NumBalls)
             {
-                return ballNames[index];
+                return _ballNames[index];
             }
             else
             {
@@ -87,7 +87,7 @@ namespace Lench.AdvancedControls.Input
         {
             if (index >= 0 && index < NumHats)
             {
-                return hatNames[index];
+                return _hatNames[index];
             }
             else
             {
@@ -106,7 +106,7 @@ namespace Lench.AdvancedControls.Input
         {
             if (index >= 0 && index < NumButtons)
             {
-                return buttonNames[index];
+                return _buttonNames[index];
             }
             else
             {
@@ -117,23 +117,23 @@ namespace Lench.AdvancedControls.Input
         /// <summary>
         /// Index of the device needed to access it through SDL.
         /// </summary>
-        public int Index => SDL.SDL_JoystickInstanceID(device_pointer);
+        public int Index => SDL.SDL_JoystickInstanceID(DevicePointer);
 
         /// <summary>
         /// Name of the device.
         /// Returns name from GameControllerMappings.txt if found.
         /// </summary>
-        public string Name => IsGameController ? SDL.SDL_GameControllerName(game_controller) : SDL.SDL_JoystickName(device_pointer);
+        public string Name => IsGameController ? SDL.SDL_GameControllerName(GameController) : SDL.SDL_JoystickName(DevicePointer);
 
         /// <summary>
         /// GUID of the controller.
         /// </summary>
-        public Guid GUID => SDL.SDL_JoystickGetGUID(device_pointer);
+        public Guid GUID => SDL.SDL_JoystickGetGUID(DevicePointer);
 
         /// <summary>
         /// Is device currently connected.
         /// </summary>
-        public bool Connected => SDL.SDL_JoystickGetAttached(device_pointer) == SDL.SDL_bool.SDL_TRUE;
+        public bool Connected => SDL.SDL_JoystickGetAttached(DevicePointer) == SDL.SDL_bool.SDL_TRUE;
 
         /// <summary>
         /// Was device mapping found and is thus recognized as game controller.
@@ -212,24 +212,24 @@ namespace Lench.AdvancedControls.Input
 
             if (IsGameController)
             {
-                game_controller = SDL.SDL_GameControllerOpen(index);
-                device_pointer = SDL.SDL_GameControllerGetJoystick(game_controller);
+                GameController = SDL.SDL_GameControllerOpen(index);
+                DevicePointer = SDL.SDL_GameControllerGetJoystick(GameController);
             }
             else
             {
-                device_pointer = SDL.SDL_JoystickOpen(index);
+                DevicePointer = SDL.SDL_JoystickOpen(index);
             }
 
             UpdateMappings();
             Buttons = new List<Button>();
 
-            axis_values_raw = new float[SDL.SDL_JoystickNumAxes(device_pointer)];
-            axis_values_smooth = new float[SDL.SDL_JoystickNumAxes(device_pointer)];
+            _axisValuesRaw = new float[SDL.SDL_JoystickNumAxes(DevicePointer)];
+            _axisValuesSmooth = new float[SDL.SDL_JoystickNumAxes(DevicePointer)];
 
-            ball_values_raw = new float[SDL.SDL_JoystickNumBalls(device_pointer), 2];
-            ball_values_smooth = new float[SDL.SDL_JoystickNumBalls(device_pointer), 2];
+            _ballValuesRaw = new float[SDL.SDL_JoystickNumBalls(DevicePointer), 2];
+            _ballValuesSmooth = new float[SDL.SDL_JoystickNumBalls(DevicePointer), 2];
 
-            for (int i = 0; i < SDL.SDL_JoystickNumHats(device_pointer); i++)
+            for (int i = 0; i < SDL.SDL_JoystickNumHats(DevicePointer); i++)
             {
                 Buttons.Add(new HatButton(this, i, SDL.SDL_HAT_UP));
                 Buttons.Add(new HatButton(this, i, SDL.SDL_HAT_DOWN));
@@ -237,7 +237,7 @@ namespace Lench.AdvancedControls.Input
                 Buttons.Add(new HatButton(this, i, SDL.SDL_HAT_RIGHT));
             }
 
-            for (int i = 0; i < SDL.SDL_JoystickNumButtons(device_pointer); i++)
+            for (int i = 0; i < SDL.SDL_JoystickNumButtons(DevicePointer); i++)
             {
                 Buttons.Add(new JoystickButton(this, i));
             }
@@ -260,18 +260,18 @@ namespace Lench.AdvancedControls.Input
             {
                 int axis = i;
                 if (IsGameController)
-                    axis = SDL.SDL_GameControllerGetBindForAxis(game_controller, (SDL.SDL_GameControllerAxis)i).axis;
-                axis_values_raw[axis] = SDL.SDL_JoystickGetAxis(device_pointer, axis) / 32767.0f;
-                axis_values_smooth[axis] = axis_values_smooth[axis] * (1 - d) + axis_values_raw[axis] * d;
+                    axis = SDL.SDL_GameControllerGetBindForAxis(GameController, (SDL.SDL_GameControllerAxis)i).axis;
+                _axisValuesRaw[axis] = SDL.SDL_JoystickGetAxis(DevicePointer, axis) / 32767.0f;
+                _axisValuesSmooth[axis] = _axisValuesSmooth[axis] * (1 - d) + _axisValuesRaw[axis] * d;
             }
             for (int i = 0; i < NumBalls; i++)
             {
                 int x, y;
-                SDL.SDL_JoystickGetBall(device_pointer, i, out x, out y);
-                ball_values_raw[i, 0] = x / 32767.0f;
-                ball_values_raw[i, 1] = y / 32767.0f;
-                ball_values_smooth[i, 0] = ball_values_smooth[i, 0] * (1 - d) + ball_values_raw[i, 0] * d;
-                ball_values_smooth[i, 1] = ball_values_smooth[i, 1] * (1 - d) + ball_values_raw[i, 1] * d;
+                SDL.SDL_JoystickGetBall(DevicePointer, i, out x, out y);
+                _ballValuesRaw[i, 0] = x / 32767.0f;
+                _ballValuesRaw[i, 1] = y / 32767.0f;
+                _ballValuesSmooth[i, 0] = _ballValuesSmooth[i, 0] * (1 - d) + _ballValuesRaw[i, 0] * d;
+                _ballValuesSmooth[i, 1] = _ballValuesSmooth[i, 1] * (1 - d) + _ballValuesRaw[i, 1] * d;
             }
         }
 
@@ -339,38 +339,47 @@ namespace Lench.AdvancedControls.Input
         {
             if (!Connected) return;
 
-            axisNames = new List<string>();
-            for (int i = 0; i < SDL.SDL_JoystickNumAxes(device_pointer); i++)
+            _axisNames = new List<string>();
+            for (int i = 0; i < SDL.SDL_JoystickNumAxes(DevicePointer); i++)
             {
-                string name = null;
+                string name;
                 if (IsGameController)
                 {
                     name = GetAxisNameFromEnum((SDL.SDL_GameControllerAxis)i);
                 } 
                 else
                 {
-                    if (i == 0) name = "X Axis";
-                    else if (i == 1) name = "Y Axis";
-                    else name = "Axis " + (i + 1);
+                    switch (i)
+                    {
+                        case 0:
+                            name = "X Axis";
+                            break;
+                        case 1:
+                            name = "Y Axis";
+                            break;
+                        default:
+                            name = "Axis " + (i + 1);
+                            break;
+                    }
                 }
-                axisNames.Add(name);
+                _axisNames.Add(name);
             }
 
-            ballNames = new List<string>();
-            for (int i = 0; i < SDL.SDL_JoystickNumBalls(device_pointer); i++)
-                ballNames.Add("Ball " + (i + 1));
+            _ballNames = new List<string>();
+            for (int i = 0; i < SDL.SDL_JoystickNumBalls(DevicePointer); i++)
+                _ballNames.Add("Ball " + (i + 1));
 
-            hatNames = new List<string>();
-            for (int i = 0; i < SDL.SDL_JoystickNumHats(device_pointer); i++)
+            _hatNames = new List<string>();
+            for (int i = 0; i < SDL.SDL_JoystickNumHats(DevicePointer); i++)
                 if (IsGameController)
-                    hatNames.Add("DPAD");
+                    _hatNames.Add("DPAD");
                 else
-                    hatNames.Add("Hat " + (i + 1));
+                    _hatNames.Add("Hat " + (i + 1));
 
-            buttonNames = new List<string>();
-            for (int i = 0; i < SDL.SDL_JoystickNumButtons(device_pointer); i++)
+            _buttonNames = new List<string>();
+            for (int i = 0; i < SDL.SDL_JoystickNumButtons(DevicePointer); i++)
             {
-                string name = null;
+                string name;
                 if (IsGameController)
                 {
                     name = GetButtonNameFromEnum((SDL.SDL_GameControllerButton)i);
@@ -379,7 +388,7 @@ namespace Lench.AdvancedControls.Input
                 {
                     name = "Button " + (i + 1);
                 }
-                buttonNames.Add(name);
+                _buttonNames.Add(name);
             }
         }
 
@@ -391,10 +400,7 @@ namespace Lench.AdvancedControls.Input
         /// <returns>value in range [-1, 1]</returns>
         public float GetAxis(int index, bool smooth = false)
         {
-            if (smooth)
-                return axis_values_smooth[index];
-            else
-                return axis_values_raw[index];
+            return smooth ? _axisValuesSmooth[index] : _axisValuesRaw[index];
         }
 
         /// <summary>
@@ -404,9 +410,9 @@ namespace Lench.AdvancedControls.Input
         public void Dispose()
         {
             if (IsGameController)
-                SDL.SDL_GameControllerClose(game_controller);
+                SDL.SDL_GameControllerClose(GameController);
             else
-                SDL.SDL_JoystickClose(device_pointer);
+                SDL.SDL_JoystickClose(DevicePointer);
 
             DeviceManager.OnDeviceRemapped -= UpdateMappings;
             ACM.Instance.OnUpdate -= Update;
@@ -417,7 +423,7 @@ namespace Lench.AdvancedControls.Input
         /// </summary>
         public bool Equals(Controller other)
         {
-            return device_pointer == other.device_pointer;
+            return other != null && DevicePointer == other.DevicePointer;
         }
     }
 }

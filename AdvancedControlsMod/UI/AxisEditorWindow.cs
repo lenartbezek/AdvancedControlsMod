@@ -1,10 +1,11 @@
 ﻿using UnityEngine;
 using spaar.ModLoader.UI;
 using Lench.AdvancedControls.Axes;
+// ReSharper disable UnusedMember.Local
 
 namespace Lench.AdvancedControls.UI
 {
-    internal interface AxisEditor
+    internal interface IAxisEditor
     {
         void DrawAxis(Rect windowRect);
         void Open();
@@ -18,12 +19,12 @@ namespace Lench.AdvancedControls.UI
     {
         internal bool ShowHelp { get; set; } = false;
 
-        internal int windowID = spaar.ModLoader.Util.GetWindowID();
-        internal Rect windowRect = new Rect(0, 0, 320, 100);
+        internal int WindowID = spaar.ModLoader.Util.GetWindowID();
+        internal Rect WindowRect = new Rect(0, 0, 320, 100);
 
-        private string WindowName = "Create new axis";
-        private string SaveName = "";
-        private InputAxis Axis;
+        private string _windowName = "Create new axis";
+        private string _saveName = "";
+        private InputAxis _axis;
 
         internal bool ContainsMouse
         {
@@ -31,7 +32,7 @@ namespace Lench.AdvancedControls.UI
             {
                 var mousePos = UnityEngine.Input.mousePosition;
                 mousePos.y = Screen.height - mousePos.y;
-                return windowRect.Contains(mousePos);
+                return WindowRect.Contains(mousePos);
             }
         }
 
@@ -39,30 +40,30 @@ namespace Lench.AdvancedControls.UI
 
         internal void SaveAxis()
         {
-            if (Axis.Name == SaveName || !AxisManager.LocalAxes.ContainsKey(Axis.Name))
-                Axis.Dispose();
-            Axis = Axis.Clone();
-            Axis.editor.Open();
-            Axis.Name = SaveName;
-            AxisManager.AddLocalAxis(Axis);
-            Callback?.Invoke(Axis);
+            if (_axis.Name == _saveName || !AxisManager.LocalAxes.ContainsKey(_axis.Name))
+                _axis.Dispose();
+            _axis = _axis.Clone();
+            _axis.Editor.Open();
+            _axis.Name = _saveName;
+            AxisManager.AddLocalAxis(_axis);
+            Callback?.Invoke(_axis);
             Destroy(this);
         }
 
         internal void CreateAxis(SelectAxisDelegate selectAxis = null)
         {
             Callback = selectAxis;
-            WindowName = "Create new axis";
-            Axis = null;
+            _windowName = "Create new axis";
+            _axis = null;
         }
 
         internal void EditAxis(InputAxis axis, SelectAxisDelegate selectAxis = null)
         {
             Callback = selectAxis;
-            WindowName = "Edit " + axis.Name;
-            SaveName = axis.Name;
-            Axis = axis;
-            Axis.editor.Open();
+            _windowName = "Edit " + axis.Name;
+            _saveName = axis.Name;
+            _axis = axis;
+            _axis.Editor.Open();
         }
 
         /// <summary>
@@ -71,65 +72,65 @@ namespace Lench.AdvancedControls.UI
         private void OnGUI()
         {
             GUI.skin = Util.Skin;
-            windowRect = GUILayout.Window(windowID, windowRect, DoWindow, WindowName,
+            WindowRect = GUILayout.Window(WindowID, WindowRect, DoWindow, _windowName,
                 GUILayout.Width(320),
                 GUILayout.Height(100));
         }
 
         private void OnDestroy()
         {
-            Axis?.editor.Close();
+            _axis?.Editor.Close();
         }
 
         private void DoWindow(int id)
         {
-            if(Axis == null)
+            if(_axis == null)
             {
                 // Draw add buttons
                 if (GUILayout.Button("Controller Axis", Elements.Buttons.ComponentField))
                 {
-                    Axis = new ControllerAxis("new controller axis");
-                    WindowName = "Create new controller axis";
+                    _axis = new ControllerAxis("new controller axis");
+                    _windowName = "Create new controller axis";
                 }
                 if (GUILayout.Button("Key Axis", Elements.Buttons.ComponentField))
                 {
-                    Axis = new KeyAxis("new key axis");
-                    WindowName = "Create new key axis";
+                    _axis = new KeyAxis("new key axis");
+                    _windowName = "Create new key axis";
                 }
                 if (GUILayout.Button("Mouse Axis", Elements.Buttons.ComponentField))
                 {
-                    Axis = new MouseAxis("new mouse axis");
-                    WindowName = "Create new mouse axis";
+                    _axis = new MouseAxis("new mouse axis");
+                    _windowName = "Create new mouse axis";
                 }
                 if (GUILayout.Button("Chain Axis", Elements.Buttons.ComponentField))
                 {
-                    Axis = new ChainAxis("new chain axis");
-                    WindowName = "Create new chain axis";
+                    _axis = new ChainAxis("new chain axis");
+                    _windowName = "Create new chain axis";
                 }
                 if (GUILayout.Button("Custom Axis", Elements.Buttons.ComponentField))
                 {
-                    Axis = new CustomAxis("new custom axis");
-                    WindowName = "Create new custom axis";
+                    _axis = new CustomAxis("new custom axis");
+                    _windowName = "Create new custom axis";
                 }
-                if (Axis != null)
+                if (_axis != null)
                 {
-                    SaveName = Axis.Name;
-                    Axis.editor.Open();
+                    _saveName = _axis.Name;
+                    _axis.Editor.Open();
                 }
             }
             else
             {
                 // Draw save text field and save button
-                if (Axis.Saveable)
+                if (_axis.Saveable)
                 {
                     GUILayout.BeginHorizontal();
-                    SaveName = GUILayout.TextField(SaveName,
+                    _saveName = GUILayout.TextField(_saveName,
                         Elements.InputFields.Default);
 
                     if (GUILayout.Button("Save",
                         Elements.Buttons.Default,
                         GUILayout.Width(80))
-                        && SaveName != "")
+                        && _saveName != "")
                     {
                         SaveAxis();
                     }
@@ -137,32 +138,32 @@ namespace Lench.AdvancedControls.UI
                 }
 
                 // Draw axis editor
-                Axis.GetEditor().DrawAxis(windowRect);
+                _axis.GetEditor().DrawAxis(WindowRect);
 
                 // Draw error message
-                if (Axis.GetEditor().GetError() != null)
+                if (_axis.GetEditor().GetError() != null)
                 {
-                    GUILayout.Label(Axis.GetEditor().GetError(), new GUIStyle(Elements.Labels.Default) { margin = new RectOffset(8, 8, 12, 8) });
+                    GUILayout.Label(_axis.GetEditor().GetError(), new GUIStyle(Elements.Labels.Default) { margin = new RectOffset(8, 8, 12, 8) });
                 }
 
                 // Draw note message
-                if (Axis.GetEditor().GetNote() != null)
+                if (_axis.GetEditor().GetNote() != null)
                 {
-                    GUILayout.Label(Axis.GetEditor().GetNote(), new GUIStyle(Elements.Labels.Default) { margin = new RectOffset(8, 8, 12, 8) });
+                    GUILayout.Label(_axis.GetEditor().GetNote(), new GUIStyle(Elements.Labels.Default) { margin = new RectOffset(8, 8, 12, 8) });
                 }
 
                 // Draw help button
-                if (Axis.GetEditor().GetHelpURL() != null)
-                    if (GUI.Button(new Rect(windowRect.width - 76, 8, 30, 30),
+                if (_axis.GetEditor().GetHelpURL() != null)
+                    if (GUI.Button(new Rect(WindowRect.width - 76, 8, 30, 30),
                         "?", Elements.Buttons.Red))
                     {
-                        Application.OpenURL(Axis.GetEditor().GetHelpURL());
+                        Application.OpenURL(_axis.GetEditor().GetHelpURL());
                     }
             }
 
 
             // Draw close button
-            if (GUI.Button(new Rect(windowRect.width - 38, 8, 30, 30),
+            if (GUI.Button(new Rect(WindowRect.width - 38, 8, 30, 30),
                 "×", Elements.Buttons.Red))
             {
                 Callback = null;
@@ -170,7 +171,7 @@ namespace Lench.AdvancedControls.UI
             }
 
             // Drag window
-            GUI.DragWindow(new Rect(0, 0, windowRect.width, GUI.skin.window.padding.top));
+            GUI.DragWindow(new Rect(0, 0, WindowRect.width, GUI.skin.window.padding.top));
         }
     }
 }

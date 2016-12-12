@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using Lench.AdvancedControls.Input;
+// ReSharper disable PossibleNullReferenceException
 
 namespace Lench.AdvancedControls.Axes
 {
@@ -93,7 +94,6 @@ namespace Lench.AdvancedControls.Axes
         {
             foreach (var entry in MachineAxes)
             {
-                var name = entry.Key;
                 var axis = entry.Value;
 
                 switch (axis.Type)

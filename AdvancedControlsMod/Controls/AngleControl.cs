@@ -1,6 +1,7 @@
 ﻿using System;
 using UnityEngine;
 using Lench.AdvancedControls.Blocks;
+// ReSharper disable VirtualMemberCallInConstructor
 
 namespace Lench.AdvancedControls.Controls
 {
@@ -9,7 +10,7 @@ namespace Lench.AdvancedControls.Controls
     /// </summary>
     public class AngleControl : Control
     {
-        private Steering steering;
+        private Steering _steering;
 
         /// <summary>
         /// Creates an angle control for a block with given GUID.
@@ -31,11 +32,11 @@ namespace Lench.AdvancedControls.Controls
         {
             get
             {
-                return steering;
+                return _steering;
             }
             protected set
             {
-                steering = value as Steering;
+                _steering = value as Steering;
             }
         }
 
@@ -45,11 +46,10 @@ namespace Lench.AdvancedControls.Controls
         /// <param name="value">Angle in degrees.</param>
         protected override void Apply(float value)
         {
-            if (value > 0)
-                value = Mathf.Lerp(Center, Max, value);
-            else
-                value = Mathf.Lerp(Center, Min, -value);
-            steering?.SetAngle(value);
+            value = value > 0 
+                ? Mathf.Lerp(Center, Max, value) 
+                : Mathf.Lerp(Center, Min, -value);
+            _steering?.SetAngle(value);
         }
 
         /// <summary>
@@ -63,14 +63,16 @@ namespace Lench.AdvancedControls.Controls
 
         internal override Control Clone()
         {
-            var clone = new AngleControl(BlockGUID);
-            clone.Name = Name;
-            clone.Enabled = Enabled;
-            clone.Axis = Axis;
-            clone.Block = Block;
-            clone.Min = Min;
-            clone.Center = Center;
-            clone.Max = Max;
+            var clone = new AngleControl(BlockGUID)
+            {
+                Name = Name,
+                Enabled = Enabled,
+                Axis = Axis,
+                Block = Block,
+                Min = Min,
+                Center = Center,
+                Max = Max
+            };
             return clone;
         }
     }

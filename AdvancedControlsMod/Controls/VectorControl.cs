@@ -9,8 +9,8 @@ namespace Lench.AdvancedControls.Controls
     /// </summary>
     public class VectorControl : Control
     {
-        private Axis vectorAxis;
-        private VectorThruster vt;
+        private readonly Axis _vectorAxis;
+        private VectorThruster _vt;
 
         /// <summary>
         /// Creates a new VectorControl for a block with given guid.
@@ -20,12 +20,12 @@ namespace Lench.AdvancedControls.Controls
         /// <param name="axis">global::Axis</param>
         public VectorControl(Guid guid, Axis axis = global::Axis.X) : base(guid)
         {
-            vectorAxis = axis;
-            if (vectorAxis == global::Axis.X)
+            _vectorAxis = axis;
+            if (_vectorAxis == global::Axis.X)
                 Name = "HORIZONTAL";
-            if (vectorAxis == global::Axis.Y)
+            if (_vectorAxis == global::Axis.Y)
                 Name = "VERTICAL";
-            if (vectorAxis == global::Axis.Z)
+            if (_vectorAxis == global::Axis.Z)
                 Name = "POWER";
         }
 
@@ -37,11 +37,11 @@ namespace Lench.AdvancedControls.Controls
         {
             get
             {
-                return vt;
+                return _vt;
             }
             protected set
             {
-                vt = value as VectorThruster;
+                _vt = value as VectorThruster;
             }
         }
 
@@ -54,16 +54,15 @@ namespace Lench.AdvancedControls.Controls
         /// <param name="value">Value to be applied.</param>
         protected override void Apply(float value)
         {
-            if (value > 0)
-                value = Mathf.Lerp(Center, Max, value);
-            else
-                value = Mathf.Lerp(Center, Min, -value);
-            if (vectorAxis == global::Axis.X)
-                vt.HorizontalBias = value;
-            if (vectorAxis == global::Axis.Y)
-                vt.VerticalBias = value;
-            if (vectorAxis == global::Axis.Z)
-                vt.Power = value;
+            value = value > 0 
+                ? Mathf.Lerp(Center, Max, value) 
+                : Mathf.Lerp(Center, Min, -value);
+            if (_vectorAxis == global::Axis.X)
+                _vt.HorizontalBias = value;
+            if (_vectorAxis == global::Axis.Y)
+                _vt.VerticalBias = value;
+            if (_vectorAxis == global::Axis.Z)
+                _vt.Power = value;
         }
 
         /// <summary>
@@ -77,14 +76,16 @@ namespace Lench.AdvancedControls.Controls
 
         internal override Control Clone()
         {
-            var clone = new VectorControl(BlockGUID, vectorAxis);
-            clone.Name = Name;
-            clone.Enabled = Enabled;
-            clone.Axis = Axis;
-            clone.Block = Block;
-            clone.Min = Min;
-            clone.Center = Center;
-            clone.Max = Max;
+            var clone = new VectorControl(BlockGUID, _vectorAxis)
+            {
+                Name = Name,
+                Enabled = Enabled,
+                Axis = Axis,
+                Block = Block,
+                Min = Min,
+                Center = Center,
+                Max = Max
+            };
             return clone;
         }
     }

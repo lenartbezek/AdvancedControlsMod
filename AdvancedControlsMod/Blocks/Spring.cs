@@ -7,7 +7,7 @@ namespace Lench.AdvancedControls.Blocks
     /// </summary>
     public class Spring : BlockHandler
     {
-        private SpringCode sc;
+        private readonly SpringCode _sc;
 
         /// <summary>
         /// Creates a Block handler.
@@ -15,7 +15,7 @@ namespace Lench.AdvancedControls.Blocks
         /// <param name="bb">BlockBehaviour object.</param>
         public Spring(BlockBehaviour bb) : base(bb)
         {
-            sc = bb.GetComponent<SpringCode>();
+            _sc = bb.GetComponent<SpringCode>();
         }
 
         /// <summary>
@@ -26,17 +26,17 @@ namespace Lench.AdvancedControls.Blocks
         public override void Action(string actionName)
         {
             actionName = actionName.ToUpper();
-            if (!sc.winchMode && actionName == "CONTRACT")
+            if (!_sc.winchMode && actionName == "CONTRACT")
             {
                 Contract();
                 return;
             }
-            if (sc.winchMode && actionName == "WIND")
+            if (_sc.winchMode && actionName == "WIND")
             {
                 Wind();
                 return;
             }
-            if (sc.winchMode && actionName == "UNWIND")
+            if (_sc.winchMode && actionName == "UNWIND")
             {
                 Unwind();
                 return;
@@ -52,16 +52,16 @@ namespace Lench.AdvancedControls.Blocks
         public void SetInput(float rate = 1)
         {
             if (Mathf.Abs(rate) < 0.02) return;
-            if (sc.winchMode)
+            if (_sc.winchMode)
             {
                 if (rate > 0)
-                    sc.WinchContract(rate);
+                    _sc.WinchContract(rate);
                 else
-                    sc.WinchUnwind(-rate);
+                    _sc.WinchUnwind(-rate);
             }
             else
             {
-                sc.Contract(rate, sc.startPoint.position, sc.endPoint.position);
+                _sc.Contract(rate, _sc.startPoint.position, _sc.endPoint.position);
             }
         }
 
@@ -70,7 +70,7 @@ namespace Lench.AdvancedControls.Blocks
         /// </summary>
         public void Contract(float rate = 1)
         {
-            sc.Contract(rate, sc.startPoint.position, sc.endPoint.position);
+            _sc.Contract(rate, _sc.startPoint.position, _sc.endPoint.position);
         }
 
         /// <summary>
@@ -78,7 +78,7 @@ namespace Lench.AdvancedControls.Blocks
         /// </summary>
         public void Wind(float rate = 1)
         {
-            sc.WinchContract(rate);
+            _sc.WinchContract(rate);
         }
 
         /// <summary>
@@ -86,7 +86,7 @@ namespace Lench.AdvancedControls.Blocks
         /// </summary>
         public void Unwind(float rate = 1)
         {
-            sc.WinchUnwind(rate);
+            _sc.WinchUnwind(rate);
         }
     }
 }

@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace Lench.AdvancedControls.UI
 {
-    internal class ChainAxisEditor : AxisEditor
+    internal class ChainAxisEditor : IAxisEditor
     {
         internal ChainAxisEditor(InputAxis axis)
         {

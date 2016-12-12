@@ -27,6 +27,7 @@
 using System;
 using System.Text;
 using System.Runtime.InteropServices;
+// ReSharper disable All
 
 namespace Lench.AdvancedControls.Input
 {

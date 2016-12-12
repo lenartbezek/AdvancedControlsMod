@@ -5,7 +5,7 @@
     /// </summary>
     public class Decoupler : BlockHandler
     {
-        private ExplosiveBolt eb;
+        private readonly ExplosiveBolt _eb;
 
         /// <summary>
         /// Creates a Block handler.
@@ -13,7 +13,7 @@
         /// <param name="bb">BlockBehaviour object.</param>
         public Decoupler(BlockBehaviour bb) : base(bb)
         {
-            eb = bb.GetComponent<ExplosiveBolt>();
+            _eb = bb.GetComponent<ExplosiveBolt>();
         }
 
         /// <summary>
@@ -39,7 +39,7 @@
         {
             try
             {
-                eb.Explode();
+                _eb.Explode();
             }
             catch
             {
@@ -52,8 +52,8 @@
         /// </summary>
         public float ExplodePower
         {
-            get { return eb.explodePower; }
-            set { eb.explodePower = value; }
+            get { return _eb.explodePower; }
+            set { _eb.explodePower = value; }
         }
     }
 }

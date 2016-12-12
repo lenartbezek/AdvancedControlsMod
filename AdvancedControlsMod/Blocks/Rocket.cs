@@ -7,7 +7,7 @@ namespace Lench.AdvancedControls.Blocks
     /// </summary>
     public class Rocket : BlockHandler
     {
-        private TimedRocket tr;
+        private readonly TimedRocket _tr;
 
         /// <summary>
         /// Creates a Block handler.
@@ -15,7 +15,7 @@ namespace Lench.AdvancedControls.Blocks
         /// <param name="bb">BlockBehaviour object.</param>
         public Rocket(BlockBehaviour bb) : base(bb)
         {
-            tr = bb.GetComponent<TimedRocket>();
+            _tr = bb.GetComponent<TimedRocket>();
         }
 
         /// <summary>
@@ -52,10 +52,10 @@ namespace Lench.AdvancedControls.Blocks
         /// </summary>
         public void Launch()
         {
-            if (!tr.hasFired)
+            if (!_tr.hasFired)
             {
-                tr.hasFired = true;
-                tr.StartCoroutine(tr.Fire(0));
+                _tr.hasFired = true;
+                _tr.StartCoroutine(_tr.Fire(0));
             }
         }
 
@@ -64,7 +64,7 @@ namespace Lench.AdvancedControls.Blocks
         /// </summary>
         public bool HasFired
         {
-            get { return tr.hasFired; }
+            get { return _tr.hasFired; }
         }
 
         /// <summary>
@@ -72,7 +72,7 @@ namespace Lench.AdvancedControls.Blocks
         /// </summary>
         public bool HasExploded
         {
-            get { return tr.hasExploded; }
+            get { return _tr.hasExploded; }
         }
     }
 }

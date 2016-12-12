@@ -3,6 +3,7 @@ using spaar.ModLoader;
 using System;
 using System.Linq;
 using System.Collections.Generic;
+// ReSharper disable PossibleNullReferenceException
 
 namespace Lench.AdvancedControls.Axes
 {
@@ -18,7 +19,7 @@ namespace Lench.AdvancedControls.Axes
 axis_value = Mathf.Sin(time)
 axis_value";
 
-        private bool initialised = false;
+        private bool _initialised;
 
         /// <summary>
         /// Initialisation code is run once when the simulation is started.
@@ -43,7 +44,7 @@ axis_value";
         /// <summary>
         /// Axis is saveable if Python engine is ready.
         /// </summary>
-        public override bool Saveable { get { return PythonEnvironment.Loaded; } }
+        public override bool Saveable => PythonEnvironment.Loaded;
 
         /// <summary>
         /// List of axes retrieved in initialisation code.
@@ -69,9 +70,9 @@ axis_value";
         /// </summary>
         public string Error { get; private set; }
 
-        private PythonEnvironment python;
-        private Func<object> update;
-        private Func<object> init;
+        private PythonEnvironment _python;
+        private Func<object> _update;
+        private Func<object> _init;
 
         /// <summary>
         /// Reads input value and updates output value depending on pressed keys and settings.
@@ -83,9 +84,9 @@ axis_value";
             UpdateCode = DefaultUpdateCode;
             GlobalScope = false;
             Running = false;
-            editor = new UI.CustomAxisEditor(this);
+            Editor = new UI.CustomAxisEditor(this);
 
-            Game.OnSimulationToggle += (bool value) => { if (!value) { Stop(); } };
+            Game.OnSimulationToggle += (value) => { if (!value) { Stop(); } };
         }
 
         /// <summary>
@@ -109,16 +110,16 @@ axis_value";
         protected override void Update()
         {
             if (!PythonEnvironment.Loaded) return;
-            if (!Running && initialised)
+            if (!Running && _initialised)
             {
                 Stop();
             }
             if (!Running) return;
-            if (initialised)
+            if (_initialised)
             {
                 try
                 {   // Attempts to run the update code.
-                    var result = update.Invoke();
+                    var result = _update.Invoke();
                     if (result == null)
                     {
                         Error = "Update code does not return a value.";
@@ -156,31 +157,34 @@ axis_value";
         {
             if (!PythonEnvironment.Loaded) return;
 
-            init = null;
-            update = null;
+            _init = null;
+            _update = null;
 
-            initialised = false;
+            _initialised = false;
             if (!Running && !Game.IsSimulating) return;
+
             Error = null;
             Running = false;
+
             if (GlobalScope)
             {
                 if (PythonEnvironment.ScripterEnvironment == null)
                     InitGlobalScope();
-                python = PythonEnvironment.ScripterEnvironment;
+                _python = PythonEnvironment.ScripterEnvironment;
             }
             else
             {
-                python = new PythonEnvironment();
+                _python = new PythonEnvironment();
             }
+
             try
             {   
                 // Attempts to compile initialisation and update code.
-                init = python.Compile(InitialisationCode);
-                update = python.Compile(UpdateCode);
+                _init = _python.Compile(InitialisationCode);
+                _update = _python.Compile(UpdateCode);
 
                 // Executes initialisation code and checks it's scope for linked axes.
-                init.Invoke();
+                _init.Invoke();
                 LinkAxes();
             }
             catch (Exception e)
@@ -189,14 +193,15 @@ axis_value";
                 Error = PythonEnvironment.FormatException(e);
                 return;
             }
+
             Running = true;
-            initialised = true;
+            _initialised = true;
         }
 
         private void Stop()
         {
             Running = false;
-            initialised = false;
+            _initialised = false;
         }
 
         /// <summary>
@@ -205,11 +210,11 @@ axis_value";
         private void LinkAxes()
         {
             LinkedAxes.Clear();
-            foreach (var name in python.GetVariableNames())
+            foreach (var name in _python.GetVariableNames())
             {
                 try
                 {
-                    var axis = python.GetVariable<InputAxis>(name);
+                    var axis = _python.GetVariable<InputAxis>(name);
                     if (axis != null)
                     {
                         LinkedAxes.Add(axis.Name);
@@ -217,17 +222,19 @@ axis_value";
                 }
                 catch
                 {
-                    continue;
+                    // ignored
                 }
             }
         }
 
         internal override InputAxis Clone()
         {
-            var clone = new CustomAxis(Name);
-            clone.InitialisationCode = InitialisationCode;
-            clone.UpdateCode = UpdateCode;
-            clone.GlobalScope = GlobalScope;
+            var clone = new CustomAxis(Name)
+            {
+                InitialisationCode = InitialisationCode,
+                UpdateCode = UpdateCode,
+                GlobalScope = GlobalScope
+            };
             return clone;
         }
 
@@ -249,7 +256,7 @@ axis_value";
             if (machineInfo.MachineData.HasKey("axis-" + Name + "-global"))
                 GlobalScope = machineInfo.MachineData.ReadBool("axis-" + Name + "-global");
             if (machineInfo.MachineData.HasKey("axis-" + Name + "-links"))
-                LinkedAxes.Union<string>(machineInfo.MachineData.ReadStringArray("axis-" + Name + "-links"));
+                LinkedAxes = (HashSet<string>)LinkedAxes.Union(machineInfo.MachineData.ReadStringArray("axis-" + Name + "-links"));
         }
 
         internal override void Save()
@@ -258,7 +265,7 @@ axis_value";
             spaar.ModLoader.Configuration.SetString("axis-" + Name + "-init", InitialisationCode);
             spaar.ModLoader.Configuration.SetString("axis-" + Name + "-update", UpdateCode);
             spaar.ModLoader.Configuration.SetBool("axis-" + Name + "-global", GlobalScope);
-            var list = LinkedAxes.ToArray<string>();
+            var list = LinkedAxes.ToArray();
             for (int i = 0; i < list.Length; i++)
                 spaar.ModLoader.Configuration.SetString("axis-" + Name + "-link"+i, list[i]);
         }
@@ -270,7 +277,7 @@ axis_value";
             machineInfo.MachineData.Write("axis-" + Name + "-update", UpdateCode);
             machineInfo.MachineData.Write("axis-" + Name + "-global", GlobalScope);
             if (LinkedAxes.Count > 0)
-                machineInfo.MachineData.Write("axis-" + Name + "-links", LinkedAxes.ToArray<string>());
+                machineInfo.MachineData.Write("axis-" + Name + "-links", LinkedAxes.ToArray());
         }
 
         internal override void Delete()
@@ -293,10 +300,10 @@ axis_value";
         {
             var cast = other as CustomAxis;
             if (cast == null) return false;
-            return this.Name == cast.Name &&
-                   this.InitialisationCode == cast.InitialisationCode &&
-                   this.UpdateCode == cast.UpdateCode &&
-                   this.GlobalScope == cast.GlobalScope;
+            return Name == cast.Name &&
+                   InitialisationCode == cast.InitialisationCode &&
+                   UpdateCode == cast.UpdateCode &&
+                   GlobalScope == cast.GlobalScope;
         }
     }
 }

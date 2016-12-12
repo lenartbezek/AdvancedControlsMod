@@ -7,14 +7,14 @@ namespace Lench.AdvancedControls.Blocks
     /// </summary>
     public class WaterCannon : BlockHandler
     {
-        private static FieldInfo holdFieldInfo = typeof(WaterCannonController).GetField("holdToShootToggle", BindingFlags.NonPublic | BindingFlags.Instance);
+        private static readonly FieldInfo HoldFieldInfo = typeof(WaterCannonController).GetField("holdToShootToggle", BindingFlags.NonPublic | BindingFlags.Instance);
 
-        private WaterCannonController wcc;
+        private readonly WaterCannonController _wcc;
 
-        private bool setShootFlag = false;
-        private bool lastShootFlag = false;
-        private MToggle holdToShootToggle;
-        private bool realHoldToShootToggle;
+        private bool _setShootFlag;
+        private bool _lastShootFlag;
+        private readonly MToggle _holdToShootToggle;
+        private bool _realHoldToShootToggle;
 
         /// <summary>
         /// Creates a Block handler.
@@ -22,9 +22,9 @@ namespace Lench.AdvancedControls.Blocks
         /// <param name="bb">BlockBehaviour object.</param>
         public WaterCannon(BlockBehaviour bb) : base(bb)
         {
-            wcc = bb.GetComponent<WaterCannonController>();
+            _wcc = bb.GetComponent<WaterCannonController>();
 
-            holdToShootToggle = holdFieldInfo.GetValue(wcc) as MToggle;
+            _holdToShootToggle = HoldFieldInfo.GetValue(_wcc) as MToggle;
         }
 
         /// <summary>
@@ -48,7 +48,7 @@ namespace Lench.AdvancedControls.Blocks
         /// </summary>
         public void Shoot()
         {
-            setShootFlag = true;
+            _setShootFlag = true;
         }
 
         /// <summary>
@@ -56,19 +56,19 @@ namespace Lench.AdvancedControls.Blocks
         /// </summary>
         protected override void Update()
         {
-            if (setShootFlag)
+            if (_setShootFlag)
             {
-                realHoldToShootToggle = realHoldToShootToggle ? realHoldToShootToggle : wcc.isActive;
-                holdToShootToggle.IsActive = false;
-                wcc.isActive = realHoldToShootToggle ? true : !wcc.isActive;
-                lastShootFlag = realHoldToShootToggle;
-                setShootFlag = false;
+                _realHoldToShootToggle = _realHoldToShootToggle ? _realHoldToShootToggle : _wcc.isActive;
+                _holdToShootToggle.IsActive = false;
+                _wcc.isActive = _realHoldToShootToggle ? true : !_wcc.isActive;
+                _lastShootFlag = _realHoldToShootToggle;
+                _setShootFlag = false;
             }
-            else if (lastShootFlag)
+            else if (_lastShootFlag)
             {
-                holdToShootToggle.IsActive = realHoldToShootToggle;
-                wcc.isActive = false;
-                lastShootFlag = false;
+                _holdToShootToggle.IsActive = _realHoldToShootToggle;
+                _wcc.isActive = false;
+                _lastShootFlag = false;
             }
         }
     }

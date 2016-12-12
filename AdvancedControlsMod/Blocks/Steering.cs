@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Reflection;
 using UnityEngine;
+// ReSharper disable RedundantArgumentDefaultValue
+// ReSharper disable CompareOfFloatsByEqualityOperator
 
 namespace Lench.AdvancedControls.Blocks
 {
@@ -9,20 +11,20 @@ namespace Lench.AdvancedControls.Blocks
     /// </summary>
     public class Steering : BlockHandler
     {
-        private static FieldInfo angleyToBeField = typeof(SteeringWheel).GetField("angleyToBe", BindingFlags.NonPublic | BindingFlags.Instance);
-        private static FieldInfo speedSliderField = typeof(SteeringWheel).GetField("speedSlider", BindingFlags.NonPublic | BindingFlags.Instance);
-        private static FieldInfo limitsSliderField = typeof(SteeringWheel).GetField("limitsSlider", BindingFlags.NonPublic | BindingFlags.Instance);
+        private static readonly FieldInfo AngleyToBeField = typeof(SteeringWheel).GetField("angleyToBe", BindingFlags.NonPublic | BindingFlags.Instance);
+        private static readonly FieldInfo SpeedSliderField = typeof(SteeringWheel).GetField("speedSlider", BindingFlags.NonPublic | BindingFlags.Instance);
+        private static readonly FieldInfo LimitsSliderField = typeof(SteeringWheel).GetField("limitsSlider", BindingFlags.NonPublic | BindingFlags.Instance);
 
-        private SteeringWheel sw;
+        private readonly SteeringWheel _sw;
 
-        private MSlider speedSlider;
-        private MLimits limitsSlider;
+        private readonly MSlider _speedSlider;
+        private readonly MLimits _limitsSlider;
 
-        private float desired_input;
-        private bool setInputFlag = false;
+        private float _desiredInput;
+        private bool _setInputFlag;
 
-        private float desired_angle;
-        private bool setAngleFlag = false;
+        private float _desiredAngle;
+        private bool _setAngleFlag;
 
         /// <summary>
         /// Creates a Block handler.
@@ -30,9 +32,9 @@ namespace Lench.AdvancedControls.Blocks
         /// <param name="bb">BlockBehaviour object.</param>
         public Steering(BlockBehaviour bb) : base(bb)
         {
-            sw = bb.GetComponent<SteeringWheel>();
-            speedSlider = speedSliderField.GetValue(sw) as MSlider;
-            limitsSlider = limitsSliderField.GetValue(sw) as MLimits;
+            _sw = bb.GetComponent<SteeringWheel>();
+            _speedSlider = SpeedSliderField.GetValue(_sw) as MSlider;
+            _limitsSlider = LimitsSliderField.GetValue(_sw) as MLimits;
         }
 
         /// <summary>
@@ -64,9 +66,9 @@ namespace Lench.AdvancedControls.Blocks
         {
             if (float.IsNaN(value))
                 throw new ArgumentException("Value is not a number (NaN).");
-            desired_input = value * (sw.Flipped ? -1 : 1);
-            setInputFlag = true;
-            setAngleFlag = false;
+            _desiredInput = value * (_sw.Flipped ? -1 : 1);
+            _setInputFlag = true;
+            _setAngleFlag = false;
         }
 
         /// <summary>
@@ -76,22 +78,22 @@ namespace Lench.AdvancedControls.Blocks
         public void SetAngle(float angle)
         {
             angle /= convertToRadians;
-            angle *= (sw.Flipped ? -1 : 1);
+            angle *= (_sw.Flipped ? -1 : 1);
             if (float.IsNaN(angle))
                 throw new ArgumentException("Value is not a number (NaN).");
-            if (sw.allowLimits && limitsSlider.IsActive)
+            if (_sw.allowLimits && _limitsSlider.IsActive)
             {
-                if (sw.Flipped)
-                    desired_angle = Mathf.Clamp(angle, -limitsSlider.Min, limitsSlider.Max);
+                if (_sw.Flipped)
+                    _desiredAngle = Mathf.Clamp(angle, -_limitsSlider.Min, _limitsSlider.Max);
                 else
-                    desired_angle = Mathf.Clamp(angle, -limitsSlider.Max, limitsSlider.Min);
+                    _desiredAngle = Mathf.Clamp(angle, -_limitsSlider.Max, _limitsSlider.Min);
             }
             else
             {
-                desired_angle = angle;
+                _desiredAngle = angle;
             }
 
-            setAngleFlag = true;
+            _setAngleFlag = true;
         }
 
         /// <summary>
@@ -100,7 +102,7 @@ namespace Lench.AdvancedControls.Blocks
         /// <returns>Float value in degrees or radians as specified.</returns>
         public float GetAngle()
         {
-            return (float)angleyToBeField.GetValue(sw) * convertToRadians;
+            return (float)AngleyToBeField.GetValue(_sw) * convertToRadians;
         }
 
         /// <summary>
@@ -108,48 +110,47 @@ namespace Lench.AdvancedControls.Blocks
         /// </summary>
         protected override void LateUpdate()
         {
-            if (setAngleFlag)
+            if (_setAngleFlag)
             {
-                float current_angle = (float)angleyToBeField.GetValue(sw);
-                if (Mathf.Abs(Mathf.DeltaAngle(current_angle, desired_angle)) < 0.1)
+                float currentAngle = (float)AngleyToBeField.GetValue(_sw);
+                if (Mathf.Abs(Mathf.DeltaAngle(currentAngle, _desiredAngle)) < 0.1)
                 {
-                    setAngleFlag = false;
+                    _setAngleFlag = false;
                 }
                 else
                 {
-                    desired_input = Mathf.DeltaAngle(current_angle, desired_angle) /
-                        (100f * sw.targetAngleSpeed * speedSlider.Value * Time.deltaTime);
-                    desired_input = Mathf.Clamp(desired_input, -1, 1);
-                    setInputFlag = true;
+                    _desiredInput = Mathf.DeltaAngle(currentAngle, _desiredAngle) /
+                        (100f * _sw.targetAngleSpeed * _speedSlider.Value * Time.deltaTime);
+                    _desiredInput = Mathf.Clamp(_desiredInput, -1, 1);
+                    _setInputFlag = true;
                 }
             }
 
-            if (setInputFlag)
+            if (_setInputFlag)
             {
-                if (speedSlider.Value != 0)
+                if (_speedSlider.Value != 0)
                 {
-                    sw.GetComponent<Rigidbody>()?.WakeUp();
+                    _sw.GetComponent<Rigidbody>()?.WakeUp();
 
-                    float speed = desired_input * 100f * sw.targetAngleSpeed * speedSlider.Value;
+                    float speed = _desiredInput * 100f * _sw.targetAngleSpeed * _speedSlider.Value;
 
-                    float current_angle = (float)angleyToBeField.GetValue(sw);
-                    float new_angle = current_angle + speed * Time.deltaTime;
+                    float currentAngle = (float)AngleyToBeField.GetValue(_sw);
+                    float newAngle = currentAngle + speed * Time.deltaTime;
 
-                    if (sw.allowLimits && limitsSlider.IsActive)
+                    if (_sw.allowLimits && _limitsSlider.IsActive)
                     {
-                        if (sw.Flipped)
-                            new_angle = Mathf.Clamp(new_angle, -limitsSlider.Min, limitsSlider.Max);
-                        else
-                            new_angle = Mathf.Clamp(new_angle, -limitsSlider.Max, limitsSlider.Min);
+                        newAngle = _sw.Flipped 
+                            ? Mathf.Clamp(newAngle, -_limitsSlider.Min, _limitsSlider.Max) 
+                            : Mathf.Clamp(newAngle, -_limitsSlider.Max, _limitsSlider.Min);
                     }
-                    else if (new_angle > 180)
-                        new_angle -= 360;
-                    else if (new_angle < -180)
-                        new_angle += 360;
+                    else if (newAngle > 180)
+                        newAngle -= 360;
+                    else if (newAngle < -180)
+                        newAngle += 360;
 
-                    angleyToBeField.SetValue(sw, new_angle);
+                    AngleyToBeField.SetValue(_sw, newAngle);
                 }
-                setInputFlag = false;
+                _setInputFlag = false;
             }
         }
     }

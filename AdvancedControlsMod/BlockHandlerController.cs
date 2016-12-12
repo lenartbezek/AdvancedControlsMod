@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Lench.AdvancedControls.Blocks;
+// ReSharper disable UnusedMember.Local
+// ReSharper disable PossibleNullReferenceException
 
 namespace Lench.AdvancedControls
 {
@@ -12,7 +15,7 @@ namespace Lench.AdvancedControls
         /// <summary>
         /// 
         /// </summary>
-        public override string Name { get { return "Block Handlers Controller"; } }
+        public override string Name => "Block Handlers Controller";
 
         /// <summary>
         /// Event invoked when simulation block handlers are initialised.
@@ -26,16 +29,16 @@ namespace Lench.AdvancedControls
         public static bool Initialised { get; private set; }
 
         // Map: Building GUID -> Sequential ID
-        internal static Dictionary<Guid, string> buildingBlocks;
+        internal static Dictionary<Guid, string> BuildingBlocks;
 
         // Map: BlockBehaviour -> Block handler
-        internal static Dictionary<BlockBehaviour, BlockHandler> bbToBlockHandler;
+        internal static Dictionary<BlockBehaviour, BlockHandler> BbToBlockHandler;
 
         // Map: GUID -> Block handler
-        internal static Dictionary<Guid, BlockHandler> guidToBlockHandler;
+        internal static Dictionary<Guid, BlockHandler> GUIDToBlockHandler;
 
         // Map: ID -> Block handler
-        internal static Dictionary<string, BlockHandler> idToBlockHandler;
+        internal static Dictionary<string, BlockHandler> IDToBlockHandler;
 
         // Map: BlockType -> BlockHandler type
         internal static Dictionary<int, Type> Types = new Dictionary<int, Type>
@@ -116,7 +119,7 @@ namespace Lench.AdvancedControls
                 block = (BlockHandler)Activator.CreateInstance(Types[bb.GetBlockID()], new object[] { bb });
             else
                 block = new BlockHandler(bb);
-            bbToBlockHandler[bb] = block;
+            BbToBlockHandler[bb] = block;
             return block;
         }
 
@@ -128,8 +131,8 @@ namespace Lench.AdvancedControls
         public static BlockHandler GetBlock(Guid blockGuid)
         {
             if (!Initialised) throw new InvalidOperationException("Block handlers are not initialised.");
-            if (guidToBlockHandler.ContainsKey(blockGuid))
-                return guidToBlockHandler[blockGuid];
+            if (GUIDToBlockHandler.ContainsKey(blockGuid))
+                return GUIDToBlockHandler[blockGuid];
             throw new BlockNotFoundException("Block " + blockGuid + " not found.");
         }
 
@@ -141,8 +144,8 @@ namespace Lench.AdvancedControls
         public static BlockHandler GetBlock(BlockBehaviour bb)
         {
             if (!Initialised) throw new InvalidOperationException("Block handlers are not initialised.");
-            if (bbToBlockHandler.ContainsKey(bb))
-                return bbToBlockHandler[bb];
+            if (BbToBlockHandler.ContainsKey(bb))
+                return BbToBlockHandler[bb];
             throw new BlockNotFoundException("Given BlockBehaviour has no corresponding Block handler.");
         }
 
@@ -154,8 +157,8 @@ namespace Lench.AdvancedControls
         public static BlockHandler GetBlock(string blockId)
         {
             if (!Initialised) throw new InvalidOperationException("Block handlers are not initialised.");
-            if (idToBlockHandler.ContainsKey(blockId.ToUpper()))
-                return idToBlockHandler[blockId.ToUpper()];
+            if (IDToBlockHandler.ContainsKey(blockId.ToUpper()))
+                return IDToBlockHandler[blockId.ToUpper()];
             throw new BlockNotFoundException("Block " + blockId + " not found.");
         }
 
@@ -166,9 +169,9 @@ namespace Lench.AdvancedControls
         /// <returns></returns>
         public static string GetID(GenericBlock block)
         {
-            if (buildingBlocks == null || !buildingBlocks.ContainsKey(block.Guid))
+            if (BuildingBlocks == null || !BuildingBlocks.ContainsKey(block.Guid))
                 InitializeBuildingBlockIDs();
-            return buildingBlocks[block.Guid];
+            return BuildingBlocks[block.Guid];
         }
 
         /// <summary>
@@ -178,9 +181,9 @@ namespace Lench.AdvancedControls
         /// <returns></returns>
         public static string GetID(Guid guid)
         {
-            if (buildingBlocks == null || !buildingBlocks.ContainsKey(guid))
+            if (BuildingBlocks == null || !BuildingBlocks.ContainsKey(guid))
                 InitializeBuildingBlockIDs();
-            return buildingBlocks[guid];
+            return BuildingBlocks[guid];
         }
 
         /// <summary>
@@ -191,13 +194,13 @@ namespace Lench.AdvancedControls
         public static void InitializeBuildingBlockIDs()
         {
             var typeCount = new Dictionary<string, int>();
-            buildingBlocks = new Dictionary<Guid, string>();
-            for (int i = 0; i < ReferenceMaster.BuildingBlocks.Count; i++)
+            BuildingBlocks = new Dictionary<Guid, string>();
+            foreach (var bb in ReferenceMaster.BuildingBlocks)
             {
-                GenericBlock block = ReferenceMaster.BuildingBlocks[i].GetComponent<GenericBlock>();
-                string name = ReferenceMaster.BuildingBlocks[i].GetComponent<MyBlockInfo>().blockName.ToUpper();
+                var block = bb.GetComponent<GenericBlock>();
+                var name = bb.GetComponent<MyBlockInfo>().blockName.ToUpper();
                 typeCount[name] = typeCount.ContainsKey(name) ? typeCount[name] + 1 : 1;
-                buildingBlocks[block.Guid] = name + " " + typeCount[name];
+                BuildingBlocks[block.Guid] = name + " " + typeCount[name];
             }
         }
 
@@ -209,19 +212,19 @@ namespace Lench.AdvancedControls
         /// </summary>
         public static void InitializeBlockHandlers()
         {
-            idToBlockHandler = new Dictionary<string, BlockHandler>();
-            guidToBlockHandler = new Dictionary<Guid, BlockHandler>();
-            bbToBlockHandler = new Dictionary<BlockBehaviour, BlockHandler>();
+            IDToBlockHandler = new Dictionary<string, BlockHandler>();
+            GUIDToBlockHandler = new Dictionary<Guid, BlockHandler>();
+            BbToBlockHandler = new Dictionary<BlockBehaviour, BlockHandler>();
             var typeCount = new Dictionary<string, int>();
             for (int i = 0; i < ReferenceMaster.BuildingBlocks.Count; i++)
             {
                 var name = ReferenceMaster.BuildingBlocks[i].GetComponent<MyBlockInfo>().blockName.ToUpper();
                 typeCount[name] = typeCount.ContainsKey(name) ? typeCount[name] + 1 : 1;
                 var id = name + " " + typeCount[name];
-                Guid guid = ReferenceMaster.BuildingBlocks[i].Guid;
+                var guid = ReferenceMaster.BuildingBlocks[i].Guid;
                 var b = CreateBlock(ReferenceMaster.SimulationBlocks[i]);
-                idToBlockHandler[id] = b;
-                guidToBlockHandler[guid] = b;
+                IDToBlockHandler[id] = b;
+                GUIDToBlockHandler[guid] = b;
             }
 
             Initialised = true;
@@ -234,12 +237,12 @@ namespace Lench.AdvancedControls
         /// </summary>
         public static void DestroyBlockHandlers()
         {
-            if (bbToBlockHandler != null)
-                foreach (var entry in bbToBlockHandler)
+            if (BbToBlockHandler != null)
+                foreach (var entry in BbToBlockHandler)
                     entry.Value.Dispose();
-            idToBlockHandler = null;
-            guidToBlockHandler = null;
-            bbToBlockHandler = null;
+            IDToBlockHandler = null;
+            GUIDToBlockHandler = null;
+            BbToBlockHandler = null;
             Initialised = false;
         }
 
@@ -249,33 +252,28 @@ namespace Lench.AdvancedControls
         public static List<BlockHandler> GetBlocks()
         {
             if (!Initialised) throw new InvalidOperationException("Block handlers are not initialised.");
-            var blocks = new List<BlockHandler>();
-            foreach (KeyValuePair<string, BlockHandler> entry in idToBlockHandler)
-            {
-                blocks.Add(entry.Value);
-            }
-            return blocks;
+            return IDToBlockHandler.Select(entry => entry.Value).ToList();
         }
 
         /// <summary>
         /// Add custom BlockHandler to be initialized for blocks of the specified BlockType.
         /// Must derive from LenchScripter.Blocks.Block base class.
         /// </summary>
-        /// <param name="BlockType">Block type ID.</param>
-        /// <param name="BlockHandler">Type of your Block handler.</param>
-        public static void AddBlockHandler(int BlockType, Type BlockHandler)
+        /// <param name="blockType">Block type ID.</param>
+        /// <param name="blockHandler">Type of your Block handler.</param>
+        public static void AddBlockHandler(int blockType, Type blockHandler)
         {
-            if (!BlockHandler.IsSubclassOf(typeof(Block)))
+            if (!blockHandler.IsSubclassOf(typeof(Block)))
             {
-                throw new ArgumentException(BlockHandler.ToString() + " is not a subclass of Block.");
+                throw new ArgumentException(blockHandler + " is not a subclass of Block.");
             }
-            if (Types.ContainsKey(BlockType))
+            if (Types.ContainsKey(blockType))
             {
-                Types[BlockType] = BlockHandler;
+                Types[blockType] = blockHandler;
             }
             else
             {
-                Types.Add(BlockType, BlockHandler);
+                Types.Add(blockType, blockHandler);
             }
         }
     }

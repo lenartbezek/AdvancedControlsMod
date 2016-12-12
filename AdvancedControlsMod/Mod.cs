@@ -6,6 +6,9 @@ using Lench.AdvancedControls.Input;
 using Lench.AdvancedControls.Controls;
 using System.Collections.Generic;
 using UnityEngine;
+// ReSharper disable CoVariantArrayConversion
+// ReSharper disable UnusedMember.Local
+// ReSharper disable DelegateSubtraction
 
 namespace Lench.AdvancedControls
 {
@@ -82,7 +85,7 @@ namespace Lench.AdvancedControls
             }
             catch
             {
-                return;
+                // ignored
             }
         }
 
@@ -106,7 +109,7 @@ namespace Lench.AdvancedControls
         /// <summary>
         /// Name of the instance.
         /// </summary>
-        public override string Name { get { return "Advanced Controls"; } }
+        public override string Name => "Advanced Controls";
 
         /// <summary>
         /// Is mod enabled in the settings menu.
@@ -117,15 +120,15 @@ namespace Lench.AdvancedControls
         /// Is automatic game controller database updater enabled.
         /// Changed with `acm dbupdate enable/disable` command.
         /// </summary>
-        public bool DBUpdaterEnabled = false;
+        public bool DbUpdaterEnabled;
 
         /// <summary>
         /// Is automatic mod update checker enabled.
         /// Changed with `acm modupdate enable/disable` command.
         /// </summary>
-        public bool ModUpdaterEnabled = false;
+        public bool ModUpdaterEnabled;
 
-        internal bool LoadedMachine = false;
+        internal bool LoadedMachine;
 
         internal delegate void UpdateEventHandler();
         internal event UpdateEventHandler OnUpdate;
@@ -133,7 +136,7 @@ namespace Lench.AdvancedControls
         internal delegate void InitialiseEventHandler();
         internal event InitialiseEventHandler OnInitialisation;
 
-        private Guid copy_source;
+        private Guid _copySource;
 
         private void Awake()
         {
@@ -153,8 +156,8 @@ namespace Lench.AdvancedControls
             if (ModUpdaterEnabled)
                 CheckForModUpdate();
 
-            if (DBUpdaterEnabled)
-                CheckForDBUpdate();
+            if (DbUpdaterEnabled)
+                CheckForDbUpdate();
 
             enabled = ModEnabled;
 
@@ -186,9 +189,9 @@ namespace Lench.AdvancedControls
                 if (BlockMapper.CurrentInstance.Block != null)
                 {
                     if (InputManager.CopyKeys())
-                        copy_source = BlockMapper.CurrentInstance.Block.Guid;
+                        _copySource = BlockMapper.CurrentInstance.Block.Guid;
                     if (InputManager.PasteKeys())
-                        ControlManager.CopyBlockControls(copy_source, BlockMapper.CurrentInstance.Block.Guid);
+                        ControlManager.CopyBlockControls(_copySource, BlockMapper.CurrentInstance.Block.Guid);
                 }
             }
             else
@@ -235,7 +238,6 @@ namespace Lench.AdvancedControls
                         else
                             result = "No devices connected.";
                         return result;
-                    case "info":
 
                     default:
                         return "Invalid command. Enter 'controller' for all available commands.";
@@ -283,13 +285,13 @@ namespace Lench.AdvancedControls
                             switch (args[1].ToLower())
                             {
                                 case "check":
-                                    CheckForDBUpdate(true);
+                                    CheckForDbUpdate(true);
                                     return "Checking for controller DB updates ...";
                                 case "enable":
-                                    DBUpdaterEnabled = true;
+                                    DbUpdaterEnabled = true;
                                     return "Controller DB update checker enabled.";
                                 case "disable":
-                                    DBUpdaterEnabled = false;
+                                    DbUpdaterEnabled = false;
                                     return "Controller DB update checker disabled.";
                                 default:
                                     return "Invalid argument [check/enable/disable]. Enter 'acm' for all available commands.";
@@ -330,7 +332,7 @@ namespace Lench.AdvancedControls
                 verbose);
         }
 
-        private void CheckForDBUpdate(bool verbose = false)
+        private void CheckForDbUpdate(bool verbose = false)
         {
             StartCoroutine(DeviceManager.AssignMappings(true, verbose));
         }

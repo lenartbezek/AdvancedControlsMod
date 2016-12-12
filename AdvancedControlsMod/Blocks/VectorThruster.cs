@@ -9,21 +9,21 @@ namespace Lench.AdvancedControls.Blocks
     public class VectorThruster : BlockHandler
     {
 
-        private static Type scriptType;
-        private static FieldInfo codeControlledField;
-        private static PropertyInfo isOnField;
-        private static PropertyInfo verticalField;
-        private static PropertyInfo horizontalField;
-        private static PropertyInfo powerField;
+        private static Type _scriptType;
+        private static FieldInfo _codeControlledField;
+        private static PropertyInfo _isOnField;
+        private static PropertyInfo _verticalField;
+        private static PropertyInfo _horizontalField;
+        private static PropertyInfo _powerField;
 
         private static void ResolveFieldInfo(object bs)
         {
-            scriptType = bs.GetType();
-            codeControlledField = scriptType.GetField("codeControlled", BindingFlags.Public | BindingFlags.Instance);
-            isOnField = scriptType.GetProperty("IsOn", BindingFlags.Public | BindingFlags.Instance);
-            verticalField = scriptType.GetProperty("UpDownAmount", BindingFlags.Public | BindingFlags.Instance);
-            horizontalField = scriptType.GetProperty("LeftRightAmount", BindingFlags.Public | BindingFlags.Instance);
-            powerField = scriptType.GetProperty("PowerAmount", BindingFlags.Public | BindingFlags.Instance);
+            _scriptType = bs.GetType();
+            _codeControlledField = _scriptType.GetField("codeControlled", BindingFlags.Public | BindingFlags.Instance);
+            _isOnField = _scriptType.GetProperty("IsOn", BindingFlags.Public | BindingFlags.Instance);
+            _verticalField = _scriptType.GetProperty("UpDownAmount", BindingFlags.Public | BindingFlags.Instance);
+            _horizontalField = _scriptType.GetProperty("LeftRightAmount", BindingFlags.Public | BindingFlags.Instance);
+            _powerField = _scriptType.GetProperty("PowerAmount", BindingFlags.Public | BindingFlags.Instance);
         }
 
         /// <summary>
@@ -32,7 +32,7 @@ namespace Lench.AdvancedControls.Blocks
         /// <param name="bb">BlockBehaviour object.</param>
         public VectorThruster(BlockBehaviour bb) : base(bb)
         {
-            if (scriptType == null) ResolveFieldInfo(bs);
+            if (_scriptType == null) ResolveFieldInfo(bs);
         }
 
         /// <summary>
@@ -42,11 +42,11 @@ namespace Lench.AdvancedControls.Blocks
         {
             get
             {
-                return (bool)isOnField.GetValue(bs, null);
+                return (bool)_isOnField.GetValue(bs, null);
             }
             set
             {
-                isOnField.SetValue(bs, value, null);
+                _isOnField.SetValue(bs, value, null);
             }
         }
 
@@ -58,11 +58,11 @@ namespace Lench.AdvancedControls.Blocks
         {
             get
             {
-                return (bool)codeControlledField.GetValue(bs);
+                return (bool)_codeControlledField.GetValue(bs);
             }
             set
             {
-                codeControlledField.SetValue(bs, value);
+                _codeControlledField.SetValue(bs, value);
             }
         }
 
@@ -73,11 +73,11 @@ namespace Lench.AdvancedControls.Blocks
         {
             get
             {
-                return (float)verticalField.GetValue(bs, null);
+                return (float)_verticalField.GetValue(bs, null);
             }
             set
             {
-                verticalField.SetValue(bs, value, null);
+                _verticalField.SetValue(bs, value, null);
             }
         }
 
@@ -88,11 +88,11 @@ namespace Lench.AdvancedControls.Blocks
         {
             get
             {
-                return (float)horizontalField.GetValue(bs, null);
+                return (float)_horizontalField.GetValue(bs, null);
             }
             set
             {
-                horizontalField.SetValue(bs, value, null);
+                _horizontalField.SetValue(bs, value, null);
             }
         }
 
@@ -103,11 +103,11 @@ namespace Lench.AdvancedControls.Blocks
         {
             get
             {
-                return (float)powerField.GetValue(bs, null);
+                return (float)_powerField.GetValue(bs, null);
             }
             set
             {
-                powerField.SetValue(bs, value, null);
+                _powerField.SetValue(bs, value, null);
             }
         }
     }

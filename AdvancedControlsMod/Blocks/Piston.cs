@@ -1,5 +1,6 @@
 ﻿using System.Reflection;
 using UnityEngine;
+// ReSharper disable CompareOfFloatsByEqualityOperator
 
 namespace Lench.AdvancedControls.Blocks
 {
@@ -8,20 +9,20 @@ namespace Lench.AdvancedControls.Blocks
     /// </summary>
     public class Piston : BlockHandler
     {
-        private static FieldInfo toggleFieldInfo = typeof(SliderCompress).GetField("toggleMode", BindingFlags.NonPublic | BindingFlags.Instance);
-        private static FieldInfo extendFieldInfo = typeof(SliderCompress).GetField("extendKey", BindingFlags.NonPublic | BindingFlags.Instance);
+        private static readonly FieldInfo ToggleFieldInfo = typeof(SliderCompress).GetField("toggleMode", BindingFlags.NonPublic | BindingFlags.Instance);
+        private static readonly FieldInfo ExtendFieldInfo = typeof(SliderCompress).GetField("extendKey", BindingFlags.NonPublic | BindingFlags.Instance);
 
-        private SliderCompress sc;
-        private MToggle toggleMode;
-        private MKey extendKey;
+        private readonly SliderCompress _sc;
+        private readonly MToggle _toggleMode;
+        private readonly MKey _extendKey;
 
-        private bool setExtendFlag = false;
-        private bool lastExtendFlag = false;
-        private bool setPositionFlag = false;
-        private float targetPosition;
+        private bool _setExtendFlag;
+        private bool _lastExtendFlag;
+        private bool _setPositionFlag;
+        private float _targetPosition;
 
-        private float defaultStartLimit;
-        private float defaultNewLimit;
+        private readonly float _defaultStartLimit;
+        private readonly float _defaultNewLimit;
 
         /// <summary>
         /// Creates a Block handler.
@@ -29,13 +30,13 @@ namespace Lench.AdvancedControls.Blocks
         /// <param name="bb">BlockBehaviour object.</param>
         public Piston(BlockBehaviour bb) : base(bb)
         {
-            sc = bb.GetComponent<SliderCompress>();
+            _sc = bb.GetComponent<SliderCompress>();
 
-            toggleMode = toggleFieldInfo.GetValue(sc) as MToggle;
-            extendKey = extendFieldInfo.GetValue(sc) as MKey;
+            _toggleMode = ToggleFieldInfo.GetValue(_sc) as MToggle;
+            _extendKey = ExtendFieldInfo.GetValue(_sc) as MKey;
 
-            defaultStartLimit = sc.startLimit;
-            defaultNewLimit = sc.newLimit;
+            _defaultStartLimit = _sc.startLimit;
+            _defaultNewLimit = _sc.newLimit;
         }
 
         /// <summary>
@@ -59,13 +60,13 @@ namespace Lench.AdvancedControls.Blocks
         /// </summary>
         public void Extend()
         {
-            if (toggleMode.IsActive)
+            if (_toggleMode.IsActive)
             {
-                sc.posToBe = (sc.posToBe != sc.newLimit ? sc.newLimit : sc.startLimit);
+                _sc.posToBe = (_sc.posToBe != _sc.newLimit ? _sc.newLimit : _sc.startLimit);
             }
             else
             {
-                setExtendFlag = true;
+                _setExtendFlag = true;
             }
         }
 
@@ -75,8 +76,8 @@ namespace Lench.AdvancedControls.Blocks
         /// <param name="t"></param>
         public void SetPosition(float t)
         {
-            targetPosition = Mathf.Lerp(defaultStartLimit, defaultNewLimit, t);
-            setPositionFlag = true;
+            _targetPosition = Mathf.Lerp(_defaultStartLimit, _defaultNewLimit, t);
+            _setPositionFlag = true;
         }
 
         /// <summary>
@@ -84,36 +85,36 @@ namespace Lench.AdvancedControls.Blocks
         /// </summary>
         protected override void Update()
         {
-            if (setExtendFlag)
+            if (_setExtendFlag)
             {
-                if (!extendKey.IsDown)
+                if (!_extendKey.IsDown)
                 {
-                    sc.startLimit = defaultNewLimit;
-                    sc.newLimit = defaultStartLimit;
+                    _sc.startLimit = _defaultNewLimit;
+                    _sc.newLimit = _defaultStartLimit;
                 }
-                setExtendFlag = false;
-                lastExtendFlag = true;
-                setPositionFlag = false;
+                _setExtendFlag = false;
+                _lastExtendFlag = true;
+                _setPositionFlag = false;
             }
-            else if (setPositionFlag)
+            else if (_setPositionFlag)
             {
-                if (toggleMode.IsActive)
+                if (_toggleMode.IsActive)
                 {
-                    sc.posToBe = targetPosition;
+                    _sc.posToBe = _targetPosition;
                 }
                 else
                 {
-                    sc.startLimit = targetPosition;
-                    sc.newLimit = targetPosition;
+                    _sc.startLimit = _targetPosition;
+                    _sc.newLimit = _targetPosition;
                 }
-                lastExtendFlag = true;
-                setPositionFlag = false;
+                _lastExtendFlag = true;
+                _setPositionFlag = false;
             }
-            else if (lastExtendFlag)
+            else if (_lastExtendFlag)
             {
-                sc.startLimit = defaultStartLimit;
-                sc.newLimit = defaultNewLimit;
-                lastExtendFlag = false;
+                _sc.startLimit = _defaultStartLimit;
+                _sc.newLimit = _defaultNewLimit;
+                _lastExtendFlag = false;
             }
         }
     }

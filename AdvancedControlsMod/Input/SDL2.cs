@@ -32,6 +32,7 @@ using System.Runtime.InteropServices;
 #endregion
 
 #pragma warning disable CS1570, CS1572, CS1574, CS1584, CS1658
+// ReSharper disable All
 
 // Altered namespace.
 namespace Lench.AdvancedControls.Input

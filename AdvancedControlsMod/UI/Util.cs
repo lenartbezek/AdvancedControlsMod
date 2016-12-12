@@ -1,38 +1,36 @@
 ﻿using UnityEngine;
 using spaar.ModLoader.UI;
 using System.Text.RegularExpressions;
+// ReSharper disable SpecifyACultureInStringConversionExplicitly
+// ReSharper disable CompareOfFloatsByEqualityOperator
 
 namespace Lench.AdvancedControls.UI
 {
     internal static class Util
     {
-        private static Texture2D _rectTexture = new Texture2D(1, 1);
-        private static GUIStyle _rectStyle = new GUIStyle();
-        private static Color _currentColor = new Color();
+        private static readonly Texture2D RectTexture = new Texture2D(1, 1);
+        private static readonly GUIStyle RectStyle = new GUIStyle();
+        private static readonly Color CurrentColor = new Color();
 
-        internal static GUIStyle LabelStyle
+        internal static GUIStyle LabelStyle => new GUIStyle(Elements.Labels.Default)
         {
-            get
+            richText = true,
+            padding =
             {
-                var style = new GUIStyle(Elements.Labels.Default);
-                style.richText = true;
-                style.padding.top = 6;
-                style.padding.left = 12;
-                return style;
+                top = 6,
+                left = 12
             }
-        }
+        };
 
-        internal static GUIStyle ToggleStyle
+        internal static GUIStyle ToggleStyle => new GUIStyle(Elements.Toggle.Default)
         {
-            get
+            margin =
             {
-                var style = new GUIStyle(Elements.Toggle.Default);
-                style.margin.top = 12;
-                style.margin.bottom = 12;
-                style.margin.left = 30;
-                return style;
+                top = 12,
+                bottom = 12,
+                left = 30
             }
-        }
+        };
 
         internal static GUISkin Skin
         {
@@ -47,38 +45,23 @@ namespace Lench.AdvancedControls.UI
             }
         }
 
-        internal static GUIStyle CompactWindowStyle
+        internal static GUIStyle CompactWindowStyle => new GUIStyle
         {
-            get
-            {
-                return new GUIStyle
-                {
-                    normal = Elements.Windows.Default.normal,
-                    border = new RectOffset(4, 4, 4, 4),
-                    padding = Elements.Settings.DefaultPadding,
-                    margin = Elements.Settings.DefaultMargin
-                };
-            }
-        }
+            normal = Elements.Windows.Default.normal,
+            border = new RectOffset(4, 4, 4, 4),
+            padding = Elements.Settings.DefaultPadding,
+            margin = Elements.Settings.DefaultMargin
+        };
 
-        internal static GUIStyle FullWindowStyle
-        {
-            get { return Elements.Windows.Default; }
-        }
+        internal static GUIStyle FullWindowStyle => Elements.Windows.Default;
 
-        internal static GUIStyle InvisibleWindowStyle
+        internal static GUIStyle InvisibleWindowStyle => new GUIStyle
         {
-            get
-            {
-                return new GUIStyle
-                {
-                    normal = new GUIStyleState(),
-                    border = new RectOffset(4, 4, 4, 4),
-                    padding = Elements.Settings.DefaultPadding,
-                    margin = Elements.Settings.DefaultMargin
-                };
-            }
-        }
+            normal = new GUIStyleState(),
+            border = new RectOffset(4, 4, 4, 4),
+            padding = Elements.Settings.DefaultPadding,
+            margin = Elements.Settings.DefaultMargin
+        };
 
         internal static void DrawEnabledBadge(bool enabled)
         {
@@ -88,36 +71,35 @@ namespace Lench.AdvancedControls.UI
             }
             else
             {
-                GUIStyle style = new GUIStyle(Elements.InputFields.Default);
-                style.normal.textColor = new Color(1, 0, 0);
+                GUIStyle style = new GUIStyle(Elements.InputFields.Default) {normal = {textColor = new Color(1, 0, 0)}};
                 GUILayout.Label("✘", style, GUILayout.Width(30));
             }
         }
 
-        internal static float DrawSlider(string label, float value, float min, float max, string old_text, out string new_text)
+        internal static float DrawSlider(string label, float value, float min, float max, string oldText, out string newText)
         {
             GUILayout.BeginHorizontal();
             GUILayout.Label(label, LabelStyle);
-            new_text = Regex.Replace(GUILayout.TextField(old_text,
+            newText = Regex.Replace(GUILayout.TextField(oldText,
                 LabelStyle,
                 GUILayout.Width(60)), @"[^0-9\-.]", "");
             GUILayout.EndHorizontal();
 
             float slider = GUILayout.HorizontalSlider(value, min, max);
-            if (new_text != old_text)
+            if (newText != oldText)
             {
-                if (new_text != "-" &&
-                    !new_text.EndsWith(".") &&
-                    !new_text.EndsWith(".0"))
+                if (newText != "-" &&
+                    !newText.EndsWith(".") &&
+                    !newText.EndsWith(".0"))
                 {
-                    float.TryParse(new_text.TrimEnd('-'), out value);
-                    new_text = value.ToString();
+                    float.TryParse(newText.TrimEnd('-'), out value);
+                    newText = value.ToString();
                 }
             }
             else if (slider != value)
             {
                 value = slider;
-                new_text = value.ToString("0.00");
+                newText = value.ToString("0.00");
             }
                 
             return value;
@@ -156,15 +138,15 @@ namespace Lench.AdvancedControls.UI
 
         internal static void FillRect(Rect position, Color color)
         {
-            if (color != _currentColor)
+            if (color != CurrentColor)
             {
-                _rectTexture.SetPixel(0, 0, color);
-                _rectTexture.Apply();
+                RectTexture.SetPixel(0, 0, color);
+                RectTexture.Apply();
 
-                _rectStyle.normal.background = _rectTexture;
+                RectStyle.normal.background = RectTexture;
             }
 
-            GUI.Box(position, GUIContent.none, _rectStyle);
+            GUI.Box(position, GUIContent.none, RectStyle);
         }
     }
 }

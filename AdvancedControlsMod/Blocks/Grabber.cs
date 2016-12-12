@@ -1,4 +1,5 @@
 ﻿using System.Reflection;
+// ReSharper disable PrivateFieldCanBeConvertedToLocalVariable
 
 namespace Lench.AdvancedControls.Blocks
 {
@@ -7,10 +8,10 @@ namespace Lench.AdvancedControls.Blocks
     /// </summary>
     public class Grabber : BlockHandler
     {
-        private static FieldInfo joinFieldInfo = typeof(GrabberBlock).GetField("joinOnTriggerBlock", BindingFlags.NonPublic | BindingFlags.Instance);
+        private static readonly FieldInfo JoinFieldInfo = typeof(GrabberBlock).GetField("joinOnTriggerBlock", BindingFlags.NonPublic | BindingFlags.Instance);
 
-        private GrabberBlock gb;
-        private JoinOnTriggerBlock join;
+        private readonly GrabberBlock _gb;
+        private readonly JoinOnTriggerBlock _join;
 
         /// <summary>
         /// Creates a Block handler.
@@ -18,8 +19,8 @@ namespace Lench.AdvancedControls.Blocks
         /// <param name="bb">BlockBehaviour object.</param>
         public Grabber(BlockBehaviour bb) : base(bb)
         {
-            gb = bb.GetComponent<GrabberBlock>();
-            join = joinFieldInfo.GetValue(gb) as JoinOnTriggerBlock;
+            _gb = bb.GetComponent<GrabberBlock>();
+            _join = JoinFieldInfo.GetValue(_gb) as JoinOnTriggerBlock;
         }
 
         /// <summary>
@@ -43,7 +44,7 @@ namespace Lench.AdvancedControls.Blocks
         /// </summary>
         public void Detach()
         {
-            join.OnKeyPressed();
+            _join.OnKeyPressed();
         }
     }
 }

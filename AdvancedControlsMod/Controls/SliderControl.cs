@@ -15,7 +15,7 @@ namespace Lench.AdvancedControls.Controls
         /// <param name="guid">GUID of the block.</param>
         public SliderControl(Guid guid) : base(guid){}
 
-        private string slider;
+        private string _slider;
 
         /// <summary>
         /// Slider display name that the block controls. Also sets the control's display name.
@@ -23,12 +23,12 @@ namespace Lench.AdvancedControls.Controls
         public string Slider {
             get
             {
-                return slider;
+                return _slider;
             }
             set
             {
-                slider = value;
-                Name = slider;
+                _slider = value;
+                Name = _slider;
             }
         }
 
@@ -38,10 +38,9 @@ namespace Lench.AdvancedControls.Controls
         /// <param name="value">Value to be applied.</param>
         protected override void Apply(float value)
         {
-            if (value > 0)
-                value = Mathf.Lerp(Center, Max, value);
-            else
-                value = Mathf.Lerp(Center, Min, -value);
+            value = value > 0 
+                ? Mathf.Lerp(Center, Max, value) 
+                : Mathf.Lerp(Center, Min, -value);
             Block?.SetSliderValue(Slider, value);
         }
 
@@ -55,14 +54,16 @@ namespace Lench.AdvancedControls.Controls
 
         internal override Control Clone()
         {
-            var clone = new SliderControl(BlockGUID);
-            clone.Name = Name;
-            clone.Enabled = Enabled;
-            clone.Axis = Axis;
-            clone.Block = Block;
-            clone.Min = Min;
-            clone.Center = Center;
-            clone.Max = Max;
+            var clone = new SliderControl(BlockGUID)
+            {
+                Name = Name,
+                Enabled = Enabled,
+                Axis = Axis,
+                Block = Block,
+                Min = Min,
+                Center = Center,
+                Max = Max
+            };
             return clone;
         }
     }

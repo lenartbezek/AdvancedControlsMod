@@ -5,7 +5,7 @@ using spaar.ModLoader.UI;
 
 namespace Lench.AdvancedControls.UI
 {
-    internal class MouseAxisEditor : AxisEditor
+    internal class MouseAxisEditor : IAxisEditor
     {
         private MouseAxis Axis;
 

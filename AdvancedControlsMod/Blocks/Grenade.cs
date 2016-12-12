@@ -5,7 +5,7 @@
     /// </summary>
     public class Grenade : BlockHandler
     {
-        private ControllableBomb cb;
+        private readonly ControllableBomb _cb;
 
         /// <summary>
         /// Creates a Block handler.
@@ -13,7 +13,7 @@
         /// <param name="bb">BlockBehaviour object.</param>
         public Grenade(BlockBehaviour bb) : base(bb)
         {
-            cb = bb.GetComponent<ControllableBomb>();
+            _cb = bb.GetComponent<ControllableBomb>();
         }
 
         /// <summary>
@@ -37,7 +37,7 @@
         /// </summary>
         public void Detonate()
         {
-            cb.StartCoroutine_Auto(cb.Explode());
+            _cb.StartCoroutine_Auto(_cb.Explode());
         }
     }
 }

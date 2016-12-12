@@ -12,7 +12,7 @@ namespace Lench.AdvancedControls.Axes
         Custom = 4,
         Chain = 5,
         Mouse = 6,
-        Key = 7,
+        Key = 7
     }
 
     public enum AxisStatus
@@ -69,14 +69,15 @@ namespace Lench.AdvancedControls.Axes
         /// </summary>
         public AxisType Type { get; protected set; }
 
-        internal UI.AxisEditor editor;
+        internal UI.IAxisEditor Editor;
 
         /// <summary>
         /// Initializes a new axis with given name.
         /// </summary>
         /// <param name="name">Name of the axis.</param>
-        public InputAxis(string name)
+        protected InputAxis(string name)
         {
+            // ReSharper disable once VirtualMemberCallInConstructor
             Name = name;
             ACM.Instance.OnUpdate += Update;
             ACM.Instance.OnInitialisation += Initialise;
@@ -102,9 +103,9 @@ namespace Lench.AdvancedControls.Axes
         /// </summary>
         protected abstract void Update();
 
-        internal virtual UI.AxisEditor GetEditor()
+        internal virtual UI.IAxisEditor GetEditor()
         {
-            return editor;
+            return Editor;
         }
 
         internal abstract InputAxis Clone();

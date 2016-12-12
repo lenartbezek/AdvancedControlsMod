@@ -8,26 +8,25 @@ namespace Lench.AdvancedControls
     /// </summary>
     public class TrackedCollider
     {
-        private Collider c;
-        private BlockHandler block;
-        private Vector3 offset;
-        private Vector3 lastPosition;
+        private readonly Collider _c;
+        private readonly Vector3 _offset;
+        private Vector3 _lastPosition;
 
         internal TrackedCollider(Collider hitCollider, Vector3 hitPoint)
         {
-            c = hitCollider;
-            offset = c.transform.InverseTransformPoint(hitPoint);
-            lastPosition = Position;
-            var bb = c.transform.parent.gameObject.GetComponent<BlockBehaviour>();
+            _c = hitCollider;
+            _offset = _c.transform.InverseTransformPoint(hitPoint);
+            _lastPosition = Position;
+            var bb = _c.transform.parent.gameObject.GetComponent<BlockBehaviour>();
             if (bb != null)
-                block = BlockHandlerController.GetBlock(bb);
+                Block = BlockHandlerController.GetBlock(bb);
         }
 
         /// <summary>
         /// Implicit conversion to Vector3.
         /// </summary>
         /// <param name="tc"></param>
-        static public implicit operator Vector3(TrackedCollider tc)
+        public static implicit operator Vector3(TrackedCollider tc)
         {
             return tc.Position;
         }
@@ -43,37 +42,25 @@ namespace Lench.AdvancedControls
         /// <summary>
         /// Returns true if the collider still exists.
         /// </summary>
-        public bool Exists
-        {
-            get { return c != null; }
-        }
+        public bool Exists => _c != null;
 
         /// <summary>
         /// Returns true if the collider represents a building block.
         /// </summary>
-        public bool IsBlock
-        {
-            get { return block != null; }
-        }
+        public bool IsBlock => Block != null;
 
         /// <summary>
         /// Returns block represented by the collider.
         /// </summary>
         /// <returns></returns>
-        public BlockHandler Block
-        {
-            get { return block; }
-        }
+        public BlockHandler Block { get; }
 
         /// <summary>
         /// Returns the name of the object represented by the collider.
         /// Intended for identifying game objects.
         /// </summary>
         /// <returns></returns>
-        public string Name
-        {
-            get { return c.transform.parent.name; }
-        }
+        public string Name => _c.transform.parent.name;
 
         /// <summary>
         /// Position of the tracked collider with it's offset.
@@ -86,9 +73,9 @@ namespace Lench.AdvancedControls
             {
                 if (Exists)
                 {
-                    lastPosition = c.transform.TransformPoint(offset);
+                    _lastPosition = _c.transform.TransformPoint(_offset);
                 }
-                return lastPosition;
+                return _lastPosition;
             }
         }
     }

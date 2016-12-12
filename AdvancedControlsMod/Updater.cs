@@ -4,6 +4,7 @@ using SimpleJSON;
 using UnityEngine;
 using spaar.ModLoader.UI;
 using System.Collections.Generic;
+// ReSharper disable UnusedMember.Local
 
 namespace Lench.AdvancedControls
 {
@@ -31,7 +32,7 @@ namespace Lench.AdvancedControls
         /// <summary>
         /// Is update available. Checked on start.
         /// </summary>
-        public bool UpdateAvailable { get; private set; } = false;
+        public bool UpdateAvailable { get; private set; }
 
         /// <summary>
         /// Current installed version.
@@ -56,7 +57,7 @@ namespace Lench.AdvancedControls
         /// <summary>
         /// Window visibility.
         /// </summary>
-        public bool Visible { get; set; } = false;
+        public bool Visible { get; set; }
 
         /// <summary>
         /// GitHub API URL for checking the latest release.
@@ -73,7 +74,7 @@ namespace Lench.AdvancedControls
         /// </summary>
         public List<Link> Links { get; set; }
 
-        private int windowID = spaar.ModLoader.Util.GetWindowID();
+        private readonly int _windowID = spaar.ModLoader.Util.GetWindowID();
 
         /// <summary>
         /// Window Rectangle field for size and position.
@@ -83,14 +84,14 @@ namespace Lench.AdvancedControls
         /// <summary>
         /// Check for update.
         /// </summary>
-        /// <param name="window_name">Title of the updater window.</param>
+        /// <param name="windowName">Title of the updater window.</param>
         /// <param name="api">GitHub API release url.</param>
         /// <param name="current">Current version.</param>
         /// <param name="links">Links to be displayed.</param>
         /// <param name="verbose">Verbose mode.</param>
-        public void Check(string window_name, string api, Version current, List<Link> links, bool verbose = false)
+        public void Check(string windowName, string api, Version current, List<Link> links, bool verbose = false)
         {
-            WindowName = window_name;
+            WindowName = windowName;
             API = api;
             CurrentVersion = current;
             Links = links;
@@ -133,7 +134,7 @@ namespace Lench.AdvancedControls
             {
                 GUI.skin = ModGUI.Skin;
                 GUI.backgroundColor = new Color(0.7f, 0.7f, 0.7f, 0.7f);
-                WindowRect = GUILayout.Window(windowID, WindowRect, DoWindow, WindowName);
+                WindowRect = GUILayout.Window(_windowID, WindowRect, DoWindow, WindowName);
             }
         }
 

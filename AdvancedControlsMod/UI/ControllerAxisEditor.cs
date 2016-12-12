@@ -2,92 +2,93 @@
 using spaar.ModLoader.UI;
 using Lench.AdvancedControls.Axes;
 using Lench.AdvancedControls.Input;
+// ReSharper disable CompareOfFloatsByEqualityOperator
 
 namespace Lench.AdvancedControls.UI
 {
-    internal class ControllerAxisEditor : AxisEditor
+    internal class ControllerAxisEditor : IAxisEditor
     {
 
-        internal static bool downloading_in_progress = false;
-        internal static string download_button_text = "Download";
+        internal static bool DownloadingInProgress = false;
+        internal static string DownloadButtonText = "Download";
 
         public ControllerAxisEditor(InputAxis axis)
         {
-            Axis = axis as ControllerAxis;
+            _axis = axis as ControllerAxis;
 
             FindIndex();
-            DeviceManager.OnDeviceAdded += (SDL.SDL_Event e) => FindIndex();
-            DeviceManager.OnDeviceRemoved += (SDL.SDL_Event e) => FindIndex();
+            DeviceManager.OnDeviceAdded += (e) => FindIndex();
+            DeviceManager.OnDeviceRemoved += (e) => FindIndex();
         }
 
-        private ControllerAxis Axis;
-        private Controller controller;
+        private readonly ControllerAxis _axis;
+        private Controller _controller;
 
-        private Rect graphRect;
-        private Rect last_graphRect;
-        private Texture2D graphTex;
-        private Color[] resetTex;
+        private Rect _graphRect;
+        private Rect _lastGraphRect;
+        private Texture2D _graphTex;
+        private Color[] _resetTex;
 
-        private int controller_index = -1;
+        private int _controllerIndex = -1;
 
-        internal string note;
-        internal string error;
+        internal string Note;
+        internal string Error;
          
-        private Vector2 click_position;
-        private bool dragging;
+        private Vector2 _clickPosition;
+        private bool _dragging;
 
-        private string sens_string;
-        private string curv_string;
-        private string dead_string;
+        private string _sensString;
+        private string _curvString;
+        private string _deadString;
 
         private void FindIndex()
         {
-            if (Controller.ControllerList.Exists((c) => c.GUID == Axis.GUID))
-                controller_index = Controller.ControllerList.FindIndex((c) => c.GUID == Axis.GUID);
+            if (Controller.ControllerList.Exists((c) => c.GUID == _axis.GUID))
+                _controllerIndex = Controller.ControllerList.FindIndex((c) => c.GUID == _axis.GUID);
             else
-                controller_index = -1;
+                _controllerIndex = -1;
         }
 
         private void DrawGraph()
         {
-            if (graphTex == null || graphRect != last_graphRect)
+            if (_graphTex == null || _graphRect != _lastGraphRect)
             {
-                graphTex = new Texture2D((int)graphRect.width, (int)graphRect.height);
-                for (int i = 0; i < graphTex.width; i++)
-                    for (int j = 0; j < graphTex.height; j++)
-                        graphTex.SetPixel(i, j, Color.clear);
-                resetTex = graphTex.GetPixels();
+                _graphTex = new Texture2D((int)_graphRect.width, (int)_graphRect.height);
+                for (int i = 0; i < _graphTex.width; i++)
+                    for (int j = 0; j < _graphTex.height; j++)
+                        _graphTex.SetPixel(i, j, Color.clear);
+                _resetTex = _graphTex.GetPixels();
             }
-            if (Axis.Changed || graphRect != last_graphRect)
+            if (_axis.Changed || _graphRect != _lastGraphRect)
             {
-                graphTex.SetPixels(resetTex);
-                float step = 0.5f / graphTex.width;
-                for (float x_value = -1; x_value < 1; x_value += step)
+                _graphTex.SetPixels(_resetTex);
+                float step = 0.5f / _graphTex.width;
+                for (float xValue = -1; xValue < 1; xValue += step)
                 {
-                    float y_value = Axis.Process(x_value);
-                    if (y_value <= -1f || y_value >= 1f) continue;
-                    float x_pixel = (x_value + 1) * graphTex.width / 2;
-                    float y_pixel = (y_value + 1) * graphTex.height / 2;
-                    graphTex.SetPixel(Mathf.RoundToInt(x_pixel), Mathf.RoundToInt(y_pixel), Color.white);
+                    float yValue = _axis.Process(xValue);
+                    if (yValue <= -1f || yValue >= 1f) continue;
+                    float xPixel = (xValue + 1) * _graphTex.width / 2;
+                    float yPixel = (yValue + 1) * _graphTex.height / 2;
+                    _graphTex.SetPixel(Mathf.RoundToInt(xPixel), Mathf.RoundToInt(yPixel), Color.white);
                 }
-                graphTex.Apply();
+                _graphTex.Apply();
             }
-            last_graphRect = graphRect;
-            GUILayout.Box(graphTex);
+            _lastGraphRect = _graphRect;
+            GUILayout.Box(_graphTex);
         }
 
         public void Open()
         {
-            sens_string = Axis.Sensitivity.ToString("0.00");
-            curv_string = Axis.Curvature.ToString("0.00");
-            dead_string = Axis.Deadzone.ToString("0.00");
+            _sensString = _axis.Sensitivity.ToString("0.00");
+            _curvString = _axis.Curvature.ToString("0.00");
+            _deadString = _axis.Deadzone.ToString("0.00");
         }
 
         public void Close() { }
 
         public void DrawAxis(Rect windowRect)
         {
-            if (!DeviceManager.SDL_Initialized)
+            if (!DeviceManager.SdlInitialized)
             {
 #if windows
                 GUILayout.Label("<b>Additional library needed</b>\n" +
@@ -97,8 +98,8 @@ namespace Lench.AdvancedControls.UI
                                 "You are using Windows version of ACM.\n"+
                                 "If you are using some other operating system,\n"+
                                 "download the correct version of the mod.");
-                if (GUILayout.Button(download_button_text) && !downloading_in_progress && !DeviceManager.SDL_Installed)
-                    DeviceManager.InstallSDL();
+                if (GUILayout.Button(DownloadButtonText) && !DownloadingInProgress && !DeviceManager.SdlInstalled)
+                    DeviceManager.InstallSdl();
 #elif linux
                 GUILayout.Label("<b>Additional library needed</b>\n" +
                                 "Controller axis requires SDL2 library to work.\n" +
@@ -122,57 +123,57 @@ namespace Lench.AdvancedControls.UI
             }
             else if (Controller.NumDevices == 0)
             {
-                note =  "<color=#FFFF00><b>No controllers connected.</b></color>\n"+
+                Note =  "<color=#FFFF00><b>No controllers connected.</b></color>\n"+
                         "Connect a joystick or controller to use this axis.";
             }
-            else if (controller_index < 0)
+            else if (_controllerIndex < 0)
             {
-                note = "<color=#FFFF00><b>Associated controller not connected.</b></color>\n" +
+                Note = "<color=#FFFF00><b>Associated controller not connected.</b></color>\n" +
                         "The device this axis is bound to is not found.\n"+
-                        "\n<b>Device GUID</b>\n" + Axis.GUID;
+                        "\n<b>Device GUID</b>\n" + _axis.GUID;
                 if (GUILayout.Button("Use another controller"))
                 {
-                    controller_index = 0;
-                    Axis.GUID = Controller.ControllerList[controller_index].GUID;
+                    _controllerIndex = 0;
+                    _axis.GUID = Controller.ControllerList[_controllerIndex].GUID;
                 }
             }
             else
             {
-                error = null;
-                note = null;
+                Error = null;
+                Note = null;
 
-                controller = Controller.Get(Axis.GUID);
+                _controller = Controller.Get(_axis.GUID);
 
                 // Graph rect
-                graphRect = new Rect(
+                _graphRect = new Rect(
                     GUI.skin.window.padding.left,
                     GUI.skin.window.padding.top + 36,
                     windowRect.width - GUI.skin.window.padding.left - GUI.skin.window.padding.right,
                     windowRect.width - GUI.skin.window.padding.left - GUI.skin.window.padding.right);
 
                 // Axis value
-                GUI.Label(new Rect(graphRect.x, graphRect.y, graphRect.width, 20),
-                        "  <color=#808080><b>"+ Axis.OutputValue.ToString("0.00")+"</b></color>",
+                GUI.Label(new Rect(_graphRect.x, _graphRect.y, _graphRect.width, 20),
+                        "  <color=#808080><b>"+ _axis.OutputValue.ToString("0.00")+"</b></color>",
                         new GUIStyle(Elements.Labels.Default) { richText = true, alignment = TextAnchor.MiddleLeft });
 
                 // Draw drag controls
-                if (Axis.OffsetX == 0 && Axis.OffsetY == 0)
+                if (_axis.OffsetX == 0 && _axis.OffsetY == 0)
                 {
-                    GUI.Label(new Rect(graphRect.x, graphRect.y + graphRect.height - 20, graphRect.width, 20),
+                    GUI.Label(new Rect(_graphRect.x, _graphRect.y + _graphRect.height - 20, _graphRect.width, 20),
                         "<color=#808080><b>DRAG TO SET OFFSET</b></color>",
                         new GUIStyle(Elements.Labels.Default) { richText = true, alignment = TextAnchor.MiddleCenter });
                 }
                 else
                 {
-                    GUI.Label(new Rect(graphRect.x, graphRect.y + graphRect.height - 20, (graphRect.width - 16) / 2, 20),
-                        "  <color=#808080><b>X: " + Axis.OffsetX.ToString("0.00") + "\tY:" + Axis.OffsetY.ToString("0.00") + "</b></color>",
+                    GUI.Label(new Rect(_graphRect.x, _graphRect.y + _graphRect.height - 20, (_graphRect.width - 16) / 2, 20),
+                        "  <color=#808080><b>X: " + _axis.OffsetX.ToString("0.00") + "\tY:" + _axis.OffsetY.ToString("0.00") + "</b></color>",
                         new GUIStyle(Elements.Labels.Default) { richText = true, alignment = TextAnchor.MiddleLeft });
-                    if (GUI.Button(new Rect(graphRect.x + (graphRect.width - 16) / 2, graphRect.y + graphRect.height - 20, (graphRect.width - 16) / 2, 20),
+                    if (GUI.Button(new Rect(_graphRect.x + (_graphRect.width - 16) / 2, _graphRect.y + _graphRect.height - 20, (_graphRect.width - 16) / 2, 20),
                             "<color=#808080><b>RESET OFFSET</b></color>",
                             new GUIStyle(Elements.Labels.Default) { richText = true, alignment = TextAnchor.MiddleRight }))
                     {
-                        Axis.OffsetX = 0;
-                        Axis.OffsetY = 0;
+                        _axis.OffsetX = 0;
+                        _axis.OffsetY = 0;
                     }
                 }
 
@@ -182,99 +183,99 @@ namespace Lench.AdvancedControls.UI
                 // Listen for drag
                 var mousePos = UnityEngine.Input.mousePosition;
                 mousePos.y = Screen.height - mousePos.y;
-                var drag_handle = new Rect(windowRect.x + graphRect.x, windowRect.y + graphRect.y, graphRect.width, graphRect.height);
-                var drag_range = (graphRect.width) / 2f;
+                var dragHandle = new Rect(windowRect.x + _graphRect.x, windowRect.y + _graphRect.y, _graphRect.width, _graphRect.height);
+                var dragRange = (_graphRect.width) / 2f;
 
-                if (!dragging && UnityEngine.Input.GetMouseButtonDown(0) && drag_handle.Contains(mousePos))
+                if (!_dragging && UnityEngine.Input.GetMouseButtonDown(0) && dragHandle.Contains(mousePos))
                 {
-                    dragging = true;
-                    click_position = mousePos;
-                    click_position.x += Axis.OffsetX * drag_range;
-                    click_position.y += Axis.OffsetY * drag_range;
+                    _dragging = true;
+                    _clickPosition = mousePos;
+                    _clickPosition.x += _axis.OffsetX * dragRange;
+                    _clickPosition.y += _axis.OffsetY * dragRange;
                 }
 
-                if (dragging)
+                if (_dragging)
                 {
-                    Axis.OffsetX = Mathf.Clamp((click_position.x - mousePos.x) / drag_range, -1f, 1f);
-                    Axis.OffsetY = Mathf.Clamp((click_position.y - mousePos.y) / drag_range, -1f, 1f);
+                    _axis.OffsetX = Mathf.Clamp((_clickPosition.x - mousePos.x) / dragRange, -1f, 1f);
+                    _axis.OffsetY = Mathf.Clamp((_clickPosition.y - mousePos.y) / dragRange, -1f, 1f);
                     if (UnityEngine.Input.GetMouseButtonUp(0))
                     {
-                        dragging = false;
+                        _dragging = false;
                     }
                 }
 
                 // Draw graph input and frame
-                Util.DrawRect(graphRect, Color.gray);
+                Util.DrawRect(_graphRect, Color.gray);
                 Util.FillRect(new Rect(
-                        graphRect.x + graphRect.width / 2,
-                        graphRect.y,
+                        _graphRect.x + _graphRect.width / 2,
+                        _graphRect.y,
                         1,
-                        graphRect.height),
+                        _graphRect.height),
                     Color.gray);
                 Util.FillRect(new Rect(
-                        graphRect.x,
-                        graphRect.y + graphRect.height / 2,
-                        graphRect.width,
+                        _graphRect.x,
+                        _graphRect.y + _graphRect.height / 2,
+                        _graphRect.width,
                         1),
                     Color.gray);
 
-                if (Axis.Status == AxisStatus.OK)
+                if (_axis.Status == AxisStatus.OK)
                 Util.FillRect(new Rect(
-                                  graphRect.x + graphRect.width / 2 + graphRect.width / 2 * Axis.InputValue,
-                                  graphRect.y,
+                                  _graphRect.x + _graphRect.width / 2 + _graphRect.width / 2 * _axis.InputValue,
+                                  _graphRect.y,
                                   1,
-                                  graphRect.height),
+                                  _graphRect.height),
                          Color.yellow);
 
                 // Draw controller selection
                 GUILayout.BeginHorizontal();
-                if (GUILayout.Button("<", controller_index > 0 ? Elements.Buttons.Default : Elements.Buttons.Disabled, GUILayout.Width(30)) 
-                    && controller_index > 0)
+                if (GUILayout.Button("<", _controllerIndex > 0 ? Elements.Buttons.Default : Elements.Buttons.Disabled, GUILayout.Width(30)) 
+                    && _controllerIndex > 0)
                 {
-                    controller_index--;
-                    Axis.GUID = Controller.ControllerList[controller_index].GUID;
+                    _controllerIndex--;
+                    _axis.GUID = Controller.ControllerList[_controllerIndex].GUID;
                 }
 
-                GUILayout.Label(controller.Name, new GUIStyle(Elements.InputFields.Default) { alignment = TextAnchor.MiddleCenter });
+                GUILayout.Label(_controller.Name, new GUIStyle(Elements.InputFields.Default) { alignment = TextAnchor.MiddleCenter });
 
-                if (GUILayout.Button(">", controller_index < Controller.NumDevices - 1 ? Elements.Buttons.Default : Elements.Buttons.Disabled, GUILayout.Width(30)) 
-                    && controller_index < Controller.NumDevices - 1)
+                if (GUILayout.Button(">", _controllerIndex < Controller.NumDevices - 1 ? Elements.Buttons.Default : Elements.Buttons.Disabled, GUILayout.Width(30)) 
+                    && _controllerIndex < Controller.NumDevices - 1)
                 {
-                    controller_index++;
-                    Axis.GUID = Controller.ControllerList[controller_index].GUID;
+                    _controllerIndex++;
+                    _axis.GUID = Controller.ControllerList[_controllerIndex].GUID;
                 }
 
-                if (controller == null) return;
+                if (_controller == null) return;
 
                 GUILayout.EndHorizontal();
 
                 // Draw axis selection
                 GUILayout.BeginHorizontal();
-                if (GUILayout.Button("<", Axis.Axis > 0 ? Elements.Buttons.Default : Elements.Buttons.Disabled, GUILayout.Width(30)) 
-                    && Axis.Axis > 0)
-                    Axis.Axis--;
+                if (GUILayout.Button("<", _axis.Axis > 0 ? Elements.Buttons.Default : Elements.Buttons.Disabled, GUILayout.Width(30)) 
+                    && _axis.Axis > 0)
+                    _axis.Axis--;
 
-                GUILayout.Label(controller.GetAxisName(Axis.Axis), new GUIStyle(Elements.InputFields.Default) { alignment = TextAnchor.MiddleCenter });
+                GUILayout.Label(_controller.GetAxisName(_axis.Axis), new GUIStyle(Elements.InputFields.Default) { alignment = TextAnchor.MiddleCenter });
 
-                if (GUILayout.Button(">", Axis.Axis < Controller.Get(Axis.GUID).NumAxes - 1 ? Elements.Buttons.Default : Elements.Buttons.Disabled, GUILayout.Width(30)) 
-                    && Axis.Axis < Controller.Get(Axis.GUID).NumAxes - 1)
-                    Axis.Axis++;
+                if (GUILayout.Button(">", _axis.Axis < Controller.Get(_axis.GUID).NumAxes - 1 ? Elements.Buttons.Default : Elements.Buttons.Disabled, GUILayout.Width(30)) 
+                    && _axis.Axis < Controller.Get(_axis.GUID).NumAxes - 1)
+                    _axis.Axis++;
 
                 GUILayout.EndHorizontal();
 
                 // Draw Sensitivity slider
-                Axis.Sensitivity = Util.DrawSlider("Sensitivity", Axis.Sensitivity, 0, 5, sens_string, out sens_string);
+                _axis.Sensitivity = Util.DrawSlider("Sensitivity", _axis.Sensitivity, 0, 5, _sensString, out _sensString);
 
                 // Draw Curvature slider
-                Axis.Curvature = Util.DrawSlider("Curvaure", Axis.Curvature, 0, 3, curv_string, out curv_string);
+                _axis.Curvature = Util.DrawSlider("Curvaure", _axis.Curvature, 0, 3, _curvString, out _curvString);
 
                 // Draw Deadzone slider
-                Axis.Deadzone = Util.DrawSlider("Deadzone", Axis.Deadzone, 0, 0.5f, dead_string, out dead_string);
+                _axis.Deadzone = Util.DrawSlider("Deadzone", _axis.Deadzone, 0, 0.5f, _deadString, out _deadString);
 
                 GUILayout.BeginHorizontal();
 
                 // Draw Invert toggle
-                Axis.Invert = GUILayout.Toggle(Axis.Invert, "",
+                _axis.Invert = GUILayout.Toggle(_axis.Invert, "",
                     Util.ToggleStyle,
                     GUILayout.Width(20),
                     GUILayout.Height(20));
@@ -283,7 +284,7 @@ namespace Lench.AdvancedControls.UI
                     new GUIStyle(Elements.Labels.Default) { margin = new RectOffset(0, 0, 14, 0) });
 
                 // Draw Raw toggle
-                Axis.Smooth = GUILayout.Toggle(Axis.Smooth, "",
+                _axis.Smooth = GUILayout.Toggle(_axis.Smooth, "",
                     Util.ToggleStyle,
                     GUILayout.Width(20),
                     GUILayout.Height(20));
@@ -302,12 +303,12 @@ namespace Lench.AdvancedControls.UI
 
         public string GetNote()
         {
-            return note;
+            return Note;
         }
 
         public string GetError()
         {
-            return error;
+            return Error;
         }
     }
 }

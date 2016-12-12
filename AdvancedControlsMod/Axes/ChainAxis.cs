@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
+// ReSharper disable PossibleNullReferenceException
 
 namespace Lench.AdvancedControls.Axes
 {
@@ -25,23 +26,23 @@ namespace Lench.AdvancedControls.Axes
                 base.Name = value;
                 var sub1 = AxisManager.Get(SubAxis1) as ChainAxis;
                 var sub2 = AxisManager.Get(SubAxis2) as ChainAxis;
-                bool error = false;
-                string error_message = "Renaming this axis formed a cycle in the chain.\n";
+                var error = false;
+                var errorMessage = "Renaming this axis formed a cycle in the chain.\n";
                 if (sub1 != null && sub1.CheckCycle(new List<string>() { Name }))
                 {
                     error = true;
-                    error_message += "'" + SubAxis1 + "' has been unlinked. ";
+                    errorMessage += "'" + SubAxis1 + "' has been unlinked. ";
                     SubAxis1 = null;
                 }
                 if (sub2 != null && sub2.CheckCycle(new List<string>() { Name }))
                 {
                     error = true;
-                    error_message += "'" + SubAxis2 + "' has been unlinked. ";
+                    errorMessage += "'" + SubAxis2 + "' has been unlinked. ";
                     SubAxis2 = null;
                 }
                 if (error)
                 {
-                    (editor as UI.ChainAxisEditor).error = "<color=#FFFF00><b>Chain cycle error</b></color>\n" + error_message;
+                    (Editor as UI.ChainAxisEditor).error = "<color=#FFFF00><b>Chain cycle error</b></color>\n" + errorMessage;
                 }
             }
         }
@@ -54,20 +55,20 @@ namespace Lench.AdvancedControls.Axes
         {
             get
             {
-                return sub_axis1;
+                return _subAxis1;
             }
             set
             {
-                sub_axis1 = value;
+                _subAxis1 = value;
                 var axis = AxisManager.Get(value) as ChainAxis;
-                if (axis != null && axis.CheckCycle(new List<string>() { }))
+                if (axis != null && axis.CheckCycle(new List<string>()))
                 {
-                    sub_axis1 = null;
+                    _subAxis1 = null;
                     throw new InvalidOperationException("'" + value + "' is already in the axis chain.\nLinking it here would create a cycle.");
                 }
             }
         }
-        private string sub_axis1;
+        private string _subAxis1;
 
         /// <summary>
         /// name of the right linked axis.
@@ -77,20 +78,20 @@ namespace Lench.AdvancedControls.Axes
         {
             get
             {
-                return sub_axis2;
+                return _subAxis2;
             }
             set
             {
-                sub_axis2 = value;
-                var axis = AxisManager.Get(sub_axis2) as ChainAxis;
-                if (axis != null && axis.CheckCycle(new List<string>() { }))
+                _subAxis2 = value;
+                var axis = AxisManager.Get(_subAxis2) as ChainAxis;
+                if (axis != null && axis.CheckCycle(new List<string>()))
                 {
-                    sub_axis2 = null;
+                    _subAxis2 = null;
                     throw new InvalidOperationException("'" + value + "' is already in the axis chain.\nLinking it here would create a cycle.");
                 }
             }
         }
-        private string sub_axis2;
+        private string _subAxis2;
 
         /// <summary>
         /// The method that determines how the axes are combined into a single one.
@@ -134,23 +135,27 @@ namespace Lench.AdvancedControls.Axes
         public override float OutputValue {
             get
             {
-                var axis_a = AxisManager.Get(SubAxis1);
-                var axis_b = AxisManager.Get(SubAxis2);
-                float a = axis_a != null ? axis_a.OutputValue : 0;
-                float b = axis_b != null ? axis_b.OutputValue : 0;
-                if (Method == ChainMethod.Sum)
-                    return Mathf.Clamp(a + b, -1, 1);
-                if (Method == ChainMethod.Subtract)
-                    return Mathf.Clamp(a - b, -1, 1);
-                if (Method == ChainMethod.Average)
-                    return Mathf.Clamp((a + b) / 2, -1, 1);
-                if (Method == ChainMethod.Multiply)
-                    return Mathf.Clamp(a * b, -1, 1);
-                if (Method == ChainMethod.Maximum)
-                    return Mathf.Clamp(Mathf.Max(a, b), -1, 1);
-                if (Method == ChainMethod.Minimum)
-                    return Mathf.Clamp(Mathf.Min(a, b), -1, 1);
-                return 0;
+                var axisA = AxisManager.Get(SubAxis1);
+                var axisB = AxisManager.Get(SubAxis2);
+                float a = axisA?.OutputValue ?? 0;
+                float b = axisB?.OutputValue ?? 0;
+                switch (Method)
+                {
+                    case ChainMethod.Sum:
+                        return Mathf.Clamp(a + b, -1, 1);
+                    case ChainMethod.Subtract:
+                        return Mathf.Clamp(a - b, -1, 1);
+                    case ChainMethod.Average:
+                        return Mathf.Clamp((a + b) / 2, -1, 1);
+                    case ChainMethod.Multiply:
+                        return Mathf.Clamp(a * b, -1, 1);
+                    case ChainMethod.Maximum:
+                        return Mathf.Clamp(Mathf.Max(a, b), -1, 1);
+                    case ChainMethod.Minimum:
+                        return Mathf.Clamp(Mathf.Min(a, b), -1, 1);
+                    default:
+                        return 0;
+                }
             }
         }
 
@@ -165,7 +170,7 @@ namespace Lench.AdvancedControls.Axes
             SubAxis1 = null;
             SubAxis2 = null;
             Method = ChainMethod.Sum;
-            editor = new UI.ChainAxisEditor(this);
+            Editor = new UI.ChainAxisEditor(this);
         }
 
         /// <summary>
@@ -174,8 +179,8 @@ namespace Lench.AdvancedControls.Axes
         /// </summary>
         public void RefreshLinks()
         {
-            SubAxis1 = sub_axis1;
-            SubAxis2 = sub_axis2;
+            SubAxis1 = _subAxis1;
+            SubAxis2 = _subAxis2;
         }
 
         /// <summary>
@@ -185,7 +190,7 @@ namespace Lench.AdvancedControls.Axes
         {
             get
             {
-                if (sub_axis1 == null && sub_axis2 == null) return AxisStatus.NoLink;
+                if (_subAxis1 == null && _subAxis2 == null) return AxisStatus.NoLink;
                 return AxisStatus.OK;
             }
         }
@@ -205,18 +210,18 @@ namespace Lench.AdvancedControls.Axes
             // Traverse left node
             if (sub1 != null)
             {
-                var new_path = new List<string>();
-                new_path.AddRange(path);
-                new_path.Add(Name);
-                cycle |= sub1.CheckCycle(new_path);
+                var newPath = new List<string>();
+                newPath.AddRange(path);
+                newPath.Add(Name);
+                cycle |= sub1.CheckCycle(newPath);
             }
             // Traverse right node
             if (sub2 != null)
             {
-                var new_path = new List<string>();
-                new_path.AddRange(path);
-                new_path.Add(Name);
-                cycle |= sub2.CheckCycle(new_path);
+                var newPath = new List<string>();
+                newPath.AddRange(path);
+                newPath.Add(Name);
+                cycle |= sub2.CheckCycle(newPath);
             }
             return cycle;
         }
@@ -299,10 +304,10 @@ namespace Lench.AdvancedControls.Axes
         {
             var cast = other as ChainAxis;
             if (cast == null) return false;
-            return this.Name == cast.Name &&
-                   this.Method == cast.Method &&
-                   this.SubAxis1 == cast.SubAxis1 &&
-                   this.SubAxis2 == cast.SubAxis2;
+            return Name == cast.Name &&
+                   Method == cast.Method &&
+                   SubAxis1 == cast.SubAxis1 &&
+                   SubAxis2 == cast.SubAxis2;
         }
     }
 }

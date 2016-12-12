@@ -52,7 +52,7 @@ namespace Lench.AdvancedControls.Axes
             Range = 0.5f;
             Axis = Axis.X;
 
-            editor = new UI.MouseAxisEditor(this);
+            Editor = new UI.MouseAxisEditor(this);
         }
 
         /// <summary>

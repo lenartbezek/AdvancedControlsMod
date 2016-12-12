@@ -9,7 +9,7 @@ using System.Linq;
 
 namespace Lench.AdvancedControls.UI
 {
-    internal class CustomAxisEditor : AxisEditor
+    internal class CustomAxisEditor : IAxisEditor
     {
         internal static bool downloading_in_progress = false;
         internal static string download_button_text = "Download";

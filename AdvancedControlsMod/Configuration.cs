@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+// ReSharper disable PossibleNullReferenceException
 
 namespace Lench.AdvancedControls
 {
@@ -14,7 +15,7 @@ namespace Lench.AdvancedControls
                 // load mod configuration
                 ACM.Instance.ModEnabled = spaar.ModLoader.Configuration.GetBool("acm-enabled", true);
                 ACM.Instance.ModUpdaterEnabled = spaar.ModLoader.Configuration.GetBool("mod-updater-enabled", true);
-                ACM.Instance.DBUpdaterEnabled = spaar.ModLoader.Configuration.GetBool("db-updater-enabled", true);
+                ACM.Instance.DbUpdaterEnabled = spaar.ModLoader.Configuration.GetBool("db-updater-enabled", true);
 
                 // read input axes
                 int count = spaar.ModLoader.Configuration.GetInt("number-of-axes", 0);
@@ -40,7 +41,7 @@ namespace Lench.AdvancedControls
                     }
                     if (axis != null)
                     {
-                        axis?.Load();
+                        axis.Load();
                         AxisManager.AddLocalAxis(axis);
                     }
                 }
@@ -66,7 +67,7 @@ namespace Lench.AdvancedControls
             {
                 spaar.ModLoader.Configuration.SetBool("acm-enabled", ACM.Instance.ModEnabled);
                 spaar.ModLoader.Configuration.SetBool("mod-updater-enabled", ACM.Instance.ModUpdaterEnabled);
-                spaar.ModLoader.Configuration.SetBool("db-updater-enabled", ACM.Instance.DBUpdaterEnabled);
+                spaar.ModLoader.Configuration.SetBool("db-updater-enabled", ACM.Instance.DbUpdaterEnabled);
 
                 int count = spaar.ModLoader.Configuration.GetInt("number-of-axes", 0);
                 log += "Attempting to clear " + count + " existing axes.\n";
@@ -75,20 +76,20 @@ namespace Lench.AdvancedControls
 
                 log += "\tExisting axis list removed.\n\n";
 
-                List<string> axis_names = new List<string>();
+                var axisNames = new List<string>();
 
-                foreach (KeyValuePair<string, InputAxis> entry in AxisManager.LocalAxes)
+                foreach (var entry in AxisManager.LocalAxes)
                 {
                     log += "Attempting to save axis '"+entry.Key+ "'.\n";
-                    axis_names.Add(entry.Key);
+                    axisNames.Add(entry.Key);
                     entry.Value.Save();
                     log += "\tSuccessfully saved axis '" + entry.Key + "'.\n";
                 }
 
                 spaar.ModLoader.Configuration.SetInt("number-of-axes", AxisManager.LocalAxes.Count);
                 log += "\nWrote new number of axes: " + AxisManager.LocalAxes.Count + ".\n";
-                for (int i = 0; i < axis_names.Count; i++)
-                    spaar.ModLoader.Configuration.SetString("axis-" + i + "-name", axis_names[i]);
+                for (int i = 0; i < axisNames.Count; i++)
+                    spaar.ModLoader.Configuration.SetString("axis-" + i + "-name", axisNames[i]);
                 log += "Successfully wrote axis list.\n";
 
                 spaar.ModLoader.Configuration.Save();

@@ -1,6 +1,7 @@
 ﻿using System;
 using Lench.AdvancedControls.Blocks;
 using UnityEngine;
+// ReSharper disable UseNullPropagation
 
 namespace Lench.AdvancedControls.Controls
 {
@@ -49,10 +50,9 @@ namespace Lench.AdvancedControls.Controls
         /// <param name="value">Input value.</param>
         protected override void Apply(float value)
         {
-            if (value > 0)
-                value = Mathf.Lerp(Center, Max, value);
-            else
-                value = Mathf.Lerp(Center, Min, -value);
+            value = value > 0 
+                ? Mathf.Lerp(Center, Max, value) 
+                : Mathf.Lerp(Center, Min, -value);
             cog?.SetInput(value);
             steering?.SetInput(value);
             spring?.SetInput(value);
@@ -78,14 +78,16 @@ namespace Lench.AdvancedControls.Controls
 
         internal override Control Clone()
         {
-            var clone = new InputControl(BlockGUID);
-            clone.Name = Name;
-            clone.Enabled = Enabled;
-            clone.Axis = Axis;
-            clone.Block = Block;
-            clone.Min = Min;
-            clone.Center = Center;
-            clone.Max = Max;
+            var clone = new InputControl(BlockGUID)
+            {
+                Name = Name,
+                Enabled = Enabled,
+                Axis = Axis,
+                Block = Block,
+                Min = Min,
+                Center = Center,
+                Max = Max
+            };
             return clone;
         }
     }

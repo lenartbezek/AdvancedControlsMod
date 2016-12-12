@@ -7,7 +7,7 @@ using System.Collections.Generic;
 
 namespace Lench.AdvancedControls.UI
 {
-    internal class KeyAxisEditor : AxisEditor
+    internal class KeyAxisEditor : IAxisEditor
     {
         public KeyAxisEditor(InputAxis axis)
         {

@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
+// ReSharper disable InconsistentNaming
+// ReSharper disable ArrangeThisQualifier
 
 namespace Lench.AdvancedControls.Blocks
 {

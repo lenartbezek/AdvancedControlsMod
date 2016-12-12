@@ -7,14 +7,14 @@ namespace Lench.AdvancedControls.Blocks
     /// </summary>
     public class Flamethrower : BlockHandler
     {
-        private static FieldInfo holdFieldInfo = typeof(FlamethrowerController).GetField("holdToFire", BindingFlags.NonPublic | BindingFlags.Instance);
-        private static FieldInfo keyHeld = typeof(FlamethrowerController).GetField("keyHeld", BindingFlags.NonPublic | BindingFlags.Instance);
+        private static readonly FieldInfo HoldFieldInfo = typeof(FlamethrowerController).GetField("holdToFire", BindingFlags.NonPublic | BindingFlags.Instance);
+        private static readonly FieldInfo KeyHeld = typeof(FlamethrowerController).GetField("keyHeld", BindingFlags.NonPublic | BindingFlags.Instance);
 
-        private FlamethrowerController fc;
-        private MToggle holdToFire;
+        private readonly FlamethrowerController _fc;
+        private readonly MToggle _holdToFire;
 
-        private bool setIgniteFlag = false;
-        private bool lastIgniteFlag = false;
+        private bool _setIgniteFlag;
+        private bool _lastIgniteFlag;
 
         /// <summary>
         /// Creates a Block handler.
@@ -22,8 +22,8 @@ namespace Lench.AdvancedControls.Blocks
         /// <param name="bb">BlockBehaviour object.</param>
         public Flamethrower(BlockBehaviour bb) : base(bb)
         {
-            fc = bb.GetComponent<FlamethrowerController>();
-            holdToFire = holdFieldInfo.GetValue(fc) as MToggle;
+            _fc = bb.GetComponent<FlamethrowerController>();
+            _holdToFire = HoldFieldInfo.GetValue(_fc) as MToggle;
         }
 
         /// <summary>
@@ -47,7 +47,7 @@ namespace Lench.AdvancedControls.Blocks
         /// </summary>
         public void Ignite()
         {
-            setIgniteFlag = true;
+            _setIgniteFlag = true;
         }
 
         /// <summary>
@@ -57,11 +57,11 @@ namespace Lench.AdvancedControls.Blocks
         {
             get
             {
-                return 10 - fc.timey;
+                return 10 - _fc.timey;
             }
             set
             {
-                fc.timey = 10 - value;
+                _fc.timey = 10 - value;
             }
         }
 
@@ -70,26 +70,26 @@ namespace Lench.AdvancedControls.Blocks
         /// </summary>
         protected override void LateUpdate()
         {
-            if (setIgniteFlag)
+            if (_setIgniteFlag)
             {
-                if (!fc.timeOut || StatMaster.GodTools.InfiniteAmmoMode)
+                if (!_fc.timeOut || StatMaster.GodTools.InfiniteAmmoMode)
                 {
-                    if (holdToFire.IsActive)
+                    if (_holdToFire.IsActive)
                     {
-                        fc.FlameOn();
+                        _fc.FlameOn();
                     }
                     else
                     {
-                        fc.Flame();
+                        _fc.Flame();
                     }
                 }
-                setIgniteFlag = false;
-                lastIgniteFlag = true;
+                _setIgniteFlag = false;
+                _lastIgniteFlag = true;
             }
-            else if(lastIgniteFlag)
+            else if(_lastIgniteFlag)
             {
-                keyHeld.SetValue(fc, true);
-                lastIgniteFlag = false;
+                KeyHeld.SetValue(_fc, true);
+                _lastIgniteFlag = false;
             }
         }
     }

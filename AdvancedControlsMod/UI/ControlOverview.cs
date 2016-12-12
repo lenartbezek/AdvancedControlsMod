@@ -105,9 +105,9 @@ namespace Lench.AdvancedControls.UI
             if (a != null && GUILayout.Button("✎", new GUIStyle(Elements.Buttons.Default) { fontSize = 20, padding = new RectOffset(-3, 0, 0, 0) }, GUILayout.Width(30), GUILayout.MaxHeight(28)))
             {
                 var Editor = ACM.Instance.gameObject.AddComponent<AxisEditorWindow>();
-                Editor.windowRect.x = Mathf.Clamp(windowRect.x + windowRect.width,
+                Editor.WindowRect.x = Mathf.Clamp(windowRect.x + windowRect.width,
                             -320 + GUI.skin.window.padding.top, Screen.width - GUI.skin.window.padding.top);
-                Editor.windowRect.y = Mathf.Clamp(windowRect.y, 0, Screen.height - GUI.skin.window.padding.top);
+                Editor.WindowRect.y = Mathf.Clamp(windowRect.y, 0, Screen.height - GUI.skin.window.padding.top);
                 Editor.EditAxis(a, new SelectAxisDelegate((InputAxis new_axis) => { AssignAxis(axis, new_axis.Name); }));
             }
 

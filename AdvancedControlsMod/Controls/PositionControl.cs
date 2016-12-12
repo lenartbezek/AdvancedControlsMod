@@ -1,6 +1,7 @@
 ﻿using System;
 using UnityEngine;
 using Lench.AdvancedControls.Blocks;
+// ReSharper disable VirtualMemberCallInConstructor
 
 namespace Lench.AdvancedControls.Controls
 {
@@ -9,7 +10,7 @@ namespace Lench.AdvancedControls.Controls
     /// </summary>
     public class PositionControl : Control
     {
-        private Piston piston;
+        private Piston _piston;
 
         /// <summary>
         /// Creates a position control for a piston with given GUID.
@@ -31,11 +32,11 @@ namespace Lench.AdvancedControls.Controls
         {
             get
             {
-                return piston;
+                return _piston;
             }
             protected set
             {
-                piston = value as Piston;
+                _piston = value as Piston;
             }
         }
 
@@ -75,11 +76,10 @@ namespace Lench.AdvancedControls.Controls
         /// <param name="value">Value to be applied.</param>
         protected override void Apply(float value)
         {
-            if (value > 0)
-                value = Mathf.Lerp(Center, Max, value);
-            else
-                value = Mathf.Lerp(Center, Min, -value);
-            piston?.SetPosition(value);
+            value = value > 0 
+                ? Mathf.Lerp(Center, Max, value) 
+                : Mathf.Lerp(Center, Min, -value);
+            _piston?.SetPosition(value);
         }
 
         /// <summary>
@@ -92,14 +92,16 @@ namespace Lench.AdvancedControls.Controls
 
         internal override Control Clone()
         {
-            var clone = new PositionControl(BlockGUID);
-            clone.Name = Name;
-            clone.Enabled = Enabled;
-            clone.Axis = Axis;
-            clone.Block = Block;
-            clone.Min = Min;
-            clone.Center = Center;
-            clone.Max = Max;
+            var clone = new PositionControl(BlockGUID)
+            {
+                Name = Name,
+                Enabled = Enabled,
+                Axis = Axis,
+                Block = Block,
+                Min = Min,
+                Center = Center,
+                Max = Max
+            };
             return clone;
         }
     }

@@ -1,6 +1,7 @@
 ﻿using Lench.AdvancedControls.Input;
 using System;
 using UnityEngine;
+// ReSharper disable CompareOfFloatsByEqualityOperator
 
 namespace Lench.AdvancedControls.Axes
 {
@@ -16,45 +17,45 @@ namespace Lench.AdvancedControls.Axes
          */
         public float Sensitivity
         {
-            get { return sensitivity; }
-            set { changed |= value != sensitivity; sensitivity = value; }
+            get { return _sensitivity; }
+            set { _changed |= value != _sensitivity; _sensitivity = value; }
         }
-        private float sensitivity;
+        private float _sensitivity;
 
         public float Curvature
         {
-            get { return curvature; }
-            set { changed |= value != curvature; curvature = value; }
+            get { return _curvature; }
+            set { _changed |= value != _curvature; _curvature = value; }
         }
-        private float curvature;
+        private float _curvature;
 
         public float Deadzone
         {
-            get { return deadzone; }
-            set { changed |= value != deadzone; deadzone = value; }
+            get { return _deadzone; }
+            set { _changed |= value != _deadzone; _deadzone = value; }
         }
-        private float deadzone;
+        private float _deadzone;
 
         public float OffsetX
         {
-            get { return offx; }
-            set { changed |= value != offx; offx = value; }
+            get { return _offx; }
+            set { _changed |= value != _offx; _offx = value; }
         }
-        private float offx;
+        private float _offx;
 
         public float OffsetY
         {
-            get { return offy; }
-            set { changed |= value != offy; offy = value; }
+            get { return _offy; }
+            set { _changed |= value != _offy; _offy = value; }
         }
-        private float offy;
+        private float _offy;
 
         public bool Invert
         {
-            get { return invert; }
-            set { changed |= value != invert; invert = value; }
+            get { return _invert; }
+            set { _changed |= value != _invert; _invert = value; }
         }
-        private bool invert;
+        private bool _invert;
 
         public bool Smooth { get; set; }
 #pragma warning restore CS1591
@@ -64,8 +65,8 @@ namespace Lench.AdvancedControls.Axes
         /// </summary>
         public int Axis { get; set; }
 
-        private Guid guid;
-        private Controller controller;
+        private Guid _guid;
+        private Controller _controller;
 
         /// <summary>
         /// GUID of the controller.
@@ -73,33 +74,33 @@ namespace Lench.AdvancedControls.Axes
         /// </summary>
         public Guid GUID
         {
-            get { return guid; }
+            get { return _guid; }
             set
             {
-                guid = value;
-                controller = Controller.Get(value);
+                _guid = value;
+                _controller = Controller.Get(value);
             }
         }
 
-        private bool changed = true;
+        private bool _changed = true;
 
         /// <summary>
         /// Is true if the axis tuning has been changed since the last call.
         /// </summary>
         public bool Changed
         {
-            get { bool tmp = changed; changed = false; return tmp; }
+            get { bool tmp = _changed; _changed = false; return tmp; }
         }
 
         /// <summary>
         /// Is the associated device currently connected.
         /// </summary>
-        public override bool Connected { get { return controller != null && controller.Connected && Axis < controller.NumAxes; } }
+        public override bool Connected => _controller != null && _controller.Connected && Axis < _controller.NumAxes;
 
         /// <summary>
         /// Axis is saveable if SDL engine is initialized and at least one device is connected.
         /// </summary>
-        public override bool Saveable { get { return DeviceManager.SDL_Initialized && Controller.NumDevices > 0; } }
+        public override bool Saveable => DeviceManager.SdlInitialized && Controller.NumDevices > 0;
 
         /// <summary>
         /// Controller axis status distinguishes between Engine Unavailable, Device Disconnected and OK.
@@ -108,7 +109,7 @@ namespace Lench.AdvancedControls.Axes
         {
             get
             {
-                if (!DeviceManager.SDL_Initialized) return AxisStatus.Unavailable;
+                if (!DeviceManager.SdlInitialized) return AxisStatus.Unavailable;
                 if (!Connected) return AxisStatus.Disconnected;
                 return AxisStatus.OK;
             }
@@ -130,10 +131,10 @@ namespace Lench.AdvancedControls.Axes
             OffsetY = 0;
             Invert = false;
             Smooth = false;
-            editor = new UI.ControllerAxisEditor(this);
+            Editor = new UI.ControllerAxisEditor(this);
 
-            DeviceManager.OnDeviceAdded += (SDL.SDL_Event e) => this.controller = Controller.Get(guid);
-            DeviceManager.OnDeviceRemoved += (SDL.SDL_Event e) => this.controller = Controller.Get(guid);
+            DeviceManager.OnDeviceAdded += (e) => _controller = Controller.Get(_guid);
+            DeviceManager.OnDeviceRemoved += (e) => _controller = Controller.Get(_guid);
         }
 
         /// <summary>
@@ -144,7 +145,7 @@ namespace Lench.AdvancedControls.Axes
             get
             {
                 if (!Connected) return 0;
-                return controller.GetAxis(Axis, Smooth);
+                return _controller.GetAxis(Axis, Smooth);
             }
         }
 
@@ -290,16 +291,16 @@ namespace Lench.AdvancedControls.Axes
         {
             var cast = other as ControllerAxis;
             if (cast == null) return false;
-            return this.Name == cast.Name &&
-                   this.GUID == cast.GUID &&
-                   this.Axis == cast.Axis &&
-                   this.Sensitivity == cast.Sensitivity &&
-                   this.Curvature == cast.Curvature &&
-                   this.Deadzone == cast.Deadzone &&
-                   this.OffsetX == cast.OffsetX &&
-                   this.OffsetY == cast.OffsetY &&
-                   this.Invert == cast.Invert &&
-                   this.Smooth == cast.Smooth;
+            return Name == cast.Name &&
+                   GUID == cast.GUID &&
+                   Axis == cast.Axis &&
+                   Sensitivity == cast.Sensitivity &&
+                   Curvature == cast.Curvature &&
+                   Deadzone == cast.Deadzone &&
+                   OffsetX == cast.OffsetX &&
+                   OffsetY == cast.OffsetY &&
+                   Invert == cast.Invert &&
+                   Smooth == cast.Smooth;
         }
     }
 }

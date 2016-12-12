@@ -4,6 +4,7 @@ using Lench.AdvancedControls.Controls;
 using Lench.AdvancedControls.Axes;
 using UnityEngine;
 using System.Reflection;
+// ReSharper disable PossibleNullReferenceException
 
 namespace Lench.AdvancedControls
 {
@@ -47,9 +48,10 @@ namespace Lench.AdvancedControls
                         axis = new KeyAxis(name);
                     if (type == AxisType.Mouse.ToString())
                         axis = new MouseAxis(name);
+
                     if (axis != null)
                     {
-                        axis?.Load(machineInfo);
+                        axis.Load(machineInfo);
                         AxisManager.AddMachineAxis(axis);
                     }
                 }
@@ -68,11 +70,11 @@ namespace Lench.AdvancedControls
                 foreach (BlockInfo blockInfo in machineInfo.Blocks)
                 {
                     if (!blockInfo.BlockData.HasKey("ac-controllist")) continue;
-                    var control_list = ControlManager.GetBlockControls(blockInfo.ID, blockInfo.Guid);
-                    var control_names = blockInfo.BlockData.ReadStringArray("ac-controllist");
-                    foreach (string name in control_names)
+                    var controlList = ControlManager.GetBlockControls(blockInfo.ID, blockInfo.Guid);
+                    var controlNames = blockInfo.BlockData.ReadStringArray("ac-controllist");
+                    foreach (string name in controlNames)
                     {
-                        foreach (Control c in control_list)
+                        foreach (Control c in controlList)
                         {
                             if (name == c.Name)
                                 c.Load(blockInfo);
@@ -103,15 +105,15 @@ namespace Lench.AdvancedControls
                     {
                         var controls = ControlManager.GetActiveBlockControls(blockInfo.Guid);
                         if (controls.Count == 0) continue;
-                        var control_names = new List<string>();
+                        var controlNames = new List<string>();
                         foreach (Control c in controls)
                         {
                             if (!axisStack.Contains(c.Axis))
                                 axisStack.Push(c.Axis);
-                            control_names.Add(c.Name);
+                            controlNames.Add(c.Name);
                             c.Save(blockInfo);
                         }
-                        blockInfo.BlockData.Write("ac-controllist", control_names.ToArray());
+                        blockInfo.BlockData.Write("ac-controllist", controlNames.ToArray());
                     }
                 }
 
