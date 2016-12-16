@@ -1,6 +1,8 @@
 ﻿using UnityEngine;
 using spaar.ModLoader.UI;
 using Lench.AdvancedControls.Axes;
+using Steamworks;
+
 // ReSharper disable UnusedMember.Local
 
 namespace Lench.AdvancedControls.UI
@@ -157,7 +159,14 @@ namespace Lench.AdvancedControls.UI
                     if (GUI.Button(new Rect(WindowRect.width - 76, 8, 30, 30),
                         "?", Elements.Buttons.Red))
                     {
-                        Application.OpenURL(_axis.GetEditor().GetHelpURL());
+                        try
+                        {
+                            SteamFriends.ActivateGameOverlayToWebPage(_axis.GetEditor().GetHelpURL());
+                        }
+                        catch
+                        {
+                            Application.OpenURL(_axis.GetEditor().GetHelpURL());
+                        }
                     }
             }
 

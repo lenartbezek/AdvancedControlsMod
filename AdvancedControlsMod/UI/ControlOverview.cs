@@ -2,6 +2,7 @@
 using Lench.AdvancedControls.Axes;
 using Lench.AdvancedControls.Controls;
 using spaar.ModLoader.UI;
+using Steamworks;
 using UnityEngine;
 // ReSharper disable UnusedMember.Local
 
@@ -220,7 +221,15 @@ namespace Lench.AdvancedControls.UI
             if (GUI.Button(new Rect(WindowRect.width - 76, 8, 30, 30),
                 "?", Elements.Buttons.Red))
             {
-                Application.OpenURL("https://github.com/lench4991/AdvancedControlsMod/wiki/Sharing");
+                const string url = "https://github.com/lench4991/AdvancedControlsMod/wiki/Sharing";
+                try
+                {
+                    SteamFriends.ActivateGameOverlayToWebPage(url);
+                }
+                catch
+                {
+                    Application.OpenURL(url);
+                }
             }
 
             // Draw close button
