@@ -39,7 +39,7 @@ namespace Lench.AdvancedControls.UI
                 windowRect.width - GUI.skin.window.padding.left - GUI.skin.window.padding.right,
                 20);
 
-            GUILayout.Label("  <color=#808080><b>"+ _axis.OutputValue.ToString("0.00") + "</b></color>",
+            GUILayout.Label($"  <color=#808080><b>{_axis.OutputValue:0.00}</b></color>",
                 new GUIStyle(Elements.Labels.Default) { richText = true, alignment = TextAnchor.MiddleLeft },
                 GUILayout.Height(20));
 
@@ -61,7 +61,7 @@ namespace Lench.AdvancedControls.UI
             // Draw key mappers 
             GUILayout.BeginHorizontal();
 
-            GUILayout.Button(new GUIContent(_axis.NegativeBind != null ? _axis.NegativeBind.Name : "None", "Key Mapper Negative"), Elements.Buttons.Red);
+            GUILayout.Button(new GUIContent(_axis.NegativeBind != null ? _axis.NegativeBind.Name : Strings.KeyAxisEditor_NoBind, "Key Mapper Negative"), Elements.Buttons.Red);
             if (GUI.tooltip == "Key Mapper Negative")
             {
                 foreach (var c in Controller.ControllerList)
@@ -80,7 +80,7 @@ namespace Lench.AdvancedControls.UI
                     }
                 }
             }
-            GUILayout.Button(new GUIContent(_axis.PositiveBind != null ? _axis.PositiveBind.Name : "None", "Key Mapper Positive"), Elements.Buttons.Red);
+            GUILayout.Button(new GUIContent(_axis.PositiveBind != null ? _axis.PositiveBind.Name : Strings.KeyAxisEditor_NoBind, "Key Mapper Positive"), Elements.Buttons.Red);
             if (GUI.tooltip == "Key Mapper Positive")
             {
                 foreach (var c in Controller.ControllerList)
@@ -103,47 +103,47 @@ namespace Lench.AdvancedControls.UI
             GUILayout.EndHorizontal();
 
             // Draw Sensitivity slider
-            _axis.Sensitivity = Util.DrawSlider("Sensitivity", _axis.Sensitivity, 0, 10, _sensString, out _sensString);
+            _axis.Sensitivity = Util.DrawSlider(Strings.Label_Sensitivity, _axis.Sensitivity, 0, 10, _sensString, out _sensString);
 
             // Draw Gravity slider
-            _axis.Gravity = Util.DrawSlider("Gravity", _axis.Gravity, 0, 10, _gravString, out _gravString);
+            _axis.Gravity = Util.DrawSlider(Strings.Label_Gravity, _axis.Gravity, 0, 10, _gravString, out _gravString);
 
             // Draw Momentum slider
-            _axis.Momentum = Util.DrawSlider("Momentum", _axis.Momentum, 0, 10, _momnString, out _momnString);
+            _axis.Momentum = Util.DrawSlider(Strings.Label_Momentum, _axis.Momentum, 0, 10, _momnString, out _momnString);
 
             // Draw toggles
             GUILayout.BeginHorizontal();
 
-            _axis.Raw = GUILayout.Toggle(_axis.Raw, "",
+            _axis.Raw = GUILayout.Toggle(_axis.Raw, string.Empty,
                 Util.ToggleStyle,
                 GUILayout.Width(20),
                 GUILayout.Height(20));
 
-            GUILayout.Label("Raw ",
-                new GUIStyle(Elements.Labels.Default) { margin = new RectOffset(0, 0, 14, 0) });
+            GUILayout.Label(Strings.Label_Raw,
+                new GUIStyle(Elements.Labels.Default) { margin = new RectOffset(10, 0, 14, 0) });
 
-            _axis.Snap = GUILayout.Toggle(_axis.Snap, "",
+            _axis.Snap = GUILayout.Toggle(_axis.Snap, string.Empty,
                 Util.ToggleStyle,
                 GUILayout.Width(20),
                 GUILayout.Height(20));
 
-            GUILayout.Label("Snap ",
-                new GUIStyle(Elements.Labels.Default) { margin = new RectOffset(0, 0, 14, 0) });
+            GUILayout.Label(Strings.Label_Snap,
+                new GUIStyle(Elements.Labels.Default) { margin = new RectOffset(10, 0, 14, 0) });
 
             GUILayout.EndHorizontal();
 
             // Set notes
-            Note = "<color=#FFFF00><b>Device disconnected</b></color>";
+            Note = $"<color=#FFFF00><b>{Strings.KeyAxisEditor_Message_DeviceDisconnected}</b></color>";
             var disconnected = false;
             if (_axis.PositiveBind != null && !_axis.PositiveBind.Connected)
             {
                 disconnected = true;
-                Note += "\n'" + _axis.PositiveBind.Name + "' is not connected.";
+                Note += string.Format(Strings.KeyAxisEditor_Message_DeviceDisconnectedDetail, _axis.PositiveBind.Name);
             }
             if (_axis.NegativeBind != null && !_axis.NegativeBind.Connected)
             {
                 disconnected = true;
-                Note += "\n'" + _axis.NegativeBind.Name + "' is not connected.";
+                Note += string.Format(Strings.KeyAxisEditor_Message_DeviceDisconnectedDetail, _axis.NegativeBind.Name);
             }
             if (!disconnected)
                 Note = null;
@@ -151,7 +151,7 @@ namespace Lench.AdvancedControls.UI
 
         public string GetHelpURL()
         {
-            return "https://github.com/lench4991/AdvancedControlsMod/wiki/Key-Axes";
+            return Strings.KeyAxisEditor_HelpURL;
         }
 
         public string GetNote()

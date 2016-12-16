@@ -1,8 +1,7 @@
-﻿using UnityEngine;
+﻿using Lench.AdvancedControls.Axes;
 using spaar.ModLoader.UI;
-using Lench.AdvancedControls.Axes;
 using Steamworks;
-
+using UnityEngine;
 // ReSharper disable UnusedMember.Local
 
 namespace Lench.AdvancedControls.UI
@@ -24,8 +23,8 @@ namespace Lench.AdvancedControls.UI
         internal int WindowID = spaar.ModLoader.Util.GetWindowID();
         internal Rect WindowRect = new Rect(0, 0, 320, 100);
 
-        private string _windowName = "Create new axis";
-        private string _saveName = "";
+        private string _windowName = Strings.AxisEditorWindow_WindowTitle_CreateNewAxis;
+        private string _saveName = string.Empty;
         private InputAxis _axis;
 
         internal bool ContainsMouse
@@ -55,14 +54,14 @@ namespace Lench.AdvancedControls.UI
         internal void CreateAxis(SelectAxisDelegate selectAxis = null)
         {
             Callback = selectAxis;
-            _windowName = "Create new axis";
+            _windowName = Strings.AxisEditorWindow_WindowTitle_CreateNewAxis;
             _axis = null;
         }
 
         internal void EditAxis(InputAxis axis, SelectAxisDelegate selectAxis = null)
         {
             Callback = selectAxis;
-            _windowName = "Edit " + axis.Name;
+            _windowName = string.Format(Strings.AxisEditorWindow_WindowTitle_Edit, axis.Name);
             _saveName = axis.Name;
             _axis = axis;
             _axis.Editor.Open();
@@ -89,30 +88,30 @@ namespace Lench.AdvancedControls.UI
             if(_axis == null)
             {
                 // Draw add buttons
-                if (GUILayout.Button("Controller Axis", Elements.Buttons.ComponentField))
+                if (GUILayout.Button(Strings.AxisEditorWindow_ButtonText_ControllerAxis, Elements.Buttons.ComponentField))
                 {
-                    _axis = new ControllerAxis("new controller axis");
-                    _windowName = "Create new controller axis";
+                    _axis = new ControllerAxis(Strings.AxisEditorWindow_DefaultAxisName_NewControllerAxis);
+                    _windowName = Strings.AxisEditorWindow_WindowTitle_CreateNewControllerAxis;
                 }
-                if (GUILayout.Button("Key Axis", Elements.Buttons.ComponentField))
+                if (GUILayout.Button(Strings.AxisEditorWindow_ButtonText_KeyAxis, Elements.Buttons.ComponentField))
                 {
-                    _axis = new KeyAxis("new key axis");
-                    _windowName = "Create new key axis";
+                    _axis = new KeyAxis(Strings.AxisEditorWindow_DefaultAxisName_NewKeyAxis);
+                    _windowName = Strings.AxisEditorWindow_WindowTitle_CreateNewKeyAxis;
                 }
-                if (GUILayout.Button("Mouse Axis", Elements.Buttons.ComponentField))
+                if (GUILayout.Button(Strings.AxisEditorWindow_ButtonText_MouseAxis, Elements.Buttons.ComponentField))
                 {
-                    _axis = new MouseAxis("new mouse axis");
-                    _windowName = "Create new mouse axis";
+                    _axis = new MouseAxis(Strings.AxisEditorWindow_DefaultAxisName_NewMouseAxis);
+                    _windowName = Strings.AxisEditorWindow_WindowTitle_CreateNewMouseAxis;
                 }
-                if (GUILayout.Button("Chain Axis", Elements.Buttons.ComponentField))
+                if (GUILayout.Button(Strings.AxisEditorWindow_ButtonText_ChainAxis, Elements.Buttons.ComponentField))
                 {
-                    _axis = new ChainAxis("new chain axis");
-                    _windowName = "Create new chain axis";
+                    _axis = new ChainAxis(Strings.AxisEditorWindow_DefaultAxisName_NewChainAxis);
+                    _windowName = Strings.AxisEditorWindow_WindowTitle_CreateNewChainAxis;
                 }
-                if (GUILayout.Button("Custom Axis", Elements.Buttons.ComponentField))
+                if (GUILayout.Button(Strings.AxisEditorWindow_ButtonText_CustomAxis, Elements.Buttons.ComponentField))
                 {
-                    _axis = new CustomAxis("new custom axis");
-                    _windowName = "Create new custom axis";
+                    _axis = new CustomAxis(Strings.AxisEditorWindow_DefaultAxisName_NewCustomAxis);
+                    _windowName = Strings.AxisEditorWindow_WindowTitle_CreateNewCustomAxis;
                 }
                 if (_axis != null)
                 {
@@ -129,10 +128,10 @@ namespace Lench.AdvancedControls.UI
                     _saveName = GUILayout.TextField(_saveName,
                         Elements.InputFields.Default);
 
-                    if (GUILayout.Button("Save",
+                    if (GUILayout.Button(Strings.ButtonText_Save,
                         Elements.Buttons.Default,
                         GUILayout.Width(80))
-                        && _saveName != "")
+                        && _saveName != string.Empty)
                     {
                         SaveAxis();
                     }
@@ -157,7 +156,7 @@ namespace Lench.AdvancedControls.UI
                 // Draw help button
                 if (_axis.GetEditor().GetHelpURL() != null)
                     if (GUI.Button(new Rect(WindowRect.width - 76, 8, 30, 30),
-                        "?", Elements.Buttons.Red))
+                        Strings.ButtonText_Help, Elements.Buttons.Red))
                     {
                         try
                         {
@@ -173,7 +172,7 @@ namespace Lench.AdvancedControls.UI
 
             // Draw close button
             if (GUI.Button(new Rect(WindowRect.width - 38, 8, 30, 30),
-                "×", Elements.Buttons.Red))
+                Strings.ButtonText_Close, Elements.Buttons.Red))
             {
                 Callback = null;
                 Destroy(this);

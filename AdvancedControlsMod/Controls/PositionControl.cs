@@ -1,6 +1,8 @@
 ﻿using System;
 using UnityEngine;
 using Lench.AdvancedControls.Blocks;
+using Lench.AdvancedControls.UI;
+
 // ReSharper disable VirtualMemberCallInConstructor
 
 namespace Lench.AdvancedControls.Controls
@@ -13,12 +15,21 @@ namespace Lench.AdvancedControls.Controls
         private Piston _piston;
 
         /// <summary>
+        /// Position control key is 'POSITION'.
+        /// </summary>
+        public override string Key => "POSITION";
+
+        /// <summary>
+        /// Localized display name of the control.
+        /// </summary>
+        public override string Name => Strings.PositionControl_Name;
+
+        /// <summary>
         /// Creates a position control for a piston with given GUID.
         /// </summary>
         /// <param name="guid">GUID of the block.</param>
         public PositionControl(Guid guid) : base(guid)
         {
-            Name = "POSITION";
             Min = 0;
             Center = 0.5f;
             Max = 1;
@@ -94,7 +105,6 @@ namespace Lench.AdvancedControls.Controls
         {
             var clone = new PositionControl(BlockGUID)
             {
-                Name = Name,
                 Enabled = Enabled,
                 Axis = Axis,
                 Block = Block,

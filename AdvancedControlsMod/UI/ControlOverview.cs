@@ -103,7 +103,7 @@ namespace Lench.AdvancedControls.UI
                 Popup.WindowRect.y = WindowRect.y + GUI.skin.window.padding.top + buttonRect.y - _scrollPosition.y - 8;
             }
 
-            if (a != null && GUILayout.Button("✎", new GUIStyle(Elements.Buttons.Default) { fontSize = 20, padding = new RectOffset(-3, 0, 0, 0) }, GUILayout.Width(30), GUILayout.MaxHeight(28)))
+            if (a != null && GUILayout.Button(Strings.ButtonText_EditAxis, new GUIStyle(Elements.Buttons.Default) { fontSize = 20, padding = new RectOffset(-3, 0, 0, 0) }, GUILayout.Width(30), GUILayout.MaxHeight(28)))
             {
                 var editor = ACM.Instance.gameObject.AddComponent<AxisEditorWindow>();
                 editor.WindowRect.x = Mathf.Clamp(WindowRect.x + WindowRect.width,
@@ -117,13 +117,13 @@ namespace Lench.AdvancedControls.UI
             // Draw graph
             string text;
             if (a == null)
-                text = "NOT FOUND";
+                text = InputAxis.GetStatusString(AxisStatus.NotFound);
             else if (a.Status != AxisStatus.OK)
                 text = InputAxis.GetStatusString(a.Status);
             else
-                text = "";
+                text = string.Empty;
 
-            GUILayout.Label("  <color=#808080><b>" + text + "</b></color>",
+            GUILayout.Label($"  <color=#808080><b>{text}</b></color>",
                 new GUIStyle(Elements.Labels.Default) { richText = true, alignment = TextAnchor.MiddleLeft, margin = new RectOffset(8, 8, 8, 8) },
                 GUILayout.Height(20));
 
@@ -149,7 +149,7 @@ namespace Lench.AdvancedControls.UI
             foreach (Control c in _controls[axis])
             {
                 GUILayout.BeginHorizontal();
-                if (GUILayout.Button("×", new GUIStyle(Elements.Buttons.Red) { margin = new RectOffset(8, 8, 0, 0) }, GUILayout.Width(20), GUILayout.Height(20)))
+                if (GUILayout.Button(Strings.ButtonText_Close, new GUIStyle(Elements.Buttons.Red) { margin = new RectOffset(8, 8, 0, 0) }, GUILayout.Width(20), GUILayout.Height(20)))
                 {
                     c.Axis = null;
                     c.Enabled = false;
@@ -163,7 +163,7 @@ namespace Lench.AdvancedControls.UI
                 {
                     blockName = "...";
                 }
-                GUILayout.Label("<b>" + c.Name + "</b> for " + blockName, Elements.Labels.LogEntry);
+                GUILayout.Label(string.Format(Strings.ControlOverview_List_Entry, c.Key, blockName), Elements.Labels.LogEntry);
                 GUILayout.EndHorizontal();
             }
 
@@ -181,7 +181,7 @@ namespace Lench.AdvancedControls.UI
         protected virtual void OnGUI()
         {
             GUI.skin = Util.Skin;
-            WindowRect = GUILayout.Window(WindowID, WindowRect, DoWindow, "Overview",
+            WindowRect = GUILayout.Window(WindowID, WindowRect, DoWindow, Strings.ControlOverview_WindowTitle,
                 GUILayout.Width(320),
                 GUILayout.Height(42));
             if (Popup != null && !Popup.ContainsMouse)
@@ -203,12 +203,12 @@ namespace Lench.AdvancedControls.UI
             RefreshOverview();
 
             if (_axisList.Count == 0)
-                GUILayout.Label("<b>" + Machine.Active().Name + "</b> uses no advanced controls.");
+                GUILayout.Label(string.Format(Strings.ControlOverview_Label_NoControls, Machine.Active().Name));
             else
             {
                 _scrollPosition = GUILayout.BeginScrollView(_scrollPosition, new GUIStyle(Elements.Scrollview.ThumbVertical) { normal = new GUIStyleState(), padding = new RectOffset() }, GUILayout.Width(304), GUILayout.Height(500));
                 
-                GUILayout.Label("To use this machine as intended,\nmake sure all axes report no problems.\n\n<b>" + Machine.Active().Name + "</b> uses these input axes:");
+                GUILayout.Label(string.Format(Strings.ControlOverview_Message_IntroNote, Machine.Active().Name));
 
                 // Draw axes
                 foreach (string axis in _axisList)
@@ -219,9 +219,9 @@ namespace Lench.AdvancedControls.UI
 
             // Draw help button
             if (GUI.Button(new Rect(WindowRect.width - 76, 8, 30, 30),
-                "?", Elements.Buttons.Red))
+                Strings.ButtonText_Help, Elements.Buttons.Red))
             {
-                const string url = "https://github.com/lench4991/AdvancedControlsMod/wiki/Sharing";
+                var url = Strings.ControlOverview_HelpURL;
                 try
                 {
                     SteamFriends.ActivateGameOverlayToWebPage(url);
@@ -234,7 +234,7 @@ namespace Lench.AdvancedControls.UI
 
             // Draw close button
             if (GUI.Button(new Rect(WindowRect.width - 38, 8, 30, 30),
-                "×", Elements.Buttons.Red))
+                Strings.ButtonText_Close, Elements.Buttons.Red))
             {
                 Destroy(this);
             }

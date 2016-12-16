@@ -1,5 +1,6 @@
 ﻿using System;
 using Lench.AdvancedControls.Blocks;
+using Lench.AdvancedControls.UI;
 using UnityEngine;
 // ReSharper disable UseNullPropagation
 
@@ -10,18 +11,25 @@ namespace Lench.AdvancedControls.Controls
     /// </summary>
     public class InputControl : Control
     {
-        private Cog cog;
-        private Steering steering;
-        private Spring spring;
+        private Cog _cog;
+        private Steering _steering;
+        private Spring _spring;
+
+        /// <summary>
+        /// Input control key is 'INPUT'.
+        /// </summary>
+        public override string Key => "INPUT";
+
+        /// <summary>
+        /// Localized display name of the control.
+        /// </summary>
+        public override string Name => Strings.ControlName_Input;
 
         /// <summary>
         /// Creates an input control for a block with given GUID.
         /// </summary>
         /// <param name="guid">GUID of the block.</param>
-        public InputControl(Guid guid) : base(guid)
-        {
-            Name = "INPUT";
-        }
+        public InputControl(Guid guid) : base(guid) {}
 
         /// <summary>
         /// Control's block handler.
@@ -31,16 +39,16 @@ namespace Lench.AdvancedControls.Controls
         {
             get
             {
-                if (cog != null) return cog;
-                if (steering != null) return steering;
-                if (spring != null) return spring;
+                if (_cog != null) return _cog;
+                if (_steering != null) return _steering;
+                if (_spring != null) return _spring;
                 return null;
             }
             protected set
             {
-                cog = value as Cog;
-                steering = value as Steering;
-                spring = value as Spring;
+                _cog = value as Cog;
+                _steering = value as Steering;
+                _spring = value as Spring;
             }
         }
 
@@ -53,9 +61,9 @@ namespace Lench.AdvancedControls.Controls
             value = value > 0 
                 ? Mathf.Lerp(Center, Max, value) 
                 : Mathf.Lerp(Center, Min, -value);
-            cog?.SetInput(value);
-            steering?.SetInput(value);
-            spring?.SetInput(value);
+            _cog?.SetInput(value);
+            _steering?.SetInput(value);
+            _spring?.SetInput(value);
         }
 
         /// <summary>
@@ -65,12 +73,12 @@ namespace Lench.AdvancedControls.Controls
         /// </summary>
         protected override void ClearKeys()
         {
-            if (steering != null)
+            if (_steering != null)
             {
                 Block.ClearKeys("LEFT");
                 Block.ClearKeys("RIGHT");
             }
-            if (spring != null)
+            if (_spring != null)
             {
                 Block.ClearKeys("CONTRACT");
             }
@@ -80,7 +88,6 @@ namespace Lench.AdvancedControls.Controls
         {
             var clone = new InputControl(BlockGUID)
             {
-                Name = Name,
                 Enabled = Enabled,
                 Axis = Axis,
                 Block = Block,

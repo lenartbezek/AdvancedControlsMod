@@ -140,25 +140,12 @@ namespace Lench.AdvancedControls.Axes
         /// <summary>
         /// Raw input value.
         /// </summary>
-        public override float InputValue
-        {
-            get
-            {
-                if (!Connected) return 0;
-                return _controller.GetAxis(Axis, Smooth);
-            }
-        }
+        public override float InputValue => !Connected ? 0 : _controller.GetAxis(Axis, Smooth);
 
         /// <summary>
         /// Processed input value.
         /// </summary>
-        public override float OutputValue
-        {
-            get
-            {
-                return Process(InputValue);
-            }
-        }
+        public override float OutputValue => Process(InputValue);
 
         /// <summary>
         /// Returns processed output value for given input value.
@@ -181,16 +168,18 @@ namespace Lench.AdvancedControls.Axes
 
         internal override InputAxis Clone()
         {
-            var clone = new ControllerAxis(Name);
-            clone.GUID = GUID;
-            clone.Axis = Axis;
-            clone.Sensitivity = Sensitivity;
-            clone.Curvature = Curvature;
-            clone.Deadzone = Deadzone;
-            clone.OffsetX = OffsetX;
-            clone.OffsetY = OffsetY;
-            clone.Invert = Invert;
-            clone.Smooth = Smooth;
+            var clone = new ControllerAxis(Name)
+            {
+                GUID = GUID,
+                Axis = Axis,
+                Sensitivity = Sensitivity,
+                Curvature = Curvature,
+                Deadzone = Deadzone,
+                OffsetX = OffsetX,
+                OffsetY = OffsetY,
+                Invert = Invert,
+                Smooth = Smooth
+            };
             return clone;
         }
 

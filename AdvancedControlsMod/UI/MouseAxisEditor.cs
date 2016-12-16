@@ -111,16 +111,16 @@ namespace Lench.AdvancedControls.UI
             // Draw axis toggles
             GUILayout.BeginHorizontal();
             GUILayout.FlexibleSpace();
-            if (GUILayout.Button("X", _axis.Axis == Axis.X ? Elements.Buttons.Default : Elements.Buttons.Disabled, GUILayout.Width(80)))
+            if (GUILayout.Button(Strings.ControllerAxisEditor_AxisX, _axis.Axis == Axis.X ? Elements.Buttons.Default : Elements.Buttons.Disabled, GUILayout.Width(80)))
                 _axis.Axis = Axis.X;
-            if (GUILayout.Button("Y", _axis.Axis == Axis.Y ? Elements.Buttons.Default : Elements.Buttons.Disabled, GUILayout.Width(80)))
+            if (GUILayout.Button(Strings.ControllerAxisEditor_AxisY, _axis.Axis == Axis.Y ? Elements.Buttons.Default : Elements.Buttons.Disabled, GUILayout.Width(80)))
                 _axis.Axis = Axis.Y;
             GUILayout.FlexibleSpace();
             GUILayout.EndHorizontal();
 
             // Draw sliders
-            _axis.Center = Util.DrawSlider("Center", _axis.Center, -1, 1, _centerString, out _centerString);
-            _axis.Range = Util.DrawSlider("Range", _axis.Range, 0, 1, _rangeString, out _rangeString);
+            _axis.Center = Util.DrawSlider(Strings.Label_Center, _axis.Center, -1, 1, _centerString, out _centerString);
+            _axis.Range = Util.DrawSlider(Strings.Label_Range, _axis.Range, 0, 1, _rangeString, out _rangeString);
         }
 
         public string GetError()
@@ -130,7 +130,7 @@ namespace Lench.AdvancedControls.UI
 
         public string GetHelpURL()
         {
-            return "https://github.com/lench4991/AdvancedControlsMod/wiki/Mouse-axis";
+            return Strings.MouseAxisEditor_HelpURL;
         }
 
         public string GetNote()

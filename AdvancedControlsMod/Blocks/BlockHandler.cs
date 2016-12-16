@@ -42,12 +42,7 @@ namespace Lench.AdvancedControls.Blocks
         /// <summary>
         /// Type of the block.
         /// </summary>
-        public BlockType BlockType {
-            get
-            {
-                return (BlockType)bb.GetBlockID();
-            }
-        }
+        public BlockType BlockType => (BlockType)bb.GetBlockID();
 
         /// <summary>
         /// BlockBehaviour object of this handler.
@@ -135,10 +130,7 @@ namespace Lench.AdvancedControls.Blocks
         /// Returns true if the block has RigidBody.
         /// </summary>
         /// <returns>Boolean value.</returns>
-        public virtual bool Exists
-        {
-            get { return bb != null && bb.GetComponent<Rigidbody>() != null; }
-        }
+        public virtual bool Exists => bb != null && bb.GetComponent<Rigidbody>() != null;
 
         /// <summary>
         /// Returns a list of all available toggles.
@@ -354,37 +346,25 @@ namespace Lench.AdvancedControls.Blocks
         /// Returns the block's forward vector.
         /// </summary>
         /// <returns>UnityEngine.Vector3 vector.</returns>
-        public virtual Vector3 Forward
-        {
-            get { return bb.transform.forward; }
-        }
+        public virtual Vector3 Forward => bb.transform.forward;
 
         /// <summary>
         /// Returns the block's up vector.
         /// </summary>
         /// <returns>UnityEngine.Vector3 vector.</returns>
-        public virtual Vector3 Up
-        {
-            get { return bb.transform.up; }
-        }
+        public virtual Vector3 Up => bb.transform.up;
 
         /// <summary>
         /// Returns the block's right vector.
         /// </summary>
         /// <returns>UnityEngine.Vector3 vector.</returns>
-        public virtual Vector3 Right
-        {
-            get { return bb.transform.right; }
-        }
+        public virtual Vector3 Right => bb.transform.right;
 
         /// <summary>
         /// Returns the position of the block.
         /// </summary>
         /// <returns>UnityEngine.Vector3 vector.</returns>
-        public virtual Vector3 Position
-        {
-            get { return bb.transform.position; }
-        }
+        public virtual Vector3 Position => bb.transform.position;
 
         /// <summary>
         /// Returns the velocity of the block in units per second.
@@ -395,7 +375,7 @@ namespace Lench.AdvancedControls.Blocks
         {
             get
             {
-                Rigidbody body = bb.GetComponent<Rigidbody>();
+                var body = bb.GetComponent<Rigidbody>();
                 if (body != null)
                     return body.velocity;
                 throw new NoRigidBodyException("Block " + BlockName + " has no rigid body.");
@@ -410,7 +390,7 @@ namespace Lench.AdvancedControls.Blocks
         {
             get
             {
-                Rigidbody body = bb.GetComponent<Rigidbody>();
+                var body = bb.GetComponent<Rigidbody>();
                 if (body != null)
                     return body.mass;
                 throw new NoRigidBodyException("Block " + BlockName + " has no rigid body.");
@@ -425,7 +405,7 @@ namespace Lench.AdvancedControls.Blocks
         {
             get
             {
-                Rigidbody body = bb.GetComponent<Rigidbody>();
+                var body = bb.GetComponent<Rigidbody>();
                 if (body != null)
                     return body.centerOfMass;
                 throw new NoRigidBodyException("Block " + BlockName + " has no rigid body.");
@@ -456,7 +436,7 @@ namespace Lench.AdvancedControls.Blocks
         {
             get
             {
-                Rigidbody body = bb.GetComponent<Rigidbody>();
+                var body = bb.GetComponent<Rigidbody>();
                 if (body != null)
                 {
                     Vector3 convertUnits = new Vector3(convertToDegrees, convertToDegrees, convertToDegrees);

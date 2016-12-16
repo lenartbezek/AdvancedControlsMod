@@ -4,6 +4,8 @@ using SimpleJSON;
 using UnityEngine;
 using spaar.ModLoader.UI;
 using System.Collections.Generic;
+using Lench.AdvancedControls.UI;
+
 // ReSharper disable UnusedMember.Local
 
 namespace Lench.AdvancedControls
@@ -106,7 +108,7 @@ namespace Lench.AdvancedControls
 
             if (!www.isDone || !string.IsNullOrEmpty(www.error))
             {
-                if (verbose) Debug.Log("=> Unable to connect.");
+                if (verbose) Debug.Log("=> "+Strings.Log_UnableToConnect);
                 Destroy(this);
                 yield break;
             }  
@@ -120,12 +122,12 @@ namespace Lench.AdvancedControls
 
             if (LatestVersion > CurrentVersion)
             {
-                if (verbose) Debug.Log("=> Update available: v" + LatestVersion+": "+LatestReleaseName);
+                if (verbose) Debug.Log("=> "+Strings.Log_UpdateAvailable+" v" + LatestVersion+": "+LatestReleaseName);
                 UpdateAvailable = true;
                 Visible = true;
             }
             else
-                if (verbose) Debug.Log("=> Mod is up to date.");
+                if (verbose) Debug.Log("=> "+Strings.Log_ModIsUpToDate);
         }
 
         private void OnGUI()
@@ -141,7 +143,7 @@ namespace Lench.AdvancedControls
         private void DoWindow(int id)
         {
             // Draw release info
-            GUILayout.Label("New update available",
+            GUILayout.Label(Strings.Updater_NewUpdateAvailable,
                 new GUIStyle(Elements.Labels.Default) { alignment = TextAnchor.MiddleCenter });
             GUILayout.Label("<b>v" + LatestVersion + ": " + LatestReleaseName + "</b>",
                 new GUIStyle(Elements.Labels.Default) { alignment = TextAnchor.MiddleCenter, fontSize = 16 });
@@ -157,7 +159,7 @@ namespace Lench.AdvancedControls
 
             // Draw close button
             if (GUI.Button(new Rect(WindowRect.width - 38, 8, 30, 30),
-                "×", Elements.Buttons.Red))
+                Strings.ButtonText_Close, Elements.Buttons.Red))
             {
                 Destroy(this);
             }

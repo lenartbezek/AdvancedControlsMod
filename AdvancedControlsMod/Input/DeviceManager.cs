@@ -82,13 +82,13 @@ namespace Lench.AdvancedControls.Input
                         ControllerAxisEditor.DownloadingInProgress = false;
                         if (e.Error != null)
                         {
-                            ControllerAxisEditor.DownloadButtonText = "Error";
-                            spaar.ModLoader.ModConsole.AddMessage(LogType.Log, "[ACM]: Error downloading file: SDL2.dll", e.Error.Message);
+                            ControllerAxisEditor.DownloadButtonText = Strings.DownloadButtonText_Error;
+                            spaar.ModLoader.ModConsole.AddMessage(LogType.Log, $"[ACM]: {Strings.Log_ErrorDownloadingFile} SDL2.dll", e.Error.Message);
                         }
                         else
                         {
-                            spaar.ModLoader.ModConsole.AddMessage(LogType.Log, "[ACM]: File downloaded: SDL2.dll");
-                            ControllerAxisEditor.DownloadButtonText = "Please restart Besiege";
+                            spaar.ModLoader.ModConsole.AddMessage(LogType.Log, $"[ACM]: {Strings.Log_SuccessDownloadingFile} SDL2.dll");
+                            ControllerAxisEditor.DownloadButtonText = Strings.RestartButtonText;
                             SdlInstalled = true;
                             InitSdl();
                         } 
@@ -100,8 +100,8 @@ namespace Lench.AdvancedControls.Input
                 catch (Exception e)
                 {
                     ControllerAxisEditor.DownloadingInProgress = false;
-                    ControllerAxisEditor.DownloadButtonText = "Error";
-                    spaar.ModLoader.ModConsole.AddMessage(LogType.Error, "[ACM]: Error downloading file: SDL2.dll", e.Message);
+                    ControllerAxisEditor.DownloadButtonText = Strings.DownloadButtonText_Error;
+                    spaar.ModLoader.ModConsole.AddMessage(LogType.Error, $"[ACM]: {Strings.Log_ErrorDownloadingFile} SDL2.dll", e.Message);
                 }
             }
         }
@@ -118,7 +118,7 @@ namespace Lench.AdvancedControls.Input
                 if (www.isDone && string.IsNullOrEmpty(www.error))
                     mappings = www.text;
                 else
-                    if (verbose) Debug.Log("=> Unable to connect.");
+                    if (verbose) Debug.Log("=> "+Strings.Log_UnableToConnect);
             }
 
             var dir = Application.dataPath + "/Mods/Resources/AdvancedControls/";
@@ -131,12 +131,12 @@ namespace Lench.AdvancedControls.Input
                 {
                     if (mappings == currentMappings)
                     {
-                        if (verbose) Debug.Log("=> Game Controller DB is up to date.");
+                        if (verbose) Debug.Log("=> "+Strings.Log_GameControllerDBIsUpToDate);
                     }
                     else
                     {
                         File.WriteAllText(dir + file, mappings);
-                        if (verbose) Debug.Log("=> Game Controller DB update successfull.");
+                        if (verbose) Debug.Log("=> "+Strings.Log_GameControllerDBUpdateSuccessfull);
                     }
                 }
                 else
@@ -151,7 +151,7 @@ namespace Lench.AdvancedControls.Input
                     if (!Directory.Exists(dir))
                         Directory.CreateDirectory(dir);
                     File.WriteAllText(dir + file, mappings);
-                    if (verbose) Debug.Log("=> Game Controller DB downloaded.");
+                    if (verbose) Debug.Log("=> "+Strings.Log_GameControllerDBDownloaded);
                 }
             }
 
@@ -165,17 +165,17 @@ namespace Lench.AdvancedControls.Input
                 var envVar = Environment.GetEnvironmentVariable("SDL_GAMECONTROLLERCONFIG", EnvironmentVariableTarget.User);
                 if (string.IsNullOrEmpty(envVar))
                 {
-                    if (verbose) Debug.Log("=> SDL_GAMECONTROLLERCONFIG environment variable not set.");
+                    if (verbose) Debug.Log("=> "+Strings.Log_EnvVarSet);
                 }
                 else
                 {
-                    if (verbose) Debug.Log("=> Successfully read SDL_GAMECONTROLLERCONFIG environment variable.");
+                    if (verbose) Debug.Log("=> "+Strings.Log_EnvVarRead);
                     SDL.SDL_GameControllerAddMapping(envVar);
                 }
             }
             catch
             {
-                if (verbose) Debug.Log("=> SDL_GAMECONTROLLERCONFIG environment variable not retrieved.");
+                if (verbose) Debug.Log("=> "+Strings.Log_EnvVarError);
             }
         }
 

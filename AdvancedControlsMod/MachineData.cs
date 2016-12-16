@@ -4,6 +4,8 @@ using Lench.AdvancedControls.Controls;
 using Lench.AdvancedControls.Axes;
 using UnityEngine;
 using System.Reflection;
+using Lench.AdvancedControls.UI;
+
 // ReSharper disable PossibleNullReferenceException
 
 namespace Lench.AdvancedControls
@@ -23,7 +25,7 @@ namespace Lench.AdvancedControls
 
                 // version alert
                 if (version < Assembly.GetExecutingAssembly().GetName().Version)
-                    Debug.Log("[ACM]: " + machineInfo.Name + " was saved with mod version " + version + ".\n\tIt may not be compatible with some newer features.");
+                    Debug.Log("[ACM]: "+string.Format(Strings.Log_VersionWarning, machineInfo.Name, version));
 
                 // return if no input axes are present
                 if (!machineInfo.MachineData.HasKey("ac-axislist")) return;
@@ -76,7 +78,7 @@ namespace Lench.AdvancedControls
                     {
                         foreach (Control c in controlList)
                         {
-                            if (name == c.Name)
+                            if (name == c.Key)
                                 c.Load(blockInfo);
                         }
                     }
@@ -86,7 +88,7 @@ namespace Lench.AdvancedControls
             }
             catch (Exception e)
             {
-                Debug.Log("[ACM]: Error loading machine's controls:");
+                Debug.Log($"[ACM]: {Strings.Log_ControlLoadingError}");
                 Debug.LogException(e);
             }
         }
@@ -110,7 +112,7 @@ namespace Lench.AdvancedControls
                         {
                             if (!axisStack.Contains(c.Axis))
                                 axisStack.Push(c.Axis);
-                            controlNames.Add(c.Name);
+                            controlNames.Add(c.Key);
                             c.Save(blockInfo);
                         }
                         blockInfo.BlockData.Write("ac-controllist", controlNames.ToArray());
@@ -147,7 +149,7 @@ namespace Lench.AdvancedControls
             }
             catch (Exception e)
             {
-                Debug.Log("[ACM]: Error saving machine's controls.");
+                Debug.Log($"[ACM]: {Strings.Log_ControlSavingError}");
                 Debug.LogException(e);
             }
         }

@@ -2,6 +2,7 @@
 using UnityEngine;
 using Lench.AdvancedControls.Blocks;
 using Lench.AdvancedControls.Axes;
+using Lench.AdvancedControls.UI;
 using spaar.ModLoader;
 // ReSharper disable SpecifyACultureInStringConversionExplicitly
 // ReSharper disable VirtualMemberCallInConstructor
@@ -16,7 +17,12 @@ namespace Lench.AdvancedControls.Controls
         /// <summary>
         /// Name of the control. Displayed in the control mapper.
         /// </summary>
-        public string Name { get; set; } = "CONTROL";
+        public virtual string Name { get; set; } = Strings.ControlName_Default;
+
+        /// <summary>
+        /// Control key for saving, loading and copying. Should be unique per block.
+        /// </summary>
+        public virtual string Key { get; set; } = "CONTROL";
 
         /// <summary>
         /// Is the control enabled and applies value to the block on each frame.
@@ -173,13 +179,13 @@ namespace Lench.AdvancedControls.Controls
         /// <param name="blockInfo"></param>
         internal virtual void Load(BlockInfo blockInfo)
         {
-            Axis = blockInfo.BlockData.ReadString("ac-control-" + Name + "-axis");
-            if (blockInfo.BlockData.HasKey("ac-control-" + Name + "-min"))
-                Min = blockInfo.BlockData.ReadFloat("ac-control-" + Name + "-min");
-            if (blockInfo.BlockData.HasKey("ac-control-" + Name + "-center"))
-                Center = blockInfo.BlockData.ReadFloat("ac-control-" + Name + "-center");
-            if (blockInfo.BlockData.HasKey("ac-control-" + Name + "-max"))
-                Max = blockInfo.BlockData.ReadFloat("ac-control-" + Name + "-max");
+            Axis = blockInfo.BlockData.ReadString("ac-control-" + Key + "-axis");
+            if (blockInfo.BlockData.HasKey("ac-control-" + Key + "-min"))
+                Min = blockInfo.BlockData.ReadFloat("ac-control-" + Key + "-min");
+            if (blockInfo.BlockData.HasKey("ac-control-" + Key + "-center"))
+                Center = blockInfo.BlockData.ReadFloat("ac-control-" + Key + "-center");
+            if (blockInfo.BlockData.HasKey("ac-control-" + Key + "-max"))
+                Max = blockInfo.BlockData.ReadFloat("ac-control-" + Key + "-max");
             Enabled = true;
         }
 
@@ -189,10 +195,10 @@ namespace Lench.AdvancedControls.Controls
         /// <param name="blockInfo"></param>
         internal virtual void Save(BlockInfo blockInfo)
         {
-            blockInfo.BlockData.Write("ac-control-" + Name + "-axis", Axis);
-            blockInfo.BlockData.Write("ac-control-" + Name + "-min", Min);
-            blockInfo.BlockData.Write("ac-control-" + Name + "-center", Center);
-            blockInfo.BlockData.Write("ac-control-" + Name + "-max", Max);
+            blockInfo.BlockData.Write("ac-control-" + Key + "-axis", Axis);
+            blockInfo.BlockData.Write("ac-control-" + Key + "-min", Min);
+            blockInfo.BlockData.Write("ac-control-" + Key + "-center", Center);
+            blockInfo.BlockData.Write("ac-control-" + Key + "-max", Max);
         }
     }
 }

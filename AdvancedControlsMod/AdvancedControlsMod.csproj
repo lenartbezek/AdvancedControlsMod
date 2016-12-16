@@ -150,6 +150,11 @@
     <Compile Include="Input\LPUtf8StrMarshaler.cs" />
     <Compile Include="Input\SDL2.cs" />
     <Compile Include="PythonEnvironment.cs" />
+    <Compile Include="UI\Strings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Strings.resx</DependentUpon>
+    </Compile>
     <Compile Include="TrackedCollider.cs" />
     <Compile Include="UI\ControlOverview.cs" />
     <Compile Include="UI\AxisEditorWindow.cs" />
@@ -164,6 +169,12 @@
     <Compile Include="UI\KeyAxisEditor.cs" />
     <Compile Include="UI\Util.cs" />
     <Compile Include="Updater.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="UI\Strings.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Strings.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

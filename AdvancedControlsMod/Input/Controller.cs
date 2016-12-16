@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Lench.AdvancedControls.UI;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -53,7 +54,7 @@ namespace Lench.AdvancedControls.Input
             }
             else
             {
-                return "Unknown axis";
+                return Strings.Controller_AxisName_UnknownAxis;
             }
         }
 
@@ -72,7 +73,7 @@ namespace Lench.AdvancedControls.Input
             }
             else
             {
-                return "Unknown ball";
+                return Strings.Controller_BallName_UnknownBall;
             }
         }
 
@@ -91,7 +92,7 @@ namespace Lench.AdvancedControls.Input
             }
             else
             {
-                return "Unknown hat";
+                return Strings.Controller_HatName_UnknownHat;
             }
         }
 
@@ -110,7 +111,7 @@ namespace Lench.AdvancedControls.Input
             }
             else
             {
-                return "Unknown button";
+                return Strings.Controller_ButtonName_UnknownButton;
             }
         }
 
@@ -138,7 +139,7 @@ namespace Lench.AdvancedControls.Input
         /// <summary>
         /// Was device mapping found and is thus recognized as game controller.
         /// </summary>
-        public bool IsGameController { get; private set; }
+        public bool IsGameController { get; }
 
         internal static List<Controller> ControllerList = new List<Controller>();
 
@@ -247,10 +248,10 @@ namespace Lench.AdvancedControls.Input
 
             // Debug
             if (IsGameController)
-                Debug.Log("[ACM]: Game controller connected: " + Name);
+                Debug.Log($"[ACM]: {Strings.Controller_GameControllerConnected} " + Name);
             else
-                Debug.Log("[ACM]: Joystick connected: " + Name);
-            Debug.Log("\tGuid: " + GUID);
+                Debug.Log($"[ACM]: {Strings.Controller_JoystickConnected} " + Name);
+            Debug.Log("\t"+Strings.Controller_GUID+" " + GUID);
         }
 
         private void Update()
@@ -288,19 +289,19 @@ namespace Lench.AdvancedControls.Input
             switch (i)
             {
                 case SDL.SDL_GameControllerAxis.SDL_CONTROLLER_AXIS_LEFTX:
-                    return "Left X";
+                    return Strings.Controller_AxisName_LeftX;
                 case SDL.SDL_GameControllerAxis.SDL_CONTROLLER_AXIS_LEFTY:
-                    return "Left Y";
+                    return Strings.Controller_AxisName_LeftY;
                 case SDL.SDL_GameControllerAxis.SDL_CONTROLLER_AXIS_RIGHTX:
-                    return "Right X";
+                    return Strings.Controller_AxisName_RightX;
                 case SDL.SDL_GameControllerAxis.SDL_CONTROLLER_AXIS_RIGHTY:
-                    return "Right Y";
+                    return Strings.Controller_AxisName_RightY;
                 case SDL.SDL_GameControllerAxis.SDL_CONTROLLER_AXIS_TRIGGERLEFT:
-                    return "Left Trigger";
+                    return Strings.Controller_AxisName_LeftTrigger;
                 case SDL.SDL_GameControllerAxis.SDL_CONTROLLER_AXIS_TRIGGERRIGHT:
-                    return "Right Trigger";
+                    return Strings.Controller_AxisName_RightTrigger;
                 default:
-                    return "Axis " + ((int)i + 1);
+                    return string.Format(Strings.Controller_AxisName_Default, (int)i + 1);
             }
         }
 
@@ -309,29 +310,29 @@ namespace Lench.AdvancedControls.Input
             switch (i)
             {
                 case SDL.SDL_GameControllerButton.SDL_CONTROLLER_BUTTON_A:
-                    return "A Button";
+                    return Strings.Controller_ButtonName_AButton;
                 case SDL.SDL_GameControllerButton.SDL_CONTROLLER_BUTTON_B:
-                    return "B Button";
+                    return Strings.Controller_ButtonName_BButton;
                 case SDL.SDL_GameControllerButton.SDL_CONTROLLER_BUTTON_X:
-                    return "X Button";
+                    return Strings.Controller_ButtonName_XButton;
                 case SDL.SDL_GameControllerButton.SDL_CONTROLLER_BUTTON_Y:
-                    return "Y Button";
+                    return Strings.Controller_ButtonName_YButton;
                 case SDL.SDL_GameControllerButton.SDL_CONTROLLER_BUTTON_BACK:
-                    return "Back Button";
+                    return Strings.Controller_ButtonName_BackButton;
                 case SDL.SDL_GameControllerButton.SDL_CONTROLLER_BUTTON_GUIDE:
-                    return "Guide Button";
+                    return Strings.Controller_ButtonName_GuideButton;
                 case SDL.SDL_GameControllerButton.SDL_CONTROLLER_BUTTON_START:
-                    return "Start Button";
+                    return Strings.Controller_ButtonName_StartButton;
                 case SDL.SDL_GameControllerButton.SDL_CONTROLLER_BUTTON_LEFTSTICK:
-                    return "Left Stick";
+                    return Strings.Controller_ButtonName_LeftStick;
                 case SDL.SDL_GameControllerButton.SDL_CONTROLLER_BUTTON_RIGHTSTICK:
-                    return "Right Stick";
+                    return Strings.Controller_ButtonName_RightStick;
                 case SDL.SDL_GameControllerButton.SDL_CONTROLLER_BUTTON_LEFTSHOULDER:
-                    return "Left Shoulder";
+                    return Strings.Controller_ButtonName_LeftShoulder;
                 case SDL.SDL_GameControllerButton.SDL_CONTROLLER_BUTTON_RIGHTSHOULDER:
-                    return "Right Shoulder";
+                    return Strings.Controller_ButtonName_RightShoulder;
                 default:
-                    return "Button " + ((int)i + 1);
+                    return string.Format(Strings.Controller_ButtonName_Default, (int)i + 1);
             }
         }
 
@@ -352,13 +353,13 @@ namespace Lench.AdvancedControls.Input
                     switch (i)
                     {
                         case 0:
-                            name = "X Axis";
+                            name = Strings.Controller_AxisName_XAxis;
                             break;
                         case 1:
-                            name = "Y Axis";
+                            name = Strings.Controller_AxisName_YAxis;
                             break;
                         default:
-                            name = "Axis " + (i + 1);
+                            name = string.Format(Strings.Controller_AxisName_Default, i + 1);
                             break;
                     }
                 }
@@ -367,14 +368,14 @@ namespace Lench.AdvancedControls.Input
 
             _ballNames = new List<string>();
             for (int i = 0; i < SDL.SDL_JoystickNumBalls(DevicePointer); i++)
-                _ballNames.Add("Ball " + (i + 1));
+                _ballNames.Add(string.Format(Strings.Controller_BallName_Default, i + 1));
 
             _hatNames = new List<string>();
             for (int i = 0; i < SDL.SDL_JoystickNumHats(DevicePointer); i++)
                 if (IsGameController)
-                    _hatNames.Add("DPAD");
+                    _hatNames.Add(Strings.Controller_HatName_DPAD);
                 else
-                    _hatNames.Add("Hat " + (i + 1));
+                    _hatNames.Add(string.Format(Strings.Controller_HatName_Default, i + 1));
 
             _buttonNames = new List<string>();
             for (int i = 0; i < SDL.SDL_JoystickNumButtons(DevicePointer); i++)
@@ -386,7 +387,7 @@ namespace Lench.AdvancedControls.Input
                 }
                 else
                 {
-                    name = "Button " + (i + 1);
+                    name = string.Format(Strings.Controller_ButtonName_Default, i + 1);
                 }
                 _buttonNames.Add(name);
             }

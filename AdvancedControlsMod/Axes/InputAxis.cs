@@ -1,4 +1,5 @@
 ﻿using System;
+using Lench.AdvancedControls.UI;
 
 namespace Lench.AdvancedControls.Axes
 {
@@ -35,7 +36,7 @@ namespace Lench.AdvancedControls.Axes
         /// <summary>
         /// Unique name of the axis.
         /// </summary>
-        public virtual string Name { get; internal set; } = "new axis";
+        public virtual string Name { get; internal set; }
 
         /// <summary>
         /// Raw input value.
@@ -69,7 +70,7 @@ namespace Lench.AdvancedControls.Axes
         /// </summary>
         public AxisType Type { get; protected set; }
 
-        internal UI.IAxisEditor Editor;
+        internal IAxisEditor Editor;
 
         /// <summary>
         /// Initializes a new axis with given name.
@@ -103,7 +104,7 @@ namespace Lench.AdvancedControls.Axes
         /// </summary>
         protected abstract void Update();
 
-        internal virtual UI.IAxisEditor GetEditor()
+        internal virtual IAxisEditor GetEditor()
         {
             return Editor;
         }
@@ -131,21 +132,21 @@ namespace Lench.AdvancedControls.Axes
             switch (status)
             {
                 case AxisStatus.OK:
-                    return "OK";
+                    return Strings.AxisStatus_Ok;
                 case AxisStatus.NotFound:
-                    return "NOT FOUND";
+                    return Strings.AxisStatus_NotFound;
                 case AxisStatus.Unavailable:
-                    return "NOT AVAILABLE";
+                    return Strings.AxisStatus_NotAvailable;
                 case AxisStatus.Disconnected:
-                    return "NOT CONNECTED";
+                    return Strings.AxisStatus_NotConnected;
                 case AxisStatus.NotRunning:
-                    return "NOT RUNNING";
+                    return Strings.AxisStatus_NotRunning;
                 case AxisStatus.Error:
-                    return "ERROR";
+                    return Strings.AxisStatus_Error;
                 case AxisStatus.NoLink:
-                    return "NO LINK";
+                    return Strings.AxisStatus_NoLink;
                 default:
-                    return "UNKNOWN";
+                    return Strings.AxisStatus_Unknown;
             }
         }
 

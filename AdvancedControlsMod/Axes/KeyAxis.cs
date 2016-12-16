@@ -1,6 +1,8 @@
 ﻿using UnityEngine;
 using Lench.AdvancedControls.Input;
 using System;
+using Lench.AdvancedControls.UI;
+
 // ReSharper disable CompareOfFloatsByEqualityOperator
 
 namespace Lench.AdvancedControls.Axes
@@ -13,13 +15,7 @@ namespace Lench.AdvancedControls.Axes
         /// <summary>
         /// Are both bound keys associated devices connected.
         /// </summary>
-        public override bool Connected
-        {
-            get
-            {
-                return (PositiveBind == null || PositiveBind.Connected) && (NegativeBind == null || NegativeBind.Connected);
-            }
-        }
+        public override bool Connected => (PositiveBind == null || PositiveBind.Connected) && (NegativeBind == null || NegativeBind.Connected);
 
         /// <summary>
         /// Status of the axis.
@@ -156,14 +152,16 @@ namespace Lench.AdvancedControls.Axes
 
         internal override InputAxis Clone()
         {
-            var clone = new KeyAxis(Name);
-            clone.PositiveBind = PositiveBind;
-            clone.NegativeBind = NegativeBind;
-            clone.Sensitivity = Sensitivity;
-            clone.Gravity = Gravity;
-            clone.Snap = Snap;
-            clone.Raw = Raw;
-            clone.Momentum = Momentum;
+            var clone = new KeyAxis(Name)
+            {
+                PositiveBind = PositiveBind,
+                NegativeBind = NegativeBind,
+                Sensitivity = Sensitivity,
+                Gravity = Gravity,
+                Snap = Snap,
+                Raw = Raw,
+                Momentum = Momentum
+            };
             return clone;
         }
 
@@ -233,26 +231,23 @@ namespace Lench.AdvancedControls.Axes
             Dispose();
         }
 
-        private Button ParseButtonID(string id)
+        private static Button ParseButtonID(string id)
         {
             if (id == null)
                 return null;
             try
             {
-                Button b = null;
                 if (id.StartsWith("key"))
-                    b = new Key(id);
+                    return new Key(id);
                 if (id.StartsWith("hat"))
-                    b = new HatButton(id);
+                    return new HatButton(id);
                 if (id.StartsWith("joy"))
-                    b = new JoystickButton(id);
-                if (b != null)
-                    return b;
+                    return new JoystickButton(id);
                 return null;
             }
             catch (Exception e)
             {
-                Debug.Log("[ACM]: Error while loading a button:");
+                Debug.Log($"[ACM]: {Strings.KeyAxis_ParseButtonID_ErrorWhileLoadingAButton}");
                 Debug.LogException(e);
                 return null;
             }

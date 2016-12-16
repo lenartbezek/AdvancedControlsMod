@@ -1,8 +1,10 @@
-﻿using UnityEngine;
-using spaar.ModLoader;
-using System;
-using System.Linq;
+﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using Lench.AdvancedControls.UI;
+using spaar.ModLoader;
+using UnityEngine;
+
 // ReSharper disable PossibleNullReferenceException
 
 namespace Lench.AdvancedControls.Axes
@@ -84,9 +86,9 @@ axis_value";
             UpdateCode = DefaultUpdateCode;
             GlobalScope = false;
             Running = false;
-            Editor = new UI.CustomAxisEditor(this);
+            Editor = new CustomAxisEditor(this);
 
-            Game.OnSimulationToggle += (value) => { if (!value) { Stop(); } };
+            Game.OnSimulationToggle += value => { if (!value) { Stop(); } };
         }
 
         /// <summary>
@@ -122,7 +124,7 @@ axis_value";
                     var result = _update.Invoke();
                     if (result == null)
                     {
-                        Error = "Update code does not return a value.";
+                        Error = Strings.CustomAxisEditor_Message_UpdateCodeDoesNotReturnAValue;
                         Running = false;
                     }
                     else if (result is float || result is int || result is double)
@@ -131,7 +133,7 @@ axis_value";
                     }
                     else
                     {
-                        Error = "Update code returns "+result.GetType()+"\ninstead of number.";
+                        Error = string.Format(Strings.CustomAxisEditor_Message_UpdateCodeReturnsWrongType, result.GetType());
                         Running = false;
                     }
                 }

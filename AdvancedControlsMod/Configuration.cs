@@ -1,6 +1,7 @@
 ﻿using Lench.AdvancedControls.Axes;
 using System;
 using System.Collections.Generic;
+using Lench.AdvancedControls.UI;
 using UnityEngine;
 // ReSharper disable PossibleNullReferenceException
 
@@ -55,7 +56,7 @@ namespace Lench.AdvancedControls
             }
             catch (Exception e)
             {
-                Debug.Log("[ACM]: Error loading saved axes:");
+                Debug.Log("[ACM]: "+Strings.Log_AxisLoadingError);
                 Debug.LogException(e);
             }
         }
@@ -97,7 +98,7 @@ namespace Lench.AdvancedControls
             }
             catch (Exception e)
             {
-                Debug.Log("[ACM]: Error saving axes:");
+                Debug.Log("[ACM]: "+Strings.Log_AxisSavingError);
                 Debug.LogException(e);
                 log += "\nException thrown:\n";
                 log += e.Message + "\n";

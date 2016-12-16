@@ -10,7 +10,7 @@ namespace Lench.AdvancedControls.UI
     {
 
         internal static bool DownloadingInProgress = false;
-        internal static string DownloadButtonText = "Download";
+        internal static string DownloadButtonText = Strings.DownloadButtonText_Download;
 
         public ControllerAxisEditor(InputAxis axis)
         {
@@ -91,47 +91,40 @@ namespace Lench.AdvancedControls.UI
             if (!DeviceManager.SdlInitialized)
             {
 #if windows
-                GUILayout.Label("<b>Additional library needed</b>\n" +
-                                "Controller axis requires SDL2 library to work.\n" +
-                                "Press download to install it automatically.\n\n"+
-                                "<b>Platform</b>\n" +
-                                "You are using Windows version of ACM.\n"+
-                                "If you are using some other operating system,\n"+
-                                "download the correct version of the mod.");
+                GUILayout.Label($"<b>{Strings.ControllerAxisEditor_Message_AdditionalLibraryNeeded}</b>\n" +
+                                Strings.ControllerAxisEditor_DrawAxis_RequireSDL2Windows+
+                                $"<b>{Strings.ControllerAxisEditor_Message_Platform}</b>\n" +
+                                Strings.ControllerAxisEditor_Message_WindowsPlatform+
+                                Strings.ControllerAxisEditor_Message_CorrectPlatform);
                 if (GUILayout.Button(DownloadButtonText) && !DownloadingInProgress && !DeviceManager.SdlInstalled)
                     DeviceManager.InstallSdl();
 #elif linux
-                GUILayout.Label("<b>Additional library needed</b>\n" +
-                                "Controller axis requires SDL2 library to work.\n" +
-                                "Run the command below to install it.\n\n"+
-                                "<b>Platform</b>\n" +
-                                "You are using Linux version of ACM.\n" +
-                                "If you are using some other operating system,\n" +
-                                "download the correct version of the mod.");
+                GUILayout.Label($"<b>{Strings.ControllerAxisEditor_Message_AdditionalLibraryNeeded}</b>\n" +
+                                Strings.ControllerAxisEditor_Message_RequireSDL2Linux +
+                                $"<b>{Strings.ControllerAxisEditor_Message_Platform}</b>\n" +
+                                Strings.ControllerAxisEditor_Message_LinuxPlatform +
+                                Strings.ControllerAxisEditor_Message_CorrectPlatform);
                 GUILayout.TextField("sudo apt-get install libsdl2-2.0-0");
 #elif osx
-                GUILayout.Label("<b>Additional library needed</b>\n" +
-                                "Controller axis requires SDL2 library to work.\n" +
-                                "Download it at the link below.\n\n"+
-                                "<b>Platform</b>\n" +
-                                "You are using OSX version of ACM.\n" +
-                                "If you are using some other operating system,\n" +
-                                "download the correct version of the mod.");
+                GUILayout.Label($"<b>{Strings.ControllerAxisEditor_Message_AdditionalLibraryNeeded}</b>\n" +
+                                Strings.ControllerAxisEditor_Message_RequireSDL2OSX+
+                                $"<b>{Strings.ControllerAxisEditor_Message_Platform}</b>\n" +
+                                Strings.ControllerAxisEditor_Message_OSXPlatform +
+                                Strings.ControllerAxisEditor_Message_CorrectPlatform);
                 if (GUILayout.Button("www.libsdl.org/download-2.0.php"))
                     Application.OpenURL("www.libsdl.org/download-2.0.php");
 #endif
             }
             else if (Controller.NumDevices == 0)
             {
-                Note =  "<color=#FFFF00><b>No controllers connected.</b></color>\n"+
-                        "Connect a joystick or controller to use this axis.";
+                Note =  $"<color=#FFFF00><b>{Strings.ControllerAxisEditor_Message_NoControllersConnected}</b></color>\n"+
+                        Strings.ControllerAxisEditor_Message_NoControllersConnectedDetail;
             }
             else if (_controllerIndex < 0)
             {
-                Note = "<color=#FFFF00><b>Associated controller not connected.</b></color>\n" +
-                        "The device this axis is bound to is not found.\n"+
-                        "\n<b>Device GUID</b>\n" + _axis.GUID;
-                if (GUILayout.Button("Use another controller"))
+                Note = $"<color=#FFFF00><b>{Strings.ControllerAxisEditor_Message_AssociatedControllerNotConnected}</b></color>\n" +
+                        Strings.ControllerAxisEditor_Message_AssociatedControllerNotConnectedDetail + _axis.GUID;
+                if (GUILayout.Button(Strings.ControllerAxisEditor_ButtonText_UseAnotherController))
                 {
                     _controllerIndex = 0;
                     _axis.GUID = Controller.ControllerList[_controllerIndex].GUID;
@@ -153,23 +146,23 @@ namespace Lench.AdvancedControls.UI
 
                 // Axis value
                 GUI.Label(new Rect(_graphRect.x, _graphRect.y, _graphRect.width, 20),
-                        "  <color=#808080><b>"+ _axis.OutputValue.ToString("0.00")+"</b></color>",
+                        $"  <color=#808080><b>{_axis.OutputValue:0.00}</b></color>",
                         new GUIStyle(Elements.Labels.Default) { richText = true, alignment = TextAnchor.MiddleLeft });
 
                 // Draw drag controls
                 if (_axis.OffsetX == 0 && _axis.OffsetY == 0)
                 {
                     GUI.Label(new Rect(_graphRect.x, _graphRect.y + _graphRect.height - 20, _graphRect.width, 20),
-                        "<color=#808080><b>DRAG TO SET OFFSET</b></color>",
+                        $"<color=#808080><b>{Strings.ControllerAxisEditor_Graph_DragToSetOffset}</b></color>",
                         new GUIStyle(Elements.Labels.Default) { richText = true, alignment = TextAnchor.MiddleCenter });
                 }
                 else
                 {
                     GUI.Label(new Rect(_graphRect.x, _graphRect.y + _graphRect.height - 20, (_graphRect.width - 16) / 2, 20),
-                        "  <color=#808080><b>X: " + _axis.OffsetX.ToString("0.00") + "\tY:" + _axis.OffsetY.ToString("0.00") + "</b></color>",
+                        $"  <color=#808080><b>X: {_axis.OffsetX:0.00}\tY:{_axis.OffsetY:0.00}</b></color>",
                         new GUIStyle(Elements.Labels.Default) { richText = true, alignment = TextAnchor.MiddleLeft });
                     if (GUI.Button(new Rect(_graphRect.x + (_graphRect.width - 16) / 2, _graphRect.y + _graphRect.height - 20, (_graphRect.width - 16) / 2, 20),
-                            "<color=#808080><b>RESET OFFSET</b></color>",
+                            $"<color=#808080><b>{Strings.ControllerAxisEditor_Graph_ResetOffset}</b></color>",
                             new GUIStyle(Elements.Labels.Default) { richText = true, alignment = TextAnchor.MiddleRight }))
                     {
                         _axis.OffsetX = 0;
@@ -229,7 +222,7 @@ namespace Lench.AdvancedControls.UI
 
                 // Draw controller selection
                 GUILayout.BeginHorizontal();
-                if (GUILayout.Button("<", _controllerIndex > 0 ? Elements.Buttons.Default : Elements.Buttons.Disabled, GUILayout.Width(30)) 
+                if (GUILayout.Button(Strings.ButtonText_ArrowPrevious, _controllerIndex > 0 ? Elements.Buttons.Default : Elements.Buttons.Disabled, GUILayout.Width(30)) 
                     && _controllerIndex > 0)
                 {
                     _controllerIndex--;
@@ -238,7 +231,7 @@ namespace Lench.AdvancedControls.UI
 
                 GUILayout.Label(_controller.Name, new GUIStyle(Elements.InputFields.Default) { alignment = TextAnchor.MiddleCenter });
 
-                if (GUILayout.Button(">", _controllerIndex < Controller.NumDevices - 1 ? Elements.Buttons.Default : Elements.Buttons.Disabled, GUILayout.Width(30)) 
+                if (GUILayout.Button(Strings.ButtonText_ArrowNext, _controllerIndex < Controller.NumDevices - 1 ? Elements.Buttons.Default : Elements.Buttons.Disabled, GUILayout.Width(30)) 
                     && _controllerIndex < Controller.NumDevices - 1)
                 {
                     _controllerIndex++;
@@ -251,45 +244,45 @@ namespace Lench.AdvancedControls.UI
 
                 // Draw axis selection
                 GUILayout.BeginHorizontal();
-                if (GUILayout.Button("<", _axis.Axis > 0 ? Elements.Buttons.Default : Elements.Buttons.Disabled, GUILayout.Width(30)) 
+                if (GUILayout.Button(Strings.ButtonText_ArrowPrevious, _axis.Axis > 0 ? Elements.Buttons.Default : Elements.Buttons.Disabled, GUILayout.Width(30)) 
                     && _axis.Axis > 0)
                     _axis.Axis--;
 
                 GUILayout.Label(_controller.GetAxisName(_axis.Axis), new GUIStyle(Elements.InputFields.Default) { alignment = TextAnchor.MiddleCenter });
 
-                if (GUILayout.Button(">", _axis.Axis < Controller.Get(_axis.GUID).NumAxes - 1 ? Elements.Buttons.Default : Elements.Buttons.Disabled, GUILayout.Width(30)) 
+                if (GUILayout.Button(Strings.ButtonText_ArrowNext, _axis.Axis < Controller.Get(_axis.GUID).NumAxes - 1 ? Elements.Buttons.Default : Elements.Buttons.Disabled, GUILayout.Width(30)) 
                     && _axis.Axis < Controller.Get(_axis.GUID).NumAxes - 1)
                     _axis.Axis++;
 
                 GUILayout.EndHorizontal();
 
                 // Draw Sensitivity slider
-                _axis.Sensitivity = Util.DrawSlider("Sensitivity", _axis.Sensitivity, 0, 5, _sensString, out _sensString);
+                _axis.Sensitivity = Util.DrawSlider(Strings.Label_Sensitivity, _axis.Sensitivity, 0, 5, _sensString, out _sensString);
 
                 // Draw Curvature slider
-                _axis.Curvature = Util.DrawSlider("Curvaure", _axis.Curvature, 0, 3, _curvString, out _curvString);
+                _axis.Curvature = Util.DrawSlider(Strings.Label_Curvaure, _axis.Curvature, 0, 3, _curvString, out _curvString);
 
                 // Draw Deadzone slider
-                _axis.Deadzone = Util.DrawSlider("Deadzone", _axis.Deadzone, 0, 0.5f, _deadString, out _deadString);
+                _axis.Deadzone = Util.DrawSlider(Strings.Label_Deadzone, _axis.Deadzone, 0, 0.5f, _deadString, out _deadString);
 
                 GUILayout.BeginHorizontal();
 
                 // Draw Invert toggle
-                _axis.Invert = GUILayout.Toggle(_axis.Invert, "",
+                _axis.Invert = GUILayout.Toggle(_axis.Invert, string.Empty,
                     Util.ToggleStyle,
                     GUILayout.Width(20),
                     GUILayout.Height(20));
 
-                GUILayout.Label("Invert",
+                GUILayout.Label(Strings.Label_Invert,
                     new GUIStyle(Elements.Labels.Default) { margin = new RectOffset(0, 0, 14, 0) });
 
                 // Draw Raw toggle
-                _axis.Smooth = GUILayout.Toggle(_axis.Smooth, "",
+                _axis.Smooth = GUILayout.Toggle(_axis.Smooth, string.Empty,
                     Util.ToggleStyle,
                     GUILayout.Width(20),
                     GUILayout.Height(20));
 
-                GUILayout.Label("Smooth",
+                GUILayout.Label(Strings.Label_Smooth,
                     new GUIStyle(Elements.Labels.Default) { margin = new RectOffset(0, 0, 14, 0) });
 
                 GUILayout.EndHorizontal();
@@ -298,7 +291,7 @@ namespace Lench.AdvancedControls.UI
 
         public string GetHelpURL()
         {
-            return "https://github.com/lench4991/AdvancedControlsMod/wiki/Controller-Axis";
+            return Strings.ControllerAxisEditor_HelpURL;
         }
 
         public string GetNote()

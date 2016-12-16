@@ -11,7 +11,7 @@ namespace Lench.AdvancedControls.UI
     internal class CustomAxisEditor : IAxisEditor
     {
         internal static bool DownloadingInProgress;
-        internal static string DownloadButtonText = "Download";
+        internal static string DownloadButtonText = Strings.DownloadButtonText_Download;
 
         internal CustomAxisEditor(InputAxis axis)
         {
@@ -33,9 +33,7 @@ namespace Lench.AdvancedControls.UI
         {
             if (!PythonEnvironment.Loaded)
             {
-                GUILayout.Label("<b>Additional library needed</b>\n" +
-                                "Custom axis runs on IronPython engine.\n" +
-                                "Press download to install it automatically.");
+                GUILayout.Label(Strings.CustomAxisEditor_Message_MissingIronPython);
                 if (GUILayout.Button(DownloadButtonText) && !DownloadingInProgress)
                     InstallIronPython();
             }
@@ -51,7 +49,7 @@ namespace Lench.AdvancedControls.UI
                     ? _axis.OutputValue.ToString("0.00") 
                     : InputAxis.GetStatusString(_axis.Status);
 
-                GUILayout.Label("  <color=#808080><b>" + text + "</b></color>",
+                GUILayout.Label($"  <color=#808080><b>{text}</b></color>",
                     new GUIStyle(Elements.Labels.Default) { richText = true, alignment = TextAnchor.MiddleLeft },
                     GUILayout.Height(28));
 
@@ -74,13 +72,14 @@ namespace Lench.AdvancedControls.UI
                                  Color.yellow);
 
                 // Draw start/stop button
-                if (GUILayout.Button(_axis.Running ? "STOP" : "START", new GUIStyle(Elements.Buttons.Red) { margin = new RectOffset(8, 8, 0, 0) }, GUILayout.Width(80)))
+                if (GUILayout.Button(_axis.Running ? Strings.CustomAxisEditor_ButtonText_Stop : Strings.CustomAxisEditor_ButtonText_Start, 
+                        new GUIStyle(Elements.Buttons.Red) { margin = new RectOffset(8, 8, 0, 0) }, GUILayout.Width(80)))
                     _axis.Running = !_axis.Running;
 
                 GUILayout.EndHorizontal();
 
                 // Draw initialisation code text area
-                GUILayout.Label("Initialisation code",
+                GUILayout.Label(Strings.Label_InitialisationCode,
                     Util.LabelStyle);
 
                 _initialisationScrollPosition = GUILayout.BeginScrollView(_initialisationScrollPosition,
@@ -89,7 +88,7 @@ namespace Lench.AdvancedControls.UI
                 GUILayout.EndScrollView();
 
                 // Draw update code text area
-                GUILayout.Label("Update code",
+                GUILayout.Label(Strings.Label_UpdateCode,
                     Util.LabelStyle);
 
                 _updateScrollPosition = GUILayout.BeginScrollView(_updateScrollPosition,
@@ -105,7 +104,7 @@ namespace Lench.AdvancedControls.UI
                     GUILayout.Width(20),
                     GUILayout.Height(20));
 
-                GUILayout.Label("Run in global scope",
+                GUILayout.Label(Strings.Label_RunInGlobalScope,
                     new GUIStyle(Elements.Labels.Default) { margin = new RectOffset(0, 0, 14, 0) });
 
                 GUILayout.EndHorizontal();
@@ -115,7 +114,7 @@ namespace Lench.AdvancedControls.UI
                 // Display linked axes
                 if (_axis.LinkedAxes.Count > 0)
                 {
-                    GUILayout.Label("Linked axes", new GUIStyle(Elements.Labels.Title) { alignment = TextAnchor.MiddleCenter });
+                    GUILayout.Label(Strings.Label_LinkedAxes, new GUIStyle(Elements.Labels.Title) { alignment = TextAnchor.MiddleCenter });
                     foreach (var name in _axis.LinkedAxes)
                         GUILayout.Label(name, new GUIStyle(Elements.Labels.Default) { alignment = TextAnchor.MiddleCenter });
                 }
@@ -123,7 +122,7 @@ namespace Lench.AdvancedControls.UI
                 // Display error
                 if (_axis.Error != null)
                 {
-                    Error = "<color=#FF0000><b>Python error</b></color>\n" +
+                    Error = $"<color=#FF0000><b>{Strings.CustomAxisEditor_Message_PythonError}</b></color>\n" +
                             _axis.Error;
                 }
             }
@@ -148,7 +147,7 @@ namespace Lench.AdvancedControls.UI
         {
             if (PythonEnvironment.LoadPythonAssembly())
             {
-                DownloadButtonText = "Complete";
+                DownloadButtonText = Strings.DownloadButtonText_Complete;
                 return;
             }
 
@@ -182,11 +181,11 @@ namespace Lench.AdvancedControls.UI
                             if (e.Error != null)
                             {
                                 // set error messages
-                                spaar.ModLoader.ModConsole.AddMessage(LogType.Log, "[ACM]: Error downloading file:" + FileNames[i]);
+                                spaar.ModLoader.ModConsole.AddMessage(LogType.Log, $"[ACM]: {Strings.Log_ErrorDownloadingFile}" + FileNames[i]);
                                 spaar.ModLoader.ModConsole.AddMessage(LogType.Error, "\t" + e.Error.Message);
 
                                 DownloadingInProgress = false;
-                                DownloadButtonText = "Error";
+                                DownloadButtonText = Strings.DownloadButtonText_Error;
 
                                 // delete failed file
                                 if (File.Exists(PythonEnvironment.LibPath + FileNames[i]))
@@ -194,12 +193,14 @@ namespace Lench.AdvancedControls.UI
                             }
                             else
                             {
-                                spaar.ModLoader.ModConsole.AddMessage(LogType.Log, "[ACM]: File downloaded: " + FileNames[i]);
+                                spaar.ModLoader.ModConsole.AddMessage(LogType.Log, $"[ACM]: {Strings.CustomAxisEditor_InstallIronPython_FileDownloaded}" + FileNames[i]);
                                 _filesDownloaded++;
                                 if (_filesDownloaded == FilesRequired)
                                 {
                                     // finish download and load assemblies
-                                    DownloadButtonText = PythonEnvironment.LoadPythonAssembly() ? "Complete" : "Error";
+                                    DownloadButtonText = PythonEnvironment.LoadPythonAssembly() 
+                                        ? Strings.DownloadButtonText_Complete 
+                                        : Strings.DownloadButtonText_Error;
                                 }
                             }
                         };
@@ -213,10 +214,10 @@ namespace Lench.AdvancedControls.UI
             }
             catch (Exception e)
             {
-                Debug.Log("[ACM]: Error while downloading:");
+                Debug.Log($"[ACM]: {Strings.Log_ErrorDownloadingFile}");
                 Debug.LogException(e);
                 DownloadingInProgress = false;
-                DownloadButtonText = "Error";
+                DownloadButtonText = Strings.DownloadButtonText_Error;
             }
         }
 

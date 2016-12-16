@@ -1,6 +1,8 @@
 ﻿using System;
 using UnityEngine;
 using Lench.AdvancedControls.Blocks;
+using Lench.AdvancedControls.UI;
+
 // ReSharper disable VirtualMemberCallInConstructor
 
 namespace Lench.AdvancedControls.Controls
@@ -18,11 +20,20 @@ namespace Lench.AdvancedControls.Controls
         /// <param name="guid">GUID of the block.</param>
         public AngleControl(Guid guid) : base(guid)
         {
-            Name = "ANGLE";
             Min = -45;
             Center = 0;
             Max = 45;
         }
+
+        /// <summary>
+        /// Angle control key is 'ANGLE'.
+        /// </summary>
+        public override string Key => "ANGLE";
+
+        /// <summary>
+        /// Localized display name of the control.
+        /// </summary>
+        public override string Name => Strings.ControlName_Angle;
 
         /// <summary>
         /// Control's block handler.
@@ -65,7 +76,6 @@ namespace Lench.AdvancedControls.Controls
         {
             var clone = new AngleControl(BlockGUID)
             {
-                Name = Name,
                 Enabled = Enabled,
                 Axis = Axis,
                 Block = Block,

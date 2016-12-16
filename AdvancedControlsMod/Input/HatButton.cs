@@ -1,4 +1,5 @@
 ﻿using System;
+using Lench.AdvancedControls.UI;
 
 namespace Lench.AdvancedControls.Input
 {
@@ -10,7 +11,6 @@ namespace Lench.AdvancedControls.Input
         private Controller _controller;
         private Guid _guid;
         private readonly byte _downState;
-        private readonly string _direction;
 
         private bool _down;
         private bool _pressed;
@@ -42,12 +42,29 @@ namespace Lench.AdvancedControls.Input
         public int Index { get; }
 
 #pragma warning disable CS1591
-        public override bool IsDown { get { return _down; } }
-        public override bool Pressed { get { return _pressed; } }
-        public override bool Released { get { return _released; } }
-        public override float Value { get { return _down ? 1 : 0; } }
-        public override string Name { get { return _controller != null ? _controller.GetHatName(Index) + " - " + _direction : "Unknown hat" + " - " + _direction; } }
-        public override bool Connected { get { return _controller != null && _controller.Connected && Index < _controller.NumHats; } }
+        public override bool IsDown => _down;
+        public override bool Pressed => _pressed;
+        public override bool Released => _released;
+        public override float Value => _down ? 1 : 0;
+        public override string Name
+        { 
+            get
+            {
+                var dir = string.Empty;
+                if ((_downState & SDL.SDL_HAT_UP) > 0)
+                    dir = Strings.HatButton_Direction_UP;
+                else if ((_downState & SDL.SDL_HAT_DOWN) > 0)
+                    dir = Strings.HatButton_Direction_DOWN;
+                else if ((_downState & SDL.SDL_HAT_LEFT) > 0)
+                    dir = Strings.HatButton_Direction_LEFT;
+                else if ((_downState & SDL.SDL_HAT_RIGHT) > 0)
+                    dir = Strings.HatButton_Direction_RIGHT;
+                return _controller != null
+                    ? _controller.GetHatName(Index) + " - " + dir
+                    : Strings.Controller_HatName_UnknownHat + " - " + dir;
+            }
+        }
+        public override bool Connected => _controller != null && _controller.Connected && Index < _controller.NumHats;
 #pragma warning restore CS1591
 
         /// <summary>
@@ -55,22 +72,13 @@ namespace Lench.AdvancedControls.Input
         /// </summary>
         /// <param name="controller">Controller class.</param>
         /// <param name="index">Index of the hat button.</param>
-        /// <param name="down_state">Down state byte. For example SDL.SDL_HAT_UP</param>
-        public HatButton(Controller controller, int index, byte down_state)
+        /// <param name="downState">Down state byte. For example SDL.SDL_HAT_UP</param>
+        public HatButton(Controller controller, int index, byte downState)
         {
-            this._controller = controller;
-            this.Index = index;
-            this._guid = controller.GUID;
-            this._downState = down_state;
-            if ((down_state & SDL.SDL_HAT_UP) > 0)
-                _direction = "UP";
-            else if ((down_state & SDL.SDL_HAT_DOWN) > 0)
-                _direction = "DOWN";
-            else if ((down_state & SDL.SDL_HAT_LEFT) > 0)
-                _direction = "LEFT";
-            else if ((down_state & SDL.SDL_HAT_RIGHT) > 0)
-                _direction = "RIGHT";
-            DeviceManager.OnHatMotion += HandleEvent;
+            _controller = controller;
+            Index = index;
+            _guid = controller.GUID;
+            _downState = downState;
             DeviceManager.OnDeviceAdded += UpdateDevice;
         }
 
@@ -93,15 +101,6 @@ namespace Lench.AdvancedControls.Input
             else
                 throw new FormatException("Specified ID does not represent a hat button.");
 
-            if ((_downState & SDL.SDL_HAT_UP) > 0)
-                _direction = "UP";
-            else if ((_downState & SDL.SDL_HAT_DOWN) > 0)
-                _direction = "DOWN";
-            else if ((_downState & SDL.SDL_HAT_LEFT) > 0)
-                _direction = "LEFT";
-            else if ((_downState & SDL.SDL_HAT_RIGHT) > 0)
-                _direction = "RIGHT";
-
             DeviceManager.OnHatMotion += HandleEvent;
             DeviceManager.OnDeviceAdded += UpdateDevice;
         }
@@ -114,10 +113,10 @@ namespace Lench.AdvancedControls.Input
                 return;
             if (e.jhat.hat == Index)
             {
-                bool down = (e.jhat.hatValue & _downState) > 0;
-                _pressed = this._down != down && down;
-                _released = this._down != down && !down;
-                this._down = down;
+                var down = (e.jhat.hatValue & _downState) > 0;
+                _pressed = _down != down && down;
+                _released = _down != down && !down;
+                _down = down;
             }
         }
 

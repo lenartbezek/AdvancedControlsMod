@@ -56,7 +56,7 @@ namespace Lench.AdvancedControls.UI
         {
             if (!Visible || Block == null) return;
             GUI.skin = Util.Skin;
-            WindowRect = GUILayout.Window(WindowID, WindowRect, DoWindow, "Advanced Controls",
+            WindowRect = GUILayout.Window(WindowID, WindowRect, DoWindow, Strings.ControlMapper_WindowTitle_AdvancedControls,
                 GUILayout.Width(320),
                 GUILayout.Height(50));
             if (Popup != null && !Popup.ContainsMouse)
@@ -73,13 +73,13 @@ namespace Lench.AdvancedControls.UI
             }
 
             if (Controls.Count == 0)
-                GUILayout.Label("This block has no available controls.");
+                GUILayout.Label(Strings.ControlMapper_Message_NoAvailableControls);
 
             // Draw overview button
             if (GUI.Button(new Rect(WindowRect.width - 78, 8, 16, 16),
                 GUIContent.none, Elements.Buttons.ArrowCollapsed) ||
                 GUI.Button(new Rect(WindowRect.width - 62, 8, 50, 16),
-                "<size=9><b>OVERVIEW</b></size>", Elements.Labels.Default))
+                $"<size=9><b>{Strings.ControlMapper_ButtonText_Overview}</b></size>", Elements.Labels.Default))
             {
                 ControlOverview.Open();
             }
@@ -91,7 +91,7 @@ namespace Lench.AdvancedControls.UI
         private void DrawControl(Control c)
         {
             // Draw control label
-            GUILayout.Label(c.Name, Elements.Labels.Title);
+            GUILayout.Label(c.Key, Elements.Labels.Title);
 
             // Draw axis select button
             GUILayout.BeginHorizontal();
@@ -99,7 +99,7 @@ namespace Lench.AdvancedControls.UI
             var buttonRect = GUILayoutUtility.GetRect(GUIContent.none, Elements.Buttons.Default);
             if (c.Axis == null)
             {
-                if (GUI.Button(buttonRect, "Select Input Axis", Elements.Buttons.Disabled))
+                if (GUI.Button(buttonRect, Strings.ButtonText_SelectInputAxis, Elements.Buttons.Disabled))
                 {
                     var callback = new SelectAxisDelegate((axis) => { c.Axis = axis.Name; c.Enabled = true; });
                     if (Popup == null)
@@ -123,7 +123,7 @@ namespace Lench.AdvancedControls.UI
                     Popup.WindowRect.x = WindowRect.x + buttonRect.x - 8;
                     Popup.WindowRect.y = WindowRect.y + buttonRect.y - 8;
                 }
-                if (a != null && GUILayout.Button("✎", new GUIStyle(Elements.Buttons.Default) { fontSize = 20, padding = new RectOffset(-3, 0, 0, 0) }, GUILayout.Width(30), GUILayout.MaxHeight(28)))
+                if (a != null && GUILayout.Button(Strings.ButtonText_EditAxis, new GUIStyle(Elements.Buttons.Default) { fontSize = 20, padding = new RectOffset(-3, 0, 0, 0) }, GUILayout.Width(30), GUILayout.MaxHeight(28)))
                 {
                     var editor = ACM.Instance.gameObject.AddComponent<AxisEditorWindow>();
                     editor.WindowRect.x = Mathf.Clamp(WindowRect.x + WindowRect.width,
@@ -131,7 +131,7 @@ namespace Lench.AdvancedControls.UI
                     editor.WindowRect.y = Mathf.Clamp(WindowRect.y, 0, Screen.height - GUI.skin.window.padding.top);
                     editor.EditAxis(a, (newAxis) => { c.Axis = newAxis.Name; });
                 }
-                if (GUILayout.Button("×", Elements.Buttons.Red, GUILayout.Width(30)))
+                if (GUILayout.Button(Strings.ButtonText_Close, Elements.Buttons.Red, GUILayout.Width(30)))
                 {
                     c.Enabled = false;
                     c.Axis = null;
@@ -144,28 +144,24 @@ namespace Lench.AdvancedControls.UI
             {
                 // Draw graph
                 var axis = AxisManager.Get(c.Axis);
-                float axisValue = axis?.OutputValue ?? 0;
+                var axisValue = axis?.OutputValue ?? 0;
                 string text;
                 if (axis == null)
                 {
-                    text = "NOT FOUND";
+                    text = InputAxis.GetStatusString(AxisStatus.NotFound);
                 }
                 else
                 {
-                    float controlValue;
-                    if (axisValue > 0)
-                        controlValue = Mathf.Lerp(c.Center, c.Max, axisValue);
-                    else
-                        controlValue = Mathf.Lerp(c.Center, c.Min, -axisValue);
+                    var controlValue = axisValue > 0 
+                        ? Mathf.Lerp(c.Center, c.Max, axisValue) 
+                        : Mathf.Lerp(c.Center, c.Min, -axisValue);
 
-                    if (axis.Status == AxisStatus.OK)
-                        text = controlValue.ToString("0.00");
-                    else
-                        text = InputAxis.GetStatusString(axis.Status);
-
+                    text = axis.Status == AxisStatus.OK 
+                        ? controlValue.ToString("0.00") 
+                        : InputAxis.GetStatusString(axis.Status);
                 }
 
-                GUILayout.Label("<color=#808080><b>" + text + "</b></color>",
+                GUILayout.Label($"<color=#808080><b>{text}</b></color>",
                     new GUIStyle(Elements.Labels.Default) { padding = new RectOffset(38, 38, 4, 0), richText = true, alignment = TextAnchor.MiddleLeft },
                     GUILayout.Height(20));
 

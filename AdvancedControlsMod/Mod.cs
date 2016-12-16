@@ -144,8 +144,8 @@ namespace Lench.AdvancedControls
             gameObject.AddComponent<ControlMapper>();
             gameObject.AddComponent<DeviceManager>();
 
-            Commands.RegisterCommand("controller", ControllerCommand, "Enter 'controller' for all available controller commands.");
-            Commands.RegisterCommand("acm", ConfigurationCommand, "Enter 'acm' for all available configuration commands.");
+            Commands.RegisterCommand("controller", ControllerCommand, Strings.Console_Controller_AllAvailable);
+            Commands.RegisterCommand("acm", ConfigurationCommand, Strings.Console_Acm_AllAvailable);
             SettingsMenu.RegisterSettingsButton("ACM", EnableToggle, ModEnabled, 14);
         }
 
@@ -228,26 +228,25 @@ namespace Lench.AdvancedControls
                 switch (args[0].ToLower())
                 {
                     case "list":
-                        string result = "Controller list:\n";
+                        string result = Strings.Console_Controller_ControllerList;
                         if (Controller.NumDevices > 0)
                             for (int i = 0; i < Controller.NumDevices; i++)
                             {
                                 var controller = Controller.Get(i);
-                                result += i+": "+controller.Name+" ("+(controller.IsGameController ? "Controller" : "Joystick")+")\n"+ "\tGuid: " + controller.GUID+"\n";
+                                result += $"{i}: {controller.Name} ({(controller.IsGameController ? Strings.Console_Controller_ControllerTag : Strings.Console_Controller_JoystickTag)})\n\t"+
+                                    Strings.Controller_GUID + " " + controller.GUID + "\n";
                             }
                         else
-                            result = "No devices connected.";
+                            result = Strings.Console_Controller_NoDevicesConnected;
                         return result;
 
                     default:
-                        return "Invalid command. Enter 'controller' for all available commands.";
+                        return Strings.Console_Controller_InvalidCommand;
                 }
             }
             else
             {
-                return "Available commands:\n" +
-                    "  controller list             \t List all connected devices.\n" +
-                    "  controller info [index]     \t Show info of a device at index.\n";
+                return Strings.Console_Controller_AllAvailableList;
             }
         }
 
@@ -264,20 +263,20 @@ namespace Lench.AdvancedControls
                             {
                                 case "check":
                                     CheckForModUpdate(true);
-                                    return "Checking for mod updates ...";
+                                    return Strings.Console_Acm_CheckingForModUpdates;
                                 case "enable":
                                     ModUpdaterEnabled = true;
-                                    return "Mod update checker enabled.";
+                                    return Strings.Console_Acm_ModUpdateCheckerEnabled;
                                 case "disable":
                                     ModUpdaterEnabled = false;
-                                    return "Mod update checker disabled.";
+                                    return Strings.Console_Acm_ModUpdateCheckerDisabled;
                                 default:
-                                    return "Invalid argument [check/enable/disable]. Enter 'acm' for all available commands.";
+                                    return Strings.Console_Acm_UpdateInvalidArgument;
                             }
                         }
                         else
                         {
-                            return "Missing argument [check/enable/disable]. Enter 'acm' for all available commands.";
+                            return Strings.Console_Acm_UpdateMissingArgument;
                         }
                     case "dbupdate":
                         if (args.Length > 1)
@@ -286,34 +285,28 @@ namespace Lench.AdvancedControls
                             {
                                 case "check":
                                     CheckForDbUpdate(true);
-                                    return "Checking for controller DB updates ...";
+                                    return Strings.Console_Acm_CheckingForControllerDBUpdates;
                                 case "enable":
                                     DbUpdaterEnabled = true;
-                                    return "Controller DB update checker enabled.";
+                                    return Strings.Console_Acm_ControllerDBUpdateCheckerEnabled;
                                 case "disable":
                                     DbUpdaterEnabled = false;
-                                    return "Controller DB update checker disabled.";
+                                    return Strings.Console_Acm_ControllerDBUpdateCheckerDisabled;
                                 default:
-                                    return "Invalid argument [check/enable/disable]. Enter 'acm' for all available commands.";
+                                    return Strings.Console_Acm_UpdateInvalidArgument;
                             }
                         }
                         else
                         {
-                            return "Missing argument [check/enable/disable]. Enter 'acm' for all available commands.";
+                            return Strings.Console_Acm_UpdateMissingArgument;
                         }
                     default:
-                        return "Invalid command. Enter 'acm' for all available commands.";
+                        return Strings.Console_Acm_InvalidCommand;
                 }
             }
             else
             {
-                return "Available commands:\n" +
-                    "  acm modupdate check  \t Checks for mod update.\n" +
-                    "  acm modupdate enable \t Enables update checker.\n" +
-                    "  acm modupdate disable\t Disables update checker.\n" +
-                    "  acm dbupdate check   \t Checks for controller database update.\n" +
-                    "  acm dbupdate enable  \t Enables automatic controller database updates.\n" +
-                    "  acm dbupdate disable \t Disables automatic controller database updates.\n";
+                return Strings.Console_Acm_AllAvailableList;
             }
         }
 
@@ -321,13 +314,13 @@ namespace Lench.AdvancedControls
         {
             var updater = gameObject.AddComponent<Updater>();
             updater.Check(
-                "Advanced Controls Mod",
+                Strings.Updater_WindowTitle,
                 "https://api.github.com/repos/lench4991/AdvancedControlsMod/releases/latest",
                 Assembly.GetExecutingAssembly().GetName().Version,
                 new List<Updater.Link>()
                     {
-                            new Updater.Link() { DisplayName = "Spiderling forum page", URL = "http://forum.spiderlinggames.co.uk/index.php?threads/3150/" },
-                            new Updater.Link() { DisplayName = "GitHub release page", URL = "https://github.com/lench4991/AdvancedControlsMod/releases/latest" }
+                            new Updater.Link() { DisplayName = Strings.Updater_SpiderlingForumLink, URL = "http://forum.spiderlinggames.co.uk/index.php?threads/3150/" },
+                            new Updater.Link() { DisplayName = Strings.Updater_GithubReleasePageLink, URL = "https://github.com/lench4991/AdvancedControlsMod/releases/latest" }
                     },
                 verbose);
         }

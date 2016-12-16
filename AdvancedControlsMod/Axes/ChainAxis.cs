@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Lench.AdvancedControls.UI;
 using UnityEngine;
 // ReSharper disable PossibleNullReferenceException
 
@@ -27,22 +28,22 @@ namespace Lench.AdvancedControls.Axes
                 var sub1 = AxisManager.Get(SubAxis1) as ChainAxis;
                 var sub2 = AxisManager.Get(SubAxis2) as ChainAxis;
                 var error = false;
-                var errorMessage = "Renaming this axis formed a cycle in the chain.\n";
+                var errorMessage = Strings.ChainAxisEditor_Message_ChainCycleErrorDetail;
                 if (sub1 != null && sub1.CheckCycle(new List<string>() { Name }))
                 {
                     error = true;
-                    errorMessage += "'" + SubAxis1 + "' has been unlinked. ";
+                    errorMessage += string.Format(Strings.ChainAxisEditor_Message_ChainCycleErrorEffect, SubAxis1);
                     SubAxis1 = null;
                 }
                 if (sub2 != null && sub2.CheckCycle(new List<string>() { Name }))
                 {
                     error = true;
-                    errorMessage += "'" + SubAxis2 + "' has been unlinked. ";
+                    errorMessage += string.Format(Strings.ChainAxisEditor_Message_ChainCycleErrorEffect, SubAxis2);
                     SubAxis2 = null;
                 }
                 if (error)
                 {
-                    (Editor as UI.ChainAxisEditor).Error = "<color=#FFFF00><b>Chain cycle error</b></color>\n" + errorMessage;
+                    (Editor as ChainAxisEditor).Error = $"<color=#FFFF00><b>{Strings.ChainAxisEditor_Message_ChainCycleError}</b></color>\n" + errorMessage;
                 }
             }
         }
@@ -64,7 +65,7 @@ namespace Lench.AdvancedControls.Axes
                 if (axis != null && axis.CheckCycle(new List<string>()))
                 {
                     _subAxis1 = null;
-                    throw new InvalidOperationException("'" + value + "' is already in the axis chain.\nLinking it here would create a cycle.");
+                    throw new InvalidOperationException(string.Format(Strings.ChainAxisEditor_Message_ChainCycleErrorDetail2, value));
                 }
             }
         }
@@ -87,7 +88,7 @@ namespace Lench.AdvancedControls.Axes
                 if (axis != null && axis.CheckCycle(new List<string>()))
                 {
                     _subAxis2 = null;
-                    throw new InvalidOperationException("'" + value + "' is already in the axis chain.\nLinking it here would create a cycle.");
+                    throw new InvalidOperationException(string.Format(Strings.ChainAxisEditor_Message_ChainCycleErrorDetail2, value));
                 }
             }
         }
@@ -127,6 +128,31 @@ namespace Lench.AdvancedControls.Axes
             /// Takes the minimum value.
             /// </summary>
             Minimum = 5
+        }
+
+        /// <summary>
+        /// Returns localized string representation of a chain method.
+        /// </summary>
+        /// <param name="m">ChainMethod enumerator</param>
+        public static string GetMethodString(ChainMethod m)
+        {
+            switch (m)
+            {
+                case ChainMethod.Sum:
+                    return Strings.ChainMethod_Sum;
+                case ChainMethod.Subtract:
+                    return Strings.ChainMethod_Subtract;
+                case ChainMethod.Average:
+                    return Strings.ChainMethod_Average;
+                case ChainMethod.Multiply:
+                    return Strings.ChainMethod_Multiply;
+                case ChainMethod.Maximum:
+                    return Strings.ChainMethod_Maximum;
+                case ChainMethod.Minimum:
+                    return Strings.ChainMethod_Minimum;
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(m), m, null);
+            }
         }
 
         /// <summary>
@@ -170,7 +196,7 @@ namespace Lench.AdvancedControls.Axes
             SubAxis1 = null;
             SubAxis2 = null;
             Method = ChainMethod.Sum;
-            Editor = new UI.ChainAxisEditor(this);
+            Editor = new ChainAxisEditor(this);
         }
 
         /// <summary>
@@ -228,10 +254,12 @@ namespace Lench.AdvancedControls.Axes
 
         internal override InputAxis Clone()
         {
-            var clone = new ChainAxis(Name);
-            clone.Method = Method;
-            clone.SubAxis1 = SubAxis1;
-            clone.SubAxis2 = SubAxis2;
+            var clone = new ChainAxis(Name)
+            {
+                Method = Method,
+                SubAxis1 = SubAxis1,
+                SubAxis2 = SubAxis2
+            };
             return clone;
         }
 

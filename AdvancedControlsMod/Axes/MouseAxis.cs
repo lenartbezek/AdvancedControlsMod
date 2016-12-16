@@ -1,5 +1,6 @@
-﻿using System;
+﻿using Lench.AdvancedControls.UI;
 using UnityEngine;
+// ReSharper disable CompareOfFloatsByEqualityOperator
 
 namespace Lench.AdvancedControls.Axes
 {
@@ -19,13 +20,13 @@ namespace Lench.AdvancedControls.Axes
         /// </summary>
         public float Center
         {
-            get { return center; }
+            get { return _center; }
             set
             {
-                center = Mathf.Clamp(value, -1, 1);
+                _center = Mathf.Clamp(value, -1, 1);
             }
         }
-        private float center;
+        private float _center;
 
         /// <summary>
         /// Size of the range between -1 and +1 axis values.
@@ -33,13 +34,13 @@ namespace Lench.AdvancedControls.Axes
         /// </summary>
         public float Range
         {
-            get { return range; }
+            get { return _range; }
             set
             {
-                range = Mathf.Clamp(value, 0, 1);
+                _range = Mathf.Clamp(value, 0, 1);
             }
         }
-        private float range;
+        private float _range;
 
         /// <summary>
         /// Creates a new mouse axis with given name.
@@ -52,7 +53,7 @@ namespace Lench.AdvancedControls.Axes
             Range = 0.5f;
             Axis = Axis.X;
 
-            Editor = new UI.MouseAxisEditor(this);
+            Editor = new MouseAxisEditor(this);
         }
 
         /// <summary>
@@ -62,11 +63,11 @@ namespace Lench.AdvancedControls.Axes
         {
             get
             {
-                float mouse_pos = Axis == Axis.X ? UnityEngine.Input.mousePosition.x : UnityEngine.Input.mousePosition.y;
-                float screen_size = Axis == Axis.X ? Screen.width : Screen.height;
-                float range_size = Range == 0 ? 1 : screen_size * Range / 2f;
-                float center = screen_size/2f + screen_size/2f * Center;
-                return Mathf.Clamp((mouse_pos - center) / range_size, -1f, 1f);
+                float mousePos = Axis == Axis.X ? UnityEngine.Input.mousePosition.x : UnityEngine.Input.mousePosition.y;
+                float screenSize = Axis == Axis.X ? Screen.width : Screen.height;
+                float rangeSize = Range == 0 ? 1 : screenSize * Range / 2f;
+                float center = screenSize/2f + screenSize/2f * Center;
+                return Mathf.Clamp((mousePos - center) / rangeSize, -1f, 1f);
             }
         }
 
@@ -79,10 +80,10 @@ namespace Lench.AdvancedControls.Axes
         {
             var cast = other as MouseAxis;
             if (cast == null) return false;
-            return this.Name == cast.Name &&
-                   this.Axis == cast.Axis &&
-                   this.Center == cast.Center &&
-                   this.Range == cast.Range;
+            return Name == cast.Name &&
+                   Axis == cast.Axis &&
+                   Center == cast.Center &&
+                   Range == cast.Range;
         }
 
         /// <summary>
@@ -97,10 +98,12 @@ namespace Lench.AdvancedControls.Axes
 
         internal override InputAxis Clone()
         {
-            var clone = new MouseAxis(Name);
-            clone.Axis = Axis;
-            clone.Center = Center;
-            clone.Range = Range;
+            var clone = new MouseAxis(Name)
+            {
+                Axis = Axis,
+                Center = Center,
+                Range = Range
+            };
             return clone;
         }
 

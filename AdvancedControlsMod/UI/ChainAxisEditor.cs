@@ -80,7 +80,7 @@ namespace Lench.AdvancedControls.UI
             float b = axisB?.OutputValue ?? 0;
 
             // Draw axis value
-            GUILayout.Label("  <color=#808080><b>" + _axis.OutputValue.ToString("0.00") + "</b></color>",
+            GUILayout.Label($"  <color=#808080><b>{_axis.OutputValue:0.00}</b></color>",
                 new GUIStyle(Elements.Labels.Default) { richText = true, alignment = TextAnchor.MiddleLeft },
                 GUILayout.Height(20));
 
@@ -89,13 +89,13 @@ namespace Lench.AdvancedControls.UI
             int numMethods = Enum.GetValues(typeof(ChainAxis.ChainMethod)).Length;
 
             GUILayout.BeginHorizontal();
-            if (GUILayout.Button("<", Elements.Buttons.Default, GUILayout.Width(30)))
+            if (GUILayout.Button(Strings.ButtonText_ArrowPrevious, Elements.Buttons.Default, GUILayout.Width(30)))
                 i--;
             if (i < 0) i += numMethods;
 
             GUILayout.Label(Enum.GetNames(typeof(ChainAxis.ChainMethod))[i], new GUIStyle(Elements.InputFields.Default) { alignment = TextAnchor.MiddleCenter });
 
-            if (GUILayout.Button(">", Elements.Buttons.Default, GUILayout.Width(30)))
+            if (GUILayout.Button(Strings.ButtonText_ArrowNext, Elements.Buttons.Default, GUILayout.Width(30)))
                 i++;
             if (i == numMethods) i = 0;
 
@@ -106,12 +106,14 @@ namespace Lench.AdvancedControls.UI
             // Draw sub axis values
             GUILayout.BeginHorizontal(GUILayout.Height(20));
 
-            GUILayout.Label("  <color=#808080><b>" + (axisA == null ? "" : axisA.Status == AxisStatus.OK ? a.ToString("0.00") : InputAxis.GetStatusString(axisA.Status)) + "</b></color>",
+            GUILayout.Label(
+                $"  <color=#808080><b>{(axisA == null ? string.Empty : axisA.Status == AxisStatus.OK ? a.ToString("0.00") : InputAxis.GetStatusString(axisA.Status))}</b></color>",
                 new GUIStyle(Elements.Labels.Default) { richText = true, alignment = TextAnchor.MiddleLeft },
                 GUILayout.MinWidth(leftGraphRect.width),
                 GUILayout.Height(20));
 
-            GUILayout.Label("  <color=#808080><b>" + (axisB == null ? "" : axisB.Status == AxisStatus.OK ? b.ToString("0.00") : InputAxis.GetStatusString(axisA.Status)) + "</b></color>",
+            GUILayout.Label(
+                $"  <color=#808080><b>{(axisB == null ? string.Empty : axisB.Status == AxisStatus.OK ? b.ToString("0.00") : InputAxis.GetStatusString(axisA.Status))}</b></color>",
                 new GUIStyle(Elements.Labels.Default) { richText = true, alignment = TextAnchor.MiddleLeft, margin = new RectOffset(8, 0, 0, 0) },
                 GUILayout.MinWidth(rightGraphRect.width),
                 GUILayout.Height(20));
@@ -149,7 +151,7 @@ namespace Lench.AdvancedControls.UI
             var buttonRect = GUILayoutUtility.GetRect(new GUIContent(" "), Elements.Buttons.Default, GUILayout.MaxWidth(leftGraphRect.width));
             if (_axis.SubAxis1 == null)
             {
-                if (GUI.Button(buttonRect, "Select Input Axis", Elements.Buttons.Disabled))
+                if (GUI.Button(buttonRect, Strings.ButtonText_SelectInputAxis, Elements.Buttons.Disabled))
                 {
                     Error = null;
                     var callback = new SelectAxisDelegate(axis =>
@@ -160,7 +162,7 @@ namespace Lench.AdvancedControls.UI
                         }
                         catch (InvalidOperationException e)
                         {
-                            Error = "<color=#FFFF00><b>Chain cycle error</b></color>\n" + e.Message;
+                            Error = Strings.ChainAxisEditor_Message_ChainCycleError + e.Message;
                         }
                     });
                     if (_popup == null)
@@ -184,7 +186,7 @@ namespace Lench.AdvancedControls.UI
                         }
                         catch (InvalidOperationException e)
                         {
-                            Error = "<color=#FFFF00><b>Chain cycle error</b></color>\n" + e.Message;
+                            Error = Strings.ChainAxisEditor_Message_ChainCycleError + e.Message;
                         }
                     });
                     if (_popup == null)
@@ -198,7 +200,7 @@ namespace Lench.AdvancedControls.UI
 
             if (_axis.SubAxis2 == null)
             {
-                if (GUILayout.Button("Select Input Axis", Elements.Buttons.Disabled, GUILayout.MaxWidth(rightGraphRect.width)))
+                if (GUILayout.Button(Strings.ButtonText_SelectInputAxis, Elements.Buttons.Disabled, GUILayout.MaxWidth(rightGraphRect.width)))
                 {
                     Error = null;
                     var callback = new SelectAxisDelegate(axis =>
@@ -209,7 +211,7 @@ namespace Lench.AdvancedControls.UI
                         }
                         catch (InvalidOperationException e)
                         {
-                            Error = "<color=#FFFF00><b>Chain cycle error</b></color>\n" + e.Message;
+                            Error = Strings.ChainAxisEditor_Message_ChainCycleError + e.Message;
                         }
                     });
                     if (_popup == null)
@@ -234,7 +236,7 @@ namespace Lench.AdvancedControls.UI
                         }
                         catch (InvalidOperationException e)
                         {
-                            Error = "<color=#FFFF00><b>Chain cycle error</b></color>\n" + e.Message;
+                            Error = Strings.ChainAxisEditor_Message_ChainCycleError + e.Message;
                         }
                     });
                     if (_popup == null)
@@ -255,7 +257,7 @@ namespace Lench.AdvancedControls.UI
 
         public string GetHelpURL()
         {
-            return "https://github.com/lench4991/AdvancedControlsMod/wiki/Chain-Axis";
+            return Strings.ChainAxisEditor_HelpURL;
         }
 
         public string GetNote()

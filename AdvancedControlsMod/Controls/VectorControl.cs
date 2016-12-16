@@ -1,5 +1,6 @@
 ﻿using Lench.AdvancedControls.Blocks;
 using System;
+using Lench.AdvancedControls.UI;
 using UnityEngine;
 
 namespace Lench.AdvancedControls.Controls
@@ -13,20 +14,56 @@ namespace Lench.AdvancedControls.Controls
         private VectorThruster _vt;
 
         /// <summary>
+        /// Vector control key is either 'HORIZONTAL' (x), 'VERTICAL' (y), or 'POWER' (z), depending on the axis.
+        /// </summary>
+        public override string Key
+        {
+            get
+            {
+                switch (_vectorAxis)
+                {
+                    case global::Axis.X:
+                        return "HORIZONTAL";
+                    case global::Axis.Y:
+                        return "VERTICAL";
+                    case global::Axis.Z:
+                        return "POWER";
+                    default:
+                        throw new ArgumentOutOfRangeException();
+                }
+            }
+        }
+
+        /// <summary>
+        /// Localized display name.
+        /// </summary>
+        public override string Name
+        {
+            get
+            {
+                switch (_vectorAxis)
+                {
+                    case global::Axis.X:
+                        return Strings.VectorControl_AxisHorizontal;
+                    case global::Axis.Y:
+                        return Strings.VectorControl_AxisVertical;
+                    case global::Axis.Z:
+                        return Strings.VectorControl_AxisPower;
+                    default:
+                        throw new ArgumentOutOfRangeException();
+                }
+            }
+        }
+
+        /// <summary>
         /// Creates a new VectorControl for a block with given guid.
         /// Axis specifies what property of vector thruster should be controlled.
         /// </summary>
         /// <param name="guid">Blocks' guid.</param>
         /// <param name="axis">global::Axis</param>
-        public VectorControl(Guid guid, Axis axis = global::Axis.X) : base(guid)
+        public VectorControl(Guid guid, Axis axis) : base(guid)
         {
             _vectorAxis = axis;
-            if (_vectorAxis == global::Axis.X)
-                Name = "HORIZONTAL";
-            if (_vectorAxis == global::Axis.Y)
-                Name = "VERTICAL";
-            if (_vectorAxis == global::Axis.Z)
-                Name = "POWER";
         }
 
         /// <summary>
@@ -78,7 +115,6 @@ namespace Lench.AdvancedControls.Controls
         {
             var clone = new VectorControl(BlockGUID, _vectorAxis)
             {
-                Name = Name,
                 Enabled = Enabled,
                 Axis = Axis,
                 Block = Block,

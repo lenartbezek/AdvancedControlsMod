@@ -9,28 +9,21 @@ namespace Lench.AdvancedControls.Controls
     public class SliderControl : Control
     {
         /// <summary>
+        /// Slider control key equals to the slider key.
+        /// </summary>
+        public override string Key => Slider;
+
+        /// <summary>
         /// Creates a slider control for a block with given GUID.
         /// Slider property needs to be set before the control is used.
         /// </summary>
         /// <param name="guid">GUID of the block.</param>
         public SliderControl(Guid guid) : base(guid){}
 
-        private string _slider;
-
         /// <summary>
         /// Slider display name that the block controls. Also sets the control's display name.
         /// </summary>
-        public string Slider {
-            get
-            {
-                return _slider;
-            }
-            set
-            {
-                _slider = value;
-                Name = _slider;
-            }
-        }
+        public string Slider { get; set; }
 
         /// <summary>
         /// Applies the slider value.
@@ -56,6 +49,7 @@ namespace Lench.AdvancedControls.Controls
         {
             var clone = new SliderControl(BlockGUID)
             {
+                Slider = Slider,
                 Name = Name,
                 Enabled = Enabled,
                 Axis = Axis,
