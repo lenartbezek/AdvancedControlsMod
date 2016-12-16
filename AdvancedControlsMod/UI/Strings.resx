@@ -123,15 +123,19 @@
   </data>
   <data name="AxisEditorWindow_ButtonText_KeyAxis" xml:space="preserve">
     <value>Key Axis</value>
+    <comment>Button text in Create new axis window.</comment>
   </data>
   <data name="AxisEditorWindow_ButtonText_MouseAxis" xml:space="preserve">
     <value>Mouse Axis</value>
+    <comment>Button text in Create new axis window.</comment>
   </data>
   <data name="AxisEditorWindow_ButtonText_ChainAxis" xml:space="preserve">
     <value>Chain Axis</value>
+    <comment>Button text in Create new axis window.</comment>
   </data>
   <data name="AxisEditorWindow_ButtonText_CustomAxis" xml:space="preserve">
     <value>Custom Axis</value>
+    <comment>Button text in Create new axis window.</comment>
   </data>
   <data name="AxisEditorWindow_WindowTitle_CreateNewCustomAxis" xml:space="preserve">
     <value>Create new custom axis</value>
@@ -150,18 +154,23 @@
   </data>
   <data name="AxisEditorWindow_DefaultAxisName_NewControllerAxis" xml:space="preserve">
     <value>new controller axis</value>
+    <comment>Default axis name for controller axis.</comment>
   </data>
   <data name="AxisEditorWindow_DefaultAxisName_NewKeyAxis" xml:space="preserve">
     <value>new key axis</value>
+    <comment>Default axis name for key axis.</comment>
   </data>
   <data name="AxisEditorWindow_DefaultAxisName_NewMouseAxis" xml:space="preserve">
     <value>new mouse axis</value>
+    <comment>Default axis name for mouse axis.</comment>
   </data>
   <data name="AxisEditorWindow_DefaultAxisName_NewChainAxis" xml:space="preserve">
     <value>new chain axis</value>
+    <comment>Default axis name for chain axis.</comment>
   </data>
   <data name="AxisEditorWindow_DefaultAxisName_NewCustomAxis" xml:space="preserve">
     <value>new custom axis</value>
+    <comment>Default axis name for custom axis.</comment>
   </data>
   <data name="ButtonText_Save" xml:space="preserve">
     <value>Save</value>
@@ -193,6 +202,7 @@
   </data>
   <data name="ChainAxisEditor_Message_ChainCycleError" xml:space="preserve">
     <value>Chain cycle error</value>
+    <comment>Error title in chain axis editor.</comment>
   </data>
   <data name="ButtonText_SelectInputAxis" xml:space="preserve">
     <value>Select Input Axis</value>
@@ -218,22 +228,22 @@
   <data name="ControllerAxisEditor_Message_Platform" xml:space="preserve">
     <value>Platform</value>
   </data>
-  <data name="ControllerAxisEditor_Message_WindowsPlatform" xml:space="preserve">
+  <data name="ControllerAxisEditor_Message_PlatformWindows" xml:space="preserve">
     <value>You are using Windows version of ACM.\n</value>
   </data>
-  <data name="ControllerAxisEditor_Message_CorrectPlatform" xml:space="preserve">
+  <data name="ControllerAxisEditor_Message_PlatformCorrect" xml:space="preserve">
     <value>If you are using some other operating system,\ndownload the correct version of the mod.</value>
   </data>
   <data name="ControllerAxisEditor_Message_RequireSDL2Linux" xml:space="preserve">
     <value>Controller axis requires SDL2 library to work.\nRun the command below to install it.\n\n</value>
   </data>
-  <data name="ControllerAxisEditor_Message_LinuxPlatform" xml:space="preserve">
+  <data name="ControllerAxisEditor_Message_PlatformLinux" xml:space="preserve">
     <value>You are using Linux version of ACM.\n</value>
   </data>
   <data name="ControllerAxisEditor_Message_RequireSDL2OSX" xml:space="preserve">
     <value>Controller axis requires SDL2 library to work.\nDownload it at the link below.\n\n</value>
   </data>
-  <data name="ControllerAxisEditor_Message_OSXPlatform" xml:space="preserve">
+  <data name="ControllerAxisEditor_Message_PlatformOSX" xml:space="preserve">
     <value>You are using OSX version of ACM.\n</value>
   </data>
   <data name="ControllerAxisEditor_Message_NoControllersConnected" xml:space="preserve">
@@ -380,27 +390,35 @@
   </data>
   <data name="AxisStatus_Ok" xml:space="preserve">
     <value>OK</value>
+    <comment>Axis status label displayed in overview and control mapper.</comment>
   </data>
   <data name="AxisStatus_NotFound" xml:space="preserve">
     <value>NOT FOUND</value>
+    <comment>Axis status label displayed in overview and control mapper.</comment>
   </data>
   <data name="AxisStatus_NotAvailable" xml:space="preserve">
     <value>NOT AVAILABLE</value>
+    <comment>Axis status label displayed in overview and control mapper.</comment>
   </data>
   <data name="AxisStatus_NotConnected" xml:space="preserve">
     <value>NOT CONNECTED</value>
+    <comment>Axis status label displayed in overview and control mapper.</comment>
   </data>
   <data name="AxisStatus_NotRunning" xml:space="preserve">
     <value>NOT RUNNING</value>
+    <comment>Axis status label displayed in overview and control mapper.</comment>
   </data>
   <data name="AxisStatus_Error" xml:space="preserve">
     <value>ERROR</value>
+    <comment>Axis status label displayed in overview and control mapper.</comment>
   </data>
   <data name="AxisStatus_NoLink" xml:space="preserve">
     <value>NO LINK</value>
+    <comment>Axis status label displayed in overview and control mapper.</comment>
   </data>
   <data name="AxisStatus_Unknown" xml:space="preserve">
     <value>UNKNOWN</value>
+    <comment>Axis status label displayed in overview and control mapper.</comment>
   </data>
   <data name="ChainAxisEditor_Message_ChainCycleErrorEffect" xml:space="preserve">
     <value>'{0}' has been unlinked. </value>
@@ -408,9 +426,11 @@
   </data>
   <data name="ChainAxisEditor_Message_ChainCycleErrorDetail" xml:space="preserve">
     <value>Renaming this axis formed a cycle in the chain.\n</value>
+    <comment>Error detail in chain axis editor.</comment>
   </data>
   <data name="ChainAxisEditor_Message_ChainCycleErrorDetail2" xml:space="preserve">
     <value>'{0}' is already in the axis chain.\nLinking it here would create a cycle.</value>
+    <comment>0 - axis name</comment>
   </data>
   <data name="ChainMethod_Sum" xml:space="preserve">
     <value>Sum</value>
@@ -440,21 +460,6 @@
   <data name="KeyAxis_ParseButtonID_ErrorWhileLoadingAButton" xml:space="preserve">
     <value>Error while loading a button:</value>
   </data>
-  <data name="BlockHandler_ActionNotFoundException" xml:space="preserve">
-    <value>Block {0} has no {1} action.</value>
-    <comment>0 - block name, 1 - action name</comment>
-  </data>
-  <data name="BlockHandler_ToggleNotFoundException" xml:space="preserve">
-    <value>Toggle {0} not found.</value>
-    <comment>0 - toggle name</comment>
-  </data>
-  <data name="BlockHandler_SetSliderValue_ValueIsNotANumberNaN" xml:space="preserve">
-    <value>Value is not a number (NaN).</value>
-  </data>
-  <data name="BlockHandler_SliderNotFoundException" xml:space="preserve">
-    <value>Slider {0} not found.</value>
-    <comment>0 - slider name</comment>
-  </data>
   <data name="ControlName_Angle" xml:space="preserve">
     <value>ANGLE</value>
   </data>
@@ -465,7 +470,7 @@
   <data name="ControlName_Input" xml:space="preserve">
     <value>INPUT</value>
   </data>
-  <data name="PositionControl_Name" xml:space="preserve">
+  <data name="ControlName_Position" xml:space="preserve">
     <value>POSITION</value>
   </data>
   <data name="VectorControl_AxisHorizontal" xml:space="preserve">
@@ -621,7 +626,7 @@
     <value>Hat {0}</value>
     <comment>0 - hat number</comment>
   </data>
-  <data name="RestartButtonText" xml:space="preserve">
+  <data name="DownloadButtonText_Restart" xml:space="preserve">
     <value>Please restart Besiege</value>
   </data>
   <data name="Log_SuccessDownloadingFile" xml:space="preserve">

@@ -94,8 +94,8 @@ namespace Lench.AdvancedControls.UI
                 GUILayout.Label($"<b>{Strings.ControllerAxisEditor_Message_AdditionalLibraryNeeded}</b>\n" +
                                 Strings.ControllerAxisEditor_DrawAxis_RequireSDL2Windows+
                                 $"<b>{Strings.ControllerAxisEditor_Message_Platform}</b>\n" +
-                                Strings.ControllerAxisEditor_Message_WindowsPlatform+
-                                Strings.ControllerAxisEditor_Message_CorrectPlatform);
+                                Strings.ControllerAxisEditor_Message_PlatformWindows+
+                                Strings.ControllerAxisEditor_Message_PlatformCorrect);
                 if (GUILayout.Button(DownloadButtonText) && !DownloadingInProgress && !DeviceManager.SdlInstalled)
                     DeviceManager.InstallSdl();
 #elif linux

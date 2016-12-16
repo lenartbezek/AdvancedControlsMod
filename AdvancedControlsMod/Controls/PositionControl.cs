@@ -22,7 +22,7 @@ namespace Lench.AdvancedControls.Controls
         /// <summary>
         /// Localized display name of the control.
         /// </summary>
-        public override string Name => Strings.PositionControl_Name;
+        public override string Name => Strings.ControlName_Position;
 
         /// <summary>
         /// Creates a position control for a piston with given GUID.

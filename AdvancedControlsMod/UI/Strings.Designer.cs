@@ -313,42 +313,6 @@ namespace Lench.AdvancedControls.UI {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Block {0} has no {1} action..
-        /// </summary>
-        internal static string BlockHandler_ActionNotFoundException {
-            get {
-                return ResourceManager.GetString("BlockHandler_ActionNotFoundException", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Value is not a number (NaN)..
-        /// </summary>
-        internal static string BlockHandler_SetSliderValue_ValueIsNotANumberNaN {
-            get {
-                return ResourceManager.GetString("BlockHandler_SetSliderValue_ValueIsNotANumberNaN", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Slider {0} not found..
-        /// </summary>
-        internal static string BlockHandler_SliderNotFoundException {
-            get {
-                return ResourceManager.GetString("BlockHandler_SliderNotFoundException", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Toggle {0} not found..
-        /// </summary>
-        internal static string BlockHandler_ToggleNotFoundException {
-            get {
-                return ResourceManager.GetString("BlockHandler_ToggleNotFoundException", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to &gt;.
         /// </summary>
         internal static string ButtonText_ArrowNext {
@@ -1051,24 +1015,6 @@ namespace Lench.AdvancedControls.UI {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to If you are using some other operating system,\ndownload the correct version of the mod..
-        /// </summary>
-        internal static string ControllerAxisEditor_Message_CorrectPlatform {
-            get {
-                return ResourceManager.GetString("ControllerAxisEditor_Message_CorrectPlatform", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to You are using Linux version of ACM.\n.
-        /// </summary>
-        internal static string ControllerAxisEditor_Message_LinuxPlatform {
-            get {
-                return ResourceManager.GetString("ControllerAxisEditor_Message_LinuxPlatform", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to No controllers connected..
         /// </summary>
         internal static string ControllerAxisEditor_Message_NoControllersConnected {
@@ -1087,20 +1033,47 @@ namespace Lench.AdvancedControls.UI {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to You are using OSX version of ACM.\n.
-        /// </summary>
-        internal static string ControllerAxisEditor_Message_OSXPlatform {
-            get {
-                return ResourceManager.GetString("ControllerAxisEditor_Message_OSXPlatform", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Platform.
         /// </summary>
         internal static string ControllerAxisEditor_Message_Platform {
             get {
                 return ResourceManager.GetString("ControllerAxisEditor_Message_Platform", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to If you are using some other operating system,\ndownload the correct version of the mod..
+        /// </summary>
+        internal static string ControllerAxisEditor_Message_PlatformCorrect {
+            get {
+                return ResourceManager.GetString("ControllerAxisEditor_Message_PlatformCorrect", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You are using Linux version of ACM.\n.
+        /// </summary>
+        internal static string ControllerAxisEditor_Message_PlatformLinux {
+            get {
+                return ResourceManager.GetString("ControllerAxisEditor_Message_PlatformLinux", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You are using OSX version of ACM.\n.
+        /// </summary>
+        internal static string ControllerAxisEditor_Message_PlatformOSX {
+            get {
+                return ResourceManager.GetString("ControllerAxisEditor_Message_PlatformOSX", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to You are using Windows version of ACM.\n.
+        /// </summary>
+        internal static string ControllerAxisEditor_Message_PlatformWindows {
+            get {
+                return ResourceManager.GetString("ControllerAxisEditor_Message_PlatformWindows", resourceCulture);
             }
         }
         
@@ -1119,15 +1092,6 @@ namespace Lench.AdvancedControls.UI {
         internal static string ControllerAxisEditor_Message_RequireSDL2OSX {
             get {
                 return ResourceManager.GetString("ControllerAxisEditor_Message_RequireSDL2OSX", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to You are using Windows version of ACM.\n.
-        /// </summary>
-        internal static string ControllerAxisEditor_Message_WindowsPlatform {
-            get {
-                return ResourceManager.GetString("ControllerAxisEditor_Message_WindowsPlatform", resourceCulture);
             }
         }
         
@@ -1182,6 +1146,15 @@ namespace Lench.AdvancedControls.UI {
         internal static string ControlName_Input {
             get {
                 return ResourceManager.GetString("ControlName_Input", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to POSITION.
+        /// </summary>
+        internal static string ControlName_Position {
+            get {
+                return ResourceManager.GetString("ControlName_Position", resourceCulture);
             }
         }
         
@@ -1317,6 +1290,15 @@ namespace Lench.AdvancedControls.UI {
         internal static string DownloadButtonText_Error {
             get {
                 return ResourceManager.GetString("DownloadButtonText_Error", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Please restart Besiege.
+        /// </summary>
+        internal static string DownloadButtonText_Restart {
+            get {
+                return ResourceManager.GetString("DownloadButtonText_Restart", resourceCulture);
             }
         }
         
@@ -1686,24 +1668,6 @@ namespace Lench.AdvancedControls.UI {
         internal static string MouseAxisEditor_HelpURL {
             get {
                 return ResourceManager.GetString("MouseAxisEditor_HelpURL", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to POSITION.
-        /// </summary>
-        internal static string PositionControl_Name {
-            get {
-                return ResourceManager.GetString("PositionControl_Name", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Please restart Besiege.
-        /// </summary>
-        internal static string RestartButtonText {
-            get {
-                return ResourceManager.GetString("RestartButtonText", resourceCulture);
             }
         }
         

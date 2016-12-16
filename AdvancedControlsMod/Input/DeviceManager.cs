@@ -88,7 +88,7 @@ namespace Lench.AdvancedControls.Input
                         else
                         {
                             spaar.ModLoader.ModConsole.AddMessage(LogType.Log, $"[ACM]: {Strings.Log_SuccessDownloadingFile} SDL2.dll");
-                            ControllerAxisEditor.DownloadButtonText = Strings.RestartButtonText;
+                            ControllerAxisEditor.DownloadButtonText = Strings.DownloadButtonText_Restart;
                             SdlInstalled = true;
                             InitSdl();
                         } 
