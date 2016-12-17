@@ -223,28 +223,41 @@
     <value>Additional library needed</value>
   </data>
   <data name="ControllerAxisEditor_DrawAxis_RequireSDL2Windows" xml:space="preserve">
-    <value>Controller axis requires SDL2 library to work.\nPress download to install it automatically.\n\n</value>
+    <value>Controller axis requires SDL2 library to work.
+Press download to install it automatically.
+
+</value>
   </data>
   <data name="ControllerAxisEditor_Message_Platform" xml:space="preserve">
     <value>Platform</value>
   </data>
   <data name="ControllerAxisEditor_Message_PlatformWindows" xml:space="preserve">
-    <value>You are using Windows version of ACM.\n</value>
+    <value>You are using Windows version of ACM.
+</value>
   </data>
   <data name="ControllerAxisEditor_Message_PlatformCorrect" xml:space="preserve">
-    <value>If you are using some other operating system,\ndownload the correct version of the mod.</value>
+    <value>If you are using some other operating system,
+download the correct version of the mod.</value>
   </data>
   <data name="ControllerAxisEditor_Message_RequireSDL2Linux" xml:space="preserve">
-    <value>Controller axis requires SDL2 library to work.\nRun the command below to install it.\n\n</value>
+    <value>Controller axis requires SDL2 library to work.
+Run the command below to install it.
+
+</value>
   </data>
   <data name="ControllerAxisEditor_Message_PlatformLinux" xml:space="preserve">
-    <value>You are using Linux version of ACM.\n</value>
+    <value>You are using Linux version of ACM.
+</value>
   </data>
   <data name="ControllerAxisEditor_Message_RequireSDL2OSX" xml:space="preserve">
-    <value>Controller axis requires SDL2 library to work.\nDownload it at the link below.\n\n</value>
+    <value>Controller axis requires SDL2 library to work.
+Download it at the link below.
+
+</value>
   </data>
   <data name="ControllerAxisEditor_Message_PlatformOSX" xml:space="preserve">
-    <value>You are using OSX version of ACM.\n</value>
+    <value>You are using OSX version of ACM.
+</value>
   </data>
   <data name="ControllerAxisEditor_Message_NoControllersConnected" xml:space="preserve">
     <value>No controllers connected.</value>
@@ -256,7 +269,10 @@
     <value>Associated controller not connected.</value>
   </data>
   <data name="ControllerAxisEditor_Message_AssociatedControllerNotConnectedDetail" xml:space="preserve">
-    <value>The device this axis is bound to is not found.\n\n&lt;b&gt;Device GUID&lt;/b&gt;\n</value>
+    <value>The device this axis is bound to is not found.
+
+&lt;b&gt;Device GUID&lt;/b&gt;
+</value>
   </data>
   <data name="ControllerAxisEditor_ButtonText_UseAnotherController" xml:space="preserve">
     <value>Use another controller</value>
@@ -295,7 +311,10 @@
     <value>OVERVIEW</value>
   </data>
   <data name="ControlOverview_Message_IntroNote" xml:space="preserve">
-    <value>To use this machine as intended,\nmake sure all axes report no problems.\n\n&lt;b&gt;{0}&lt;/b&gt; uses these input axes:</value>
+    <value>To use this machine as intended,
+make sure all axes report no problems.
+
+&lt;b&gt;{0}&lt;/b&gt; uses these input axes:</value>
     <comment>0 - machine name</comment>
   </data>
   <data name="ControlOverview_Label_NoControls" xml:space="preserve">
@@ -313,7 +332,9 @@
     <value>https://github.com/lench4991/AdvancedControlsMod/wiki/Sharing</value>
   </data>
   <data name="CustomAxisEditor_Message_MissingIronPython" xml:space="preserve">
-    <value>&lt;b&gt;Additional library needed&lt;/b&gt;\nCustom axis runs on IronPython engine.\nPress download to install it automatically.</value>
+    <value>&lt;b&gt;Additional library needed&lt;/b&gt;
+Custom axis runs on IronPython engine.
+Press download to install it automatically.</value>
   </data>
   <data name="CustomAxisEditor_ButtonText_Stop" xml:space="preserve">
     <value>STOP</value>
@@ -367,7 +388,8 @@
     <value>Device disconnected</value>
   </data>
   <data name="KeyAxisEditor_Message_DeviceDisconnectedDetail" xml:space="preserve">
-    <value>\n'{0}' is not connected.</value>
+    <value>
+'{0}' is not connected.</value>
     <comment>0 - bind name</comment>
   </data>
   <data name="KeyAxisEditor_HelpURL" xml:space="preserve">
@@ -425,11 +447,13 @@
     <comment>0 - axis name</comment>
   </data>
   <data name="ChainAxisEditor_Message_ChainCycleErrorDetail" xml:space="preserve">
-    <value>Renaming this axis formed a cycle in the chain.\n</value>
+    <value>Renaming this axis formed a cycle in the chain.
+</value>
     <comment>Error detail in chain axis editor.</comment>
   </data>
   <data name="ChainAxisEditor_Message_ChainCycleErrorDetail2" xml:space="preserve">
-    <value>'{0}' is already in the axis chain.\nLinking it here would create a cycle.</value>
+    <value>'{0}' is already in the axis chain.
+Linking it here would create a cycle.</value>
     <comment>0 - axis name</comment>
   </data>
   <data name="ChainMethod_Sum" xml:space="preserve">
@@ -454,7 +478,8 @@
     <value>Update code does not return a value.</value>
   </data>
   <data name="CustomAxisEditor_Message_UpdateCodeReturnsWrongType" xml:space="preserve">
-    <value>Update code returns {0}\ninstead of number.</value>
+    <value>Update code returns {0}
+instead of number.</value>
     <comment>0 - return type</comment>
   </data>
   <data name="KeyAxis_ParseButtonID_ErrorWhileLoadingAButton" xml:space="preserve">
@@ -672,7 +697,8 @@
     <value>Error saving machine's controls.</value>
   </data>
   <data name="Log_VersionWarning" xml:space="preserve">
-    <value>{0} was saved with mod version {1}.\n\tIt may not be compatible with some newer features.</value>
+    <value>{0} was saved with mod version {1}.
+	It may not be compatible with some newer features.</value>
     <comment>0 - machine name, 1 - saved version</comment>
   </data>
   <data name="Console_Controller_AllAvailable" xml:space="preserve">
@@ -688,10 +714,14 @@
     <value>Invalid command. Enter 'controller' for all available commands.</value>
   </data>
   <data name="Console_Controller_AllAvailableList" xml:space="preserve">
-    <value>Available commands:\n  controller list             \t List all connected devices.\n  controller info [index]     \t Show info of a device at index.\n</value>
+    <value>Available commands:
+  controller list		List all connected devices.
+  controller info [index]	Show info of a device at index.
+</value>
   </data>
   <data name="Console_Controller_ControllerList" xml:space="preserve">
-    <value>Controller list:\n</value>
+    <value>Controller list:
+</value>
   </data>
   <data name="Console_Controller_ControllerTag" xml:space="preserve">
     <value>Controller</value>
@@ -700,7 +730,7 @@
     <value>Joystick</value>
   </data>
   <data name="Console_Controller_GUID" xml:space="preserve">
-    <value>\tGUID: </value>
+    <value>GUID: </value>
   </data>
   <data name="Console_Acm_CheckingForModUpdates" xml:space="preserve">
     <value>Checking for mod updates ...</value>
@@ -730,7 +760,14 @@
     <value>Invalid command. Enter 'acm' for all available commands.</value>
   </data>
   <data name="Console_Acm_AllAvailableList" xml:space="preserve">
-    <value>Available commands:\n  acm modupdate check  \t Checks for mod update.\n  acm modupdate enable \t Enables update checker.\n  acm modupdate disable\t Disables update checker.\n  acm dbupdate check   \t Checks for controller database update.\n  acm dbupdate enable  \t Enables automatic controller database updates.\n  acm dbupdate disable \t Disables automatic controller database updates.\n</value>
+    <value>Available commands:
+  acm modupdate check  	 Checks for mod update.
+  acm modupdate enable 	 Enables update checker.
+  acm modupdate disable	 Disables update checker.
+  acm dbupdate check   	 Checks for controller database update.
+  acm dbupdate enable  	 Enables automatic controller database updates.
+  acm dbupdate disable 	 Disables automatic controller database updates.
+</value>
   </data>
   <data name="Updater_SpiderlingForumLink" xml:space="preserve">
     <value>Spiderling forum page</value>

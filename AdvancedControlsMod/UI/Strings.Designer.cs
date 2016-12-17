@@ -394,7 +394,8 @@ namespace Lench.AdvancedControls.UI {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Renaming this axis formed a cycle in the chain.\n.
+        ///   Looks up a localized string similar to Renaming this axis formed a cycle in the chain.
+        ///.
         /// </summary>
         internal static string ChainAxisEditor_Message_ChainCycleErrorDetail {
             get {
@@ -403,7 +404,8 @@ namespace Lench.AdvancedControls.UI {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &apos;{0}&apos; is already in the axis chain.\nLinking it here would create a cycle..
+        ///   Looks up a localized string similar to &apos;{0}&apos; is already in the axis chain.
+        ///Linking it here would create a cycle..
         /// </summary>
         internal static string ChainAxisEditor_Message_ChainCycleErrorDetail2 {
             get {
@@ -484,7 +486,14 @@ namespace Lench.AdvancedControls.UI {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Available commands:\n  acm modupdate check  \t Checks for mod update.\n  acm modupdate enable \t Enables update checker.\n  acm modupdate disable\t Disables update checker.\n  acm dbupdate check   \t Checks for controller database update.\n  acm dbupdate enable  \t Enables automatic controller database updates.\n  acm dbupdate disable \t Disables automatic controller database updates.\n.
+        ///   Looks up a localized string similar to Available commands:
+        ///  acm modupdate check  	 Checks for mod update.
+        ///  acm modupdate enable 	 Enables update checker.
+        ///  acm modupdate disable	 Disables update checker.
+        ///  acm dbupdate check   	 Checks for controller database update.
+        ///  acm dbupdate enable  	 Enables automatic controller database updates.
+        ///  acm dbupdate disable 	 Disables automatic controller database updates.
+        ///.
         /// </summary>
         internal static string Console_Acm_AllAvailableList {
             get {
@@ -583,7 +592,10 @@ namespace Lench.AdvancedControls.UI {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Available commands:\n  controller list             \t List all connected devices.\n  controller info [index]     \t Show info of a device at index.\n.
+        ///   Looks up a localized string similar to Available commands:
+        ///  controller list		List all connected devices.
+        ///  controller info [index]	Show info of a device at index.
+        ///.
         /// </summary>
         internal static string Console_Controller_AllAvailableList {
             get {
@@ -592,7 +604,8 @@ namespace Lench.AdvancedControls.UI {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Controller list:\n.
+        ///   Looks up a localized string similar to Controller list:
+        ///.
         /// </summary>
         internal static string Console_Controller_ControllerList {
             get {
@@ -610,7 +623,7 @@ namespace Lench.AdvancedControls.UI {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to \tGUID: .
+        ///   Looks up a localized string similar to GUID: .
         /// </summary>
         internal static string Console_Controller_GUID {
             get {
@@ -952,7 +965,10 @@ namespace Lench.AdvancedControls.UI {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Controller axis requires SDL2 library to work.\nPress download to install it automatically.\n\n.
+        ///   Looks up a localized string similar to Controller axis requires SDL2 library to work.
+        ///Press download to install it automatically.
+        ///
+        ///.
         /// </summary>
         internal static string ControllerAxisEditor_DrawAxis_RequireSDL2Windows {
             get {
@@ -1006,7 +1022,10 @@ namespace Lench.AdvancedControls.UI {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The device this axis is bound to is not found.\n\n&lt;b&gt;Device GUID&lt;/b&gt;\n.
+        ///   Looks up a localized string similar to The device this axis is bound to is not found.
+        ///
+        ///&lt;b&gt;Device GUID&lt;/b&gt;
+        ///.
         /// </summary>
         internal static string ControllerAxisEditor_Message_AssociatedControllerNotConnectedDetail {
             get {
@@ -1042,7 +1061,8 @@ namespace Lench.AdvancedControls.UI {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to If you are using some other operating system,\ndownload the correct version of the mod..
+        ///   Looks up a localized string similar to If you are using some other operating system,
+        ///download the correct version of the mod..
         /// </summary>
         internal static string ControllerAxisEditor_Message_PlatformCorrect {
             get {
@@ -1051,7 +1071,8 @@ namespace Lench.AdvancedControls.UI {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to You are using Linux version of ACM.\n.
+        ///   Looks up a localized string similar to You are using Linux version of ACM.
+        ///.
         /// </summary>
         internal static string ControllerAxisEditor_Message_PlatformLinux {
             get {
@@ -1060,7 +1081,8 @@ namespace Lench.AdvancedControls.UI {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to You are using OSX version of ACM.\n.
+        ///   Looks up a localized string similar to You are using OSX version of ACM.
+        ///.
         /// </summary>
         internal static string ControllerAxisEditor_Message_PlatformOSX {
             get {
@@ -1069,7 +1091,8 @@ namespace Lench.AdvancedControls.UI {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to You are using Windows version of ACM.\n.
+        ///   Looks up a localized string similar to You are using Windows version of ACM.
+        ///.
         /// </summary>
         internal static string ControllerAxisEditor_Message_PlatformWindows {
             get {
@@ -1078,7 +1101,10 @@ namespace Lench.AdvancedControls.UI {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Controller axis requires SDL2 library to work.\nRun the command below to install it.\n\n.
+        ///   Looks up a localized string similar to Controller axis requires SDL2 library to work.
+        ///Run the command below to install it.
+        ///
+        ///.
         /// </summary>
         internal static string ControllerAxisEditor_Message_RequireSDL2Linux {
             get {
@@ -1087,7 +1113,10 @@ namespace Lench.AdvancedControls.UI {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Controller axis requires SDL2 library to work.\nDownload it at the link below.\n\n.
+        ///   Looks up a localized string similar to Controller axis requires SDL2 library to work.
+        ///Download it at the link below.
+        ///
+        ///.
         /// </summary>
         internal static string ControllerAxisEditor_Message_RequireSDL2OSX {
             get {
@@ -1186,7 +1215,10 @@ namespace Lench.AdvancedControls.UI {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to To use this machine as intended,\nmake sure all axes report no problems.\n\n&lt;b&gt;{0}&lt;/b&gt; uses these input axes:.
+        ///   Looks up a localized string similar to To use this machine as intended,
+        ///make sure all axes report no problems.
+        ///
+        ///&lt;b&gt;{0}&lt;/b&gt; uses these input axes:.
         /// </summary>
         internal static string ControlOverview_Message_IntroNote {
             get {
@@ -1231,7 +1263,9 @@ namespace Lench.AdvancedControls.UI {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to &lt;b&gt;Additional library needed&lt;/b&gt;\nCustom axis runs on IronPython engine.\nPress download to install it automatically..
+        ///   Looks up a localized string similar to &lt;b&gt;Additional library needed&lt;/b&gt;
+        ///Custom axis runs on IronPython engine.
+        ///Press download to install it automatically..
         /// </summary>
         internal static string CustomAxisEditor_Message_MissingIronPython {
             get {
@@ -1258,7 +1292,8 @@ namespace Lench.AdvancedControls.UI {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Update code returns {0}\ninstead of number..
+        ///   Looks up a localized string similar to Update code returns {0}
+        ///instead of number..
         /// </summary>
         internal static string CustomAxisEditor_Message_UpdateCodeReturnsWrongType {
             get {
@@ -1366,7 +1401,8 @@ namespace Lench.AdvancedControls.UI {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to \n&apos;{0}&apos; is not connected..
+        ///   Looks up a localized string similar to 
+        ///&apos;{0}&apos; is not connected..
         /// </summary>
         internal static string KeyAxisEditor_Message_DeviceDisconnectedDetail {
             get {
@@ -1654,7 +1690,8 @@ namespace Lench.AdvancedControls.UI {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to {0} was saved with mod version {1}.\n\tIt may not be compatible with some newer features..
+        ///   Looks up a localized string similar to {0} was saved with mod version {1}.
+        ///	It may not be compatible with some newer features..
         /// </summary>
         internal static string Log_VersionWarning {
             get {
