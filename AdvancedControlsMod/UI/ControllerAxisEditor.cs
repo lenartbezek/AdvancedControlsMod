@@ -102,15 +102,15 @@ namespace Lench.AdvancedControls.UI
                 GUILayout.Label($"<b>{Strings.ControllerAxisEditor_Message_AdditionalLibraryNeeded}</b>\n" +
                                 Strings.ControllerAxisEditor_Message_RequireSDL2Linux +
                                 $"<b>{Strings.ControllerAxisEditor_Message_Platform}</b>\n" +
-                                Strings.ControllerAxisEditor_Message_LinuxPlatform +
-                                Strings.ControllerAxisEditor_Message_CorrectPlatform);
+                                Strings.ControllerAxisEditor_Message_PlatformLinux +
+                                Strings.ControllerAxisEditor_Message_PlatformCorrect);
                 GUILayout.TextField("sudo apt-get install libsdl2-2.0-0");
 #elif osx
                 GUILayout.Label($"<b>{Strings.ControllerAxisEditor_Message_AdditionalLibraryNeeded}</b>\n" +
                                 Strings.ControllerAxisEditor_Message_RequireSDL2OSX+
                                 $"<b>{Strings.ControllerAxisEditor_Message_Platform}</b>\n" +
-                                Strings.ControllerAxisEditor_Message_OSXPlatform +
-                                Strings.ControllerAxisEditor_Message_CorrectPlatform);
+                                Strings.ControllerAxisEditor_Message_PlatformOSX +
+                                Strings.ControllerAxisEditor_Message_PlatformCorrect);
                 if (GUILayout.Button("www.libsdl.org/download-2.0.php"))
                     Application.OpenURL("www.libsdl.org/download-2.0.php");
 #endif
