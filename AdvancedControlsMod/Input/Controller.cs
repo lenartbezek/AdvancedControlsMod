@@ -155,11 +155,13 @@ namespace Lench.AdvancedControls.Input
         /// Devices shouldn't be added twice.
         /// </summary>
         /// <param name="index"></param>
-        public static void AddDevice(int index)
+        public static Controller Add(int index)
         {
             RemoveDisconnected();
-            if (index < NumDevices) return;
-            ControllerList.Add(new Controller(NumDevices));
+            if (index < NumDevices) return null;
+            var controller = new Controller(NumDevices);
+            ControllerList.Add(controller);
+            return controller;
         }
 
         /// <summary>
@@ -167,7 +169,9 @@ namespace Lench.AdvancedControls.Input
         /// </summary>
         public static void RemoveDisconnected()
         {
-            ControllerList.RemoveAll((c) => !c.Connected);
+            foreach (var c in ControllerList)
+                if (!c.Connected) c.Dispose();
+            ControllerList.RemoveAll(c => !c.Connected);
         }
 
         /// <summary>
@@ -179,7 +183,7 @@ namespace Lench.AdvancedControls.Input
         {
             try
             {
-                return ControllerList.First((c) => c.GUID == guid);
+                return ControllerList.First(c => c.GUID == guid);
             }
             catch
             {
@@ -196,7 +200,7 @@ namespace Lench.AdvancedControls.Input
         {
             try
             {
-                return ControllerList[0];
+                return ControllerList[id];
             }
             catch
             {
@@ -207,7 +211,7 @@ namespace Lench.AdvancedControls.Input
         private Controller(int index)
         {
             if (index > SDL.SDL_NumJoysticks())
-                throw new InvalidOperationException("Cannot open controller " + index + " when only " + SDL.SDL_NumJoysticks()+" are connected.");
+                throw new InvalidOperationException($"Cannot open controller {index} when only {SDL.SDL_NumJoysticks()} are connected.");
 
             IsGameController = SDL.SDL_IsGameController(index) == SDL.SDL_bool.SDL_TRUE;
 
@@ -230,7 +234,7 @@ namespace Lench.AdvancedControls.Input
             _ballValuesRaw = new float[SDL.SDL_JoystickNumBalls(DevicePointer), 2];
             _ballValuesSmooth = new float[SDL.SDL_JoystickNumBalls(DevicePointer), 2];
 
-            for (int i = 0; i < SDL.SDL_JoystickNumHats(DevicePointer); i++)
+            for (var i = 0; i < SDL.SDL_JoystickNumHats(DevicePointer); i++)
             {
                 Buttons.Add(new HatButton(this, i, SDL.SDL_HAT_UP));
                 Buttons.Add(new HatButton(this, i, SDL.SDL_HAT_DOWN));
@@ -238,7 +242,7 @@ namespace Lench.AdvancedControls.Input
                 Buttons.Add(new HatButton(this, i, SDL.SDL_HAT_RIGHT));
             }
 
-            for (int i = 0; i < SDL.SDL_JoystickNumButtons(DevicePointer); i++)
+            for (var i = 0; i < SDL.SDL_JoystickNumButtons(DevicePointer); i++)
             {
                 Buttons.Add(new JoystickButton(this, i));
             }
@@ -247,25 +251,24 @@ namespace Lench.AdvancedControls.Input
             ACM.Instance.OnUpdate += Update;
 
             // Debug
-            if (IsGameController)
-                Debug.Log($"[ACM]: {Strings.Controller_GameControllerConnected} " + Name);
-            else
-                Debug.Log($"[ACM]: {Strings.Controller_JoystickConnected} " + Name);
+            Debug.Log(IsGameController
+                ? $"[ACM]: {Strings.Controller_GameControllerConnected} {Name}"
+                : $"[ACM]: {Strings.Controller_JoystickConnected} {Name}");
             Debug.Log("\t"+Strings.Controller_GUID+" " + GUID);
         }
 
         private void Update()
         {
             var d = Mathf.Clamp(Time.deltaTime * 12, 0, 1);
-            for (int i = 0; i < NumAxes; i++)
+            for (var i = 0; i < NumAxes; i++)
             {
-                int axis = i;
+                var axis = i;
                 if (IsGameController)
                     axis = SDL.SDL_GameControllerGetBindForAxis(GameController, (SDL.SDL_GameControllerAxis)i).axis;
                 _axisValuesRaw[axis] = SDL.SDL_JoystickGetAxis(DevicePointer, axis) / 32767.0f;
                 _axisValuesSmooth[axis] = _axisValuesSmooth[axis] * (1 - d) + _axisValuesRaw[axis] * d;
             }
-            for (int i = 0; i < NumBalls; i++)
+            for (var i = 0; i < NumBalls; i++)
             {
                 int x, y;
                 SDL.SDL_JoystickGetBall(DevicePointer, i, out x, out y);
@@ -341,7 +344,7 @@ namespace Lench.AdvancedControls.Input
             if (!Connected) return;
 
             _axisNames = new List<string>();
-            for (int i = 0; i < SDL.SDL_JoystickNumAxes(DevicePointer); i++)
+            for (var i = 0; i < SDL.SDL_JoystickNumAxes(DevicePointer); i++)
             {
                 string name;
                 if (IsGameController)
@@ -367,28 +370,25 @@ namespace Lench.AdvancedControls.Input
             }
 
             _ballNames = new List<string>();
-            for (int i = 0; i < SDL.SDL_JoystickNumBalls(DevicePointer); i++)
+            for (var i = 0; i < SDL.SDL_JoystickNumBalls(DevicePointer); i++)
+            {
                 _ballNames.Add(string.Format(Strings.Controller_BallName_Default, i + 1));
+            }
 
             _hatNames = new List<string>();
-            for (int i = 0; i < SDL.SDL_JoystickNumHats(DevicePointer); i++)
-                if (IsGameController)
-                    _hatNames.Add(Strings.Controller_HatName_DPAD);
-                else
-                    _hatNames.Add(string.Format(Strings.Controller_HatName_Default, i + 1));
+            for (var i = 0; i < SDL.SDL_JoystickNumHats(DevicePointer); i++)
+            {
+                _hatNames.Add(IsGameController && i == 0
+                    ? Strings.Controller_HatName_DPAD
+                    : string.Format(Strings.Controller_HatName_Default, i + 1));
+            }
 
             _buttonNames = new List<string>();
-            for (int i = 0; i < SDL.SDL_JoystickNumButtons(DevicePointer); i++)
+            for (var i = 0; i < SDL.SDL_JoystickNumButtons(DevicePointer); i++)
             {
-                string name;
-                if (IsGameController)
-                {
-                    name = GetButtonNameFromEnum((SDL.SDL_GameControllerButton)i);
-                }
-                else
-                {
-                    name = string.Format(Strings.Controller_ButtonName_Default, i + 1);
-                }
+                var name = IsGameController 
+                    ? GetButtonNameFromEnum((SDL.SDL_GameControllerButton)i) 
+                    : string.Format(Strings.Controller_ButtonName_Default, i + 1);
                 _buttonNames.Add(name);
             }
         }

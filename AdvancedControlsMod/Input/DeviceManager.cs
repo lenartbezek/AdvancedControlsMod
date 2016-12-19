@@ -122,7 +122,7 @@ namespace Lench.AdvancedControls.Input
             }
 
             var dir = Application.dataPath + "/Mods/Resources/AdvancedControls/";
-            var file = "GameControllerMappings.txt";
+            const string file = "GameControllerMappings.txt";
 
             if (File.Exists(dir + file))
             {
@@ -212,7 +212,7 @@ namespace Lench.AdvancedControls.Input
                         OnButton?.Invoke(e, false);
                         break;
                     case SDL.SDL_EventType.SDL_CONTROLLERDEVICEADDED:
-                        Controller.AddDevice(e.cdevice.which);
+                        Controller.Add(e.cdevice.which);
                         OnDeviceAdded?.Invoke(e);
                         break;
                     case SDL.SDL_EventType.SDL_CONTROLLERDEVICEREMOVED:
@@ -238,7 +238,7 @@ namespace Lench.AdvancedControls.Input
                         OnButton?.Invoke(e, false);
                         break;
                     case SDL.SDL_EventType.SDL_JOYDEVICEADDED:
-                        Controller.AddDevice(e.jdevice.which);
+                        Controller.Add(e.jdevice.which);
                         OnDeviceAdded?.Invoke(e);
                         break;
                     case SDL.SDL_EventType.SDL_JOYDEVICEREMOVED:
