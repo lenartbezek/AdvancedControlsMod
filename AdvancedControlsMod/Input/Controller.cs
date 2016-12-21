@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using static Lench.AdvancedControls.Input.SDL;
 
 namespace Lench.AdvancedControls.Input
 {
@@ -21,10 +22,10 @@ namespace Lench.AdvancedControls.Input
 
 #pragma warning disable CS1591
 
-        public int NumAxes => SDL.SDL_JoystickNumAxes(DevicePointer);
-        public int NumBalls => SDL.SDL_JoystickNumBalls(DevicePointer);
-        public int NumHats => SDL.SDL_JoystickNumHats(DevicePointer);
-        public int NumButtons => SDL.SDL_JoystickNumButtons(DevicePointer);
+        public int NumAxes => SDL_JoystickNumAxes(DevicePointer);
+        public int NumBalls => SDL_JoystickNumBalls(DevicePointer);
+        public int NumHats => SDL_JoystickNumHats(DevicePointer);
+        public int NumButtons => SDL_JoystickNumButtons(DevicePointer);
 
 #pragma warning restore CS1591
 
@@ -34,10 +35,28 @@ namespace Lench.AdvancedControls.Input
         /// </summary>
         public readonly List<Button> Buttons;
 
+        /// <summary>
+        /// Returns the mapping string of the game controller. 
+        /// String format: https://wiki.libsdl.org/SDL_GameControllerAddMapping
+        /// </summary>
+        public string Mapping
+        {
+            get { return _mapping; }
+            private set
+            {
+                FormMappingDicts(value);
+                _mapping = value;
+            }
+        }
+
         private List<string> _axisNames;
         private List<string> _ballNames;
         private List<string> _hatNames;
         private List<string> _buttonNames;
+
+        private string _mapping;
+        private readonly Dictionary<SDL_GameControllerAxis, int> _axisMappingDict = new Dictionary<SDL_GameControllerAxis, int>();
+        private readonly Dictionary<SDL_GameControllerButton, int> _buttonMappingDict = new Dictionary<SDL_GameControllerButton, int>();
 
         /// <summary>
         /// Returns name of the axis at given index.
@@ -118,23 +137,23 @@ namespace Lench.AdvancedControls.Input
         /// <summary>
         /// Index of the device needed to access it through SDL.
         /// </summary>
-        public int Index => SDL.SDL_JoystickInstanceID(DevicePointer);
+        public int Index => SDL_JoystickInstanceID(DevicePointer);
 
         /// <summary>
         /// Name of the device.
         /// Returns name from GameControllerMappings.txt if found.
         /// </summary>
-        public string Name => IsGameController ? SDL.SDL_GameControllerName(GameController) : SDL.SDL_JoystickName(DevicePointer);
+        public string Name => IsGameController ? SDL_GameControllerName(GameController) : SDL_JoystickName(DevicePointer);
 
         /// <summary>
         /// GUID of the controller.
         /// </summary>
-        public Guid GUID => SDL.SDL_JoystickGetGUID(DevicePointer);
+        public Guid GUID => SDL_JoystickGetGUID(DevicePointer);
 
         /// <summary>
         /// Is device currently connected.
         /// </summary>
-        public bool Connected => SDL.SDL_JoystickGetAttached(DevicePointer) == SDL.SDL_bool.SDL_TRUE;
+        public bool Connected => SDL_JoystickGetAttached(DevicePointer) == SDL_bool.SDL_TRUE;
 
         /// <summary>
         /// Was device mapping found and is thus recognized as game controller.
@@ -169,9 +188,17 @@ namespace Lench.AdvancedControls.Input
         /// </summary>
         public static void RemoveDisconnected()
         {
+#if DEBUG
+            Debug.Log("Attempting to remove disconnected devices.");
+#endif
             foreach (var c in ControllerList)
                 if (!c.Connected) c.Dispose();
-            ControllerList.RemoveAll(c => !c.Connected);
+
+            // ReSharper disable once UnusedVariable
+            var count = ControllerList.RemoveAll(c => !c.Connected);
+#if DEBUG
+            Debug.Log($"Removed {count} devices.");
+#endif
         }
 
         /// <summary>
@@ -210,44 +237,48 @@ namespace Lench.AdvancedControls.Input
 
         private Controller(int index)
         {
-            if (index > SDL.SDL_NumJoysticks())
-                throw new InvalidOperationException($"Cannot open controller {index} when only {SDL.SDL_NumJoysticks()} are connected.");
+#if DEBUG
+            Debug.Log($"Attempting to open controller at index {index}.");
+#endif
 
-            IsGameController = SDL.SDL_IsGameController(index) == SDL.SDL_bool.SDL_TRUE;
+            if (index > SDL_NumJoysticks())
+                throw new InvalidOperationException($"Cannot open controller {index} when only {SDL_NumJoysticks()} are connected.");
+
+            IsGameController = SDL_IsGameController(index) == SDL_bool.SDL_TRUE;
 
             if (IsGameController)
             {
-                GameController = SDL.SDL_GameControllerOpen(index);
-                DevicePointer = SDL.SDL_GameControllerGetJoystick(GameController);
+                GameController = SDL_GameControllerOpen(index);
+                DevicePointer = SDL_GameControllerGetJoystick(GameController);
             }
             else
             {
-                DevicePointer = SDL.SDL_JoystickOpen(index);
+                DevicePointer = SDL_JoystickOpen(index);
             }
 
-            UpdateMappings();
+            UpdateNames();
             Buttons = new List<Button>();
 
-            _axisValuesRaw = new float[SDL.SDL_JoystickNumAxes(DevicePointer)];
-            _axisValuesSmooth = new float[SDL.SDL_JoystickNumAxes(DevicePointer)];
+            _axisValuesRaw = new float[SDL_JoystickNumAxes(DevicePointer)];
+            _axisValuesSmooth = new float[SDL_JoystickNumAxes(DevicePointer)];
 
-            _ballValuesRaw = new float[SDL.SDL_JoystickNumBalls(DevicePointer), 2];
-            _ballValuesSmooth = new float[SDL.SDL_JoystickNumBalls(DevicePointer), 2];
+            _ballValuesRaw = new float[SDL_JoystickNumBalls(DevicePointer), 2];
+            _ballValuesSmooth = new float[SDL_JoystickNumBalls(DevicePointer), 2];
 
-            for (var i = 0; i < SDL.SDL_JoystickNumHats(DevicePointer); i++)
+            for (var i = 0; i < SDL_JoystickNumHats(DevicePointer); i++)
             {
-                Buttons.Add(new HatButton(this, i, SDL.SDL_HAT_UP));
-                Buttons.Add(new HatButton(this, i, SDL.SDL_HAT_DOWN));
-                Buttons.Add(new HatButton(this, i, SDL.SDL_HAT_LEFT));
-                Buttons.Add(new HatButton(this, i, SDL.SDL_HAT_RIGHT));
+                Buttons.Add(new HatButton(this, i, SDL_HAT_UP));
+                Buttons.Add(new HatButton(this, i, SDL_HAT_DOWN));
+                Buttons.Add(new HatButton(this, i, SDL_HAT_LEFT));
+                Buttons.Add(new HatButton(this, i, SDL_HAT_RIGHT));
             }
 
-            for (var i = 0; i < SDL.SDL_JoystickNumButtons(DevicePointer); i++)
+            for (var i = 0; i < SDL_JoystickNumButtons(DevicePointer); i++)
             {
                 Buttons.Add(new JoystickButton(this, i));
             }
 
-            DeviceManager.OnDeviceRemapped += UpdateMappings;
+            DeviceManager.OnDeviceRemapped += UpdateMapping;
             ACM.Instance.OnUpdate += Update;
 
             // Debug
@@ -262,16 +293,15 @@ namespace Lench.AdvancedControls.Input
             var d = Mathf.Clamp(Time.deltaTime * 12, 0, 1);
             for (var i = 0; i < NumAxes; i++)
             {
-                var axis = i;
-                if (IsGameController)
-                    axis = SDL.SDL_GameControllerGetBindForAxis(GameController, (SDL.SDL_GameControllerAxis)i).axis;
-                _axisValuesRaw[axis] = SDL.SDL_JoystickGetAxis(DevicePointer, axis) / 32767.0f;
-                _axisValuesSmooth[axis] = _axisValuesSmooth[axis] * (1 - d) + _axisValuesRaw[axis] * d;
+                _axisValuesRaw[i] = IsGameController 
+                    ? SDL_GameControllerGetAxis(GameController, (SDL_GameControllerAxis)i) / 32767.0f
+                    : SDL_JoystickGetAxis(DevicePointer, i) / 32767.0f;
+                _axisValuesSmooth[i] = _axisValuesSmooth[i] * (1 - d) + _axisValuesRaw[i] * d;
             }
             for (var i = 0; i < NumBalls; i++)
             {
                 int x, y;
-                SDL.SDL_JoystickGetBall(DevicePointer, i, out x, out y);
+                SDL_JoystickGetBall(DevicePointer, i, out x, out y);
                 _ballValuesRaw[i, 0] = x / 32767.0f;
                 _ballValuesRaw[i, 1] = y / 32767.0f;
                 _ballValuesSmooth[i, 0] = _ballValuesSmooth[i, 0] * (1 - d) + _ballValuesRaw[i, 0] * d;
@@ -279,77 +309,173 @@ namespace Lench.AdvancedControls.Input
             }
         }
 
-        private void UpdateMappings(SDL.SDL_Event e)
-        {
-            if (!Connected) return;
-            if (e.cdevice.which == Index ||
-                e.jdevice.which == Index)
-                UpdateMappings();
-        }
-
-        private static string GetAxisNameFromEnum(SDL.SDL_GameControllerAxis i)
+        private static string GetAxisNameFromEnum(SDL_GameControllerAxis i)
         {
             switch (i)
             {
-                case SDL.SDL_GameControllerAxis.SDL_CONTROLLER_AXIS_LEFTX:
+                case SDL_GameControllerAxis.SDL_CONTROLLER_AXIS_LEFTX:
                     return Strings.Controller_AxisName_LeftX;
-                case SDL.SDL_GameControllerAxis.SDL_CONTROLLER_AXIS_LEFTY:
+                case SDL_GameControllerAxis.SDL_CONTROLLER_AXIS_LEFTY:
                     return Strings.Controller_AxisName_LeftY;
-                case SDL.SDL_GameControllerAxis.SDL_CONTROLLER_AXIS_RIGHTX:
+                case SDL_GameControllerAxis.SDL_CONTROLLER_AXIS_RIGHTX:
                     return Strings.Controller_AxisName_RightX;
-                case SDL.SDL_GameControllerAxis.SDL_CONTROLLER_AXIS_RIGHTY:
+                case SDL_GameControllerAxis.SDL_CONTROLLER_AXIS_RIGHTY:
                     return Strings.Controller_AxisName_RightY;
-                case SDL.SDL_GameControllerAxis.SDL_CONTROLLER_AXIS_TRIGGERLEFT:
+                case SDL_GameControllerAxis.SDL_CONTROLLER_AXIS_TRIGGERLEFT:
                     return Strings.Controller_AxisName_LeftTrigger;
-                case SDL.SDL_GameControllerAxis.SDL_CONTROLLER_AXIS_TRIGGERRIGHT:
+                case SDL_GameControllerAxis.SDL_CONTROLLER_AXIS_TRIGGERRIGHT:
                     return Strings.Controller_AxisName_RightTrigger;
                 default:
                     return string.Format(Strings.Controller_AxisName_Default, (int)i + 1);
             }
         }
 
-        private static string GetButtonNameFromEnum(SDL.SDL_GameControllerButton i)
+        private static string GetButtonNameFromEnum(SDL_GameControllerButton i)
         {
             switch (i)
             {
-                case SDL.SDL_GameControllerButton.SDL_CONTROLLER_BUTTON_A:
+                case SDL_GameControllerButton.SDL_CONTROLLER_BUTTON_A:
                     return Strings.Controller_ButtonName_AButton;
-                case SDL.SDL_GameControllerButton.SDL_CONTROLLER_BUTTON_B:
+                case SDL_GameControllerButton.SDL_CONTROLLER_BUTTON_B:
                     return Strings.Controller_ButtonName_BButton;
-                case SDL.SDL_GameControllerButton.SDL_CONTROLLER_BUTTON_X:
+                case SDL_GameControllerButton.SDL_CONTROLLER_BUTTON_X:
                     return Strings.Controller_ButtonName_XButton;
-                case SDL.SDL_GameControllerButton.SDL_CONTROLLER_BUTTON_Y:
+                case SDL_GameControllerButton.SDL_CONTROLLER_BUTTON_Y:
                     return Strings.Controller_ButtonName_YButton;
-                case SDL.SDL_GameControllerButton.SDL_CONTROLLER_BUTTON_BACK:
+                case SDL_GameControllerButton.SDL_CONTROLLER_BUTTON_BACK:
                     return Strings.Controller_ButtonName_BackButton;
-                case SDL.SDL_GameControllerButton.SDL_CONTROLLER_BUTTON_GUIDE:
+                case SDL_GameControllerButton.SDL_CONTROLLER_BUTTON_GUIDE:
                     return Strings.Controller_ButtonName_GuideButton;
-                case SDL.SDL_GameControllerButton.SDL_CONTROLLER_BUTTON_START:
+                case SDL_GameControllerButton.SDL_CONTROLLER_BUTTON_START:
                     return Strings.Controller_ButtonName_StartButton;
-                case SDL.SDL_GameControllerButton.SDL_CONTROLLER_BUTTON_LEFTSTICK:
+                case SDL_GameControllerButton.SDL_CONTROLLER_BUTTON_LEFTSTICK:
                     return Strings.Controller_ButtonName_LeftStick;
-                case SDL.SDL_GameControllerButton.SDL_CONTROLLER_BUTTON_RIGHTSTICK:
+                case SDL_GameControllerButton.SDL_CONTROLLER_BUTTON_RIGHTSTICK:
                     return Strings.Controller_ButtonName_RightStick;
-                case SDL.SDL_GameControllerButton.SDL_CONTROLLER_BUTTON_LEFTSHOULDER:
+                case SDL_GameControllerButton.SDL_CONTROLLER_BUTTON_LEFTSHOULDER:
                     return Strings.Controller_ButtonName_LeftShoulder;
-                case SDL.SDL_GameControllerButton.SDL_CONTROLLER_BUTTON_RIGHTSHOULDER:
+                case SDL_GameControllerButton.SDL_CONTROLLER_BUTTON_RIGHTSHOULDER:
                     return Strings.Controller_ButtonName_RightShoulder;
                 default:
                     return string.Format(Strings.Controller_ButtonName_Default, (int)i + 1);
             }
         }
 
-        private void UpdateMappings()
+        private void UpdateMapping(SDL_Event e)
+        {
+            if (!Connected) return;
+            if (e.cdevice.which == Index ||
+                e.jdevice.which == Index)
+            {
+                Mapping = SDL_GameControllerMapping(GameController);
+            }
+        }
+
+        /* Example mapping:
+         * c05000000000000c405000000000000,PS4 Controller,
+         * a:b1,b:b2,back:b8,dpdown:h0.4,dpleft:h0.8,dpright:h0.2,dpup:h0.1,guide:b12,
+         * leftshoulder:b4,leftstick:b10,lefttrigger:a3,leftx:a0,lefty:a1,rightshoulder:b5,
+         * rightstick:b11,righttrigger:a4,rightx:a2,righty:a5,start:b9,x:b0,y:b3,platform:Mac OS X,
+         */
+        private void FormMappingDicts(string mapping)
+        {
+            var list = mapping.Split(',');
+            _axisMappingDict.Clear();
+            _buttonMappingDict.Clear();
+
+            foreach (var m in list)
+            {
+                var ms = m.Split(':');
+                if (ms.Length < 2) continue;
+                var name = ms[0];
+                var bind = ms[1];
+                int index;
+                try
+                {
+                    index = int.Parse(bind.Substring(1));
+                }
+                catch
+                {
+                    continue;
+                }
+
+                switch (name)
+                {
+                    // Buttons
+                    case "a":
+                        _buttonMappingDict[SDL_GameControllerButton.SDL_CONTROLLER_BUTTON_A] = index;
+                        break;
+                    case "b":
+                        _buttonMappingDict[SDL_GameControllerButton.SDL_CONTROLLER_BUTTON_B] = index;
+                        break;
+                    case "x":
+                        _buttonMappingDict[SDL_GameControllerButton.SDL_CONTROLLER_BUTTON_X] = index;
+                        break;
+                    case "y":
+                        _buttonMappingDict[SDL_GameControllerButton.SDL_CONTROLLER_BUTTON_Y] = index;
+                        break;
+                    case "back":
+                        _buttonMappingDict[SDL_GameControllerButton.SDL_CONTROLLER_BUTTON_BACK] = index;
+                        break;
+                    case "guide":
+                        _buttonMappingDict[SDL_GameControllerButton.SDL_CONTROLLER_BUTTON_GUIDE] = index;
+                        break;
+                    case "start":
+                        _buttonMappingDict[SDL_GameControllerButton.SDL_CONTROLLER_BUTTON_START] = index;
+                        break;
+                    case "leftstick":
+                        _buttonMappingDict[SDL_GameControllerButton.SDL_CONTROLLER_BUTTON_LEFTSTICK] = index;
+                        break;
+                    case "rightstick":
+                        _buttonMappingDict[SDL_GameControllerButton.SDL_CONTROLLER_BUTTON_RIGHTSTICK] = index;
+                        break;
+                    case "leftshoulder":
+                        _buttonMappingDict[SDL_GameControllerButton.SDL_CONTROLLER_BUTTON_LEFTSHOULDER] = index;
+                        break;
+                    case "rightshoulder":
+                        _buttonMappingDict[SDL_GameControllerButton.SDL_CONTROLLER_BUTTON_RIGHTSHOULDER] = index;
+                        break;
+
+                    // Axes
+                    case "leftx":
+                        _axisMappingDict[SDL_GameControllerAxis.SDL_CONTROLLER_AXIS_LEFTX] = index;
+                        break;
+                    case "righttrigger":
+                        _axisMappingDict[SDL_GameControllerAxis.SDL_CONTROLLER_AXIS_TRIGGERRIGHT] = index;
+                        break;
+                    case "rightx":
+                        _axisMappingDict[SDL_GameControllerAxis.SDL_CONTROLLER_AXIS_RIGHTX] = index;
+                        break;
+                    case "righty":
+                        _axisMappingDict[SDL_GameControllerAxis.SDL_CONTROLLER_AXIS_RIGHTY] = index;
+                        break;
+                    case "lefttrigger":
+                        _axisMappingDict[SDL_GameControllerAxis.SDL_CONTROLLER_AXIS_TRIGGERLEFT] = index;
+                        break;
+                    case "lefty":
+                        _axisMappingDict[SDL_GameControllerAxis.SDL_CONTROLLER_AXIS_LEFTY] = index;
+                        break;
+
+                    default:
+                        continue;
+                }
+            }
+        }
+
+        private void UpdateNames()
         {
             if (!Connected) return;
 
+#if DEBUG
+            Debug.Log($"Attempting to update mappings for controller {Name}");
+#endif
             _axisNames = new List<string>();
-            for (var i = 0; i < SDL.SDL_JoystickNumAxes(DevicePointer); i++)
+            for (var i = 0; i < SDL_JoystickNumAxes(DevicePointer); i++)
             {
                 string name;
                 if (IsGameController)
                 {
-                    name = GetAxisNameFromEnum((SDL.SDL_GameControllerAxis)i);
+                    name = GetAxisNameFromEnum((SDL_GameControllerAxis)i);
                 } 
                 else
                 {
@@ -370,13 +496,13 @@ namespace Lench.AdvancedControls.Input
             }
 
             _ballNames = new List<string>();
-            for (var i = 0; i < SDL.SDL_JoystickNumBalls(DevicePointer); i++)
+            for (var i = 0; i < SDL_JoystickNumBalls(DevicePointer); i++)
             {
                 _ballNames.Add(string.Format(Strings.Controller_BallName_Default, i + 1));
             }
 
             _hatNames = new List<string>();
-            for (var i = 0; i < SDL.SDL_JoystickNumHats(DevicePointer); i++)
+            for (var i = 0; i < SDL_JoystickNumHats(DevicePointer); i++)
             {
                 _hatNames.Add(IsGameController && i == 0
                     ? Strings.Controller_HatName_DPAD
@@ -384,13 +510,16 @@ namespace Lench.AdvancedControls.Input
             }
 
             _buttonNames = new List<string>();
-            for (var i = 0; i < SDL.SDL_JoystickNumButtons(DevicePointer); i++)
+            for (var i = 0; i < SDL_JoystickNumButtons(DevicePointer); i++)
             {
                 var name = IsGameController 
-                    ? GetButtonNameFromEnum((SDL.SDL_GameControllerButton)i) 
+                    ? GetButtonNameFromEnum((SDL_GameControllerButton)i) 
                     : string.Format(Strings.Controller_ButtonName_Default, i + 1);
                 _buttonNames.Add(name);
             }
+#if DEBUG
+            Debug.Log("Successfully updated mappings.");
+#endif
         }
 
         /// <summary>
@@ -401,7 +530,26 @@ namespace Lench.AdvancedControls.Input
         /// <returns>value in range [-1, 1]</returns>
         public float GetAxis(int index, bool smooth = false)
         {
+            if (IsGameController) index = GetIndexForAxis((SDL_GameControllerAxis)index);
             return smooth ? _axisValuesSmooth[index] : _axisValuesRaw[index];
+        }
+
+        /// <summary>
+        /// Takes integer specifying the type of the axis
+        /// and returns the index of the axis on the controller.
+        /// </summary>
+        internal int GetIndexForAxis(SDL_GameControllerAxis i)
+        {
+            return _axisMappingDict.ContainsKey(i) ? _axisMappingDict[i] : (int)i;
+        }
+
+        /// <summary>
+        /// Takes integer specifying the type of the button
+        /// and returns the index of the button on the controller.
+        /// </summary>
+        internal int GetIndexForButton(SDL_GameControllerButton i)
+        {
+            return _buttonMappingDict.ContainsKey(i) ? _buttonMappingDict[i] : (int)i;
         }
 
         /// <summary>
@@ -410,13 +558,19 @@ namespace Lench.AdvancedControls.Input
         /// </summary>
         public void Dispose()
         {
+#if DEBUG
+            Debug.Log($"Attempting to dispose controller. IsGameController: {IsGameController}");
+#endif
             if (IsGameController)
-                SDL.SDL_GameControllerClose(GameController);
+                SDL_GameControllerClose(GameController);
             else
-                SDL.SDL_JoystickClose(DevicePointer);
+                SDL_JoystickClose(DevicePointer);
 
-            DeviceManager.OnDeviceRemapped -= UpdateMappings;
+            DeviceManager.OnDeviceRemapped -= UpdateMapping;
             ACM.Instance.OnUpdate -= Update;
+#if DEBUG
+            Debug.Log("Successfully disposed controller.");
+#endif
         }
 
         /// <summary>

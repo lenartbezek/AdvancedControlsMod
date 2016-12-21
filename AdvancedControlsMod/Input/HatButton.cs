@@ -111,13 +111,12 @@ namespace Lench.AdvancedControls.Input
             if (e.jhat.which != _controller.Index &&
                 e.jhat.which != _controller.Index)
                 return;
-            if (e.jhat.hat == Index)
-            {
-                var down = (e.jhat.hatValue & _downState) > 0;
-                _pressed = _down != down && down;
-                _released = _down != down && !down;
-                _down = down;
-            }
+            if (e.jhat.hat != Index) return;
+
+            var down = (e.jhat.hatValue & _downState) > 0;
+            _pressed = _down != down && down;
+            _released = _down != down && !down;
+            _down = down;
         }
 
         private void UpdateDevice(SDL.SDL_Event e)

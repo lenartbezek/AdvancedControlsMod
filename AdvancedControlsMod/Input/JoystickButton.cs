@@ -92,22 +92,20 @@ namespace Lench.AdvancedControls.Input
                 return;
             if (_controller.IsGameController)
             {
-                var button = SDL.SDL_GameControllerGetBindForButton(_controller.GameController, (SDL.SDL_GameControllerButton)Index).button;
-                if (e.cbutton.button == button)
-                {
-                    _pressed = _down != down && down;
-                    _released = _down != down && !down;
-                    _down = down;
-                }
+                var button = _controller.GetIndexForButton((SDL.SDL_GameControllerButton)Index);
+                if (e.cbutton.button != button) return;
+
+                _pressed = _down != down && down;
+                _released = _down != down && !down;
+                _down = down;
             }
             else
             {
-                if (e.jbutton.button == Index)
-                {
-                    _pressed = _down != down && down;
-                    _released = _down != down && !down;
-                    _down = down;
-                }
+                if (e.jbutton.button != Index) return;
+
+                _pressed = _down != down && down;
+                _released = _down != down && !down;
+                _down = down;
             }
         }
 

@@ -46,15 +46,24 @@ namespace Lench.AdvancedControls.Input
 
         internal static void InitSdl()
         {
+#if DEBUG
+            Debug.Log("Attempting to initialize SDL.");
+#endif
             try
             {
                 SDL.SDL_SetMainReady();
                 SDL.SDL_Init(SDL.SDL_INIT_GAMECONTROLLER | SDL.SDL_INIT_JOYSTICK);
                 SdlInitialized = true;
+#if DEBUG
+                Debug.Log("SDL Successfully initialized.");
+#endif
             }
             catch (DllNotFoundException)
             {
                 SdlInitialized = false;
+#if DEBUG
+                Debug.Log("Failed to inizialize SDL.");
+#endif
             }
 
             if (SdlInitialized)
@@ -212,14 +221,23 @@ namespace Lench.AdvancedControls.Input
                         OnButton?.Invoke(e, false);
                         break;
                     case SDL.SDL_EventType.SDL_CONTROLLERDEVICEADDED:
+#if DEBUG
+                        Debug.Log("SDL Event: SDL_CONTROLLERDEVICEADDED.");
+#endif
                         Controller.Add(e.cdevice.which);
                         OnDeviceAdded?.Invoke(e);
                         break;
                     case SDL.SDL_EventType.SDL_CONTROLLERDEVICEREMOVED:
+#if DEBUG
+                        Debug.Log("SDL Event: SDL_CONTROLLERDEVICEREREMOVED.");
+#endif
                         Controller.RemoveDisconnected();
                         OnDeviceRemoved?.Invoke(e);
                         break;
                     case SDL.SDL_EventType.SDL_CONTROLLERDEVICEREMAPPED:
+#if DEBUG
+                        Debug.Log("SDL Event: SDL_CONTROLLERDEVICEREMAPPED.");
+#endif
                         OnDeviceRemapped?.Invoke(e);
                         break;
                     case SDL.SDL_EventType.SDL_JOYAXISMOTION:
@@ -238,10 +256,16 @@ namespace Lench.AdvancedControls.Input
                         OnButton?.Invoke(e, false);
                         break;
                     case SDL.SDL_EventType.SDL_JOYDEVICEADDED:
+#if DEBUG
+                        Debug.Log("SDL Event: SDL_JOYDEVICEADDED.");
+#endif
                         Controller.Add(e.jdevice.which);
                         OnDeviceAdded?.Invoke(e);
                         break;
                     case SDL.SDL_EventType.SDL_JOYDEVICEREMOVED:
+#if DEBUG
+                        Debug.Log("SDL Event: SDL_JOYDEVICEREMOVED.");
+#endif
                         Controller.RemoveDisconnected();
                         OnDeviceRemoved?.Invoke(e);
                         break;

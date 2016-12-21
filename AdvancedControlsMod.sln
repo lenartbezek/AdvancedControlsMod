@@ -7,11 +7,17 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AdvancedControlsMod", "Adva
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		debug-osx|Any CPU = debug-osx|Any CPU
+		debug-windows|Any CPU = debug-windows|Any CPU
 		linux|Any CPU = linux|Any CPU
 		osx|Any CPU = osx|Any CPU
 		windows|Any CPU = windows|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{6A16F1F7-31C2-4CAE-9FD3-0C56BBD29757}.debug-osx|Any CPU.ActiveCfg = debug-osx|Any CPU
+		{6A16F1F7-31C2-4CAE-9FD3-0C56BBD29757}.debug-osx|Any CPU.Build.0 = debug-osx|Any CPU
+		{6A16F1F7-31C2-4CAE-9FD3-0C56BBD29757}.debug-windows|Any CPU.ActiveCfg = debug-windows|Any CPU
+		{6A16F1F7-31C2-4CAE-9FD3-0C56BBD29757}.debug-windows|Any CPU.Build.0 = debug-windows|Any CPU
 		{6A16F1F7-31C2-4CAE-9FD3-0C56BBD29757}.linux|Any CPU.ActiveCfg = linux|Any CPU
 		{6A16F1F7-31C2-4CAE-9FD3-0C56BBD29757}.linux|Any CPU.Build.0 = linux|Any CPU
 		{6A16F1F7-31C2-4CAE-9FD3-0C56BBD29757}.osx|Any CPU.ActiveCfg = osx|Any CPU
