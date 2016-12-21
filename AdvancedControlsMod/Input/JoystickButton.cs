@@ -19,7 +19,7 @@ namespace Lench.AdvancedControls.Input
         /// Joystick button identifying string of the following format:
         /// joy:[index]:[device_guid]
         /// </summary>
-        public override string ID => "joy:" + Index + ":" + _guid;
+        public override string ID => $"joy:{Index}:{_guid}";
 
         /// <summary>
         /// Guid of the associated controller.
@@ -46,7 +46,7 @@ namespace Lench.AdvancedControls.Input
         public override bool Released => _released;
         public override float Value => _down ? 1 : 0;
         public override string Name => _controller != null ? _controller.GetButtonName(Index) : Strings.Controller_ButtonName_UnknownButton;
-        public override bool Connected => _controller != null && _controller.Connected && Index < _controller.NumButtons;
+        public override bool Connected => _controller != null && _controller.Connected;
 #pragma warning restore CS1591
 
         /// <summary>
@@ -92,8 +92,8 @@ namespace Lench.AdvancedControls.Input
                 return;
             if (_controller.IsGameController)
             {
-                var button = _controller.GetIndexForButton((SDL.SDL_GameControllerButton)Index);
-                if (e.cbutton.button != button) return;
+                var en = (SDL.SDL_GameControllerButton) Index;
+                if (e.cbutton.button != _controller.GetIndexForButton(en)) return;
 
                 _pressed = _down != down && down;
                 _released = _down != down && !down;

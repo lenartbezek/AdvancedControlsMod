@@ -59,9 +59,9 @@ namespace Lench.AdvancedControls.Input
                     dir = Strings.HatButton_Direction_LEFT;
                 else if ((_downState & SDL.SDL_HAT_RIGHT) > 0)
                     dir = Strings.HatButton_Direction_RIGHT;
-                return _controller != null
-                    ? _controller.GetHatName(Index) + " - " + dir
-                    : Strings.Controller_HatName_UnknownHat + " - " + dir;
+                return _controller != null && _controller.IsGameController && Index == 0
+                    ? $"{Strings.Controller_HatName_DPAD} - {dir}"
+                    : $"{string.Format(Strings.Controller_HatName_Default, Index + 1)} - {dir}";
             }
         }
         public override bool Connected => _controller != null && _controller.Connected && Index < _controller.NumHats;

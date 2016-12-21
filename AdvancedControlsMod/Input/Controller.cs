@@ -44,95 +44,14 @@ namespace Lench.AdvancedControls.Input
             get { return _mapping; }
             private set
             {
-                FormMappingDicts(value);
+                ParseMapping(value);
                 _mapping = value;
             }
         }
 
-        private List<string> _axisNames;
-        private List<string> _ballNames;
-        private List<string> _hatNames;
-        private List<string> _buttonNames;
-
         private string _mapping;
         private readonly Dictionary<SDL_GameControllerAxis, int> _axisMappingDict = new Dictionary<SDL_GameControllerAxis, int>();
         private readonly Dictionary<SDL_GameControllerButton, int> _buttonMappingDict = new Dictionary<SDL_GameControllerButton, int>();
-
-        /// <summary>
-        /// Returns name of the axis at given index.
-        /// Takes into account controller mappings.
-        /// Returns 'Unknown axis' if the controller has no such axis.
-        /// </summary>
-        /// <param name="index">Index of the axis.</param>
-        /// <returns>String name.</returns>
-        public string GetAxisName(int index)
-        {
-            if (index >= 0 && index < NumAxes)
-            {
-                return _axisNames[index];
-            }
-            else
-            {
-                return Strings.Controller_AxisName_UnknownAxis;
-            }
-        }
-
-        /// <summary>
-        /// Returns name of the ball at given index.
-        /// Takes into account controller mappings.
-        /// Returns 'Unknown ball' if the controller has no such ball.
-        /// </summary>
-        /// <param name="index">Index of the ball.</param>
-        /// <returns>String name.</returns>
-        public string GetBallName(int index)
-        {
-            if (index >= 0 && index < NumBalls)
-            {
-                return _ballNames[index];
-            }
-            else
-            {
-                return Strings.Controller_BallName_UnknownBall;
-            }
-        }
-
-        /// <summary>
-        /// Returns name of the hat at given index.
-        /// Takes into account controller mappings.
-        /// Returns 'Unknown hat' if the controller has no such hat.
-        /// </summary>
-        /// <param name="index">Index of the hat.</param>
-        /// <returns>String name.</returns>
-        public string GetHatName(int index)
-        {
-            if (index >= 0 && index < NumHats)
-            {
-                return _hatNames[index];
-            }
-            else
-            {
-                return Strings.Controller_HatName_UnknownHat;
-            }
-        }
-
-        /// <summary>
-        /// Returns name of the button at given index.
-        /// Takes into account controller mappings.
-        /// Returns 'Unknown button' if the controller has no such button.
-        /// </summary>
-        /// <param name="index">Index of the button.</param>
-        /// <returns>String name.</returns>
-        public string GetButtonName(int index)
-        {
-            if (index >= 0 && index < NumButtons)
-            {
-                return _buttonNames[index];
-            }
-            else
-            {
-                return Strings.Controller_ButtonName_UnknownButton;
-            }
-        }
 
         /// <summary>
         /// Index of the device needed to access it through SDL.
@@ -256,7 +175,6 @@ namespace Lench.AdvancedControls.Input
                 DevicePointer = SDL_JoystickOpen(index);
             }
 
-            UpdateNames();
             Buttons = new List<Button>();
 
             _axisValuesRaw = new float[SDL_JoystickNumAxes(DevicePointer)];
@@ -309,9 +227,17 @@ namespace Lench.AdvancedControls.Input
             }
         }
 
-        private static string GetAxisNameFromEnum(SDL_GameControllerAxis i)
+        /// <summary>
+        /// Returns a axis name at a given index of this specific device.
+        /// </summary>
+        public string GetAxisName(int i)
         {
-            switch (i)
+            if (!IsGameController) return GetDefaultAxisName(i);
+
+            SDL_GameControllerAxis e;
+            try { e = (SDL_GameControllerAxis)i; }
+            catch { return GetDefaultAxisName(i); }
+            switch (e)
             {
                 case SDL_GameControllerAxis.SDL_CONTROLLER_AXIS_LEFTX:
                     return Strings.Controller_AxisName_LeftX;
@@ -326,13 +252,29 @@ namespace Lench.AdvancedControls.Input
                 case SDL_GameControllerAxis.SDL_CONTROLLER_AXIS_TRIGGERRIGHT:
                     return Strings.Controller_AxisName_RightTrigger;
                 default:
-                    return string.Format(Strings.Controller_AxisName_Default, (int)i + 1);
+                    return GetDefaultAxisName(i);
             }
         }
 
-        private static string GetButtonNameFromEnum(SDL_GameControllerButton i)
+        /// <summary>
+        /// Returns localized default name for an axis at a given index.
+        /// </summary>
+        public static string GetDefaultAxisName(int i)
         {
-            switch (i)
+            return string.Format(Strings.Controller_AxisName_Default, i + 1);
+        }
+
+        /// <summary>
+        /// Returns a button name at a given index of this specific device.
+        /// </summary>
+        public string GetButtonName(int i)
+        {
+            if (!IsGameController) GetDefaultButtonName(i);
+
+            SDL_GameControllerButton e;
+            try { e = (SDL_GameControllerButton) i; }
+            catch { return GetDefaultButtonName(i); }
+            switch (e)
             {
                 case SDL_GameControllerButton.SDL_CONTROLLER_BUTTON_A:
                     return Strings.Controller_ButtonName_AButton;
@@ -357,8 +299,16 @@ namespace Lench.AdvancedControls.Input
                 case SDL_GameControllerButton.SDL_CONTROLLER_BUTTON_RIGHTSHOULDER:
                     return Strings.Controller_ButtonName_RightShoulder;
                 default:
-                    return string.Format(Strings.Controller_ButtonName_Default, (int)i + 1);
+                    return GetDefaultButtonName(i);
             }
+        }
+
+        /// <summary>
+        /// Returns localized default name for a button at a given index.
+        /// </summary>
+        public static string GetDefaultButtonName(int i)
+        {
+            return string.Format(Strings.Controller_ButtonName_Default, i + 1);
         }
 
         private void UpdateMapping(SDL_Event e)
@@ -377,7 +327,7 @@ namespace Lench.AdvancedControls.Input
          * leftshoulder:b4,leftstick:b10,lefttrigger:a3,leftx:a0,lefty:a1,rightshoulder:b5,
          * rightstick:b11,righttrigger:a4,rightx:a2,righty:a5,start:b9,x:b0,y:b3,platform:Mac OS X,
          */
-        private void FormMappingDicts(string mapping)
+        private void ParseMapping(string mapping)
         {
             var list = mapping.Split(',');
             _axisMappingDict.Clear();
@@ -462,66 +412,6 @@ namespace Lench.AdvancedControls.Input
             }
         }
 
-        private void UpdateNames()
-        {
-            if (!Connected) return;
-
-#if DEBUG
-            Debug.Log($"Attempting to update mappings for controller {Name}");
-#endif
-            _axisNames = new List<string>();
-            for (var i = 0; i < SDL_JoystickNumAxes(DevicePointer); i++)
-            {
-                string name;
-                if (IsGameController)
-                {
-                    name = GetAxisNameFromEnum((SDL_GameControllerAxis)i);
-                } 
-                else
-                {
-                    switch (i)
-                    {
-                        case 0:
-                            name = Strings.Controller_AxisName_XAxis;
-                            break;
-                        case 1:
-                            name = Strings.Controller_AxisName_YAxis;
-                            break;
-                        default:
-                            name = string.Format(Strings.Controller_AxisName_Default, i + 1);
-                            break;
-                    }
-                }
-                _axisNames.Add(name);
-            }
-
-            _ballNames = new List<string>();
-            for (var i = 0; i < SDL_JoystickNumBalls(DevicePointer); i++)
-            {
-                _ballNames.Add(string.Format(Strings.Controller_BallName_Default, i + 1));
-            }
-
-            _hatNames = new List<string>();
-            for (var i = 0; i < SDL_JoystickNumHats(DevicePointer); i++)
-            {
-                _hatNames.Add(IsGameController && i == 0
-                    ? Strings.Controller_HatName_DPAD
-                    : string.Format(Strings.Controller_HatName_Default, i + 1));
-            }
-
-            _buttonNames = new List<string>();
-            for (var i = 0; i < SDL_JoystickNumButtons(DevicePointer); i++)
-            {
-                var name = IsGameController 
-                    ? GetButtonNameFromEnum((SDL_GameControllerButton)i) 
-                    : string.Format(Strings.Controller_ButtonName_Default, i + 1);
-                _buttonNames.Add(name);
-            }
-#if DEBUG
-            Debug.Log("Successfully updated mappings.");
-#endif
-        }
-
         /// <summary>
         /// Returns raw value of an axis.
         /// </summary>
@@ -538,7 +428,7 @@ namespace Lench.AdvancedControls.Input
         /// Takes integer specifying the type of the axis
         /// and returns the index of the axis on the controller.
         /// </summary>
-        internal int GetIndexForAxis(SDL_GameControllerAxis i)
+        public int GetIndexForAxis(SDL_GameControllerAxis i)
         {
             return _axisMappingDict.ContainsKey(i) ? _axisMappingDict[i] : (int)i;
         }
@@ -547,7 +437,7 @@ namespace Lench.AdvancedControls.Input
         /// Takes integer specifying the type of the button
         /// and returns the index of the button on the controller.
         /// </summary>
-        internal int GetIndexForButton(SDL_GameControllerButton i)
+        public int GetIndexForButton(SDL_GameControllerButton i)
         {
             return _buttonMappingDict.ContainsKey(i) ? _buttonMappingDict[i] : (int)i;
         }

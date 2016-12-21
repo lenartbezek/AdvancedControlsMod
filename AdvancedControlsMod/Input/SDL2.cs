@@ -31,7 +31,7 @@ using System;
 using System.Runtime.InteropServices;
 #endregion
 
-#pragma warning disable CS1570, CS1572, CS1574, CS1584, CS1658
+#pragma warning disable CS1570, CS1572, CS1574, CS1584, CS1658, CS1591
 // ReSharper disable All
 
 // Altered namespace.
@@ -40,7 +40,7 @@ namespace Lench.AdvancedControls.Input
     /// <summary>
     /// Entry point for all SDL-related (non-extension) types and methods
     /// </summary>
-    internal static class SDL
+    public static class SDL
     {
         #region SDL2# Variables
 
