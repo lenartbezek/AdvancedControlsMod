@@ -1,15 +1,15 @@
 ﻿using System;
 using System.Reflection;
-// ReSharper disable RedundantArgumentDefaultValue
 
 namespace Lench.AdvancedControls.Blocks
 {
     /// <summary>
-    /// Handler for all wheel and cog blocks.
+    ///     Handler for all wheel and cog blocks.
     /// </summary>
-    public class Cog : BlockHandler
+    public class Cog : Block
     {
-        private static readonly FieldInfo InputFieldInfo = typeof(CogMotorControllerHinge).GetField("input", BindingFlags.NonPublic | BindingFlags.Instance);
+        private static readonly FieldInfo Input = typeof(CogMotorControllerHinge).GetField("input",
+            BindingFlags.NonPublic | BindingFlags.Instance);
 
         private readonly CogMotorControllerHinge _cmc;
 
@@ -17,7 +17,7 @@ namespace Lench.AdvancedControls.Blocks
         private bool _setInputFlag;
 
         /// <summary>
-        /// Creates a Block handler.
+        ///     Creates a Block handler.
         /// </summary>
         /// <param name="bb">BlockBehaviour object.</param>
         public Cog(BlockBehaviour bb) : base(bb)
@@ -26,31 +26,32 @@ namespace Lench.AdvancedControls.Blocks
         }
 
         /// <summary>
-        /// Invokes the block's action.
-        /// Throws ActionNotFoundException if the block does not poses such action.
+        ///     Invokes the block's action.
+        ///     Throws ActionNotFoundException if the block does not poses such action.
         /// </summary>
         /// <param name="actionName">Display name of the action.</param>
         public override void Action(string actionName)
         {
             actionName = actionName.ToUpper();
-            if (actionName == "FORWARDS")
+            switch (actionName)
             {
-                SetInput(1);
-                return;
+                case "FORWARDS":
+                    SetInput(1);
+                    return;
+                case "REVERSE":
+                    SetInput(-1);
+                    return;
+                default:
+                    base.Action(actionName);
+                    return;
             }
-            if (actionName == "REVERSE")
-            {
-                SetInput(-1);
-                return;
-            }
-            throw new ActionNotFoundException("Block " + BlockName + " has no " + actionName + " action.");
         }
 
         /// <summary>
-        /// Sets the input value on the next LateUpdate.
+        ///     Sets the input value on the next LateUpdate.
         /// </summary>
         /// <param name="value">Value to be set.</param>
-        public void SetInput(float value = 1)
+        public void SetInput(float value)
         {
             if (float.IsNaN(value))
                 throw new ArgumentException("Value is not a number (NaN).");
@@ -59,15 +60,14 @@ namespace Lench.AdvancedControls.Blocks
         }
 
         /// <summary>
-        /// Sets the desired input value to be read at the next FixedUpdate of the BlockBehaviour script.
+        ///     Sets the desired input value to be read at the next FixedUpdate of the BlockBehaviour script.
         /// </summary>
         protected override void LateUpdate()
         {
-            if (_setInputFlag)
-            {
-                InputFieldInfo.SetValue(_cmc, _desiredInput);
-                _setInputFlag = false;
-            }
+            if (!_setInputFlag) return;
+
+            Input.SetValue(_cmc, _desiredInput);
+            _setInputFlag = false;
         }
     }
 }

@@ -3,14 +3,14 @@
 namespace Lench.AdvancedControls.Blocks
 {
     /// <summary>
-    /// Handler for the Rocket block.
+    ///     Handler for the Rocket block.
     /// </summary>
-    public class Rocket : BlockHandler
+    public class Rocket : Block
     {
         private readonly TimedRocket _tr;
 
         /// <summary>
-        /// Creates a Block handler.
+        ///     Creates a Block handler.
         /// </summary>
         /// <param name="bb">BlockBehaviour object.</param>
         public Rocket(BlockBehaviour bb) : base(bb)
@@ -19,23 +19,36 @@ namespace Lench.AdvancedControls.Blocks
         }
 
         /// <summary>
-        /// Invokes the block's action.
-        /// Throws ActionNotFoundException if the block does not posess such action.
+        ///     Is true if the rocket has fired.
+        /// </summary>
+        public bool HasFired => _tr.hasFired;
+
+        /// <summary>
+        ///     Is true if the rocket has exploded.
+        /// </summary>
+        public bool HasExploded => _tr.hasExploded;
+
+        /// <summary>
+        ///     Invokes the block's action.
+        ///     Throws ActionNotFoundException if the block does not posess such action.
         /// </summary>
         /// <param name="actionName">Display name of the action.</param>
         public override void Action(string actionName)
         {
             actionName = actionName.ToUpper();
-            if (actionName == "LAUNCH")
+            switch (actionName)
             {
-                Launch();
-                return;
+                case "LAUNCH":
+                    Launch();
+                    return;
+                default:
+                    base.Action(actionName);
+                    return;
             }
-            throw new ActionNotFoundException("Block " + BlockName + " has no " + actionName + " action.");
         }
 
         /// <summary>
-        /// Rocket thrust shouldn't be set to zero.
+        ///     Rocket thrust shouldn't be set to zero.
         /// </summary>
         /// <param name="sliderName"></param>
         /// <param name="value"></param>
@@ -48,31 +61,13 @@ namespace Lench.AdvancedControls.Blocks
         }
 
         /// <summary>
-        /// Launch the rocket.
+        ///     Launch the rocket.
         /// </summary>
         public void Launch()
         {
-            if (!_tr.hasFired)
-            {
-                _tr.hasFired = true;
-                _tr.StartCoroutine(_tr.Fire(0));
-            }
-        }
-
-        /// <summary>
-        /// Is true if the rocket has fired.
-        /// </summary>
-        public bool HasFired
-        {
-            get { return _tr.hasFired; }
-        }
-
-        /// <summary>
-        /// Is true if the rocket has exploded.
-        /// </summary>
-        public bool HasExploded
-        {
-            get { return _tr.hasExploded; }
+            if (_tr.hasFired) return;
+            _tr.hasFired = true;
+            _tr.StartCoroutine(_tr.Fire(0));
         }
     }
 }

@@ -1,33 +1,34 @@
 ﻿using System;
 using System.Reflection;
 using UnityEngine;
-// ReSharper disable RedundantArgumentDefaultValue
 // ReSharper disable CompareOfFloatsByEqualityOperator
 
 namespace Lench.AdvancedControls.Blocks
 {
     /// <summary>
-    /// Handler for steering blocks; Steering and Steering Hinge.
+    ///     Handler for steering blocks; Steering and Steering Hinge.
     /// </summary>
-    public class Steering : BlockHandler
+    public class Steering : Block
     {
-        private static readonly FieldInfo AngleyToBeField = typeof(SteeringWheel).GetField("angleyToBe", BindingFlags.NonPublic | BindingFlags.Instance);
-        private static readonly FieldInfo SpeedSliderField = typeof(SteeringWheel).GetField("speedSlider", BindingFlags.NonPublic | BindingFlags.Instance);
-        private static readonly FieldInfo LimitsSliderField = typeof(SteeringWheel).GetField("limitsSlider", BindingFlags.NonPublic | BindingFlags.Instance);
+        private static readonly FieldInfo AngleyToBeField = typeof(SteeringWheel).GetField("angleyToBe",
+            BindingFlags.NonPublic | BindingFlags.Instance);
 
-        private readonly SteeringWheel _sw;
+        private static readonly FieldInfo SpeedSliderField = typeof(SteeringWheel).GetField("speedSlider",
+            BindingFlags.NonPublic | BindingFlags.Instance);
 
-        private readonly MSlider _speedSlider;
-        private readonly MLimits _limitsSlider;
-
-        private float _desiredInput;
-        private bool _setInputFlag;
+        private static readonly FieldInfo LimitsSliderField = typeof(SteeringWheel).GetField("limitsSlider",
+            BindingFlags.NonPublic | BindingFlags.Instance);
 
         private float _desiredAngle;
+        private float _desiredInput;
         private bool _setAngleFlag;
+        private bool _setInputFlag;
+        private readonly MLimits _limitsSlider;
+        private readonly MSlider _speedSlider;
+        private readonly SteeringWheel _sw;
 
         /// <summary>
-        /// Creates a Block handler.
+        ///     Creates a Block handler.
         /// </summary>
         /// <param name="bb">BlockBehaviour object.</param>
         public Steering(BlockBehaviour bb) : base(bb)
@@ -38,31 +39,32 @@ namespace Lench.AdvancedControls.Blocks
         }
 
         /// <summary>
-        /// Invokes the block's action.
-        /// Throws ActionNotFoundException if the block does not poses such action.
+        ///     Invokes the block's action.
+        ///     Throws ActionNotFoundException if the block does not poses such action.
         /// </summary>
         /// <param name="actionName">Display name of the action.</param>
         public override void Action(string actionName)
         {
             actionName = actionName.ToUpper();
-            if (actionName == "LEFT")
+            switch (actionName)
             {
-                SetInput(1);
-                return;
+                case "LEFT":
+                    SetInput(1);
+                    return;
+                case "RIGHT":
+                    SetInput(-1);
+                    return;
+                default:
+                    base.Action(actionName);
+                    return;
             }
-            if (actionName == "RIGHT")
-            {
-                SetInput(-1);
-                return;
-            }
-            throw new ActionNotFoundException("Block " + BlockName + " has no " + actionName + " action.");
         }
 
         /// <summary>
-        /// Sets the input value on the next LateUpdate.
+        ///     Sets the input value on the next LateUpdate.
         /// </summary>
         /// <param name="value">Value to be set.</param>
-        public void SetInput(float value = 1)
+        public void SetInput(float value)
         {
             if (float.IsNaN(value))
                 throw new ArgumentException("Value is not a number (NaN).");
@@ -72,47 +74,42 @@ namespace Lench.AdvancedControls.Blocks
         }
 
         /// <summary>
-        /// Moves the joint to the desired angle.
+        ///     Moves the joint to the desired angle.
         /// </summary>
         /// <param name="angle">Float value in degrees.</param>
         public void SetAngle(float angle)
         {
-            angle /= convertToRadians;
-            angle *= (_sw.Flipped ? -1 : 1);
+            angle /= ConvertToRadians;
+            angle *= _sw.Flipped ? -1 : 1;
             if (float.IsNaN(angle))
                 throw new ArgumentException("Value is not a number (NaN).");
             if (_sw.allowLimits && _limitsSlider.IsActive)
-            {
-                if (_sw.Flipped)
-                    _desiredAngle = Mathf.Clamp(angle, -_limitsSlider.Min, _limitsSlider.Max);
-                else
-                    _desiredAngle = Mathf.Clamp(angle, -_limitsSlider.Max, _limitsSlider.Min);
-            }
+                _desiredAngle = _sw.Flipped 
+                    ? Mathf.Clamp(angle, -_limitsSlider.Min, _limitsSlider.Max) 
+                    : Mathf.Clamp(angle, -_limitsSlider.Max, _limitsSlider.Min);
             else
-            {
                 _desiredAngle = angle;
-            }
 
             _setAngleFlag = true;
         }
 
         /// <summary>
-        /// Returns the current angle of the joint.
+        ///     Returns the current angle of the joint.
         /// </summary>
         /// <returns>Float value in degrees or radians as specified.</returns>
         public float GetAngle()
         {
-            return (float)AngleyToBeField.GetValue(_sw) * convertToRadians;
+            return (float) AngleyToBeField.GetValue(_sw) * ConvertToRadians;
         }
 
         /// <summary>
-        /// Handles the movement of the joint.
+        ///     Handles the movement of the joint.
         /// </summary>
         protected override void LateUpdate()
         {
             if (_setAngleFlag)
             {
-                float currentAngle = (float)AngleyToBeField.GetValue(_sw);
+                var currentAngle = (float) AngleyToBeField.GetValue(_sw);
                 if (Mathf.Abs(Mathf.DeltaAngle(currentAngle, _desiredAngle)) < 0.1)
                 {
                     _setAngleFlag = false;
@@ -120,7 +117,7 @@ namespace Lench.AdvancedControls.Blocks
                 else
                 {
                     _desiredInput = Mathf.DeltaAngle(currentAngle, _desiredAngle) /
-                        (100f * _sw.targetAngleSpeed * _speedSlider.Value * Time.deltaTime);
+                                    (100f * _sw.targetAngleSpeed * _speedSlider.Value * Time.deltaTime);
                     _desiredInput = Mathf.Clamp(_desiredInput, -1, 1);
                     _setInputFlag = true;
                 }
@@ -132,17 +129,15 @@ namespace Lench.AdvancedControls.Blocks
                 {
                     _sw.GetComponent<Rigidbody>()?.WakeUp();
 
-                    float speed = _desiredInput * 100f * _sw.targetAngleSpeed * _speedSlider.Value;
+                    var speed = _desiredInput * 100f * _sw.targetAngleSpeed * _speedSlider.Value;
 
-                    float currentAngle = (float)AngleyToBeField.GetValue(_sw);
-                    float newAngle = currentAngle + speed * Time.deltaTime;
+                    var currentAngle = (float) AngleyToBeField.GetValue(_sw);
+                    var newAngle = currentAngle + speed * Time.deltaTime;
 
                     if (_sw.allowLimits && _limitsSlider.IsActive)
-                    {
                         newAngle = _sw.Flipped 
                             ? Mathf.Clamp(newAngle, -_limitsSlider.Min, _limitsSlider.Max) 
                             : Mathf.Clamp(newAngle, -_limitsSlider.Max, _limitsSlider.Min);
-                    }
                     else if (newAngle > 180)
                         newAngle -= 360;
                     else if (newAngle < -180)

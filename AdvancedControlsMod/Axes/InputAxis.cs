@@ -80,8 +80,8 @@ namespace Lench.AdvancedControls.Axes
         {
             // ReSharper disable once VirtualMemberCallInConstructor
             Name = name;
-            ACM.Instance.OnUpdate += Update;
-            ACM.Instance.OnInitialisation += Initialise;
+            Mod.OnUpdate += Update;
+            Block.OnInitialisation += Initialise;
         }
 
         /// <summary>
@@ -89,8 +89,8 @@ namespace Lench.AdvancedControls.Axes
         /// </summary>
         public void Dispose()
         {
-            ACM.Instance.OnUpdate -= Update;
-            ACM.Instance.OnInitialisation -= Initialise;
+            Mod.OnUpdate -= Update;
+            Block.OnInitialisation -= Initialise;
         }
 
         /// <summary>

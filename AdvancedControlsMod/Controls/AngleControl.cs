@@ -37,9 +37,8 @@ namespace Lench.AdvancedControls.Controls
 
         /// <summary>
         /// Control's block handler.
-        /// Angle control only accepts Lench.ScripterMod.Blocks.Steering handlers.
         /// </summary>
-        public override BlockHandler Block
+        public override Block Block
         {
             get
             {

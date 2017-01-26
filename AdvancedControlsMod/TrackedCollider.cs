@@ -1,5 +1,4 @@
-﻿using Lench.AdvancedControls.Blocks;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace Lench.AdvancedControls
 {
@@ -19,7 +18,7 @@ namespace Lench.AdvancedControls
             _lastPosition = Position;
             var bb = _c.transform.parent.gameObject.GetComponent<BlockBehaviour>();
             if (bb != null)
-                Block = BlockHandlerController.GetBlock(bb);
+                Block = Block.Get(bb);
         }
 
         /// <summary>
@@ -53,7 +52,7 @@ namespace Lench.AdvancedControls
         /// Returns block represented by the collider.
         /// </summary>
         /// <returns></returns>
-        public BlockHandler Block { get; }
+        public Block Block { get; }
 
         /// <summary>
         /// Returns the name of the object represented by the collider.

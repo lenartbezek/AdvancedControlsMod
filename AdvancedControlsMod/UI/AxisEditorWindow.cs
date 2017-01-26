@@ -1,4 +1,5 @@
-﻿using Lench.AdvancedControls.Axes;
+﻿using System;
+using Lench.AdvancedControls.Axes;
 using spaar.ModLoader.UI;
 using Steamworks;
 using UnityEngine;
@@ -20,26 +21,32 @@ namespace Lench.AdvancedControls.UI
     {
         internal bool ShowHelp { get; set; } = false;
 
-        internal int WindowID = spaar.ModLoader.Util.GetWindowID();
-        internal Rect WindowRect = new Rect(0, 0, 320, 100);
+        private readonly int _windowID = spaar.ModLoader.Util.GetWindowID();
+        private Rect _windowRect = new Rect(0, 0, 320, 100);
 
         private string _windowName = Strings.AxisEditorWindow_WindowTitle_CreateNewAxis;
         private string _saveName = string.Empty;
         private InputAxis _axis;
 
-        internal bool ContainsMouse
+        public Vector2 Position
+        {
+            get { return _windowRect.position; }
+            set { _windowRect.position = value; }
+        }
+
+        public bool ContainsMouse
         {
             get
             {
                 var mousePos = UnityEngine.Input.mousePosition;
                 mousePos.y = Screen.height - mousePos.y;
-                return WindowRect.Contains(mousePos);
+                return _windowRect.Contains(mousePos);
             }
         }
 
-        internal SelectAxisDelegate Callback;
+        public Action<InputAxis> OnAxisSelect;
 
-        internal void SaveAxis()
+        public void SaveAxis()
         {
             if (_axis.Name == _saveName || !AxisManager.LocalAxes.ContainsKey(_axis.Name))
                 _axis.Dispose();
@@ -47,24 +54,28 @@ namespace Lench.AdvancedControls.UI
             _axis.Editor.Open();
             _axis.Name = _saveName;
             AxisManager.AddLocalAxis(_axis);
-            Callback?.Invoke(_axis);
+            OnAxisSelect?.Invoke(_axis);
             Destroy(this);
         }
 
-        internal void CreateAxis(SelectAxisDelegate selectAxis = null)
+        public static AxisEditorWindow CreateAxis(Action<InputAxis> selectAxis = null)
         {
-            Callback = selectAxis;
-            _windowName = Strings.AxisEditorWindow_WindowTitle_CreateNewAxis;
-            _axis = null;
+            var window = Mod.Controller.AddComponent<AxisEditorWindow>();
+            window.OnAxisSelect = selectAxis;
+            window._windowName = Strings.AxisEditorWindow_WindowTitle_CreateNewAxis;
+            window._axis = null;
+            return window;
         }
 
-        internal void EditAxis(InputAxis axis, SelectAxisDelegate selectAxis = null)
+        public static AxisEditorWindow EditAxis(InputAxis axis, Action<InputAxis> selectAxis = null)
         {
-            Callback = selectAxis;
-            _windowName = string.Format(Strings.AxisEditorWindow_WindowTitle_Edit, axis.Name);
-            _saveName = axis.Name;
-            _axis = axis;
-            _axis.Editor.Open();
+            var window = Mod.Controller.AddComponent<AxisEditorWindow>();
+            window.OnAxisSelect = selectAxis;
+            window._windowName = string.Format(Strings.AxisEditorWindow_WindowTitle_Edit, axis.Name);
+            window._saveName = axis.Name;
+            window._axis = axis;
+            window._axis.Editor.Open();
+            return window;
         }
 
         /// <summary>
@@ -73,7 +84,7 @@ namespace Lench.AdvancedControls.UI
         private void OnGUI()
         {
             GUI.skin = Util.Skin;
-            WindowRect = GUILayout.Window(WindowID, WindowRect, DoWindow, _windowName,
+            _windowRect = GUILayout.Window(_windowID, _windowRect, DoWindow, _windowName,
                 GUILayout.Width(320),
                 GUILayout.Height(100));
         }
@@ -139,7 +150,7 @@ namespace Lench.AdvancedControls.UI
                 }
 
                 // Draw axis editor
-                _axis.GetEditor().DrawAxis(WindowRect);
+                _axis.GetEditor().DrawAxis(_windowRect);
 
                 // Draw error message
                 if (_axis.GetEditor().GetError() != null)
@@ -155,7 +166,7 @@ namespace Lench.AdvancedControls.UI
 
                 // Draw help button
                 if (_axis.GetEditor().GetHelpURL() != null)
-                    if (GUI.Button(new Rect(WindowRect.width - 76, 8, 30, 30),
+                    if (GUI.Button(new Rect(_windowRect.width - 76, 8, 30, 30),
                         Strings.ButtonText_Help, Elements.Buttons.Red))
                     {
                         try
@@ -171,15 +182,15 @@ namespace Lench.AdvancedControls.UI
 
 
             // Draw close button
-            if (GUI.Button(new Rect(WindowRect.width - 38, 8, 30, 30),
+            if (GUI.Button(new Rect(_windowRect.width - 38, 8, 30, 30),
                 Strings.ButtonText_Close, Elements.Buttons.Red))
             {
-                Callback = null;
+                OnAxisSelect = null;
                 Destroy(this);
             }
 
             // Drag window
-            GUI.DragWindow(new Rect(0, 0, WindowRect.width, GUI.skin.window.padding.top));
+            GUI.DragWindow(new Rect(0, 0, _windowRect.width, GUI.skin.window.padding.top));
         }
     }
 }

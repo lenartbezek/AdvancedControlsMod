@@ -1,6 +1,6 @@
-﻿using System.Collections.Generic;
-using Lench.AdvancedControls.Axes;
+﻿using Lench.AdvancedControls.Axes;
 using spaar.ModLoader.UI;
+using System;
 using UnityEngine;
 
 // ReSharper disable UnusedMember.Local
@@ -8,44 +8,45 @@ using UnityEngine;
 
 namespace Lench.AdvancedControls.UI
 {
-    internal delegate void SelectAxisDelegate(InputAxis axis);
-
     internal class AxisSelector : MonoBehaviour
     {
-        internal int WindowID = spaar.ModLoader.Util.GetWindowID();
-        internal Rect WindowRect = new Rect(0, 0, 320, 42);
+        private readonly int _windowID = spaar.ModLoader.Util.GetWindowID();
 
-        internal bool ContainsMouse
+        private Vector2 _localScrollPosition = Vector2.zero;
+        private Vector2 _machineScrollPosition = Vector2.zero;
+        private Rect _windowRect = new Rect(0, 0, 320, 42);
+
+        public Vector2 Position
+        {
+            get { return _windowRect.position; }
+            set { _windowRect.position = value; }
+        }
+
+        public Action<InputAxis> OnAxisSelect;
+
+        public bool ContainsMouse
         {
             get
             {
                 var mousePos = UnityEngine.Input.mousePosition;
                 mousePos.y = Screen.height - mousePos.y;
-                return WindowRect.Contains(mousePos);
+                return _windowRect.Contains(mousePos);
             }
         }
 
-        internal SelectAxisDelegate Callback;
-
-        private bool _compact;
-        private Vector2 _localScrollPosition = Vector2.zero;
-        private Vector2 _machineScrollPosition = Vector2.zero;
-
-        internal static AxisSelector Open(SelectAxisDelegate callback, bool compact = false)
+        public static AxisSelector Open(Action<InputAxis> callback)
         {
-            var window = ACM.Instance.gameObject.AddComponent<AxisSelector>();
-            window.Callback = callback;
-            window._compact = compact;
+            var window = Mod.Controller.AddComponent<AxisSelector>();
+            window.OnAxisSelect = callback;
             return window;
         }
 
         private void OnGUI()
         {
             GUI.skin = Util.Skin;
-            GUIStyle windowStyle = _compact ? Util.CompactWindowStyle : Util.FullWindowStyle;
-            WindowRect = GUILayout.Window(WindowID, WindowRect, DoWindow, _compact ? string.Empty : Strings.AxisSelector_WindowTitle_SelectAxis, windowStyle,
-                        GUILayout.Width(320),
-                        GUILayout.Height(42));
+            _windowRect = GUILayout.Window(_windowID, _windowRect, DoWindow, string.Empty, Util.CompactWindowStyle,
+                GUILayout.Width(320),
+                GUILayout.Height(42));
         }
 
         private void DoWindow(int id)
@@ -56,11 +57,12 @@ namespace Lench.AdvancedControls.UI
                 _localScrollPosition = GUILayout.BeginScrollView(_localScrollPosition,
                     GUILayout.Height(Mathf.Clamp(AxisManager.LocalAxes.Count * 36 + 30, 138, 246)));
 
-                GUILayout.Label(Strings.AxisSelector_Label_LocallySavedAxes, new GUIStyle(Elements.Labels.Title) { alignment = TextAnchor.MiddleCenter });
+                GUILayout.Label(Strings.AxisSelector_Label_LocallySavedAxes,
+                    new GUIStyle(Elements.Labels.Title) {alignment = TextAnchor.MiddleCenter});
 
                 string toBeRemoved = null;
 
-                foreach (KeyValuePair<string, InputAxis> pair in AxisManager.LocalAxes)
+                foreach (var pair in AxisManager.LocalAxes)
                 {
                     var name = pair.Key;
                     var axis = pair.Value;
@@ -69,25 +71,24 @@ namespace Lench.AdvancedControls.UI
 
                     if (GUILayout.Button(name, axis.Saveable ? Elements.Buttons.Default : Elements.Buttons.Disabled))
                     {
-                        Callback?.Invoke(axis);
+                        OnAxisSelect?.Invoke(axis);
                         Destroy(this);
                     }
 
                     if (GUILayout.Button(Strings.ButtonText_EditAxis,
-                        new GUIStyle(Elements.Buttons.Default) { fontSize = 20, padding = new RectOffset(-3, 0, 0, 0) },
+                        new GUIStyle(Elements.Buttons.Default) {fontSize = 20, padding = new RectOffset(-3, 0, 0, 0)},
                         GUILayout.Width(30), GUILayout.MaxHeight(28)))
                     {
-                        var editor = ACM.Instance.gameObject.AddComponent<AxisEditorWindow>();
-                        editor.WindowRect.x = Mathf.Clamp(WindowRect.x + WindowRect.width,
-                            -320 + GUI.skin.window.padding.top, Screen.width - GUI.skin.window.padding.top);
-                        editor.WindowRect.y = Mathf.Clamp(WindowRect.y - 40, 0, Screen.height - GUI.skin.window.padding.top);
-                        editor.EditAxis(axis);
+                        var editor = AxisEditorWindow.EditAxis(axis);
+                        editor.Position = new Vector2(
+                            Mathf.Clamp(_windowRect.x + _windowRect.width,
+                                -320 + GUI.skin.window.padding.top, Screen.width - GUI.skin.window.padding.top),
+                            Mathf.Clamp(_windowRect.y - 40, 0,
+                            Screen.height - GUI.skin.window.padding.top));
                     }
 
                     if (GUILayout.Button(Strings.ButtonText_Close, Elements.Buttons.Red, GUILayout.Width(30)))
-                    {
                         toBeRemoved = name;
-                    }
 
                     GUILayout.EndHorizontal();
                 }
@@ -105,11 +106,11 @@ namespace Lench.AdvancedControls.UI
                     GUILayout.Height(Mathf.Clamp(AxisManager.MachineAxes.Count * 36 + 30, 138, 246)));
 
                 GUILayout.Label(Strings.AxisSelector_Label_MachineEmbeddedAxes,
-                    new GUIStyle(Elements.Labels.Title) { alignment = TextAnchor.MiddleCenter });
+                    new GUIStyle(Elements.Labels.Title) {alignment = TextAnchor.MiddleCenter});
 
                 string toBeRemoved = null;
 
-                foreach (KeyValuePair<string, InputAxis> pair in AxisManager.MachineAxes)
+                foreach (var pair in AxisManager.MachineAxes)
                 {
                     var name = pair.Key;
                     var axis = pair.Value;
@@ -118,25 +119,24 @@ namespace Lench.AdvancedControls.UI
 
                     if (GUILayout.Button(name, axis.Saveable ? Elements.Buttons.Default : Elements.Buttons.Disabled))
                     {
-                        Callback?.Invoke(axis);
+                        OnAxisSelect?.Invoke(axis);
                         Destroy(this);
                     }
 
                     if (GUILayout.Button(Strings.ButtonText_EditAxis,
-                        new GUIStyle(Elements.Buttons.Default) { fontSize = 20, padding = new RectOffset(-3, 0, 0, 0) },
+                        new GUIStyle(Elements.Buttons.Default) {fontSize = 20, padding = new RectOffset(-3, 0, 0, 0)},
                         GUILayout.Width(30), GUILayout.MaxHeight(28)))
                     {
-                        var editor = ACM.Instance.gameObject.AddComponent<AxisEditorWindow>();
-                        editor.WindowRect.x = Mathf.Clamp(WindowRect.x + WindowRect.width,
-                            -320 + GUI.skin.window.padding.top, Screen.width - GUI.skin.window.padding.top);
-                        editor.WindowRect.y = Mathf.Clamp(WindowRect.y - 40, 0, Screen.height - GUI.skin.window.padding.top);
-                        editor.EditAxis(axis);
+                        var editor = AxisEditorWindow.EditAxis(axis);
+                        editor.Position = new Vector2(
+                            Mathf.Clamp(_windowRect.x + _windowRect.width,
+                                -320 + GUI.skin.window.padding.top, Screen.width - GUI.skin.window.padding.top),
+                            Mathf.Clamp(_windowRect.y - 40, 0,
+                            Screen.height - GUI.skin.window.padding.top));
                     }
 
                     if (GUILayout.Button(Strings.ButtonText_Close, Elements.Buttons.Red, GUILayout.Width(30)))
-                    {
                         toBeRemoved = name;
-                    }
 
                     GUILayout.EndHorizontal();
                 }
@@ -149,19 +149,14 @@ namespace Lench.AdvancedControls.UI
 
             if (GUILayout.Button(Strings.AxisEditorWindow_WindowTitle_CreateNewAxis, Elements.Buttons.Disabled))
             {
-                var editor = ACM.Instance.gameObject.AddComponent<AxisEditorWindow>();
-                editor.WindowRect.x = Mathf.Clamp(WindowRect.x + WindowRect.width,
-                    -320 + GUI.skin.window.padding.top, Screen.width - GUI.skin.window.padding.top);
-                editor.WindowRect.y = Mathf.Clamp(WindowRect.y - 40, 0, Screen.height - GUI.skin.window.padding.top);
-                editor.CreateAxis(Callback);
+                var editor = AxisEditorWindow.CreateAxis(OnAxisSelect);
+                editor.Position = new Vector2(
+                    Mathf.Clamp(_windowRect.x + _windowRect.width,
+                        -320 + GUI.skin.window.padding.top, Screen.width - GUI.skin.window.padding.top),
+                    Mathf.Clamp(_windowRect.y - 40, 0,
+                    Screen.height - GUI.skin.window.padding.top));
                 Destroy(this);
             }
-
-            // Draw close button
-            if (!_compact)
-                if (GUI.Button(new Rect(WindowRect.width - 38, 8, 30, 30),
-                    Strings.ButtonText_Close, Elements.Buttons.Red))
-                    Destroy(this);
         }
     }
 }

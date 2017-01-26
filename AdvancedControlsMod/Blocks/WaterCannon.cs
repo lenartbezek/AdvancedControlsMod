@@ -3,21 +3,21 @@
 namespace Lench.AdvancedControls.Blocks
 {
     /// <summary>
-    /// Handler for the Water Cannon block.
+    ///     Handler for the Water Cannon block.
     /// </summary>
-    public class WaterCannon : BlockHandler
+    public class WaterCannon : Block
     {
-        private static readonly FieldInfo HoldFieldInfo = typeof(WaterCannonController).GetField("holdToShootToggle", BindingFlags.NonPublic | BindingFlags.Instance);
+        private static readonly FieldInfo HoldFieldInfo = typeof(WaterCannonController).GetField("holdToShootToggle",
+            BindingFlags.NonPublic | BindingFlags.Instance);
 
-        private readonly WaterCannonController _wcc;
-
+        private readonly MToggle _holdToShootToggle;
         private bool _setShootFlag;
         private bool _lastShootFlag;
-        private readonly MToggle _holdToShootToggle;
         private bool _realHoldToShootToggle;
+        private readonly WaterCannonController _wcc;
 
         /// <summary>
-        /// Creates a Block handler.
+        ///     Creates a Block handler.
         /// </summary>
         /// <param name="bb">BlockBehaviour object.</param>
         public WaterCannon(BlockBehaviour bb) : base(bb)
@@ -28,23 +28,26 @@ namespace Lench.AdvancedControls.Blocks
         }
 
         /// <summary>
-        /// Invokes the block's action.
-        /// Throws ActionNotFoundException if the block does not posess such action.
+        ///     Invokes the block's action.
+        ///     Throws ActionNotFoundException if the block does not posess such action.
         /// </summary>
         /// <param name="actionName">Display name of the action.</param>
         public override void Action(string actionName)
         {
             actionName = actionName.ToUpper();
-            if (actionName == "SHOOT")
+            switch (actionName)
             {
-                Shoot();
-                return;
+                case "SHOOT":
+                    Shoot();
+                    return;
+                default:
+                    base.Action(actionName);
+                    return;
             }
-            throw new ActionNotFoundException("Block " + BlockName + " has no " + actionName + " action.");
         }
 
         /// <summary>
-        /// Shoots the water cannon.
+        ///     Shoots the water cannon.
         /// </summary>
         public void Shoot()
         {
@@ -52,7 +55,7 @@ namespace Lench.AdvancedControls.Blocks
         }
 
         /// <summary>
-        /// Handles shooting the water cannon.
+        ///     Handles shooting the water cannon.
         /// </summary>
         protected override void Update()
         {
@@ -60,7 +63,7 @@ namespace Lench.AdvancedControls.Blocks
             {
                 _realHoldToShootToggle = _realHoldToShootToggle ? _realHoldToShootToggle : _wcc.isActive;
                 _holdToShootToggle.IsActive = false;
-                _wcc.isActive = _realHoldToShootToggle ? true : !_wcc.isActive;
+                _wcc.isActive = _realHoldToShootToggle || !_wcc.isActive;
                 _lastShootFlag = _realHoldToShootToggle;
                 _setShootFlag = false;
             }

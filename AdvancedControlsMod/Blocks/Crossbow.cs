@@ -1,25 +1,19 @@
-﻿using System.Reflection;
-
-namespace Lench.AdvancedControls.Blocks
+﻿namespace Lench.AdvancedControls.Blocks
 {
     /// <summary>
-    ///     Handler for the Grabber block.
+    ///     Handler for the crossbow block.
     /// </summary>
-    public class Grabber : Block
+    public class Crossbow : Block
     {
-        private static readonly FieldInfo JoinFieldInfo = typeof(GrabberBlock).GetField("joinOnTriggerBlock",
-            BindingFlags.NonPublic | BindingFlags.Instance);
-
-        private readonly JoinOnTriggerBlock _join;
+        private readonly CrossBowBlock _cbb;
 
         /// <summary>
         ///     Creates a Block handler.
         /// </summary>
         /// <param name="bb">BlockBehaviour object.</param>
-        public Grabber(BlockBehaviour bb) : base(bb)
+        public Crossbow(BlockBehaviour bb) : base(bb)
         {
-            var gb = bb.GetComponent<GrabberBlock>();
-            _join = JoinFieldInfo.GetValue(gb) as JoinOnTriggerBlock;
+            _cbb = bb.GetComponent<CrossBowBlock>();
         }
 
         /// <summary>
@@ -32,8 +26,8 @@ namespace Lench.AdvancedControls.Blocks
             actionName = actionName.ToUpper();
             switch (actionName)
             {
-                case "DETACH":
-                    Detach();
+                case "SHOOT":
+                    Shoot();
                     return;
                 default:
                     base.Action(actionName);
@@ -42,11 +36,20 @@ namespace Lench.AdvancedControls.Blocks
         }
 
         /// <summary>
-        ///     Detach or grab with the Grabber.
+        ///     Shoots the crossbow.
         /// </summary>
-        public void Detach()
+        public void Shoot()
         {
-            _join.OnKeyPressed();
+            _cbb.SendMessage("FIRE");
+        }
+
+        /// <summary>
+        ///     Number of arrows remaining.
+        /// </summary>
+        public int Ammo
+        {
+            get { return _cbb.ammo; }
+            set { _cbb.ammo = value; }
         }
     }
 }

@@ -70,7 +70,7 @@ namespace Lench.AdvancedControls.Controls
         /// Control's block handler.
         /// Vector control only accepts Lench.ScripterMod.Blocks.VectorThruster handlers.
         /// </summary>
-        public override BlockHandler Block
+        public override Block Block
         {
             get
             {

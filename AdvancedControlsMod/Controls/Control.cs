@@ -1,6 +1,5 @@
 ﻿using System;
 using UnityEngine;
-using Lench.AdvancedControls.Blocks;
 using Lench.AdvancedControls.Axes;
 using Lench.AdvancedControls.UI;
 using spaar.ModLoader;
@@ -42,7 +41,7 @@ namespace Lench.AdvancedControls.Controls
         /// <summary>
         /// BlockHandler object of the control's block.
         /// </summary>
-        public virtual BlockHandler Block { get; protected set; }
+        public virtual Block Block { get; protected set; }
 
         /// <summary>
         /// GUID of the block the control is bound to.
@@ -116,8 +115,8 @@ namespace Lench.AdvancedControls.Controls
         protected Control(Guid guid)
         {
             BlockGUID = guid;
-            ACM.Instance.OnUpdate += Update;
-            ACM.Instance.OnInitialisation += Initialise;
+            Mod.OnUpdate += Update;
+            Block.OnInitialisation += Initialise;
 
             MinString = (Mathf.Round(Min * 100) / 100).ToString();
             CenString = (Mathf.Round(Center * 100) / 100).ToString();
@@ -132,7 +131,7 @@ namespace Lench.AdvancedControls.Controls
         {
             try
             {
-                Block = BlockHandlerController.GetBlock(BlockGUID);
+                Block = Block.Get(BlockGUID);
 
                 var axis = AxisManager.Get(Axis);
                 if (Enabled && Block != null && axis != null && axis.Status == AxisStatus.OK)

@@ -14,9 +14,9 @@ namespace Lench.AdvancedControls
             try
             {
                 // load mod configuration
-                ACM.Instance.ModEnabled = spaar.ModLoader.Configuration.GetBool("acm-enabled", true);
-                ACM.Instance.ModUpdaterEnabled = spaar.ModLoader.Configuration.GetBool("mod-updater-enabled", true);
-                ACM.Instance.DbUpdaterEnabled = spaar.ModLoader.Configuration.GetBool("db-updater-enabled", true);
+                Mod.ModEnabled = spaar.ModLoader.Configuration.GetBool("acm-enabled", true);
+                Mod.ModUpdaterEnabled = spaar.ModLoader.Configuration.GetBool("mod-updater-enabled", true);
+                Mod.DbUpdaterEnabled = spaar.ModLoader.Configuration.GetBool("db-updater-enabled", true);
 
                 // read input axes
                 int count = spaar.ModLoader.Configuration.GetInt("number-of-axes", 0);
@@ -66,9 +66,9 @@ namespace Lench.AdvancedControls
             string log = "";
             try
             {
-                spaar.ModLoader.Configuration.SetBool("acm-enabled", ACM.Instance.ModEnabled);
-                spaar.ModLoader.Configuration.SetBool("mod-updater-enabled", ACM.Instance.ModUpdaterEnabled);
-                spaar.ModLoader.Configuration.SetBool("db-updater-enabled", ACM.Instance.DbUpdaterEnabled);
+                spaar.ModLoader.Configuration.SetBool("acm-enabled", Mod.ModEnabled);
+                spaar.ModLoader.Configuration.SetBool("mod-updater-enabled", Mod.ModUpdaterEnabled);
+                spaar.ModLoader.Configuration.SetBool("db-updater-enabled", Mod.DbUpdaterEnabled);
 
                 int count = spaar.ModLoader.Configuration.GetInt("number-of-axes", 0);
                 log += "Attempting to clear " + count + " existing axes.\n";

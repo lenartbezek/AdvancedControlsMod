@@ -138,11 +138,12 @@
     <Compile Include="Axes\CustomAxis.cs" />
     <Compile Include="Axes\MouseAxis.cs" />
     <Compile Include="Axes\KeyAxis.cs" />
-    <Compile Include="BlockHandlerController.cs" />
+    <Compile Include="Block.cs" />
+    <Compile Include="BlockController.cs" />
     <Compile Include="Blocks\Automatron.cs" />
-    <Compile Include="Blocks\BlockHandler.cs" />
     <Compile Include="Blocks\Cannon.cs" />
     <Compile Include="Blocks\Cog.cs" />
+    <Compile Include="Blocks\Crossbow.cs" />
     <Compile Include="Blocks\Decoupler.cs" />
     <Compile Include="Blocks\Flamethrower.cs" />
     <Compile Include="Blocks\FlyingSpiral.cs" />
@@ -152,6 +153,7 @@
     <Compile Include="Blocks\Rocket.cs" />
     <Compile Include="Blocks\Spring.cs" />
     <Compile Include="Blocks\Steering.cs" />
+    <Compile Include="Blocks\Vacuum.cs" />
     <Compile Include="Blocks\VectorThruster.cs" />
     <Compile Include="Blocks\WaterCannon.cs" />
     <Compile Include="Configuration.cs" />
@@ -199,6 +201,7 @@
       <LastGenOutput>Strings.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>copy /Y "$(TargetPath)" "%25BESIEGE_LOCATION%25\Besiege_Data\Mods\$(TargetName).dll"</PostBuildEvent>

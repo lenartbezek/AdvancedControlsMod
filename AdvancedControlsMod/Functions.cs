@@ -1,6 +1,5 @@
 ﻿using System;
 using UnityEngine;
-using Lench.AdvancedControls.Blocks;
 
 namespace Lench.AdvancedControls
 {
@@ -35,15 +34,15 @@ namespace Lench.AdvancedControls
         /// </summary>
         /// <param name="blockId">Block identifier string.</param>
         /// <returns>Block object.</returns>
-        public static BlockHandler GetBlock(string blockId)
+        public static Block GetBlock(string blockId)
         {
             try
             {
-                return BlockHandlerController.GetBlock(new Guid(blockId));
+                return Block.Get(new Guid(blockId));
             }
             catch (FormatException)
             {
-                return BlockHandlerController.GetBlock(blockId);
+                return Block.Get(blockId);
             }
         }
 
@@ -107,7 +106,7 @@ namespace Lench.AdvancedControls
         /// </summary>
         public static void UseDegrees()
         {
-            BlockHandler.UseDegrees();
+            Block.UseDegrees();
         }
 
         /// <summary>
@@ -115,14 +114,14 @@ namespace Lench.AdvancedControls
         /// </summary>
         public static void UseRadians()
         {
-            BlockHandler.UseRadians();
+            Block.UseRadians();
         }
 
         /// <summary>
         /// Returns the mass of the machine.
         /// </summary>
         /// <returns>Float value representing total mass.</returns>
-        public static float MachineMass { get { return Machine.Active().Mass; } }
+        public static float MachineMass => Machine.Active().Mass;
 
         /// <summary>
         /// Returns the center of mass of the machine in the world.
@@ -132,10 +131,10 @@ namespace Lench.AdvancedControls
         {
             get
             {
-                Vector3 center = Vector3.zero;
-                for (int i = 0; i < Machine.Active().Blocks.Count; i++)
+                var center = Vector3.zero;
+                foreach (BlockBehaviour bb in Machine.Active().Blocks)
                 {
-                    Rigidbody body = Machine.Active().Blocks[i].GetComponent<Rigidbody>();
+                    var body = bb.GetComponent<Rigidbody>();
                     if (body != null)
                         center += body.worldCenterOfMass * body.mass;
                 }

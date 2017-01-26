@@ -189,6 +189,17 @@ namespace Lench.AdvancedControls.Controls
                             Min = 0, Center = 1, Max = 2
                         }
                     };
+                case (int)BlockType.Vacuum:
+                    return new List<Control>
+                    {
+                        new SliderControl(guid)
+                        {
+                            Slider = "POWER",
+                            Name = Strings.SliderName_Power,
+                            PositiveOnly = true,
+                            Min = 0, Center = 1, Max = 2
+                        }
+                    };
                 case (int)BlockType.WaterCannon:
                     return new List<Control>
                     {

@@ -84,7 +84,7 @@ namespace Lench.AdvancedControls
                     }
                 }
 
-                ACM.Instance.LoadedMachine = true;
+                Mod.LoadedMachine = true;
             }
             catch (Exception e)
             {

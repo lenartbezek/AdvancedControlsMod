@@ -1,14 +1,14 @@
 ﻿namespace Lench.AdvancedControls.Blocks
 {
     /// <summary>
-    /// Handler for the Grenade block.
+    ///     Handler for the Grenade block.
     /// </summary>
-    public class Grenade : BlockHandler
+    public class Grenade : Block
     {
         private readonly ControllableBomb _cb;
 
         /// <summary>
-        /// Creates a Block handler.
+        ///     Creates a Block handler.
         /// </summary>
         /// <param name="bb">BlockBehaviour object.</param>
         public Grenade(BlockBehaviour bb) : base(bb)
@@ -17,23 +17,26 @@
         }
 
         /// <summary>
-        /// Invokes the block's action.
-        /// Throws ActionNotFoundException if the block does not posess such action.
+        ///     Invokes the block's action.
+        ///     Throws ActionNotFoundException if the block does not posess such action.
         /// </summary>
         /// <param name="actionName">Display name of the action.</param>
         public override void Action(string actionName)
         {
             actionName = actionName.ToUpper();
-            if (actionName == "DETONATE")
+            switch (actionName)
             {
-                Detonate();
-                return;
+                case "DETONATE":
+                    Detonate();
+                    return;
+                default:
+                    base.Action(actionName);
+                    return;
             }
-            throw new ActionNotFoundException("Block " + BlockName + " has no " + actionName + " action.");
         }
 
         /// <summary>
-        /// Detonate the grenade.
+        ///     Detonate the grenade.
         /// </summary>
         public void Detonate()
         {

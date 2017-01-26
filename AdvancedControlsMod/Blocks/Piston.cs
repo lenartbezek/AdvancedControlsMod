@@ -5,27 +5,28 @@ using UnityEngine;
 namespace Lench.AdvancedControls.Blocks
 {
     /// <summary>
-    /// Handler for the Piston block.
+    ///     Handler for the Piston block.
     /// </summary>
-    public class Piston : BlockHandler
+    public class Piston : Block
     {
-        private static readonly FieldInfo ToggleFieldInfo = typeof(SliderCompress).GetField("toggleMode", BindingFlags.NonPublic | BindingFlags.Instance);
-        private static readonly FieldInfo ExtendFieldInfo = typeof(SliderCompress).GetField("extendKey", BindingFlags.NonPublic | BindingFlags.Instance);
+        private static readonly FieldInfo ToggleFieldInfo = typeof(SliderCompress).GetField("toggleMode",
+            BindingFlags.NonPublic | BindingFlags.Instance);
 
-        private readonly SliderCompress _sc;
-        private readonly MToggle _toggleMode;
-        private readonly MKey _extendKey;
+        private static readonly FieldInfo ExtendFieldInfo = typeof(SliderCompress).GetField("extendKey",
+            BindingFlags.NonPublic | BindingFlags.Instance);
 
+        private readonly float _defaultNewLimit;
+        private readonly float _defaultStartLimit;
         private bool _setExtendFlag;
-        private bool _lastExtendFlag;
         private bool _setPositionFlag;
         private float _targetPosition;
-
-        private readonly float _defaultStartLimit;
-        private readonly float _defaultNewLimit;
+        private bool _lastExtendFlag;
+        private readonly MKey _extendKey;
+        private readonly MToggle _toggleMode;
+        private readonly SliderCompress _sc;
 
         /// <summary>
-        /// Creates a Block handler.
+        ///     Creates a Block handler.
         /// </summary>
         /// <param name="bb">BlockBehaviour object.</param>
         public Piston(BlockBehaviour bb) : base(bb)
@@ -40,38 +41,37 @@ namespace Lench.AdvancedControls.Blocks
         }
 
         /// <summary>
-        /// Invokes the block's action.
-        /// Throws ActionNotFoundException if the block does not posess such action.
+        ///     Invokes the block's action.
+        ///     Throws ActionNotFoundException if the block does not posess such action.
         /// </summary>
         /// <param name="actionName">Display name of the action.</param>
         public override void Action(string actionName)
         {
             actionName = actionName.ToUpper();
-            if (actionName == "EXTEND")
+            switch (actionName)
             {
-                Extend();
-                return;
+                case "EXTEND":
+                    Extend();
+                    return;
+                default:
+                    base.Action(actionName);
+                    return;
             }
-            throw new ActionNotFoundException("Block " + BlockName + " has no " + actionName + " action.");
         }
 
         /// <summary>
-        /// Extend the piston.
+        ///     Extend the piston.
         /// </summary>
         public void Extend()
         {
             if (_toggleMode.IsActive)
-            {
-                _sc.posToBe = (_sc.posToBe != _sc.newLimit ? _sc.newLimit : _sc.startLimit);
-            }
+                _sc.posToBe = _sc.posToBe != _sc.newLimit ? _sc.newLimit : _sc.startLimit;
             else
-            {
                 _setExtendFlag = true;
-            }
         }
 
         /// <summary>
-        /// Set the position between compressed and extended position.
+        ///     Set the position between compressed and extended position.
         /// </summary>
         /// <param name="t"></param>
         public void SetPosition(float t)
@@ -81,7 +81,7 @@ namespace Lench.AdvancedControls.Blocks
         }
 
         /// <summary>
-        /// Handles extending and compressing the piston.
+        ///     Handles extending and compressing the piston.
         /// </summary>
         protected override void Update()
         {

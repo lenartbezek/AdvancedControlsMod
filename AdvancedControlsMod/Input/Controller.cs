@@ -197,7 +197,7 @@ namespace Lench.AdvancedControls.Input
             }
 
             DeviceManager.OnDeviceRemapped += UpdateMapping;
-            ACM.Instance.OnUpdate += Update;
+            Mod.OnUpdate += Update;
 
             // Debug
             Debug.Log(IsGameController
@@ -218,8 +218,7 @@ namespace Lench.AdvancedControls.Input
             }
             for (var i = 0; i < NumBalls; i++)
             {
-                int x, y;
-                SDL_JoystickGetBall(DevicePointer, i, out x, out y);
+                SDL_JoystickGetBall(DevicePointer, i, out int x, out int y);
                 _ballValuesRaw[i, 0] = x / 32767.0f;
                 _ballValuesRaw[i, 1] = y / 32767.0f;
                 _ballValuesSmooth[i, 0] = _ballValuesSmooth[i, 0] * (1 - d) + _ballValuesRaw[i, 0] * d;
@@ -457,7 +456,7 @@ namespace Lench.AdvancedControls.Input
                 SDL_JoystickClose(DevicePointer);
 
             DeviceManager.OnDeviceRemapped -= UpdateMapping;
-            ACM.Instance.OnUpdate -= Update;
+            Mod.OnUpdate -= Update;
 #if DEBUG
             Debug.Log("Successfully disposed controller.");
 #endif

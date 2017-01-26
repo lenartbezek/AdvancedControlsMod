@@ -61,7 +61,7 @@ namespace Lench.AdvancedControls.UI
             // Draw key mappers 
             GUILayout.BeginHorizontal();
 
-            GUILayout.Button(new GUIContent(_axis.NegativeBind != null ? _axis.NegativeBind.Name : Strings.KeyAxisEditor_NoBind, "Key Mapper Negative"), Elements.Buttons.Red);
+            GUILayout.Button(new GUIContent(_axis.NegativeBind?.Name ?? Strings.KeyAxisEditor_NoBind, "Key Mapper Negative"), Elements.Buttons.Red);
             if (GUI.tooltip == "Key Mapper Negative")
             {
                 foreach (var c in Controller.ControllerList)
@@ -80,7 +80,7 @@ namespace Lench.AdvancedControls.UI
                     }
                 }
             }
-            GUILayout.Button(new GUIContent(_axis.PositiveBind != null ? _axis.PositiveBind.Name : Strings.KeyAxisEditor_NoBind, "Key Mapper Positive"), Elements.Buttons.Red);
+            GUILayout.Button(new GUIContent(_axis.PositiveBind?.Name ?? Strings.KeyAxisEditor_NoBind, "Key Mapper Positive"), Elements.Buttons.Red);
             if (GUI.tooltip == "Key Mapper Positive")
             {
                 foreach (var c in Controller.ControllerList)

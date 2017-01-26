@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Lench.AdvancedControls.Axes;
 using Lench.AdvancedControls.Controls;
 using spaar.ModLoader.UI;
@@ -22,12 +23,12 @@ namespace Lench.AdvancedControls.UI
 
         internal static ControlOverview Open(bool onload = false)
         {
-            BlockHandlerController.InitializeBuildingBlockIDs();
+            Block.InitializeIDs();
 
-            foreach (var x in ACM.Instance.gameObject.GetComponents<ControlOverview>())
+            foreach (var x in Mod.Controller.GetComponents<ControlOverview>())
                 Destroy(x);
 
-            var instance = ACM.Instance.gameObject.AddComponent<ControlOverview>();
+            var instance = Mod.Controller.AddComponent<ControlOverview>();
             instance.enabled = false;
 
             instance.WindowRect.x = Screen.width - 280 - 400;
@@ -73,7 +74,7 @@ namespace Lench.AdvancedControls.UI
             {
                 foreach (Control c in entry.Value)
                 {
-                    try { BlockHandlerController.GetID(c.BlockGUID); } catch { continue; }
+                    try { Block.GetID(c.BlockGUID); } catch { continue; }
                     if (c.Axis == null)
                         continue;
                     if (!_controls.ContainsKey(c.Axis))
@@ -94,22 +95,23 @@ namespace Lench.AdvancedControls.UI
             var a = AxisManager.Get(axis);
             if (GUI.Button(buttonRect, axis, a != null ? a.Saveable ? Elements.Buttons.Default : Elements.Buttons.Disabled : Elements.Buttons.Red))
             {
-                var callback = new SelectAxisDelegate(newAxis => { AssignAxis(axis, newAxis.Name); });
+                Action<InputAxis> callback = newAxis => { AssignAxis(axis, newAxis.Name); };
                 if (Popup == null)
-                    Popup = AxisSelector.Open(callback, true);
+                    Popup = AxisSelector.Open(callback);
                 else
-                    Popup.Callback = callback;
-                Popup.WindowRect.x = WindowRect.x + buttonRect.x - 8;
-                Popup.WindowRect.y = WindowRect.y + GUI.skin.window.padding.top + buttonRect.y - _scrollPosition.y - 8;
+                    Popup.OnAxisSelect = callback;
+                Popup.Position = new Vector2(
+                    WindowRect.x + buttonRect.x - 8,
+                    WindowRect.y + GUI.skin.window.padding.top + buttonRect.y - _scrollPosition.y - 8);
             }
 
             if (a != null && GUILayout.Button(Strings.ButtonText_EditAxis, new GUIStyle(Elements.Buttons.Default) { fontSize = 20, padding = new RectOffset(-3, 0, 0, 0) }, GUILayout.Width(30), GUILayout.MaxHeight(28)))
             {
-                var editor = ACM.Instance.gameObject.AddComponent<AxisEditorWindow>();
-                editor.WindowRect.x = Mathf.Clamp(WindowRect.x + WindowRect.width,
-                            -320 + GUI.skin.window.padding.top, Screen.width - GUI.skin.window.padding.top);
-                editor.WindowRect.y = Mathf.Clamp(WindowRect.y, 0, Screen.height - GUI.skin.window.padding.top);
-                editor.EditAxis(a, newAxis => { AssignAxis(axis, newAxis.Name); });
+                var editor = AxisEditorWindow.EditAxis(a, newAxis => { AssignAxis(axis, newAxis.Name); });
+                editor.Position = new Vector2(
+                    Mathf.Clamp(WindowRect.x + WindowRect.width,
+                            -320 + GUI.skin.window.padding.top, Screen.width - GUI.skin.window.padding.top),
+                    Mathf.Clamp(WindowRect.y, 0, Screen.height - GUI.skin.window.padding.top));
             }
 
             GUILayout.EndHorizontal();
@@ -157,7 +159,7 @@ namespace Lench.AdvancedControls.UI
                 string blockName;
                 try
                 {
-                    blockName = BlockHandlerController.GetID(c.BlockGUID);
+                    blockName = Block.GetID(c.BlockGUID);
                 }
                 catch
                 {

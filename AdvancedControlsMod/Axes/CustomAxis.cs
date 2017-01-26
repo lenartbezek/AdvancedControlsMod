@@ -23,6 +23,8 @@ axis_value";
 
         private bool _initialised;
 
+        private static PythonEnvironment _globalPython;
+
         /// <summary>
         /// Initialisation code is run once when the simulation is started.
         /// </summary>
@@ -97,13 +99,13 @@ axis_value";
         /// </summary>
         static CustomAxis()
         {
-            ACM.Instance.OnInitialisation += InitGlobalScope;
+            Block.OnInitialisation += InitGlobalScope;
         }
 
         private static void InitGlobalScope()
         {
             if (PythonEnvironment.Loaded)
-                PythonEnvironment.ScripterEnvironment = new PythonEnvironment();
+                _globalPython = new PythonEnvironment();
         }
 
         /// <summary>
@@ -170,9 +172,9 @@ axis_value";
 
             if (GlobalScope)
             {
-                if (PythonEnvironment.ScripterEnvironment == null)
+                if (_globalPython == null)
                     InitGlobalScope();
-                _python = PythonEnvironment.ScripterEnvironment;
+                _python = _globalPython;
             }
             else
             {

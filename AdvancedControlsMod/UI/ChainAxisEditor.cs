@@ -149,103 +149,57 @@ namespace Lench.AdvancedControls.UI
             GUILayout.BeginHorizontal();
 
             var buttonRect = GUILayoutUtility.GetRect(new GUIContent(" "), Elements.Buttons.Default, GUILayout.MaxWidth(leftGraphRect.width));
+            var selectAxis1Clicked = false;
             if (_axis.SubAxis1 == null)
-            {
-                if (GUI.Button(buttonRect, Strings.ButtonText_SelectInputAxis, Elements.Buttons.Disabled))
-                {
-                    Error = null;
-                    var callback = new SelectAxisDelegate(axis =>
-                    {
-                        try
-                        {
-                            _axis.SubAxis1 = axis.Name;
-                        }
-                        catch (InvalidOperationException e)
-                        {
-                            Error = Strings.ChainAxisEditor_Message_ChainCycleError + e.Message;
-                        }
-                    });
-                    if (_popup == null)
-                        _popup = AxisSelector.Open(callback, true);
-                    else
-                        _popup.Callback = callback;
-                    _popup.WindowRect.x = windowRect.x + buttonRect.x - 8;
-                    _popup.WindowRect.y = windowRect.y + buttonRect.y - 8;
-                }
-            }
+                selectAxis1Clicked |= GUI.Button(buttonRect, Strings.ButtonText_SelectInputAxis,
+                    Elements.Buttons.Disabled);
             else
-            {
-                if (GUI.Button(buttonRect, _axis.SubAxis1, axisA != null ? axisA.Saveable ? Elements.Buttons.Default : Elements.Buttons.Disabled : Elements.Buttons.Red))
-                {
-                    Error = null;
-                    var callback = new SelectAxisDelegate(axis =>
-                    {
-                        try
-                        {
-                            _axis.SubAxis1 = axis.Name;
-                        }
-                        catch (InvalidOperationException e)
-                        {
-                            Error = Strings.ChainAxisEditor_Message_ChainCycleError + e.Message;
-                        }
-                    });
-                    if (_popup == null)
-                        _popup = AxisSelector.Open(callback, true);
-                    else
-                        _popup.Callback = callback;
-                    _popup.WindowRect.x = windowRect.x + buttonRect.x - 8;
-                    _popup.WindowRect.y = windowRect.y + buttonRect.y - 8;
-                }
-            }
+                selectAxis1Clicked |= GUI.Button(buttonRect, _axis.SubAxis1,
+                    axisA != null
+                        ? axisA.Saveable ? Elements.Buttons.Default : Elements.Buttons.Disabled
+                        : Elements.Buttons.Red);
 
+            var selectAxis2Clicked = false;
             if (_axis.SubAxis2 == null)
             {
-                if (GUILayout.Button(Strings.ButtonText_SelectInputAxis, Elements.Buttons.Disabled, GUILayout.MaxWidth(rightGraphRect.width)))
-                {
-                    Error = null;
-                    var callback = new SelectAxisDelegate(axis =>
-                    {
-                        try
-                        {
-                            _axis.SubAxis2 = axis.Name;
-                        }
-                        catch (InvalidOperationException e)
-                        {
-                            Error = Strings.ChainAxisEditor_Message_ChainCycleError + e.Message;
-                        }
-                    });
-                    if (_popup == null)
-                        _popup = AxisSelector.Open(callback, true);
-                    else
-                        _popup.Callback = callback;
-                    _popup.WindowRect.x = windowRect.x + buttonRect.x - 8;
-                    _popup.WindowRect.y = windowRect.y + buttonRect.y - 8;
-                }
+                selectAxis2Clicked |= GUILayout.Button(Strings.ButtonText_SelectInputAxis, Elements.Buttons.Disabled,
+                    GUILayout.MaxWidth(rightGraphRect.width));
             }
             else
             {
-                if (GUILayout.Button(_axis.SubAxis2, axisB != null ? axisB.Saveable ? Elements.Buttons.Default : Elements.Buttons.Disabled : Elements.Buttons.Red,
-                    GUILayout.MaxWidth(rightGraphRect.width)))
+                selectAxis2Clicked |= GUILayout.Button(_axis.SubAxis2,
+                    axisB != null
+                        ? axisB.Saveable ? Elements.Buttons.Default : Elements.Buttons.Disabled
+                        : Elements.Buttons.Red,
+                    GUILayout.MaxWidth(rightGraphRect.width));
+            }
+
+            if (selectAxis1Clicked || selectAxis2Clicked)
+            {
+                Error = null;
+                Action<string> assignAxis = null;
+                if (selectAxis1Clicked) assignAxis = axis => { _axis.SubAxis1 = axis; };
+                if (selectAxis2Clicked) assignAxis = axis => { _axis.SubAxis2 = axis; };
+                Action<InputAxis> callback = axis =>
                 {
-                    Error = null;
-                    var callback = new SelectAxisDelegate(axis =>
+                    try
                     {
-                        try
-                        {
-                            _axis.SubAxis2 = axis.Name;
-                        }
-                        catch (InvalidOperationException e)
-                        {
-                            Error = Strings.ChainAxisEditor_Message_ChainCycleError + e.Message;
-                        }
-                    });
-                    if (_popup == null)
-                        _popup = AxisSelector.Open(callback, true);
-                    else
-                        _popup.Callback = callback;
-                    _popup.WindowRect.x = windowRect.x + buttonRect.x - 8;
-                    _popup.WindowRect.y = windowRect.y + buttonRect.y - 8;
+                        assignAxis.Invoke(axis.Name);
+                    }
+                    catch (InvalidOperationException e)
+                    {
+                        Error = Strings.ChainAxisEditor_Message_ChainCycleError + e.Message;
+                    }
+                };
+                if (_popup == null)
+                {
+                    _popup = AxisSelector.Open(callback);
+                    _popup.Position = new Vector2(
+                        windowRect.x + buttonRect.x - 8,
+                        windowRect.y + buttonRect.y - 8);
                 }
+                else
+                    _popup.OnAxisSelect = callback;
             }
 
             GUILayout.EndHorizontal();

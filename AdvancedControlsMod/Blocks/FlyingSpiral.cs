@@ -4,26 +4,34 @@ using UnityEngine;
 namespace Lench.AdvancedControls.Blocks
 {
     /// <summary>
-    /// Handler for the Flying Spiral block.
+    ///     Handler for the Flying Spiral block.
     /// </summary>
-    public class FlyingSpiral : BlockHandler
+    public class FlyingSpiral : Block
     {
-        private static readonly FieldInfo Flying = typeof(FlyingController).GetField("flying", BindingFlags.NonPublic | BindingFlags.Instance);
-        private static readonly FieldInfo SpeedToGo = typeof(FlyingController).GetField("speedToGo", BindingFlags.NonPublic | BindingFlags.Instance);
-        private static readonly FieldInfo LerpySpeed = typeof(FlyingController).GetField("lerpySpeed", BindingFlags.NonPublic | BindingFlags.Instance);
-        private static readonly FieldInfo ToggleFieldInfo = typeof(FlyingController).GetField("toggleMode", BindingFlags.NonPublic | BindingFlags.Instance);
-        private static readonly FieldInfo RigidbodyFieldInfo = typeof(FlyingController).GetField("myRigidbody", BindingFlags.NonPublic | BindingFlags.Instance);
+        private static readonly FieldInfo Flying = typeof(FlyingController).GetField("flying",
+            BindingFlags.NonPublic | BindingFlags.Instance);
+
+        private static readonly FieldInfo SpeedToGo = typeof(FlyingController).GetField("speedToGo",
+            BindingFlags.NonPublic | BindingFlags.Instance);
+
+        private static readonly FieldInfo LerpySpeed = typeof(FlyingController).GetField("lerpySpeed",
+            BindingFlags.NonPublic | BindingFlags.Instance);
+
+        private static readonly FieldInfo ToggleFieldInfo = typeof(FlyingController).GetField("toggleMode",
+            BindingFlags.NonPublic | BindingFlags.Instance);
+
+        private static readonly FieldInfo RigidbodyFieldInfo = typeof(FlyingController).GetField("myRigidbody",
+            BindingFlags.NonPublic | BindingFlags.Instance);
 
         private readonly FlyingController _fc;
-
-        private readonly MToggle _toggleMode;
+        private bool _lastFlyingFlag;
         private readonly Rigidbody _rigidbody;
 
         private bool _setFlyingFlag;
-        private bool _lastFlyingFlag;
+        private readonly MToggle _toggleMode;
 
         /// <summary>
-        /// Creates a Block handler.
+        ///     Creates a Block handler.
         /// </summary>
         /// <param name="bb">BlockBehaviour object.</param>
         public FlyingSpiral(BlockBehaviour bb) : base(bb)
@@ -34,23 +42,26 @@ namespace Lench.AdvancedControls.Blocks
         }
 
         /// <summary>
-        /// Invokes the block's action.
-        /// Throws ActionNotFoundException if the block does not posess such action.
+        ///     Invokes the block's action.
+        ///     Throws ActionNotFoundException if the block does not posess such action.
         /// </summary>
         /// <param name="actionName">Display name of the action.</param>
         public override void Action(string actionName)
         {
             actionName = actionName.ToUpper();
-            if (actionName == "SPIN")
+            switch (actionName)
             {
-                Spin();
-                return;
+                case "SPIN":
+                    Spin();
+                    return;
+                default:
+                    base.Action(actionName);
+                    return;
             }
-            throw new ActionNotFoundException("Block " + BlockName + " has no " + actionName + " action.");
         }
 
         /// <summary>
-        /// Spin the Flying Spiral.
+        ///     Spin the Flying Spiral.
         /// </summary>
         public void Spin()
         {
@@ -75,14 +86,14 @@ namespace Lench.AdvancedControls.Blocks
         }
 
         /// <summary>
-        /// Sets the speed and drag of the block to make it fly.
+        ///     Sets the speed and drag of the block to make it fly.
         /// </summary>
         protected override void Update()
         {
             if (_setFlyingFlag)
             {
                 if (_toggleMode.IsActive)
-                    Fly(!(bool)Flying.GetValue(_fc));
+                    Fly(!(bool) Flying.GetValue(_fc));
                 else
                     Fly(true);
                 _setFlyingFlag = false;
@@ -96,5 +107,4 @@ namespace Lench.AdvancedControls.Blocks
             }
         }
     }
-
 }

@@ -45,7 +45,7 @@ namespace Lench.AdvancedControls.Input
         public override bool Pressed => _pressed;
         public override bool Released => _released;
         public override float Value => _down ? 1 : 0;
-        public override string Name => _controller != null ? _controller.GetButtonName(Index) : Strings.Controller_ButtonName_UnknownButton;
+        public override string Name => _controller?.GetButtonName(Index) ?? Strings.Controller_ButtonName_UnknownButton;
         public override bool Connected => _controller != null && _controller.Connected;
 #pragma warning restore CS1591
 

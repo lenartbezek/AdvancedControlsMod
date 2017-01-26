@@ -1,7 +1,7 @@
-﻿using UnityEngine;
+﻿using System;
 using Lench.AdvancedControls.Input;
-using System;
 using Lench.AdvancedControls.UI;
+using UnityEngine;
 
 // ReSharper disable CompareOfFloatsByEqualityOperator
 
@@ -75,7 +75,7 @@ namespace Lench.AdvancedControls.Axes
         public KeyAxis(string name) : base(name)
         {
             Type = AxisType.Key;
-            Editor = new UI.KeyAxisEditor(this);
+            Editor = new KeyAxisEditor(this);
 
             PositiveBind = null;
             NegativeBind = null;
@@ -92,8 +92,8 @@ namespace Lench.AdvancedControls.Axes
         {
             get
             {
-                float p = PositiveBind != null ? PositiveBind.Value : 0;
-                float n = NegativeBind != null ? NegativeBind.Value * -1 : 0;
+                float p = PositiveBind?.Value ?? 0;
+                float n = NegativeBind?.Value * -1 ?? 0;
                 return p + n;
             }
         }
@@ -202,8 +202,8 @@ namespace Lench.AdvancedControls.Axes
             spaar.ModLoader.Configuration.SetFloat("axis-" + Name + "-momentum", Momentum);
             spaar.ModLoader.Configuration.SetBool("axis-" + Name + "-snap", Snap);
             spaar.ModLoader.Configuration.SetBool("axis-" + Name + "-raw", Raw);
-            spaar.ModLoader.Configuration.SetString("axis-" + Name + "-positive", PositiveBind != null ? PositiveBind.ID : "None");
-            spaar.ModLoader.Configuration.SetString("axis-" + Name + "-negative", NegativeBind != null ? NegativeBind.ID : "None");
+            spaar.ModLoader.Configuration.SetString("axis-" + Name + "-positive", PositiveBind?.ID ?? "None");
+            spaar.ModLoader.Configuration.SetString("axis-" + Name + "-negative", NegativeBind?.ID ?? "None");
         }
 
         internal override void Save(MachineInfo machineInfo)
@@ -214,8 +214,8 @@ namespace Lench.AdvancedControls.Axes
             machineInfo.MachineData.Write("axis-" + Name + "-momentum", Momentum);
             machineInfo.MachineData.Write("axis-" + Name + "-snap", Snap);
             machineInfo.MachineData.Write("axis-" + Name + "-raw", Raw);
-            machineInfo.MachineData.Write("axis-" + Name + "-positive", PositiveBind != null ? PositiveBind.ID : "None");
-            machineInfo.MachineData.Write("axis-" + Name + "-negative", NegativeBind != null ? NegativeBind.ID : "None");
+            machineInfo.MachineData.Write("axis-" + Name + "-positive", PositiveBind?.ID ?? "None");
+            machineInfo.MachineData.Write("axis-" + Name + "-negative", NegativeBind?.ID ?? "None");
         }
 
         internal override void Delete()

@@ -1,14 +1,14 @@
 ﻿namespace Lench.AdvancedControls.Blocks
 {
     /// <summary>
-    /// Handler for the Explosive Decoupler block.
+    ///     Handler for the Explosive Decoupler block.
     /// </summary>
-    public class Decoupler : BlockHandler
+    public class Decoupler : Block
     {
         private readonly ExplosiveBolt _eb;
 
         /// <summary>
-        /// Creates a Block handler.
+        ///     Creates a Block handler.
         /// </summary>
         /// <param name="bb">BlockBehaviour object.</param>
         public Decoupler(BlockBehaviour bb) : base(bb)
@@ -17,23 +17,35 @@
         }
 
         /// <summary>
-        /// Invokes the block's action.
-        /// Throws ActionNotFoundException if the block does not posess such action.
+        ///     Sets the decoupler explode power.
+        /// </summary>
+        public float ExplodePower
+        {
+            get { return _eb.explodePower; }
+            set { _eb.explodePower = value; }
+        }
+
+        /// <summary>
+        ///     Invokes the block's action.
+        ///     Throws ActionNotFoundException if the block does not posess such action.
         /// </summary>
         /// <param name="actionName">Display name of the action.</param>
         public override void Action(string actionName)
         {
             actionName = actionName.ToUpper();
-            if (actionName == "EXPLODE")
+            switch (actionName)
             {
-                Explode();
-                return;
+                case "EXPLODE":
+                    Explode();
+                    return;
+                default:
+                    base.Action(actionName);
+                    return;
             }
-            throw new ActionNotFoundException("Block " + BlockName + " has no " + actionName + " action.");
         }
 
         /// <summary>
-        /// Explode the decoupler.
+        ///     Explode the decoupler.
         /// </summary>
         public void Explode()
         {
@@ -45,15 +57,6 @@
             {
                 // Calling Explode imediatelly after simulation start will throw a NullReferenceException
             }
-        }
-
-        /// <summary>
-        /// Sets the decoupler explode power.
-        /// </summary>
-        public float ExplodePower
-        {
-            get { return _eb.explodePower; }
-            set { _eb.explodePower = value; }
         }
     }
 }
