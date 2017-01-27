@@ -1,4 +1,5 @@
-﻿using Lench.AdvancedControls.UI;
+﻿using Lench.AdvancedControls.Resources;
+using Lench.AdvancedControls.UI;
 using System;
 using System.Collections.Generic;
 using System.Linq;

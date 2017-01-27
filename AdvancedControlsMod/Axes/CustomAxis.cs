@@ -4,6 +4,7 @@ using System.Linq;
 using Lench.AdvancedControls.UI;
 using spaar.ModLoader;
 using UnityEngine;
+using Lench.AdvancedControls.Resources;
 
 // ReSharper disable PossibleNullReferenceException
 

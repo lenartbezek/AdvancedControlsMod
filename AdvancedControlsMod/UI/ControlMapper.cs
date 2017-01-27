@@ -5,6 +5,8 @@ using UnityEngine;
 using spaar.ModLoader.UI;
 using Lench.AdvancedControls.Controls;
 using Lench.AdvancedControls.Axes;
+using Lench.AdvancedControls.Resources;
+
 // ReSharper disable UnusedMember.Local
 // ReSharper disable SpecifyACultureInStringConversionExplicitly
 

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Lench.AdvancedControls.Axes;
 using Lench.AdvancedControls.UI;
+using Lench.AdvancedControls.Resources;
 
 // ReSharper disable RedundantArgumentDefaultValue
 

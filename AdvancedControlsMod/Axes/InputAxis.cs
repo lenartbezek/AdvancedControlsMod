@@ -1,4 +1,5 @@
 ﻿using System;
+using Lench.AdvancedControls.Resources;
 using Lench.AdvancedControls.UI;
 
 namespace Lench.AdvancedControls.Axes

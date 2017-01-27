@@ -1,6 +1,7 @@
 ﻿using Lench.AdvancedControls.Axes;
 using spaar.ModLoader.UI;
 using System;
+using Lench.AdvancedControls.Resources;
 using UnityEngine;
 
 // ReSharper disable UnusedMember.Local

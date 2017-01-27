@@ -5,6 +5,7 @@ using System.IO;
 using System.Net;
 using System;
 using System.Linq;
+using Lench.AdvancedControls.Resources;
 
 namespace Lench.AdvancedControls.UI
 {

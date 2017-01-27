@@ -2,6 +2,8 @@
 using spaar.ModLoader.UI;
 using Lench.AdvancedControls.Axes;
 using Lench.AdvancedControls.Input;
+using Lench.AdvancedControls.Resources;
+
 // ReSharper disable CompareOfFloatsByEqualityOperator
 
 namespace Lench.AdvancedControls.UI

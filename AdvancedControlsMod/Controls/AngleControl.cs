@@ -1,6 +1,7 @@
 ﻿using System;
 using UnityEngine;
 using Lench.AdvancedControls.Blocks;
+using Lench.AdvancedControls.Resources;
 using Lench.AdvancedControls.UI;
 
 // ReSharper disable VirtualMemberCallInConstructor

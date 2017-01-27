@@ -3,6 +3,7 @@ using UnityEngine;
 using spaar.ModLoader.UI;
 using Lench.AdvancedControls.Axes;
 using Lench.AdvancedControls.Input;
+using Lench.AdvancedControls.Resources;
 
 namespace Lench.AdvancedControls.UI
 {

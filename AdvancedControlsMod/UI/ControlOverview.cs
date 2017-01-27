@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Lench.AdvancedControls.Axes;
 using Lench.AdvancedControls.Controls;
+using Lench.AdvancedControls.Resources;
 using spaar.ModLoader.UI;
 using Steamworks;
 using UnityEngine;

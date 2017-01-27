@@ -1,5 +1,6 @@
 ﻿using System;
 using Lench.AdvancedControls.Input;
+using Lench.AdvancedControls.Resources;
 using Lench.AdvancedControls.UI;
 using UnityEngine;
 

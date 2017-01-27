@@ -4,6 +4,7 @@ using Lench.AdvancedControls.Controls;
 using Lench.AdvancedControls.Axes;
 using UnityEngine;
 using System.Reflection;
+using Lench.AdvancedControls.Resources;
 using Lench.AdvancedControls.UI;
 
 // ReSharper disable PossibleNullReferenceException

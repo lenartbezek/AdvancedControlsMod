@@ -1,6 +1,7 @@
 ﻿using Lench.AdvancedControls.Axes;
 using System;
 using System.Collections.Generic;
+using Lench.AdvancedControls.Resources;
 using Lench.AdvancedControls.UI;
 using UnityEngine;
 // ReSharper disable PossibleNullReferenceException

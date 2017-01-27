@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Lench.AdvancedControls.Resources;
 using Lench.AdvancedControls.UI;
 using UnityEngine;
 // ReSharper disable PossibleNullReferenceException
@@ -29,13 +30,13 @@ namespace Lench.AdvancedControls.Axes
                 var sub2 = AxisManager.Get(SubAxis2) as ChainAxis;
                 var error = false;
                 var errorMessage = Strings.ChainAxisEditor_Message_ChainCycleErrorDetail;
-                if (sub1 != null && sub1.CheckCycle(new List<string>() { Name }))
+                if (sub1 != null && sub1.CheckCycle(new List<string> { Name }))
                 {
                     error = true;
                     errorMessage += string.Format(Strings.ChainAxisEditor_Message_ChainCycleErrorEffect, SubAxis1);
                     SubAxis1 = null;
                 }
-                if (sub2 != null && sub2.CheckCycle(new List<string>() { Name }))
+                if (sub2 != null && sub2.CheckCycle(new List<string> { Name }))
                 {
                     error = true;
                     errorMessage += string.Format(Strings.ChainAxisEditor_Message_ChainCycleErrorEffect, SubAxis2);
@@ -61,8 +62,7 @@ namespace Lench.AdvancedControls.Axes
             set
             {
                 _subAxis1 = value;
-                var axis = AxisManager.Get(value) as ChainAxis;
-                if (axis != null && axis.CheckCycle(new List<string>()))
+                if (AxisManager.Get(value) is ChainAxis axis && axis.CheckCycle(new List<string>()))
                 {
                     _subAxis1 = null;
                     throw new InvalidOperationException(string.Format(Strings.ChainAxisEditor_Message_ChainCycleErrorDetail2, value));
@@ -84,8 +84,7 @@ namespace Lench.AdvancedControls.Axes
             set
             {
                 _subAxis2 = value;
-                var axis = AxisManager.Get(_subAxis2) as ChainAxis;
-                if (axis != null && axis.CheckCycle(new List<string>()))
+                if (AxisManager.Get(_subAxis2) is ChainAxis axis && axis.CheckCycle(new List<string>()))
                 {
                     _subAxis2 = null;
                     throw new InvalidOperationException(string.Format(Strings.ChainAxisEditor_Message_ChainCycleErrorDetail2, value));
