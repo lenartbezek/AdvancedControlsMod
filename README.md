@@ -17,3 +17,5 @@ When installed, the control mapper will pop up when you use the key mapping tool
 
 * Input axes take input from joystick, controller, mouse, keys or custom script and return a value in interval from -1 to 1. These are machine independent and device bound. They are meant to be configured per device and used across machines.
 * Input controls take the value from input axes and apply it to the block's function. Every control has it's own interval interval in which it applies values. Every control is bound to a machine block and is saved with the machine.
+
+![gif](http://i.imgur.com/79naVly.gif)
