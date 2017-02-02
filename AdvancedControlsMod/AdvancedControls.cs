@@ -6,7 +6,7 @@ using System.Collections.Generic;
 namespace Lench.AdvancedControls
 {
     /// <summary>
-    /// Function container exposed to Python script in AdvancedControls module.
+    /// Function container exposed to Python script.
     /// </summary>
     public static class AdvancedControls
     {

@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <root>
   <!-- 
     Microsoft ResX Schema 
@@ -317,11 +317,84 @@
   <data name="Console_Controller_InvalidCommand" xml:space="preserve">
     <value>指令无法识别。输入指令'controller'以获取所有可用的手柄调整指令。</value>
   </data>
+  <data name="Console_Controller_JoystickTag" xml:space="preserve">
+    <value>摇杆</value>
+  </data>
   <data name="Console_Controller_NoDevicesConnected" xml:space="preserve">
     <value>没有检测到设备</value>
   </data>
-  <data name="Console_Controller_JoystickTag" xml:space="preserve">
-    <value>摇杆</value>
+  <data name="ControllerAxisEditor_AxisX" xml:space="preserve">
+    <value>X</value>
+  </data>
+  <data name="ControllerAxisEditor_AxisY" xml:space="preserve">
+    <value>Y</value>
+  </data>
+  <data name="ControllerAxisEditor_ButtonText_UseAnotherController" xml:space="preserve">
+    <value>选择另一个手柄</value>
+  </data>
+  <data name="ControllerAxisEditor_DrawAxis_RequireSDL2Windows" xml:space="preserve">
+    <value>手柄需要 SDL2 库.
+点击下载以自动下载并安装.
+
+</value>
+  </data>
+  <data name="ControllerAxisEditor_Graph_DragToSetOffset" xml:space="preserve">
+    <value>拖动以设置偏移量</value>
+  </data>
+  <data name="ControllerAxisEditor_Graph_ResetOffset" xml:space="preserve">
+    <value>重置偏移量</value>
+  </data>
+  <data name="ControllerAxisEditor_HelpURL" xml:space="preserve">
+    <value>https://github.com/lench4991/AdvancedControlsMod/wiki/Controller-Axis</value>
+  </data>
+  <data name="ControllerAxisEditor_Message_AdditionalLibraryNeeded" xml:space="preserve">
+    <value>需要运行库支持</value>
+  </data>
+  <data name="ControllerAxisEditor_Message_AssociatedControllerNotConnected" xml:space="preserve">
+    <value>被关联的手柄未被连接。</value>
+  </data>
+  <data name="ControllerAxisEditor_Message_AssociatedControllerNotConnectedDetail" xml:space="preserve">
+    <value>The device this axis is bound to is not found.
+
+&lt;b&gt;Device GUID&lt;/b&gt;
+</value>
+  </data>
+  <data name="ControllerAxisEditor_Message_NoControllersConnected" xml:space="preserve">
+    <value>未检测到任何手柄。</value>
+  </data>
+  <data name="ControllerAxisEditor_Message_NoControllersConnectedDetail" xml:space="preserve">
+    <value>连接一个手柄或摇杆以使用该方程</value>
+  </data>
+  <data name="ControllerAxisEditor_Message_Platform" xml:space="preserve">
+    <value>平台/操作系统</value>
+  </data>
+  <data name="ControllerAxisEditor_Message_PlatformCorrect" xml:space="preserve">
+    <value>如果你使用的ACM对应的系统不是你正在使用的系统,
+请下载对应的版本.</value>
+  </data>
+  <data name="ControllerAxisEditor_Message_PlatformLinux" xml:space="preserve">
+    <value>你正在使用Linux操作系统的ACM.
+</value>
+  </data>
+  <data name="ControllerAxisEditor_Message_PlatformOSX" xml:space="preserve">
+    <value>你正在使用OS X操作系统的ACM.
+</value>
+  </data>
+  <data name="ControllerAxisEditor_Message_PlatformWindows" xml:space="preserve">
+    <value>你正在使用Windows操作系统的ACM.
+</value>
+  </data>
+  <data name="ControllerAxisEditor_Message_RequireSDL2Linux" xml:space="preserve">
+    <value>手柄需要 SDL2 库.
+运行下面的指令以安装.
+
+</value>
+  </data>
+  <data name="ControllerAxisEditor_Message_RequireSDL2OSX" xml:space="preserve">
+    <value>手柄需要 SDL2 库.
+下载链接在下.
+
+</value>
   </data>
   <data name="Controller_AxisName_Default" xml:space="preserve">
     <value>默认方程： {0}</value>
@@ -416,79 +489,6 @@
   <data name="Controller_JoystickConnected" xml:space="preserve">
     <value>摇杆已连接:</value>
   </data>
-  <data name="ControllerAxisEditor_AxisX" xml:space="preserve">
-    <value>X</value>
-  </data>
-  <data name="ControllerAxisEditor_AxisY" xml:space="preserve">
-    <value>Y</value>
-  </data>
-  <data name="ControllerAxisEditor_ButtonText_UseAnotherController" xml:space="preserve">
-    <value>选择另一个手柄</value>
-  </data>
-  <data name="ControllerAxisEditor_DrawAxis_RequireSDL2Windows" xml:space="preserve">
-    <value>手柄需要 SDL2 库.
-点击下载以自动下载并安装.
-
-</value>
-  </data>
-  <data name="ControllerAxisEditor_Graph_DragToSetOffset" xml:space="preserve">
-    <value>拖动以设置偏移量</value>
-  </data>
-  <data name="ControllerAxisEditor_Graph_ResetOffset" xml:space="preserve">
-    <value>重置偏移量</value>
-  </data>
-  <data name="ControllerAxisEditor_HelpURL" xml:space="preserve">
-    <value>https://github.com/lench4991/AdvancedControlsMod/wiki/Controller-Axis</value>
-  </data>
-  <data name="ControllerAxisEditor_Message_AdditionalLibraryNeeded" xml:space="preserve">
-    <value>需要运行库支持</value>
-  </data>
-  <data name="ControllerAxisEditor_Message_AssociatedControllerNotConnected" xml:space="preserve">
-    <value>被关联的手柄未被连接。</value>
-  </data>
-  <data name="ControllerAxisEditor_Message_AssociatedControllerNotConnectedDetail" xml:space="preserve">
-    <value>The device this axis is bound to is not found.
-
-&lt;b&gt;Device GUID&lt;/b&gt;
-</value>
-  </data>
-  <data name="ControllerAxisEditor_Message_NoControllersConnected" xml:space="preserve">
-    <value>未检测到任何手柄。</value>
-  </data>
-  <data name="ControllerAxisEditor_Message_NoControllersConnectedDetail" xml:space="preserve">
-    <value>连接一个手柄或摇杆以使用该方程</value>
-  </data>
-  <data name="ControllerAxisEditor_Message_Platform" xml:space="preserve">
-    <value>平台/操作系统</value>
-  </data>
-  <data name="ControllerAxisEditor_Message_PlatformCorrect" xml:space="preserve">
-    <value>如果你使用的ACM对应的系统不是你正在使用的系统,
-请下载对应的版本.</value>
-  </data>
-  <data name="ControllerAxisEditor_Message_PlatformLinux" xml:space="preserve">
-    <value>你正在使用Linux操作系统的ACM.
-</value>
-  </data>
-  <data name="ControllerAxisEditor_Message_PlatformOSX" xml:space="preserve">
-    <value>你正在使用OS X操作系统的ACM.
-</value>
-  </data>
-  <data name="ControllerAxisEditor_Message_PlatformWindows" xml:space="preserve">
-    <value>你正在使用Windows操作系统的ACM.
-</value>
-  </data>
-  <data name="ControllerAxisEditor_Message_RequireSDL2Linux" xml:space="preserve">
-    <value>手柄需要 SDL2 库.
-运行下面的指令以安装.
-
-</value>
-  </data>
-  <data name="ControllerAxisEditor_Message_RequireSDL2OSX" xml:space="preserve">
-    <value>手柄需要 SDL2 库.
-下载链接在下.
-
-</value>
-  </data>
   <data name="ControlMapper_ButtonText_Overview" xml:space="preserve">
     <value>总览</value>
   </data>
@@ -576,9 +576,6 @@ instead of number.</value>
   <data name="HatButton_Direction_UP" xml:space="preserve">
     <value>UP</value>
   </data>
-  <data name="KeyAxis_ParseButtonID_ErrorWhileLoadingAButton" xml:space="preserve">
-    <value>在加载按键时发生错误:</value>
-  </data>
   <data name="KeyAxisEditor_HelpURL" xml:space="preserve">
     <value>https://github.com/lench4991/AdvancedControlsMod/wiki/Key-Axes</value>
   </data>
@@ -588,6 +585,12 @@ instead of number.</value>
   <data name="KeyAxisEditor_Message_DeviceDisconnectedDetail" xml:space="preserve">
     <value>
 '{0}' 无法被检测到</value>
+  </data>
+  <data name="KeyAxisEditor_NoBind" xml:space="preserve">
+    <value>无</value>
+  </data>
+  <data name="KeyAxis_ParseButtonID_ErrorWhileLoadingAButton" xml:space="preserve">
+    <value>在加载按键时发生错误:</value>
   </data>
   <data name="Label_Center" xml:space="preserve">
     <value>中心</value>
@@ -655,6 +658,9 @@ instead of number.</value>
   <data name="Log_EnvVarSet" xml:space="preserve">
     <value>环境变量 SDL_GAMECONTROLLERCONFIG 未被设置.</value>
   </data>
+  <data name="Log_ErrorDownloadingFile" xml:space="preserve">
+    <value>在下载文件时发生错误:</value>
+  </data>
   <data name="Log_GameControllerDBDownloaded" xml:space="preserve">
     <value>手柄DB更新已下载。</value>
   </data>
@@ -712,6 +718,9 @@ instead of number.</value>
   <data name="SliderName_Rotation" xml:space="preserve">
     <value>旋转量</value>
   </data>
+  <data name="SliderName_RotationSpeed" xml:space="preserve">
+    <value>转速</value>
+  </data>
   <data name="SliderName_Speed" xml:space="preserve">
     <value>速度</value>
   </data>
@@ -739,22 +748,13 @@ instead of number.</value>
   <data name="Updater_WindowTitle" xml:space="preserve">
     <value>高级操控Mod</value>
   </data>
+  <data name="VectorControl_AxisHorizontal" xml:space="preserve">
+    <value>水平轴</value>
+  </data>
   <data name="VectorControl_AxisPower" xml:space="preserve">
     <value>POWER</value>
   </data>
   <data name="VectorControl_AxisVertical" xml:space="preserve">
     <value>垂直轴</value>
-  </data>
-  <data name="VectorControl_AxisHorizontal" xml:space="preserve">
-    <value>水平轴</value>
-  </data>
-  <data name="SliderName_RotationSpeed" xml:space="preserve">
-    <value>转速</value>
-  </data>
-  <data name="Log_ErrorDownloadingFile" xml:space="preserve">
-    <value>在下载文件时发生错误:</value>
-  </data>
-  <data name="KeyAxisEditor_NoBind" xml:space="preserve">
-    <value>无</value>
   </data>
 </root>

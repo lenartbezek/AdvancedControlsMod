@@ -2,7 +2,6 @@
 using UnityEngine;
 using Lench.AdvancedControls.Axes;
 using Lench.AdvancedControls.Resources;
-using Lench.AdvancedControls.UI;
 using spaar.ModLoader;
 // ReSharper disable SpecifyACultureInStringConversionExplicitly
 // ReSharper disable VirtualMemberCallInConstructor

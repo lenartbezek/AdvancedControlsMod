@@ -200,7 +200,9 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Strings.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <EmbeddedResource Include="Resources\Strings.zh-CN.resx" />
+    <EmbeddedResource Include="Resources\Strings.zh-CN.resx">
+      <LastGenOutput>Strings.zh-CN.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

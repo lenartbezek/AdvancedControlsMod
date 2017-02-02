@@ -86,7 +86,7 @@ namespace Lench.AdvancedControls
                 {
                     InitializeIDs();
                 }
-
+                
                 OnUpdate?.Invoke();
             }
 
@@ -283,7 +283,7 @@ namespace Lench.AdvancedControls
                 Types.Add(blockType, blockHandler);
         }
 
-        internal static void OnSimulationToggle(bool active)
+        internal static void HandleSimulationToggle(bool active)
         {
             if (active)
             {

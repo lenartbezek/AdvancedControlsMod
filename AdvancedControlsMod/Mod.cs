@@ -53,6 +53,7 @@ namespace Lench.AdvancedControls
         public override void OnLoad()
         {
             Game.OnSimulationToggle += SimulationToggle;
+            Game.OnSimulationToggle += Block.HandleSimulationToggle;
             XmlSaver.OnSave += MachineData.Save;
             XmlLoader.OnLoad += MachineData.Load;
 
@@ -60,10 +61,11 @@ namespace Lench.AdvancedControls
 
             ImportPythonModules();
 
-            Controller = new GameObject("AdvancedControlsMod") {hideFlags = HideFlags.DontSave};
+            Controller = new GameObject("AdvancedControlsMod");
             Controller.AddComponent<ModController>();
             DeviceManager.InitSdl();
             ControlMapper = Controller.AddComponent<ControlMapper>();
+            Object.DontDestroyOnLoad(Controller);
 
             Commands.RegisterCommand("controller", ControllerCommand, Strings.Console_Controller_AllAvailable);
             Commands.RegisterCommand("acm", ConfigurationCommand, Strings.Console_Acm_AllAvailable);
@@ -122,7 +124,6 @@ namespace Lench.AdvancedControls
         private static void SimulationToggle(bool simulating)
         {
             if (simulating) Functions.ResetTimer();
-            Block.Destroy();
         }
 
         private static void EnableToggle(bool active)

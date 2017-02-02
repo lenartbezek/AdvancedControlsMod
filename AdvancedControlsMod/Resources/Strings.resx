@@ -117,8 +117,16 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="AxisEditorWindow_ButtonText_ChainAxis" xml:space="preserve">
+    <value>Chain Axis</value>
+    <comment>Button text in Create new axis window.</comment>
+  </data>
   <data name="AxisEditorWindow_ButtonText_ControllerAxis" xml:space="preserve">
     <value>Controller Axis</value>
+    <comment>Button text in Create new axis window.</comment>
+  </data>
+  <data name="AxisEditorWindow_ButtonText_CustomAxis" xml:space="preserve">
+    <value>Custom Axis</value>
     <comment>Button text in Create new axis window.</comment>
   </data>
   <data name="AxisEditorWindow_ButtonText_KeyAxis" xml:space="preserve">
@@ -129,32 +137,17 @@
     <value>Mouse Axis</value>
     <comment>Button text in Create new axis window.</comment>
   </data>
-  <data name="AxisEditorWindow_ButtonText_ChainAxis" xml:space="preserve">
-    <value>Chain Axis</value>
-    <comment>Button text in Create new axis window.</comment>
-  </data>
-  <data name="AxisEditorWindow_ButtonText_CustomAxis" xml:space="preserve">
-    <value>Custom Axis</value>
-    <comment>Button text in Create new axis window.</comment>
-  </data>
-  <data name="AxisEditorWindow_WindowTitle_CreateNewCustomAxis" xml:space="preserve">
-    <value>Create new custom axis</value>
-  </data>
-  <data name="AxisEditorWindow_WindowTitle_CreateNewChainAxis" xml:space="preserve">
-    <value>Create new chain axis</value>
-  </data>
-  <data name="AxisEditorWindow_WindowTitle_CreateNewMouseAxis" xml:space="preserve">
-    <value>Create new mouse axis</value>
-  </data>
-  <data name="AxisEditorWindow_WindowTitle_CreateNewKeyAxis" xml:space="preserve">
-    <value>Create new key axis</value>
-  </data>
-  <data name="AxisEditorWindow_WindowTitle_CreateNewControllerAxis" xml:space="preserve">
-    <value>Create new controller axis</value>
+  <data name="AxisEditorWindow_DefaultAxisName_NewChainAxis" xml:space="preserve">
+    <value>new chain axis</value>
+    <comment>Default axis name for chain axis.</comment>
   </data>
   <data name="AxisEditorWindow_DefaultAxisName_NewControllerAxis" xml:space="preserve">
     <value>new controller axis</value>
     <comment>Default axis name for controller axis.</comment>
+  </data>
+  <data name="AxisEditorWindow_DefaultAxisName_NewCustomAxis" xml:space="preserve">
+    <value>new custom axis</value>
+    <comment>Default axis name for custom axis.</comment>
   </data>
   <data name="AxisEditorWindow_DefaultAxisName_NewKeyAxis" xml:space="preserve">
     <value>new key axis</value>
@@ -164,258 +157,43 @@
     <value>new mouse axis</value>
     <comment>Default axis name for mouse axis.</comment>
   </data>
-  <data name="AxisEditorWindow_DefaultAxisName_NewChainAxis" xml:space="preserve">
-    <value>new chain axis</value>
-    <comment>Default axis name for chain axis.</comment>
-  </data>
-  <data name="AxisEditorWindow_DefaultAxisName_NewCustomAxis" xml:space="preserve">
-    <value>new custom axis</value>
-    <comment>Default axis name for custom axis.</comment>
-  </data>
-  <data name="ButtonText_Save" xml:space="preserve">
-    <value>Save</value>
-  </data>
-  <data name="ButtonText_Close" xml:space="preserve">
-    <value>×</value>
-  </data>
-  <data name="ButtonText_Help" xml:space="preserve">
-    <value>?</value>
-  </data>
   <data name="AxisEditorWindow_WindowTitle_CreateNewAxis" xml:space="preserve">
     <value>Create new axis</value>
+  </data>
+  <data name="AxisEditorWindow_WindowTitle_CreateNewChainAxis" xml:space="preserve">
+    <value>Create new chain axis</value>
+  </data>
+  <data name="AxisEditorWindow_WindowTitle_CreateNewControllerAxis" xml:space="preserve">
+    <value>Create new controller axis</value>
+  </data>
+  <data name="AxisEditorWindow_WindowTitle_CreateNewCustomAxis" xml:space="preserve">
+    <value>Create new custom axis</value>
+  </data>
+  <data name="AxisEditorWindow_WindowTitle_CreateNewKeyAxis" xml:space="preserve">
+    <value>Create new key axis</value>
+  </data>
+  <data name="AxisEditorWindow_WindowTitle_CreateNewMouseAxis" xml:space="preserve">
+    <value>Create new mouse axis</value>
   </data>
   <data name="AxisEditorWindow_WindowTitle_Edit" xml:space="preserve">
     <value>Edit {0}</value>
     <comment>0 - name of the axis</comment>
   </data>
-  <data name="ButtonText_EditAxis" xml:space="preserve">
-    <value>✎</value>
+  <data name="AxisSelector_Label_LocallySavedAxes" xml:space="preserve">
+    <value>LOCALLY SAVED AXES</value>
   </data>
   <data name="AxisSelector_Label_MachineEmbeddedAxes" xml:space="preserve">
     <value>MACHINE EMBEDDED AXES</value>
   </data>
-  <data name="AxisSelector_Label_LocallySavedAxes" xml:space="preserve">
-    <value>LOCALLY SAVED AXES</value>
-  </data>
   <data name="AxisSelector_WindowTitle_SelectAxis" xml:space="preserve">
     <value>Select axis</value>
   </data>
-  <data name="ChainAxisEditor_Message_ChainCycleError" xml:space="preserve">
-    <value>Chain cycle error</value>
-    <comment>Error title in chain axis editor.</comment>
-  </data>
-  <data name="ButtonText_SelectInputAxis" xml:space="preserve">
-    <value>Select Input Axis</value>
-  </data>
-  <data name="ButtonText_ArrowNext" xml:space="preserve">
-    <value>&gt;</value>
-  </data>
-  <data name="ButtonText_ArrowPrevious" xml:space="preserve">
-    <value>&lt;</value>
-  </data>
-  <data name="ChainAxisEditor_HelpURL" xml:space="preserve">
-    <value>https://github.com/lench4991/AdvancedControlsMod/wiki/Chain-Axis</value>
-  </data>
-  <data name="DownloadButtonText_Download" xml:space="preserve">
-    <value>Download</value>
-  </data>
-  <data name="ControllerAxisEditor_Message_AdditionalLibraryNeeded" xml:space="preserve">
-    <value>Additional library needed</value>
-  </data>
-  <data name="ControllerAxisEditor_DrawAxis_RequireSDL2Windows" xml:space="preserve">
-    <value>Controller axis requires SDL2 library to work.
-Press download to install it automatically.
-
-</value>
-  </data>
-  <data name="ControllerAxisEditor_Message_Platform" xml:space="preserve">
-    <value>Platform</value>
-  </data>
-  <data name="ControllerAxisEditor_Message_PlatformWindows" xml:space="preserve">
-    <value>You are using Windows version of ACM.
-</value>
-  </data>
-  <data name="ControllerAxisEditor_Message_PlatformCorrect" xml:space="preserve">
-    <value>If you are using some other operating system,
-download the correct version of the mod.</value>
-  </data>
-  <data name="ControllerAxisEditor_Message_RequireSDL2Linux" xml:space="preserve">
-    <value>Controller axis requires SDL2 library to work.
-Run the command below to install it.
-
-</value>
-  </data>
-  <data name="ControllerAxisEditor_Message_PlatformLinux" xml:space="preserve">
-    <value>You are using Linux version of ACM.
-</value>
-  </data>
-  <data name="ControllerAxisEditor_Message_RequireSDL2OSX" xml:space="preserve">
-    <value>Controller axis requires SDL2 library to work.
-Download it at the link below.
-
-</value>
-  </data>
-  <data name="ControllerAxisEditor_Message_PlatformOSX" xml:space="preserve">
-    <value>You are using OSX version of ACM.
-</value>
-  </data>
-  <data name="ControllerAxisEditor_Message_NoControllersConnected" xml:space="preserve">
-    <value>No controllers connected.</value>
-  </data>
-  <data name="ControllerAxisEditor_Message_NoControllersConnectedDetail" xml:space="preserve">
-    <value>Connect a joystick or controller to use this axis.</value>
-  </data>
-  <data name="ControllerAxisEditor_Message_AssociatedControllerNotConnected" xml:space="preserve">
-    <value>Associated controller not connected.</value>
-  </data>
-  <data name="ControllerAxisEditor_Message_AssociatedControllerNotConnectedDetail" xml:space="preserve">
-    <value>The device this axis is bound to is not found.
-
-&lt;b&gt;Device GUID&lt;/b&gt;
-</value>
-  </data>
-  <data name="ControllerAxisEditor_ButtonText_UseAnotherController" xml:space="preserve">
-    <value>Use another controller</value>
-  </data>
-  <data name="ControllerAxisEditor_Graph_DragToSetOffset" xml:space="preserve">
-    <value>DRAG TO SET OFFSET</value>
-  </data>
-  <data name="ControllerAxisEditor_Graph_ResetOffset" xml:space="preserve">
-    <value>RESET OFFSET</value>
-  </data>
-  <data name="Label_Sensitivity" xml:space="preserve">
-    <value>Sensitivity</value>
-  </data>
-  <data name="Label_Curvaure" xml:space="preserve">
-    <value>Curvaure</value>
-  </data>
-  <data name="Label_Deadzone" xml:space="preserve">
-    <value>Deadzone</value>
-  </data>
-  <data name="Label_Invert" xml:space="preserve">
-    <value>Invert</value>
-  </data>
-  <data name="Label_Smooth" xml:space="preserve">
-    <value>Smooth</value>
-  </data>
-  <data name="ControllerAxisEditor_HelpURL" xml:space="preserve">
-    <value>https://github.com/lench4991/AdvancedControlsMod/wiki/Controller-Axis</value>
-  </data>
-  <data name="ControlMapper_WindowTitle_AdvancedControls" xml:space="preserve">
-    <value>Advanced Controls</value>
-  </data>
-  <data name="ControlMapper_Message_NoAvailableControls" xml:space="preserve">
-    <value>This block has no available controls.</value>
-  </data>
-  <data name="ControlMapper_ButtonText_Overview" xml:space="preserve">
-    <value>OVERVIEW</value>
-  </data>
-  <data name="ControlOverview_Message_IntroNote" xml:space="preserve">
-    <value>To use this machine as intended,
-make sure all axes report no problems.
-
-&lt;b&gt;{0}&lt;/b&gt; uses these input axes:</value>
-    <comment>0 - machine name</comment>
-  </data>
-  <data name="ControlOverview_Label_NoControls" xml:space="preserve">
-    <value>&lt;b&gt;{0}&lt;/b&gt; uses no advanced controls.</value>
-    <comment>0 - machine name</comment>
-  </data>
-  <data name="ControlOverview_WindowTitle" xml:space="preserve">
-    <value>Overview</value>
-  </data>
-  <data name="ControlOverview_List_Entry" xml:space="preserve">
-    <value>&lt;b&gt;{0}&lt;/b&gt; for {1}</value>
-    <comment>0 - control name, 1 - block name</comment>
-  </data>
-  <data name="ControlOverview_HelpURL" xml:space="preserve">
-    <value>https://github.com/lench4991/AdvancedControlsMod/wiki/Sharing</value>
-  </data>
-  <data name="CustomAxisEditor_Message_MissingIronPython" xml:space="preserve">
-    <value>&lt;b&gt;Additional library needed&lt;/b&gt;
-Custom axis runs on IronPython engine.
-Press download to install it automatically.</value>
-  </data>
-  <data name="CustomAxisEditor_ButtonText_Stop" xml:space="preserve">
-    <value>STOP</value>
-  </data>
-  <data name="CustomAxisEditor_ButtonText_Start" xml:space="preserve">
-    <value>START</value>
-  </data>
-  <data name="Label_InitialisationCode" xml:space="preserve">
-    <value>Initialisation code</value>
-  </data>
-  <data name="Label_UpdateCode" xml:space="preserve">
-    <value>Update code</value>
-  </data>
-  <data name="Label_RunInGlobalScope" xml:space="preserve">
-    <value>Run in global scope</value>
-  </data>
-  <data name="Label_LinkedAxes" xml:space="preserve">
-    <value>Linked axes</value>
-  </data>
-  <data name="CustomAxisEditor_Message_PythonError" xml:space="preserve">
-    <value>Python error</value>
-  </data>
-  <data name="DownloadButtonText_Complete" xml:space="preserve">
-    <value>Complete</value>
-  </data>
-  <data name="Log_ErrorDownloadingFile" xml:space="preserve">
-    <value>Error downloading file:</value>
-  </data>
-  <data name="CustomAxisEditor_InstallIronPython_FileDownloaded" xml:space="preserve">
-    <value>File downloaded: </value>
-  </data>
-  <data name="DownloadButtonText_Error" xml:space="preserve">
-    <value>Error</value>
-  </data>
-  <data name="KeyAxisEditor_NoBind" xml:space="preserve">
-    <value>None</value>
-  </data>
-  <data name="Label_Gravity" xml:space="preserve">
-    <value>Gravity</value>
-  </data>
-  <data name="Label_Momentum" xml:space="preserve">
-    <value>Momentum</value>
-  </data>
-  <data name="Label_Snap" xml:space="preserve">
-    <value>Snap</value>
-  </data>
-  <data name="Label_Raw" xml:space="preserve">
-    <value>Raw</value>
-  </data>
-  <data name="KeyAxisEditor_Message_DeviceDisconnected" xml:space="preserve">
-    <value>Device disconnected</value>
-  </data>
-  <data name="KeyAxisEditor_Message_DeviceDisconnectedDetail" xml:space="preserve">
-    <value>
-'{0}' is not connected.</value>
-    <comment>0 - bind name</comment>
-  </data>
-  <data name="KeyAxisEditor_HelpURL" xml:space="preserve">
-    <value>https://github.com/lench4991/AdvancedControlsMod/wiki/Key-Axes</value>
-  </data>
-  <data name="Label_Center" xml:space="preserve">
-    <value>Center</value>
-  </data>
-  <data name="Label_Range" xml:space="preserve">
-    <value>Range</value>
-  </data>
-  <data name="MouseAxisEditor_HelpURL" xml:space="preserve">
-    <value>https://github.com/lench4991/AdvancedControlsMod/wiki/Mouse-axis</value>
-  </data>
-  <data name="ControllerAxisEditor_AxisX" xml:space="preserve">
-    <value>X</value>
-  </data>
-  <data name="ControllerAxisEditor_AxisY" xml:space="preserve">
-    <value>Y</value>
-  </data>
-  <data name="AxisStatus_Ok" xml:space="preserve">
-    <value>OK</value>
+  <data name="AxisStatus_Error" xml:space="preserve">
+    <value>ERROR</value>
     <comment>Axis status label displayed in overview and control mapper.</comment>
   </data>
-  <data name="AxisStatus_NotFound" xml:space="preserve">
-    <value>NOT FOUND</value>
+  <data name="AxisStatus_NoLink" xml:space="preserve">
+    <value>NO LINK</value>
     <comment>Axis status label displayed in overview and control mapper.</comment>
   </data>
   <data name="AxisStatus_NotAvailable" xml:space="preserve">
@@ -426,25 +204,49 @@ Press download to install it automatically.</value>
     <value>NOT CONNECTED</value>
     <comment>Axis status label displayed in overview and control mapper.</comment>
   </data>
+  <data name="AxisStatus_NotFound" xml:space="preserve">
+    <value>NOT FOUND</value>
+    <comment>Axis status label displayed in overview and control mapper.</comment>
+  </data>
   <data name="AxisStatus_NotRunning" xml:space="preserve">
     <value>NOT RUNNING</value>
     <comment>Axis status label displayed in overview and control mapper.</comment>
   </data>
-  <data name="AxisStatus_Error" xml:space="preserve">
-    <value>ERROR</value>
-    <comment>Axis status label displayed in overview and control mapper.</comment>
-  </data>
-  <data name="AxisStatus_NoLink" xml:space="preserve">
-    <value>NO LINK</value>
+  <data name="AxisStatus_Ok" xml:space="preserve">
+    <value>OK</value>
     <comment>Axis status label displayed in overview and control mapper.</comment>
   </data>
   <data name="AxisStatus_Unknown" xml:space="preserve">
     <value>UNKNOWN</value>
     <comment>Axis status label displayed in overview and control mapper.</comment>
   </data>
-  <data name="ChainAxisEditor_Message_ChainCycleErrorEffect" xml:space="preserve">
-    <value>'{0}' has been unlinked. </value>
-    <comment>0 - axis name</comment>
+  <data name="ButtonText_ArrowNext" xml:space="preserve">
+    <value>&gt;</value>
+  </data>
+  <data name="ButtonText_ArrowPrevious" xml:space="preserve">
+    <value>&lt;</value>
+  </data>
+  <data name="ButtonText_Close" xml:space="preserve">
+    <value>×</value>
+  </data>
+  <data name="ButtonText_EditAxis" xml:space="preserve">
+    <value>✎</value>
+  </data>
+  <data name="ButtonText_Help" xml:space="preserve">
+    <value>?</value>
+  </data>
+  <data name="ButtonText_Save" xml:space="preserve">
+    <value>Save</value>
+  </data>
+  <data name="ButtonText_SelectInputAxis" xml:space="preserve">
+    <value>Select Input Axis</value>
+  </data>
+  <data name="ChainAxisEditor_HelpURL" xml:space="preserve">
+    <value>https://github.com/lench4991/AdvancedControlsMod/wiki/Chain-Axis</value>
+  </data>
+  <data name="ChainAxisEditor_Message_ChainCycleError" xml:space="preserve">
+    <value>Chain cycle error</value>
+    <comment>Error title in chain axis editor.</comment>
   </data>
   <data name="ChainAxisEditor_Message_ChainCycleErrorDetail" xml:space="preserve">
     <value>Renaming this axis formed a cycle in the chain.
@@ -456,17 +258,12 @@ Press download to install it automatically.</value>
 Linking it here would create a cycle.</value>
     <comment>0 - axis name</comment>
   </data>
-  <data name="ChainMethod_Sum" xml:space="preserve">
-    <value>Sum</value>
-  </data>
-  <data name="ChainMethod_Subtract" xml:space="preserve">
-    <value>Subtract</value>
+  <data name="ChainAxisEditor_Message_ChainCycleErrorEffect" xml:space="preserve">
+    <value>'{0}' has been unlinked. </value>
+    <comment>0 - axis name</comment>
   </data>
   <data name="ChainMethod_Average" xml:space="preserve">
     <value>Average</value>
-  </data>
-  <data name="ChainMethod_Multiply" xml:space="preserve">
-    <value>Multiply</value>
   </data>
   <data name="ChainMethod_Maximum" xml:space="preserve">
     <value>Maximum</value>
@@ -474,244 +271,57 @@ Linking it here would create a cycle.</value>
   <data name="ChainMethod_Minimum" xml:space="preserve">
     <value>Minimum</value>
   </data>
-  <data name="CustomAxisEditor_Message_UpdateCodeDoesNotReturnAValue" xml:space="preserve">
-    <value>Update code does not return a value.</value>
+  <data name="ChainMethod_Multiply" xml:space="preserve">
+    <value>Multiply</value>
   </data>
-  <data name="CustomAxisEditor_Message_UpdateCodeReturnsWrongType" xml:space="preserve">
-    <value>Update code returns {0}
-instead of number.</value>
-    <comment>0 - return type</comment>
+  <data name="ChainMethod_Subtract" xml:space="preserve">
+    <value>Subtract</value>
   </data>
-  <data name="KeyAxis_ParseButtonID_ErrorWhileLoadingAButton" xml:space="preserve">
-    <value>Error while loading a button:</value>
-  </data>
-  <data name="ControlName_Angle" xml:space="preserve">
-    <value>ANGLE</value>
-  </data>
-  <data name="ControlName_Default" xml:space="preserve">
-    <value>CONTROL</value>
-    <comment>default control name</comment>
-  </data>
-  <data name="ControlName_Input" xml:space="preserve">
-    <value>INPUT</value>
-  </data>
-  <data name="ControlName_Position" xml:space="preserve">
-    <value>POSITION</value>
-  </data>
-  <data name="VectorControl_AxisHorizontal" xml:space="preserve">
-    <value>HORIZONTAL</value>
-  </data>
-  <data name="VectorControl_AxisVertical" xml:space="preserve">
-    <value>VERTICAL</value>
-  </data>
-  <data name="VectorControl_AxisPower" xml:space="preserve">
-    <value>POWER</value>
-  </data>
-  <data name="SliderName_Speed" xml:space="preserve">
-    <value>SPEED</value>
-  </data>
-  <data name="SliderName_RotationSpeed" xml:space="preserve">
-    <value>ROTATION SPEED</value>
-  </data>
-  <data name="SliderName_Strength" xml:space="preserve">
-    <value>STRENGTH</value>
-  </data>
-  <data name="SliderName_Spring" xml:space="preserve">
-    <value>SPRING</value>
-  </data>
-  <data name="SliderName_Range" xml:space="preserve">
-    <value>RANGE</value>
-  </data>
-  <data name="SliderName_FlyingSpeed" xml:space="preserve">
-    <value>FLYING SPEED</value>
-  </data>
-  <data name="SliderName_Power" xml:space="preserve">
-    <value>POWER</value>
-  </data>
-  <data name="SliderName_Thrust" xml:space="preserve">
-    <value>THRUST</value>
-  </data>
-  <data name="SliderName_FlightDuration" xml:space="preserve">
-    <value>FLIGHT DURATION</value>
-  </data>
-  <data name="SliderName_ExplosiveCharge" xml:space="preserve">
-    <value>EXPLOSIVE CHARGE</value>
-  </data>
-  <data name="SliderName_Buoyancy" xml:space="preserve">
-    <value>BUOYANCY</value>
-  </data>
-  <data name="SliderName_StringLength" xml:space="preserve">
-    <value>STRING LENGTH</value>
-  </data>
-  <data name="SliderName_Mass" xml:space="preserve">
-    <value>MASS</value>
-  </data>
-  <data name="SliderName_Distance" xml:space="preserve">
-    <value>DISTANCE</value>
-  </data>
-  <data name="SliderName_Height" xml:space="preserve">
-    <value>HEIGHT</value>
-  </data>
-  <data name="SliderName_Rotation" xml:space="preserve">
-    <value>ROTATION</value>
-  </data>
-  <data name="Controller_AxisName_UnknownAxis" xml:space="preserve">
-    <value>Unknown axis</value>
-  </data>
-  <data name="Controller_BallName_UnknownBall" xml:space="preserve">
-    <value>Unknown ball</value>
-  </data>
-  <data name="Controller_HatName_UnknownHat" xml:space="preserve">
-    <value>Unknown hat</value>
-  </data>
-  <data name="Controller_ButtonName_UnknownButton" xml:space="preserve">
-    <value>Unknown button</value>
-  </data>
-  <data name="Controller_GameControllerConnected" xml:space="preserve">
-    <value>Game controller connected:</value>
-  </data>
-  <data name="Controller_JoystickConnected" xml:space="preserve">
-    <value>Joystick connected:</value>
-  </data>
-  <data name="Controller_GUID" xml:space="preserve">
-    <value>GUID:</value>
-  </data>
-  <data name="Controller_AxisName_LeftX" xml:space="preserve">
-    <value>Left X</value>
-  </data>
-  <data name="Controller_AxisName_LeftY" xml:space="preserve">
-    <value>Left Y</value>
-  </data>
-  <data name="Controller_AxisName_RightX" xml:space="preserve">
-    <value>Right X</value>
-  </data>
-  <data name="Controller_AxisName_RightY" xml:space="preserve">
-    <value>Right Y</value>
-  </data>
-  <data name="Controller_AxisName_LeftTrigger" xml:space="preserve">
-    <value>Left Trigger</value>
-  </data>
-  <data name="Controller_AxisName_RightTrigger" xml:space="preserve">
-    <value>Right Trigger</value>
-  </data>
-  <data name="Controller_AxisName_Default" xml:space="preserve">
-    <value>Axis {0}</value>
-    <comment>0 - axis number</comment>
-  </data>
-  <data name="Controller_ButtonName_Default" xml:space="preserve">
-    <value>Button {0}</value>
-  </data>
-  <data name="Controller_ButtonName_RightShoulder" xml:space="preserve">
-    <value>Right Shoulder</value>
-  </data>
-  <data name="Controller_ButtonName_LeftShoulder" xml:space="preserve">
-    <value>Left Shoulder</value>
-  </data>
-  <data name="Controller_ButtonName_RightStick" xml:space="preserve">
-    <value>Right Stick</value>
-  </data>
-  <data name="Controller_ButtonName_LeftStick" xml:space="preserve">
-    <value>Left Stick</value>
-  </data>
-  <data name="Controller_ButtonName_StartButton" xml:space="preserve">
-    <value>Start Button</value>
-  </data>
-  <data name="Controller_ButtonName_GuideButton" xml:space="preserve">
-    <value>Guide Button</value>
-  </data>
-  <data name="Controller_ButtonName_BackButton" xml:space="preserve">
-    <value>Back Button</value>
-  </data>
-  <data name="Controller_ButtonName_YButton" xml:space="preserve">
-    <value>Y Button</value>
-  </data>
-  <data name="Controller_ButtonName_XButton" xml:space="preserve">
-    <value>X Button</value>
-  </data>
-  <data name="Controller_ButtonName_BButton" xml:space="preserve">
-    <value>B Button</value>
-  </data>
-  <data name="Controller_ButtonName_AButton" xml:space="preserve">
-    <value>A Button</value>
-  </data>
-  <data name="Controller_AxisName_XAxis" xml:space="preserve">
-    <value>X Axis</value>
-  </data>
-  <data name="Controller_AxisName_YAxis" xml:space="preserve">
-    <value>Y Axis</value>
-  </data>
-  <data name="Controller_BallName_Default" xml:space="preserve">
-    <value>Ball {0}</value>
-    <comment>0 - ball number</comment>
-  </data>
-  <data name="Controller_HatName_DPAD" xml:space="preserve">
-    <value>DPAD</value>
-  </data>
-  <data name="Controller_HatName_Default" xml:space="preserve">
-    <value>Hat {0}</value>
-    <comment>0 - hat number</comment>
-  </data>
-  <data name="DownloadButtonText_Restart" xml:space="preserve">
-    <value>Please restart Besiege</value>
-  </data>
-  <data name="Log_SuccessDownloadingFile" xml:space="preserve">
-    <value>File downloaded:</value>
-  </data>
-  <data name="Log_UnableToConnect" xml:space="preserve">
-    <value>Unable to connect.</value>
-  </data>
-  <data name="Log_GameControllerDBIsUpToDate" xml:space="preserve">
-    <value>Game Controller DB is up to date.</value>
-  </data>
-  <data name="Log_GameControllerDBUpdateSuccessfull" xml:space="preserve">
-    <value>Game Controller DB update successfull.</value>
-  </data>
-  <data name="Log_GameControllerDBDownloaded" xml:space="preserve">
-    <value>Game Controller DB downloaded.</value>
-  </data>
-  <data name="Log_EnvVarSet" xml:space="preserve">
-    <value>SDL_GAMECONTROLLERCONFIG environment variable not set.</value>
-  </data>
-  <data name="Log_EnvVarRead" xml:space="preserve">
-    <value>Successfully read SDL_GAMECONTROLLERCONFIG environment variable.</value>
-  </data>
-  <data name="Log_EnvVarError" xml:space="preserve">
-    <value>SDL_GAMECONTROLLERCONFIG environment variable not retrieved.</value>
-  </data>
-  <data name="HatButton_Direction_UP" xml:space="preserve">
-    <value>UP</value>
-  </data>
-  <data name="HatButton_Direction_DOWN" xml:space="preserve">
-    <value>DOWN</value>
-  </data>
-  <data name="HatButton_Direction_LEFT" xml:space="preserve">
-    <value>LEFT</value>
-  </data>
-  <data name="HatButton_Direction_RIGHT" xml:space="preserve">
-    <value>RIGHT</value>
-  </data>
-  <data name="Log_ControlLoadingError" xml:space="preserve">
-    <value>Error loading machine's controls:</value>
-  </data>
-  <data name="Log_ControlSavingError" xml:space="preserve">
-    <value>Error saving machine's controls.</value>
-  </data>
-  <data name="Log_VersionWarning" xml:space="preserve">
-    <value>{0} was saved with mod version {1}.
-	It may not be compatible with some newer features.</value>
-    <comment>0 - machine name, 1 - saved version</comment>
-  </data>
-  <data name="Console_Controller_AllAvailable" xml:space="preserve">
-    <value>Enter 'controller' for all available controller commands.</value>
+  <data name="ChainMethod_Sum" xml:space="preserve">
+    <value>Sum</value>
   </data>
   <data name="Console_Acm_AllAvailable" xml:space="preserve">
     <value>Enter 'acm' for all available configuration commands.</value>
   </data>
-  <data name="Console_Controller_NoDevicesConnected" xml:space="preserve">
-    <value>No devices connected.</value>
+  <data name="Console_Acm_AllAvailableList" xml:space="preserve">
+    <value>Available commands:
+  acm modupdate check  	 Checks for mod update.
+  acm modupdate enable 	 Enables update checker.
+  acm modupdate disable	 Disables update checker.
+  acm dbupdate check   	 Checks for controller database update.
+  acm dbupdate enable  	 Enables automatic controller database updates.
+  acm dbupdate disable 	 Disables automatic controller database updates.
+</value>
   </data>
-  <data name="Console_Controller_InvalidCommand" xml:space="preserve">
-    <value>Invalid command. Enter 'controller' for all available commands.</value>
+  <data name="Console_Acm_CheckingForControllerDBUpdates" xml:space="preserve">
+    <value>Checking for controller DB updates ...</value>
+  </data>
+  <data name="Console_Acm_CheckingForModUpdates" xml:space="preserve">
+    <value>Checking for mod updates ...</value>
+  </data>
+  <data name="Console_Acm_ControllerDBUpdateCheckerDisabled" xml:space="preserve">
+    <value>Controller DB update checker disabled.</value>
+  </data>
+  <data name="Console_Acm_ControllerDBUpdateCheckerEnabled" xml:space="preserve">
+    <value>Controller DB update checker enabled.</value>
+  </data>
+  <data name="Console_Acm_InvalidCommand" xml:space="preserve">
+    <value>Invalid command. Enter 'acm' for all available commands.</value>
+  </data>
+  <data name="Console_Acm_ModUpdateCheckerDisabled" xml:space="preserve">
+    <value>Mod update checker disabled.</value>
+  </data>
+  <data name="Console_Acm_ModUpdateCheckerEnabled" xml:space="preserve">
+    <value>Mod update checker enabled.</value>
+  </data>
+  <data name="Console_Acm_UpdateInvalidArgument" xml:space="preserve">
+    <value>Invalid argument [check/enable/disable]. Enter 'acm' for all available commands.</value>
+  </data>
+  <data name="Console_Acm_UpdateMissingArgument" xml:space="preserve">
+    <value>Missing argument [check/enable/disable]. Enter 'acm' for all available commands.</value>
+  </data>
+  <data name="Console_Controller_AllAvailable" xml:space="preserve">
+    <value>Enter 'controller' for all available controller commands.</value>
   </data>
   <data name="Console_Controller_AllAvailableList" xml:space="preserve">
     <value>Available commands:
@@ -726,71 +336,461 @@ instead of number.</value>
   <data name="Console_Controller_ControllerTag" xml:space="preserve">
     <value>Controller</value>
   </data>
-  <data name="Console_Controller_JoystickTag" xml:space="preserve">
-    <value>Joystick</value>
-  </data>
   <data name="Console_Controller_GUID" xml:space="preserve">
     <value>GUID: </value>
   </data>
-  <data name="Console_Acm_CheckingForModUpdates" xml:space="preserve">
-    <value>Checking for mod updates ...</value>
+  <data name="Console_Controller_InvalidCommand" xml:space="preserve">
+    <value>Invalid command. Enter 'controller' for all available commands.</value>
   </data>
-  <data name="Console_Acm_ModUpdateCheckerEnabled" xml:space="preserve">
-    <value>Mod update checker enabled.</value>
+  <data name="Console_Controller_JoystickTag" xml:space="preserve">
+    <value>Joystick</value>
   </data>
-  <data name="Console_Acm_ModUpdateCheckerDisabled" xml:space="preserve">
-    <value>Mod update checker disabled.</value>
+  <data name="Console_Controller_NoDevicesConnected" xml:space="preserve">
+    <value>No devices connected.</value>
   </data>
-  <data name="Console_Acm_UpdateInvalidArgument" xml:space="preserve">
-    <value>Invalid argument [check/enable/disable]. Enter 'acm' for all available commands.</value>
+  <data name="ControllerAxisEditor_AxisX" xml:space="preserve">
+    <value>X</value>
   </data>
-  <data name="Console_Acm_UpdateMissingArgument" xml:space="preserve">
-    <value>Missing argument [check/enable/disable]. Enter 'acm' for all available commands.</value>
+  <data name="ControllerAxisEditor_AxisY" xml:space="preserve">
+    <value>Y</value>
   </data>
-  <data name="Console_Acm_CheckingForControllerDBUpdates" xml:space="preserve">
-    <value>Checking for controller DB updates ...</value>
+  <data name="ControllerAxisEditor_ButtonText_UseAnotherController" xml:space="preserve">
+    <value>Use another controller</value>
   </data>
-  <data name="Console_Acm_ControllerDBUpdateCheckerEnabled" xml:space="preserve">
-    <value>Controller DB update checker enabled.</value>
-  </data>
-  <data name="Console_Acm_ControllerDBUpdateCheckerDisabled" xml:space="preserve">
-    <value>Controller DB update checker disabled.</value>
-  </data>
-  <data name="Console_Acm_InvalidCommand" xml:space="preserve">
-    <value>Invalid command. Enter 'acm' for all available commands.</value>
-  </data>
-  <data name="Console_Acm_AllAvailableList" xml:space="preserve">
-    <value>Available commands:
-  acm modupdate check  	 Checks for mod update.
-  acm modupdate enable 	 Enables update checker.
-  acm modupdate disable	 Disables update checker.
-  acm dbupdate check   	 Checks for controller database update.
-  acm dbupdate enable  	 Enables automatic controller database updates.
-  acm dbupdate disable 	 Disables automatic controller database updates.
+  <data name="ControllerAxisEditor_DrawAxis_RequireSDL2Windows" xml:space="preserve">
+    <value>Controller axis requires SDL2 library to work.
+Press download to install it automatically.
+
 </value>
   </data>
-  <data name="Updater_SpiderlingForumLink" xml:space="preserve">
-    <value>Spiderling forum page</value>
+  <data name="ControllerAxisEditor_Graph_DragToSetOffset" xml:space="preserve">
+    <value>DRAG TO SET OFFSET</value>
   </data>
-  <data name="Updater_GithubReleasePageLink" xml:space="preserve">
-    <value>GitHub release page</value>
+  <data name="ControllerAxisEditor_Graph_ResetOffset" xml:space="preserve">
+    <value>RESET OFFSET</value>
   </data>
-  <data name="Updater_WindowTitle" xml:space="preserve">
-    <value>Advanced Controls Mod</value>
+  <data name="ControllerAxisEditor_HelpURL" xml:space="preserve">
+    <value>https://github.com/lench4991/AdvancedControlsMod/wiki/Controller-Axis</value>
   </data>
-  <data name="Updater_NewUpdateAvailable" xml:space="preserve">
-    <value>New update available</value>
+  <data name="ControllerAxisEditor_Message_AdditionalLibraryNeeded" xml:space="preserve">
+    <value>Additional library needed</value>
   </data>
-  <data name="Log_UpdateAvailable" xml:space="preserve">
-    <value>Update available:</value>
+  <data name="ControllerAxisEditor_Message_AssociatedControllerNotConnected" xml:space="preserve">
+    <value>Associated controller not connected.</value>
   </data>
-  <data name="Log_ModIsUpToDate" xml:space="preserve">
-    <value>Mod is up to date.</value>
+  <data name="ControllerAxisEditor_Message_AssociatedControllerNotConnectedDetail" xml:space="preserve">
+    <value>The device this axis is bound to is not found.
+
+&lt;b&gt;Device GUID&lt;/b&gt;
+</value>
+  </data>
+  <data name="ControllerAxisEditor_Message_NoControllersConnected" xml:space="preserve">
+    <value>No controllers connected.</value>
+  </data>
+  <data name="ControllerAxisEditor_Message_NoControllersConnectedDetail" xml:space="preserve">
+    <value>Connect a joystick or controller to use this axis.</value>
+  </data>
+  <data name="ControllerAxisEditor_Message_Platform" xml:space="preserve">
+    <value>Platform</value>
+  </data>
+  <data name="ControllerAxisEditor_Message_PlatformCorrect" xml:space="preserve">
+    <value>If you are using some other operating system,
+download the correct version of the mod.</value>
+  </data>
+  <data name="ControllerAxisEditor_Message_PlatformLinux" xml:space="preserve">
+    <value>You are using Linux version of ACM.
+</value>
+  </data>
+  <data name="ControllerAxisEditor_Message_PlatformOSX" xml:space="preserve">
+    <value>You are using OSX version of ACM.
+</value>
+  </data>
+  <data name="ControllerAxisEditor_Message_PlatformWindows" xml:space="preserve">
+    <value>You are using Windows version of ACM.
+</value>
+  </data>
+  <data name="ControllerAxisEditor_Message_RequireSDL2Linux" xml:space="preserve">
+    <value>Controller axis requires SDL2 library to work.
+Run the command below to install it.
+
+</value>
+  </data>
+  <data name="ControllerAxisEditor_Message_RequireSDL2OSX" xml:space="preserve">
+    <value>Controller axis requires SDL2 library to work.
+Download it at the link below.
+
+</value>
+  </data>
+  <data name="Controller_AxisName_Default" xml:space="preserve">
+    <value>Axis {0}</value>
+    <comment>0 - axis number</comment>
+  </data>
+  <data name="Controller_AxisName_LeftTrigger" xml:space="preserve">
+    <value>Left Trigger</value>
+  </data>
+  <data name="Controller_AxisName_LeftX" xml:space="preserve">
+    <value>Left X</value>
+  </data>
+  <data name="Controller_AxisName_LeftY" xml:space="preserve">
+    <value>Left Y</value>
+  </data>
+  <data name="Controller_AxisName_RightTrigger" xml:space="preserve">
+    <value>Right Trigger</value>
+  </data>
+  <data name="Controller_AxisName_RightX" xml:space="preserve">
+    <value>Right X</value>
+  </data>
+  <data name="Controller_AxisName_RightY" xml:space="preserve">
+    <value>Right Y</value>
+  </data>
+  <data name="Controller_AxisName_UnknownAxis" xml:space="preserve">
+    <value>Unknown axis</value>
+  </data>
+  <data name="Controller_AxisName_XAxis" xml:space="preserve">
+    <value>X Axis</value>
+  </data>
+  <data name="Controller_AxisName_YAxis" xml:space="preserve">
+    <value>Y Axis</value>
+  </data>
+  <data name="Controller_BallName_Default" xml:space="preserve">
+    <value>Ball {0}</value>
+    <comment>0 - ball number</comment>
+  </data>
+  <data name="Controller_BallName_UnknownBall" xml:space="preserve">
+    <value>Unknown ball</value>
+  </data>
+  <data name="Controller_ButtonName_AButton" xml:space="preserve">
+    <value>A Button</value>
+  </data>
+  <data name="Controller_ButtonName_BackButton" xml:space="preserve">
+    <value>Back Button</value>
+  </data>
+  <data name="Controller_ButtonName_BButton" xml:space="preserve">
+    <value>B Button</value>
+  </data>
+  <data name="Controller_ButtonName_Default" xml:space="preserve">
+    <value>Button {0}</value>
+  </data>
+  <data name="Controller_ButtonName_GuideButton" xml:space="preserve">
+    <value>Guide Button</value>
+  </data>
+  <data name="Controller_ButtonName_LeftShoulder" xml:space="preserve">
+    <value>Left Shoulder</value>
+  </data>
+  <data name="Controller_ButtonName_LeftStick" xml:space="preserve">
+    <value>Left Stick</value>
+  </data>
+  <data name="Controller_ButtonName_RightShoulder" xml:space="preserve">
+    <value>Right Shoulder</value>
+  </data>
+  <data name="Controller_ButtonName_RightStick" xml:space="preserve">
+    <value>Right Stick</value>
+  </data>
+  <data name="Controller_ButtonName_StartButton" xml:space="preserve">
+    <value>Start Button</value>
+  </data>
+  <data name="Controller_ButtonName_UnknownButton" xml:space="preserve">
+    <value>Unknown button</value>
+  </data>
+  <data name="Controller_ButtonName_XButton" xml:space="preserve">
+    <value>X Button</value>
+  </data>
+  <data name="Controller_ButtonName_YButton" xml:space="preserve">
+    <value>Y Button</value>
+  </data>
+  <data name="Controller_GameControllerConnected" xml:space="preserve">
+    <value>Game controller connected:</value>
+  </data>
+  <data name="Controller_GUID" xml:space="preserve">
+    <value>GUID:</value>
+  </data>
+  <data name="Controller_HatName_Default" xml:space="preserve">
+    <value>Hat {0}</value>
+    <comment>0 - hat number</comment>
+  </data>
+  <data name="Controller_HatName_DPAD" xml:space="preserve">
+    <value>DPAD</value>
+  </data>
+  <data name="Controller_HatName_UnknownHat" xml:space="preserve">
+    <value>Unknown hat</value>
+  </data>
+  <data name="Controller_JoystickConnected" xml:space="preserve">
+    <value>Joystick connected:</value>
+  </data>
+  <data name="ControlMapper_ButtonText_Overview" xml:space="preserve">
+    <value>OVERVIEW</value>
+  </data>
+  <data name="ControlMapper_Message_NoAvailableControls" xml:space="preserve">
+    <value>This block has no available controls.</value>
+  </data>
+  <data name="ControlMapper_WindowTitle_AdvancedControls" xml:space="preserve">
+    <value>Advanced Controls</value>
+  </data>
+  <data name="ControlName_Angle" xml:space="preserve">
+    <value>ANGLE</value>
+  </data>
+  <data name="ControlName_Default" xml:space="preserve">
+    <value>CONTROL</value>
+    <comment>default control name</comment>
+  </data>
+  <data name="ControlName_Input" xml:space="preserve">
+    <value>INPUT</value>
+  </data>
+  <data name="ControlName_Position" xml:space="preserve">
+    <value>POSITION</value>
+  </data>
+  <data name="ControlOverview_HelpURL" xml:space="preserve">
+    <value>https://github.com/lench4991/AdvancedControlsMod/wiki/Sharing</value>
+  </data>
+  <data name="ControlOverview_Label_NoControls" xml:space="preserve">
+    <value>&lt;b&gt;{0}&lt;/b&gt; uses no advanced controls.</value>
+    <comment>0 - machine name</comment>
+  </data>
+  <data name="ControlOverview_List_Entry" xml:space="preserve">
+    <value>&lt;b&gt;{0}&lt;/b&gt; for {1}</value>
+    <comment>0 - control name, 1 - block name</comment>
+  </data>
+  <data name="ControlOverview_Message_IntroNote" xml:space="preserve">
+    <value>To use this machine as intended,
+make sure all axes report no problems.
+
+&lt;b&gt;{0}&lt;/b&gt; uses these input axes:</value>
+    <comment>0 - machine name</comment>
+  </data>
+  <data name="ControlOverview_WindowTitle" xml:space="preserve">
+    <value>Overview</value>
+  </data>
+  <data name="CustomAxisEditor_ButtonText_Start" xml:space="preserve">
+    <value>START</value>
+  </data>
+  <data name="CustomAxisEditor_ButtonText_Stop" xml:space="preserve">
+    <value>STOP</value>
+  </data>
+  <data name="CustomAxisEditor_InstallIronPython_FileDownloaded" xml:space="preserve">
+    <value>File downloaded: </value>
+  </data>
+  <data name="CustomAxisEditor_Message_MissingIronPython" xml:space="preserve">
+    <value>&lt;b&gt;Additional library needed&lt;/b&gt;
+Custom axis runs on IronPython engine.
+Press download to install it automatically.</value>
+  </data>
+  <data name="CustomAxisEditor_Message_PythonError" xml:space="preserve">
+    <value>Python error</value>
+  </data>
+  <data name="CustomAxisEditor_Message_UpdateCodeDoesNotReturnAValue" xml:space="preserve">
+    <value>Update code does not return a value.</value>
+  </data>
+  <data name="CustomAxisEditor_Message_UpdateCodeReturnsWrongType" xml:space="preserve">
+    <value>Update code returns {0}
+instead of number.</value>
+    <comment>0 - return type</comment>
+  </data>
+  <data name="DownloadButtonText_Complete" xml:space="preserve">
+    <value>Complete</value>
+  </data>
+  <data name="DownloadButtonText_Download" xml:space="preserve">
+    <value>Download</value>
+  </data>
+  <data name="DownloadButtonText_Error" xml:space="preserve">
+    <value>Error</value>
+  </data>
+  <data name="DownloadButtonText_Restart" xml:space="preserve">
+    <value>Please restart Besiege</value>
+  </data>
+  <data name="HatButton_Direction_DOWN" xml:space="preserve">
+    <value>DOWN</value>
+  </data>
+  <data name="HatButton_Direction_LEFT" xml:space="preserve">
+    <value>LEFT</value>
+  </data>
+  <data name="HatButton_Direction_RIGHT" xml:space="preserve">
+    <value>RIGHT</value>
+  </data>
+  <data name="HatButton_Direction_UP" xml:space="preserve">
+    <value>UP</value>
+  </data>
+  <data name="KeyAxisEditor_HelpURL" xml:space="preserve">
+    <value>https://github.com/lench4991/AdvancedControlsMod/wiki/Key-Axes</value>
+  </data>
+  <data name="KeyAxisEditor_Message_DeviceDisconnected" xml:space="preserve">
+    <value>Device disconnected</value>
+  </data>
+  <data name="KeyAxisEditor_Message_DeviceDisconnectedDetail" xml:space="preserve">
+    <value>
+'{0}' is not connected.</value>
+    <comment>0 - bind name</comment>
+  </data>
+  <data name="KeyAxisEditor_NoBind" xml:space="preserve">
+    <value>None</value>
+  </data>
+  <data name="KeyAxis_ParseButtonID_ErrorWhileLoadingAButton" xml:space="preserve">
+    <value>Error while loading a button:</value>
+  </data>
+  <data name="Label_Center" xml:space="preserve">
+    <value>Center</value>
+  </data>
+  <data name="Label_Curvaure" xml:space="preserve">
+    <value>Curvaure</value>
+  </data>
+  <data name="Label_Deadzone" xml:space="preserve">
+    <value>Deadzone</value>
+  </data>
+  <data name="Label_Gravity" xml:space="preserve">
+    <value>Gravity</value>
+  </data>
+  <data name="Label_InitialisationCode" xml:space="preserve">
+    <value>Initialisation code</value>
+  </data>
+  <data name="Label_Invert" xml:space="preserve">
+    <value>Invert</value>
+  </data>
+  <data name="Label_LinkedAxes" xml:space="preserve">
+    <value>Linked axes</value>
+  </data>
+  <data name="Label_Momentum" xml:space="preserve">
+    <value>Momentum</value>
+  </data>
+  <data name="Label_Range" xml:space="preserve">
+    <value>Range</value>
+  </data>
+  <data name="Label_Raw" xml:space="preserve">
+    <value>Raw</value>
+  </data>
+  <data name="Label_RunInGlobalScope" xml:space="preserve">
+    <value>Run in global scope</value>
+  </data>
+  <data name="Label_Sensitivity" xml:space="preserve">
+    <value>Sensitivity</value>
+  </data>
+  <data name="Label_Smooth" xml:space="preserve">
+    <value>Smooth</value>
+  </data>
+  <data name="Label_Snap" xml:space="preserve">
+    <value>Snap</value>
+  </data>
+  <data name="Label_UpdateCode" xml:space="preserve">
+    <value>Update code</value>
   </data>
   <data name="Log_AxisLoadingError" xml:space="preserve">
     <value>Error loading saved axes:</value>
   </data>
   <data name="Log_AxisSavingError" xml:space="preserve">
     <value>Error saving axes:</value>
+  </data>
+  <data name="Log_ControlLoadingError" xml:space="preserve">
+    <value>Error loading machine's controls:</value>
+  </data>
+  <data name="Log_ControlSavingError" xml:space="preserve">
+    <value>Error saving machine's controls.</value>
+  </data>
+  <data name="Log_EnvVarError" xml:space="preserve">
+    <value>SDL_GAMECONTROLLERCONFIG environment variable not retrieved.</value>
+  </data>
+  <data name="Log_EnvVarRead" xml:space="preserve">
+    <value>Successfully read SDL_GAMECONTROLLERCONFIG environment variable.</value>
+  </data>
+  <data name="Log_EnvVarSet" xml:space="preserve">
+    <value>SDL_GAMECONTROLLERCONFIG environment variable not set.</value>
+  </data>
+  <data name="Log_ErrorDownloadingFile" xml:space="preserve">
+    <value>Error downloading file:</value>
+  </data>
+  <data name="Log_GameControllerDBDownloaded" xml:space="preserve">
+    <value>Game Controller DB downloaded.</value>
+  </data>
+  <data name="Log_GameControllerDBIsUpToDate" xml:space="preserve">
+    <value>Game Controller DB is up to date.</value>
+  </data>
+  <data name="Log_GameControllerDBUpdateSuccessfull" xml:space="preserve">
+    <value>Game Controller DB update successfull.</value>
+  </data>
+  <data name="Log_ModIsUpToDate" xml:space="preserve">
+    <value>Mod is up to date.</value>
+  </data>
+  <data name="Log_SuccessDownloadingFile" xml:space="preserve">
+    <value>File downloaded:</value>
+  </data>
+  <data name="Log_UnableToConnect" xml:space="preserve">
+    <value>Unable to connect.</value>
+  </data>
+  <data name="Log_UpdateAvailable" xml:space="preserve">
+    <value>Update available:</value>
+  </data>
+  <data name="Log_VersionWarning" xml:space="preserve">
+    <value>{0} was saved with mod version {1}.
+	It may not be compatible with some newer features.</value>
+    <comment>0 - machine name, 1 - saved version</comment>
+  </data>
+  <data name="MouseAxisEditor_HelpURL" xml:space="preserve">
+    <value>https://github.com/lench4991/AdvancedControlsMod/wiki/Mouse-axis</value>
+  </data>
+  <data name="SliderName_Buoyancy" xml:space="preserve">
+    <value>BUOYANCY</value>
+  </data>
+  <data name="SliderName_Distance" xml:space="preserve">
+    <value>DISTANCE</value>
+  </data>
+  <data name="SliderName_ExplosiveCharge" xml:space="preserve">
+    <value>EXPLOSIVE CHARGE</value>
+  </data>
+  <data name="SliderName_FlightDuration" xml:space="preserve">
+    <value>FLIGHT DURATION</value>
+  </data>
+  <data name="SliderName_FlyingSpeed" xml:space="preserve">
+    <value>FLYING SPEED</value>
+  </data>
+  <data name="SliderName_Height" xml:space="preserve">
+    <value>HEIGHT</value>
+  </data>
+  <data name="SliderName_Mass" xml:space="preserve">
+    <value>MASS</value>
+  </data>
+  <data name="SliderName_Power" xml:space="preserve">
+    <value>POWER</value>
+  </data>
+  <data name="SliderName_Range" xml:space="preserve">
+    <value>RANGE</value>
+  </data>
+  <data name="SliderName_Rotation" xml:space="preserve">
+    <value>ROTATION</value>
+  </data>
+  <data name="SliderName_RotationSpeed" xml:space="preserve">
+    <value>ROTATION SPEED</value>
+  </data>
+  <data name="SliderName_Speed" xml:space="preserve">
+    <value>SPEED</value>
+  </data>
+  <data name="SliderName_Spring" xml:space="preserve">
+    <value>SPRING</value>
+  </data>
+  <data name="SliderName_Strength" xml:space="preserve">
+    <value>STRENGTH</value>
+  </data>
+  <data name="SliderName_StringLength" xml:space="preserve">
+    <value>STRING LENGTH</value>
+  </data>
+  <data name="SliderName_Thrust" xml:space="preserve">
+    <value>THRUST</value>
+  </data>
+  <data name="Updater_GithubReleasePageLink" xml:space="preserve">
+    <value>GitHub release page</value>
+  </data>
+  <data name="Updater_NewUpdateAvailable" xml:space="preserve">
+    <value>New update available</value>
+  </data>
+  <data name="Updater_SpiderlingForumLink" xml:space="preserve">
+    <value>Spiderling forum page</value>
+  </data>
+  <data name="Updater_WindowTitle" xml:space="preserve">
+    <value>Advanced Controls Mod</value>
+  </data>
+  <data name="VectorControl_AxisHorizontal" xml:space="preserve">
+    <value>HORIZONTAL</value>
+  </data>
+  <data name="VectorControl_AxisPower" xml:space="preserve">
+    <value>POWER</value>
+  </data>
+  <data name="VectorControl_AxisVertical" xml:space="preserve">
+    <value>VERTICAL</value>
   </data>
 </root>

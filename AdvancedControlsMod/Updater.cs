@@ -5,7 +5,6 @@ using UnityEngine;
 using spaar.ModLoader.UI;
 using System.Collections.Generic;
 using Lench.AdvancedControls.Resources;
-using Lench.AdvancedControls.UI;
 
 // ReSharper disable UnusedMember.Local
 
