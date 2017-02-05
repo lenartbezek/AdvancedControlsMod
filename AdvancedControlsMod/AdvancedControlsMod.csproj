@@ -175,11 +175,7 @@
     <Compile Include="Input\LPUtf8StrMarshaler.cs" />
     <Compile Include="Input\SDL2.cs" />
     <Compile Include="PythonEnvironment.cs" />
-    <Compile Include="Resources\Strings.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Strings.resx</DependentUpon>
-    </Compile>
+    <Compile Include="Resources\Strings.cs" />
     <Compile Include="TrackedCollider.cs" />
     <Compile Include="UI\ControlOverview.cs" />
     <Compile Include="UI\AxisEditorWindow.cs" />
@@ -196,15 +192,9 @@
     <Compile Include="Updater.cs" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Resources\Strings.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Strings.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Resources\Strings.zh-CN.resx">
-      <LastGenOutput>Strings.zh-CN.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\en-US.json" />
+    <EmbeddedResource Include="Resources\zh-CN.json" />
   </ItemGroup>
-  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>copy /Y "$(TargetPath)" "%25BESIEGE_LOCATION%25\Besiege_Data\Mods\$(TargetName).dll"</PostBuildEvent>

@@ -17,6 +17,7 @@ namespace Lench.AdvancedControls
                 Mod.ModEnabled = spaar.ModLoader.Configuration.GetBool("acm-enabled", true);
                 Mod.ModUpdaterEnabled = spaar.ModLoader.Configuration.GetBool("mod-updater-enabled", true);
                 Mod.DbUpdaterEnabled = spaar.ModLoader.Configuration.GetBool("db-updater-enabled", true);
+                Strings.Language = spaar.ModLoader.Configuration.GetString("language", "en-US");
 
                 // read input axes
                 int count = spaar.ModLoader.Configuration.GetInt("number-of-axes", 0);
@@ -69,6 +70,7 @@ namespace Lench.AdvancedControls
                 spaar.ModLoader.Configuration.SetBool("acm-enabled", Mod.ModEnabled);
                 spaar.ModLoader.Configuration.SetBool("mod-updater-enabled", Mod.ModUpdaterEnabled);
                 spaar.ModLoader.Configuration.SetBool("db-updater-enabled", Mod.DbUpdaterEnabled);
+                spaar.ModLoader.Configuration.SetString("language", Strings.Language);
 
                 int count = spaar.ModLoader.Configuration.GetInt("number-of-axes", 0);
                 log += "Attempting to clear " + count + " existing axes.\n";

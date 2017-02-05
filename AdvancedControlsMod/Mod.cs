@@ -52,6 +52,9 @@ namespace Lench.AdvancedControls
         /// </summary>
         public override void OnLoad()
         {
+            // Default language
+            Strings.Language = "en-US";
+
             Game.OnSimulationToggle += SimulationToggle;
             Game.OnSimulationToggle += Block.HandleSimulationToggle;
             XmlSaver.OnSave += MachineData.Save;
@@ -66,6 +69,8 @@ namespace Lench.AdvancedControls
             DeviceManager.InitSdl();
             ControlMapper = Controller.AddComponent<ControlMapper>();
             Object.DontDestroyOnLoad(Controller);
+
+            DeviceManager.OnDeviceAdded += e => { AxisManager.ResolveMachineAxes(); };
 
             Commands.RegisterCommand("controller", ControllerCommand, Strings.Console_Controller_AllAvailable);
             Commands.RegisterCommand("acm", ConfigurationCommand, Strings.Console_Acm_AllAvailable);
@@ -264,8 +269,6 @@ namespace Lench.AdvancedControls
                     CheckForDbUpdate();
 
                 enabled = ModEnabled;
-
-                DeviceManager.OnDeviceAdded += e => { AxisManager.ResolveMachineAxes(); };
             }
 
             private void OnDestroy()
@@ -296,10 +299,9 @@ namespace Lench.AdvancedControls
                             ControlManager.CopyBlockControls(_copySource, BlockMapper.CurrentInstance.Block.Guid);
                     }
                 }
-                else
+                else if (ControlMapper.Visible)
                 {
-                    if (ControlMapper.Visible)
-                        ControlMapper.Hide();
+                    ControlMapper.Hide();
                 }
 
                 if (LoadedMachine)
