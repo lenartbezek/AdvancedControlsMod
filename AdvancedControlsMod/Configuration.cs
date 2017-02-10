@@ -106,6 +106,8 @@ namespace Lench.AdvancedControls
                 log += e.Message + "\n";
                 log += e.StackTrace;
             }
+
+            System.IO.Directory.CreateDirectory(Application.dataPath + "/Mods/Debug/");
             System.IO.File.WriteAllText(Application.dataPath + "/Mods/Debug/ACM_Log.txt", log);
         }
     }

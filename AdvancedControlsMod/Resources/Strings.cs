@@ -2,8 +2,9 @@
 using System.IO;
 using System.Reflection;
 using SimpleJSON;
-// ReSharper disable AssignNullToNotNullAttribute
+using UnityEngine;
 
+// ReSharper disable AssignNullToNotNullAttribute
 // ReSharper disable InconsistentNaming
 
 namespace Lench.AdvancedControls.Resources
@@ -17,32 +18,56 @@ namespace Lench.AdvancedControls.Resources
 
         private static bool LoadLanguage(string language)
         {
+            // Read from external resource
+            var file = $"{Application.dataPath}/Mods/Resources/AdvancedControls/{language}.json";
+            if (File.Exists(file))
+            {
+                try
+                {
+                    var content = File.ReadAllText(file);
+                    _strings = JSON.Parse(content);
+                    return true;
+                }
+                catch
+                {
+                    // Continue to embedded resource
+                }
+            }
+
+            // Fallback to embedded resource
             var assembly = Assembly.GetExecutingAssembly();
-
             var resourceName = $"Lench.AdvancedControls.Resources.{language}.json";
-
             try
             {
+
                 using (var stream = assembly.GetManifestResourceStream(resourceName))
                 using (var reader = new StreamReader(stream))
                 {
                     var content = reader.ReadToEnd();
                     _strings = JSON.Parse(content);
+                    return true;
                 }
-
-                return true;
             }
-            catch (Exception e)
+            catch
             {
-                // Resource file not found or invalid format.
                 return false;
             }
         }
 
-        public static string GetString(string key) => _strings[key].Value;
+        public static string GetString(string key)
+        {
+            try
+            {
+                return _strings[key].Value;
+            }
+            catch
+            {
+                return $"<color=red>{key}</color>";
+            }
+        }
 
         /// <summary>
-        ///   Overrides the current thread's CurrentUICulture property for all
+        ///   Overrides the Language property for all
         ///   resource lookups using this strongly typed resource class.
         /// </summary>
         internal static string Language {
@@ -54,7 +79,7 @@ namespace Lench.AdvancedControls.Resources
                 if (LoadLanguage(value))
                     _language = value;
                 else
-                    throw new InvalidOperationException($"Culture {value} is not supported.");
+                    throw new InvalidOperationException($"Language {value} is not supported.");
             }
          }
 
@@ -1106,5 +1131,15 @@ namespace Lench.AdvancedControls.Resources
         ///   Looks up a localized string similar to VERTICAL.
         /// </summary>
         internal static string VectorControl_AxisVertical => GetString("VectorControl_AxisVertical");
+
+        /// <summary>
+        ///   Looks up a localized string similar to Language {0} set.
+        /// </summary>
+        internal static string Console_Acm_LanguageSet => GetString("Console_Acm_LanguageSet");
+
+        /// <summary>
+        ///   Looks up a localized string similar to Language {0} not found.
+        /// </summary>
+        internal static string Console_Acm_LanguageNotFound => GetString("Console_Acm_LanguageNotFound");
     }
 }

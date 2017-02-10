@@ -52,6 +52,8 @@
   "Console_Acm_ControllerDBUpdateCheckerDisabled": "Controller DB update checker disabled.",
   "Console_Acm_ControllerDBUpdateCheckerEnabled": "Controller DB update checker enabled.",
   "Console_Acm_InvalidCommand": "Invalid command. Enter 'acm' for all available commands.",
+  "Console_Acm_LanguageSet": "Language {0} set.",
+  "Console_Acm_LanguageNotFound": "Language {0} not found.",
   "Console_Acm_ModUpdateCheckerDisabled": "Mod update checker disabled.",
   "Console_Acm_ModUpdateCheckerEnabled": "Mod update checker enabled.",
   "Console_Acm_UpdateInvalidArgument": "Invalid argument [check/enable/disable]. Enter 'acm' for all available commands.",

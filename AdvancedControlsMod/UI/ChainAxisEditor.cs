@@ -94,7 +94,21 @@ namespace Lench.AdvancedControls.UI
                 i--;
             if (i < 0) i += numMethods;
 
-            GUILayout.Label(Enum.GetNames(typeof(ChainAxis.ChainMethod))[i], new GUIStyle(Elements.InputFields.Default) { alignment = TextAnchor.MiddleCenter });
+            var axisMethodString = "";
+            if (_axis.Method == ChainAxis.ChainMethod.Sum)
+                axisMethodString = Strings.ChainMethod_Sum;
+            else if (_axis.Method == ChainAxis.ChainMethod.Subtract)
+                axisMethodString = Strings.ChainMethod_Subtract;
+            else if (_axis.Method == ChainAxis.ChainMethod.Average)
+                axisMethodString = Strings.ChainMethod_Average;
+            else if (_axis.Method == ChainAxis.ChainMethod.Multiply)
+                axisMethodString = Strings.ChainMethod_Multiply;
+            else if (_axis.Method == ChainAxis.ChainMethod.Maximum)
+                axisMethodString = Strings.ChainMethod_Maximum;
+            else if (_axis.Method == ChainAxis.ChainMethod.Minimum)
+                axisMethodString = Strings.ChainMethod_Minimum;
+
+            GUILayout.Label(axisMethodString, new GUIStyle(Elements.InputFields.Default) { alignment = TextAnchor.MiddleCenter });
 
             if (GUILayout.Button(Strings.ButtonText_ArrowNext, Elements.Buttons.Default, GUILayout.Width(30)))
                 i++;

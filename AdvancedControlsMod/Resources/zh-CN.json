@@ -51,6 +51,8 @@
   "Console_Acm_CheckingForModUpdates": "正在确认Mod版本 ...",
   "Console_Acm_ControllerDBUpdateCheckerDisabled": "手柄的 DB 更新检查器已被禁用.",
   "Console_Acm_ControllerDBUpdateCheckerEnabled": "手柄的 DB 更新检查器已被启用.",
+  "Console_Acm_LanguageSet": "Language {0} set.",
+  "Console_Acm_LanguageNotFound": "Language {0} not found.",
   "Console_Acm_InvalidCommand": "无法识别的指令。输入指令'acm'以获取所有可用的调整指令。",
   "Console_Acm_ModUpdateCheckerDisabled": "Mod更新检查器已被禁用",
   "Console_Acm_ModUpdateCheckerEnabled": "Mod更新检查器已被启用",

@@ -90,7 +90,7 @@ namespace Lench.AdvancedControls.UI
         private void DrawControl(Control c)
         {
             // Draw control label
-            GUILayout.Label(c.Key, Elements.Labels.Title);
+            GUILayout.Label(c.Name, Elements.Labels.Title);
 
             // Draw axis select button
             GUILayout.BeginHorizontal();

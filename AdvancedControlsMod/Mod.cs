@@ -202,6 +202,20 @@ namespace Lench.AdvancedControls
                                 return Strings.Console_Acm_UpdateInvalidArgument;
                         }
                     return Strings.Console_Acm_UpdateMissingArgument;
+                case "language":
+                    if (args.Length > 1)
+                    {
+                        try
+                        {
+                            Strings.Language = args[1];
+                            return string.Format(Strings.Console_Acm_LanguageSet, args[1]);
+                        }
+                        catch
+                        {
+                            return string.Format(Strings.Console_Acm_LanguageNotFound, args[1]);
+                        }
+                    }
+                    return Strings.Console_Acm_UpdateMissingArgument;
                 default:
                     return Strings.Console_Acm_InvalidCommand;
             }

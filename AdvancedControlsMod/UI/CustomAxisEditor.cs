@@ -234,7 +234,7 @@ namespace Lench.AdvancedControls.UI
             383488
         };
 
-        private static readonly string BaseUri = "http://lench4991.github.io/AdvancedControlsMod/files/";
+        private static readonly string BaseUri = "http://lench4991.github.io/AdvancedControlsMod/files/ironpython2.7";
         private static readonly string[] FileNames = {
             "IronPython.dll",
             "IronPython.Modules.dll",
