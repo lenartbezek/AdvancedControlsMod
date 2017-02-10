@@ -1141,5 +1141,10 @@ namespace Lench.AdvancedControls.Resources
         ///   Looks up a localized string similar to Language {0} not found.
         /// </summary>
         internal static string Console_Acm_LanguageNotFound => GetString("Console_Acm_LanguageNotFound");
+
+        /// <summary>
+        ///   Looks up a localized string similar to Missing argument [language]. Enter 'acm' for all available commands.
+        /// </summary>
+        internal static string Console_Acm_LanguageMissingArgument => GetString("Console_Acm_LanguageMissingArgument");
     }
 }
