@@ -52,8 +52,7 @@ namespace Lench.AdvancedControls
         /// </summary>
         public override void OnLoad()
         {
-            // Default language
-            Strings.Language = "en-US";
+            Configuration.Load();
 
             Game.OnSimulationToggle += SimulationToggle;
             Game.OnSimulationToggle += Block.HandleSimulationToggle;
@@ -208,7 +207,7 @@ namespace Lench.AdvancedControls
                         try
                         {
                             Strings.Language = args[1];
-                            return string.Format(Strings.Console_Acm_LanguageSet, args[1]);
+                            return Strings.Console_Acm_LanguageSet;
                         }
                         catch
                         {

@@ -1133,7 +1133,7 @@ namespace Lench.AdvancedControls.Resources
         internal static string VectorControl_AxisVertical => GetString("VectorControl_AxisVertical");
 
         /// <summary>
-        ///   Looks up a localized string similar to Language {0} set.
+        ///   Looks up a localized string similar to Language set: English.
         /// </summary>
         internal static string Console_Acm_LanguageSet => GetString("Console_Acm_LanguageSet");
 
