@@ -130,6 +130,66 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\LenchScripterMod\LenchScripterMod\Block.cs">
+      <Link>Block.cs</Link>
+    </Compile>
+    <Compile Include="..\LenchScripterMod\LenchScripterMod\BlockController.cs">
+      <Link>BlockController.cs</Link>
+    </Compile>
+    <Compile Include="..\LenchScripterMod\LenchScripterMod\Blocks\Automatron.cs">
+      <Link>Blocks\Automatron.cs</Link>
+    </Compile>
+    <Compile Include="..\LenchScripterMod\LenchScripterMod\Blocks\Cannon.cs">
+      <Link>Blocks\Cannon.cs</Link>
+    </Compile>
+    <Compile Include="..\LenchScripterMod\LenchScripterMod\Blocks\Cog.cs">
+      <Link>Blocks\Cog.cs</Link>
+    </Compile>
+    <Compile Include="..\LenchScripterMod\LenchScripterMod\Blocks\Crossbow.cs">
+      <Link>Blocks\Crossbow.cs</Link>
+    </Compile>
+    <Compile Include="..\LenchScripterMod\LenchScripterMod\Blocks\Decoupler.cs">
+      <Link>Blocks\Decoupler.cs</Link>
+    </Compile>
+    <Compile Include="..\LenchScripterMod\LenchScripterMod\Blocks\Flamethrower.cs">
+      <Link>Blocks\Flamethrower.cs</Link>
+    </Compile>
+    <Compile Include="..\LenchScripterMod\LenchScripterMod\Blocks\FlyingSpiral.cs">
+      <Link>Blocks\FlyingSpiral.cs</Link>
+    </Compile>
+    <Compile Include="..\LenchScripterMod\LenchScripterMod\Blocks\Grabber.cs">
+      <Link>Blocks\Grabber.cs</Link>
+    </Compile>
+    <Compile Include="..\LenchScripterMod\LenchScripterMod\Blocks\Grenade.cs">
+      <Link>Blocks\Grenade.cs</Link>
+    </Compile>
+    <Compile Include="..\LenchScripterMod\LenchScripterMod\Blocks\Piston.cs">
+      <Link>Blocks\Piston.cs</Link>
+    </Compile>
+    <Compile Include="..\LenchScripterMod\LenchScripterMod\Blocks\Rocket.cs">
+      <Link>Blocks\Rocket.cs</Link>
+    </Compile>
+    <Compile Include="..\LenchScripterMod\LenchScripterMod\Blocks\Spring.cs">
+      <Link>Blocks\Spring.cs</Link>
+    </Compile>
+    <Compile Include="..\LenchScripterMod\LenchScripterMod\Blocks\Steering.cs">
+      <Link>Blocks\Steering.cs</Link>
+    </Compile>
+    <Compile Include="..\LenchScripterMod\LenchScripterMod\Blocks\Vacuum.cs">
+      <Link>Blocks\Vacuum.cs</Link>
+    </Compile>
+    <Compile Include="..\LenchScripterMod\LenchScripterMod\Blocks\VectorThruster.cs">
+      <Link>Blocks\VectorThruster.cs</Link>
+    </Compile>
+    <Compile Include="..\LenchScripterMod\LenchScripterMod\Blocks\WaterCannon.cs">
+      <Link>Blocks\WaterCannon.cs</Link>
+    </Compile>
+    <Compile Include="..\LenchScripterMod\LenchScripterMod\Functions.cs">
+      <Link>Functions.cs</Link>
+    </Compile>
+    <Compile Include="..\LenchScripterMod\LenchScripterMod\PythonEnvironment.cs">
+      <Link>PythonEnvironment.cs</Link>
+    </Compile>
     <Compile Include="AdvancedControls.cs" />
     <Compile Include="Axes\ChainAxis.cs" />
     <Compile Include="Axes\InputAxis.cs" />
@@ -138,24 +198,6 @@
     <Compile Include="Axes\CustomAxis.cs" />
     <Compile Include="Axes\MouseAxis.cs" />
     <Compile Include="Axes\KeyAxis.cs" />
-    <Compile Include="Block.cs" />
-    <Compile Include="BlockController.cs" />
-    <Compile Include="Blocks\Automatron.cs" />
-    <Compile Include="Blocks\Cannon.cs" />
-    <Compile Include="Blocks\Cog.cs" />
-    <Compile Include="Blocks\Crossbow.cs" />
-    <Compile Include="Blocks\Decoupler.cs" />
-    <Compile Include="Blocks\Flamethrower.cs" />
-    <Compile Include="Blocks\FlyingSpiral.cs" />
-    <Compile Include="Blocks\Grabber.cs" />
-    <Compile Include="Blocks\Grenade.cs" />
-    <Compile Include="Blocks\Piston.cs" />
-    <Compile Include="Blocks\Rocket.cs" />
-    <Compile Include="Blocks\Spring.cs" />
-    <Compile Include="Blocks\Steering.cs" />
-    <Compile Include="Blocks\Vacuum.cs" />
-    <Compile Include="Blocks\VectorThruster.cs" />
-    <Compile Include="Blocks\WaterCannon.cs" />
     <Compile Include="Configuration.cs" />
     <Compile Include="Controls\AngleControl.cs" />
     <Compile Include="Controls\Control.cs" />
@@ -164,7 +206,6 @@
     <Compile Include="Controls\PositionControl.cs" />
     <Compile Include="Controls\SliderControl.cs" />
     <Compile Include="Controls\VectorControl.cs" />
-    <Compile Include="Functions.cs" />
     <Compile Include="Input\Button.cs" />
     <Compile Include="Input\Controller.cs" />
     <Compile Include="Input\DeviceManager.cs" />
@@ -174,7 +215,6 @@
     <Compile Include="MachineData.cs" />
     <Compile Include="Input\LPUtf8StrMarshaler.cs" />
     <Compile Include="Input\SDL2.cs" />
-    <Compile Include="PythonEnvironment.cs" />
     <Compile Include="Resources\Strings.cs" />
     <Compile Include="TrackedCollider.cs" />
     <Compile Include="UI\ControlOverview.cs" />

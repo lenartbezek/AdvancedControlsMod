@@ -55,7 +55,7 @@ namespace Lench.AdvancedControls
             Configuration.Load();
 
             Game.OnSimulationToggle += SimulationToggle;
-            Game.OnSimulationToggle += Block.HandleSimulationToggle;
+            Game.OnSimulationToggle += Block.OnSimulationToggle;
             XmlSaver.OnSave += MachineData.Save;
             XmlLoader.OnLoad += MachineData.Load;
 
