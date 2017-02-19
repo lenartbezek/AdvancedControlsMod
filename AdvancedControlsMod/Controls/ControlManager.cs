@@ -81,10 +81,10 @@ namespace Lench.AdvancedControls.Controls
         {
             switch (blockID)
             {
-                case (int)BlockType.Wheel:
-                case (int)BlockType.LargeWheel:
-                case (int)BlockType.CogMediumPowered:
-                case (int)BlockType.Drill:
+                case (int) BlockType.Wheel:
+                case (int) BlockType.LargeWheel:
+                case (int) BlockType.CogMediumPowered:
+                case (int) BlockType.Drill:
                     return new List<Control>
                     {
                         new InputControl(guid),
@@ -94,7 +94,7 @@ namespace Lench.AdvancedControls.Controls
                             Name = Strings.SliderName_Speed
                         }
                     };
-                case (int)BlockType.Piston:
+                case (int) BlockType.Piston:
                     return new List<Control>
                     {
                         new PositionControl(guid),
@@ -104,8 +104,8 @@ namespace Lench.AdvancedControls.Controls
                             Name = Strings.SliderName_Speed
                         }
                     };
-                case (int)BlockType.SteeringBlock:
-                case (int)BlockType.SteeringHinge:
+                case (int) BlockType.SteeringBlock:
+                case (int) BlockType.SteeringHinge:
                     return new List<Control>
                     {
                         new AngleControl(guid),
@@ -116,13 +116,15 @@ namespace Lench.AdvancedControls.Controls
                             Name = Strings.SliderName_RotationSpeed
                         }
                     };
-                case (int)BlockType.Spring:
+                case (int) BlockType.Spring:
                     return new List<Control>
                     {
                         new InputControl(guid)
                         {
                             PositiveOnly = true,
-                            Min = 0, Center = 1, Max = 2
+                            Min = 0,
+                            Center = 1,
+                            Max = 2
                         },
                         new SliderControl(guid)
                         {
@@ -130,7 +132,7 @@ namespace Lench.AdvancedControls.Controls
                             Name = Strings.SliderName_Strength
                         }
                     };
-                case (int)BlockType.RopeWinch:
+                case (int) BlockType.RopeWinch:
                     return new List<Control>
                     {
                         new InputControl(guid),
@@ -140,7 +142,7 @@ namespace Lench.AdvancedControls.Controls
                             Name = Strings.SliderName_Speed
                         }
                     };
-                case (int)BlockType.Suspension:
+                case (int) BlockType.Suspension:
                     return new List<Control>
                     {
                         new SliderControl(guid)
@@ -149,7 +151,7 @@ namespace Lench.AdvancedControls.Controls
                             Name = Strings.SliderName_Spring
                         }
                     };
-                case (int)BlockType.SpinningBlock:
+                case (int) BlockType.SpinningBlock:
                     return new List<Control>
                     {
                         new SliderControl(guid)
@@ -158,7 +160,7 @@ namespace Lench.AdvancedControls.Controls
                             Name = Strings.SliderName_Speed
                         }
                     };
-                case (int)BlockType.CircularSaw:
+                case (int) BlockType.CircularSaw:
                     return new List<Control>
                     {
                         new SliderControl(guid)
@@ -167,7 +169,7 @@ namespace Lench.AdvancedControls.Controls
                             Name = Strings.SliderName_Speed
                         }
                     };
-                case (int)BlockType.Flamethrower:
+                case (int) BlockType.Flamethrower:
                     return new List<Control>
                     {
                         new SliderControl(guid)
@@ -175,10 +177,12 @@ namespace Lench.AdvancedControls.Controls
                             Slider = "RANGE",
                             Name = Strings.SliderName_Range,
                             PositiveOnly = true,
-                            Min = 0, Center = 1, Max = 2
+                            Min = 0,
+                            Center = 1,
+                            Max = 2
                         }
                     };
-                case (int)BlockType.FlyingBlock:
+                case (int) BlockType.FlyingBlock:
                     return new List<Control>
                     {
                         new SliderControl(guid)
@@ -186,10 +190,12 @@ namespace Lench.AdvancedControls.Controls
                             Slider = "FLYING SPEED",
                             Name = Strings.SliderName_FlyingSpeed,
                             PositiveOnly = true,
-                            Min = 0, Center = 1, Max = 2
+                            Min = 0,
+                            Center = 1,
+                            Max = 2
                         }
                     };
-                case (int)BlockType.Vacuum:
+                case (int) BlockType.Vacuum:
                     return new List<Control>
                     {
                         new SliderControl(guid)
@@ -197,10 +203,12 @@ namespace Lench.AdvancedControls.Controls
                             Slider = "POWER",
                             Name = Strings.SliderName_Power,
                             PositiveOnly = true,
-                            Min = 0, Center = 1, Max = 2
+                            Min = 0,
+                            Center = 1,
+                            Max = 2
                         }
                     };
-                case (int)BlockType.WaterCannon:
+                case (int) BlockType.WaterCannon:
                     return new List<Control>
                     {
                         new SliderControl(guid)
@@ -208,10 +216,12 @@ namespace Lench.AdvancedControls.Controls
                             Slider = "POWER",
                             Name = Strings.SliderName_Power,
                             PositiveOnly = true,
-                            Min = 0, Center = 1, Max = 2
+                            Min = 0,
+                            Center = 1,
+                            Max = 2
                         }
                     };
-                case 59:
+                case (int) BlockType.Rocket:
                     return new List<Control>
                     {
                         new SliderControl(guid)
@@ -219,23 +229,30 @@ namespace Lench.AdvancedControls.Controls
                             Slider = "THRUST",
                             Name = Strings.SliderName_Thrust,
                             PositiveOnly = true,
-                            Min = 0, Center = 1, Max = 2
+                            Min = 0,
+                            Center = 1,
+                            Max = 2
                         },
                         new SliderControl(guid)
                         {
                             Slider = "FLIGHT DURATION",
                             Name = Strings.SliderName_FlightDuration,
                             PositiveOnly = true,
-                            Min = 0, Center = 5, Max = 10
+                            Min = 0,
+                            Center = 5,
+                            Max = 10
                         },
-                        new SliderControl(guid){
+                        new SliderControl(guid)
+                        {
                             Slider = "EXPLOSIVE CHARGE",
                             Name = Strings.SliderName_ExplosiveCharge,
                             PositiveOnly = true,
-                            Min = 0, Center = 1, Max = 2
+                            Min = 0,
+                            Center = 1,
+                            Max = 2
                         },
                     };
-                case (int)BlockType.Balloon:
+                case (int) BlockType.Balloon:
                     return new List<Control>
                     {
                         new SliderControl(guid)
@@ -243,17 +260,21 @@ namespace Lench.AdvancedControls.Controls
                             Slider = "BUOYANCY",
                             Name = Strings.SliderName_Buoyancy,
                             PositiveOnly = true,
-                            Min = 0, Center = 1, Max = 2
+                            Min = 0,
+                            Center = 1,
+                            Max = 2
                         },
                         new SliderControl(guid)
                         {
                             Slider = "STRING LENGTH",
                             Name = Strings.SliderName_StringLength,
                             PositiveOnly = true,
-                            Min = 0, Center = 1, Max = 2
+                            Min = 0,
+                            Center = 1,
+                            Max = 2
                         }
                     };
-                case (int)BlockType.Ballast:
+                case (int) BlockType.Ballast:
                     return new List<Control>
                     {
                         new SliderControl(guid)
@@ -261,10 +282,12 @@ namespace Lench.AdvancedControls.Controls
                             Slider = "MASS",
                             Name = Strings.SliderName_Mass,
                             PositiveOnly = true,
-                            Min = 0, Center = 1, Max = 2
+                            Min = 0,
+                            Center = 1,
+                            Max = 2
                         }
                     };
-                case (int)BlockType.CameraBlock:
+                case (int) BlockType.CameraBlock:
                     return new List<Control>
                     {
                         new SliderControl(guid)
@@ -272,19 +295,25 @@ namespace Lench.AdvancedControls.Controls
                             Slider = "DISTANCE",
                             Name = Strings.SliderName_Distance,
                             PositiveOnly = true,
-                            Min = 40, Center = 60, Max = 80
+                            Min = 40,
+                            Center = 60,
+                            Max = 80
                         },
                         new SliderControl(guid)
                         {
                             Slider = "HEIGHT",
                             Name = Strings.SliderName_Height,
-                            Min = 0, Center = 30, Max = 60
+                            Min = 0,
+                            Center = 30,
+                            Max = 60
                         },
                         new SliderControl(guid)
                         {
                             Slider = "ROTATION",
                             Name = Strings.SliderName_Rotation,
-                            Min = -60, Center = 0, Max = 60
+                            Min = -60,
+                            Center = 0,
+                            Max = 60
                         }
                     };
                 case 790:
@@ -297,6 +326,68 @@ namespace Lench.AdvancedControls.Controls
                             Min = -1.25f,
                             Max = 1.25f
                         },
+                    };
+                case 791: // TODO: Put control names in resource file
+                    return new List<Control>
+                    {
+                        new SliderControl(guid)
+                        {
+                            Slider = "PARTICLE VELOCITY",
+                            Name = "PARTICLE VELOCITY",
+                            PositiveOnly = true,
+                            Min = 0,
+                            Center = 0.5f,
+                            Max = 1
+                        },
+                        new SliderControl(guid)
+                        {
+                            Slider = "EMISSION RATE",
+                            Name = "EMISSION RATE",
+                            PositiveOnly = true,
+                            Min = 0,
+                            Center = 1,
+                            Max = 2
+                        },
+                        new SliderControl(guid)
+                        {
+                            Slider = "PARTICLE GRAVITY",
+                            Name = "PARTICLE GRAVITY",
+                            Min = -2,
+                            Center = 0,
+                            Max = 2
+                        },
+                        new SliderControl(guid)
+                        {
+                            Slider = "PARTICLE GRAVITY",
+                            Name = "PARTICLE GRAVITY",
+                            Min = -2,
+                            Center = 0,
+                            Max = 2
+                        },
+                        new SliderControl(guid)
+                        {
+                            Slider = "OPACITY",
+                            Name = "OPACITY",
+                            Min = 0,
+                            Center = 0.5f,
+                            Max = 1
+                        },
+                        new SliderControl(guid)
+                        {
+                            Slider = "PARTICLE LIFETIME",
+                            Name = "PARTICLE LIFETIME",
+                            Min = 0,
+                            Center = 50,
+                            Max = 100
+                        },
+                        new SliderControl(guid)
+                        {
+                            Slider = "EMITTER ANGLE",
+                            Name = "EMITTER ANGLE",
+                            Min = 0,
+                            Center = 45,
+                            Max = 90
+                        }
                     };
             }
 

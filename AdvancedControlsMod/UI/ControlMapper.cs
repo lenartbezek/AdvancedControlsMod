@@ -18,6 +18,7 @@ namespace Lench.AdvancedControls.UI
 
         private readonly int _windowID = spaar.ModLoader.Util.GetWindowID();
         private Rect _windowRect = new Rect(680, 115, 320, 50);
+        private Vector2 _scrollPosition = Vector2.zero;
 
         public BlockBehaviour Block;
         public List<Control> Controls;
@@ -64,15 +65,22 @@ namespace Lench.AdvancedControls.UI
 
         private void DoWindow(int id)
         {
-            // Draw controls
-            foreach (Control c in Controls)
+            _scrollPosition = GUILayout.BeginScrollView(_scrollPosition,
+                    new GUIStyle(Elements.Scrollview.ThumbVertical) { normal = new GUIStyleState(), padding = new RectOffset() },
+                    GUILayout.Width(304), GUILayout.Height(200));
             {
-                DrawControl(c);
-                GUILayout.Box(GUIContent.none, GUILayout.Height(20));
-            }
+                // Draw controls
+                foreach (Control c in Controls)
+                {
+                    DrawControl(c);
+                    GUILayout.Box(GUIContent.none, GUILayout.Height(20));
+                }
 
-            if (Controls.Count == 0)
-                GUILayout.Label(Strings.ControlMapper_Message_NoAvailableControls);
+                if (Controls.Count == 0)
+                    GUILayout.Label(Strings.ControlMapper_Message_NoAvailableControls);
+
+            }
+            GUILayout.EndScrollView();
 
             // Draw overview button
             if (GUI.Button(new Rect(_windowRect.width - 78, 8, 16, 16),
@@ -113,7 +121,7 @@ namespace Lench.AdvancedControls.UI
                         Mathf.Clamp(_windowRect.x + _windowRect.width,
                             -320 + GUI.skin.window.padding.top, Screen.width - GUI.skin.window.padding.top),
                         Mathf.Clamp(_windowRect.y - 40, 0,
-                        Screen.height - GUI.skin.window.padding.top));
+                            Screen.height - GUI.skin.window.padding.top));
                 }
                 if (GUILayout.Button(Strings.ButtonText_Close, Elements.Buttons.Red, GUILayout.Width(30)))
                 {
@@ -130,7 +138,7 @@ namespace Lench.AdvancedControls.UI
                     Popup = AxisSelector.Open(callback);
                     Popup.Position = new Vector2(
                         _windowRect.x + buttonRect.x - 8,
-                        _windowRect.y + buttonRect.y - 8);
+                        _windowRect.y + +GUI.skin.window.padding.top + buttonRect.y - _scrollPosition.y - 8);
                 }
                 else
                     Popup.OnAxisSelect = callback;

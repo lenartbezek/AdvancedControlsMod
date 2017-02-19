@@ -209,7 +209,9 @@ namespace Lench.AdvancedControls.UI
                 GUILayout.Label(string.Format(Strings.ControlOverview_Label_NoControls, Machine.Active().Name));
             else
             {
-                _scrollPosition = GUILayout.BeginScrollView(_scrollPosition, new GUIStyle(Elements.Scrollview.ThumbVertical) { normal = new GUIStyleState(), padding = new RectOffset() }, GUILayout.Width(304), GUILayout.Height(500));
+                _scrollPosition = GUILayout.BeginScrollView(_scrollPosition, 
+                    new GUIStyle(Elements.Scrollview.ThumbVertical) { normal = new GUIStyleState(), padding = new RectOffset() }, 
+                    GUILayout.Width(304), GUILayout.Height(500));
                 
                 GUILayout.Label(string.Format(Strings.ControlOverview_Message_IntroNote, Machine.Active().Name));
 
