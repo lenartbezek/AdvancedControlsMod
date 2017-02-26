@@ -1,4 +1,5 @@
 ﻿#region License
+
 /* SDL2# - C# Wrapper for SDL2
  *
  * Copyright (c) 2013-2016 Ethan Lee.
@@ -24,28 +25,30 @@
  * Ethan "flibitijibibo" Lee <flibitijibibo@flibitijibibo.com>
  *
  */
+
 #endregion
 
 #region Using Statements
+
 using System;
 using System.Runtime.InteropServices;
+
 #endregion
 
 #pragma warning disable CS1570, CS1572, CS1574, CS1584, CS1658, CS1591
 // ReSharper disable All
 
-// Altered namespace.
 namespace Lench.AdvancedControls.Input
 {
     /// <summary>
-    /// Entry point for all SDL-related (non-extension) types and methods
+    ///     Entry point for all SDL-related (non-extension) types and methods
     /// </summary>
     public static class SDL
     {
         #region SDL2# Variables
 
         /// <summary>
-        /// Used by DllImport to load the native library.
+        ///     Used by DllImport to load the native library.
         /// </summary>
         // Altered for use in Besiege on different platforms.
 #if windows
@@ -62,7 +65,7 @@ namespace Lench.AdvancedControls.Input
 
         public static uint SDL_FOURCC(byte A, byte B, byte C, byte D)
         {
-            return (uint)(A | (B << 8) | (C << 16) | (D << 24));
+            return (uint) (A | (B << 8) | (C << 16) | (D << 24));
         }
 
         public enum SDL_bool
@@ -90,17 +93,18 @@ namespace Lench.AdvancedControls.Input
 		 */
 
         /// <summary>
-        /// Use this function to create a new SDL_RWops structure for reading from and/or writing to a named file.
+        ///     Use this function to create a new SDL_RWops structure for reading from and/or writing to a named file.
         /// </summary>
         /// <param name="file">a UTF-8 string representing the filename to open</param>
         /// <param name="mode">an ASCII string representing the mode to be used for opening the file; see Remarks for details</param>
-        /// <returns>Returns a pointer to the SDL_RWops structure that is created, or NULL on failure; call SDL_GetError() for more information.</returns>
+        /// <returns>
+        ///     Returns a pointer to the SDL_RWops structure that is created, or NULL on failure; call SDL_GetError() for more
+        ///     information.
+        /// </returns>
         [DllImport(nativeLibName, EntryPoint = "SDL_RWFromFile", CallingConvention = CallingConvention.Cdecl)]
         internal static extern IntPtr INTERNAL_SDL_RWFromFile(
-            [In()] [MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(LPUtf8StrMarshaler))]
-                string file,
-            [In()] [MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(LPUtf8StrMarshaler))]
-                string mode
+            [In()] [MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(LPUtf8StrMarshaler))] string file,
+            [In()] [MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(LPUtf8StrMarshaler))] string mode
         );
 
         /* These are the public RWops functions. They should be used by
@@ -108,6 +112,7 @@ namespace Lench.AdvancedControls.Input
 		 */
 
         /* IntPtr refers to an SDL_RWops */
+
         [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
         public static extern IntPtr SDL_RWFromMem(byte[] mem, int size);
 
@@ -116,7 +121,7 @@ namespace Lench.AdvancedControls.Input
         #region SDL_main.h
 
         /// <summary>
-        /// Use this function to circumvent failure of SDL_Init() when not using SDL_main() as an entry point.
+        ///     Use this function to circumvent failure of SDL_Init() when not using SDL_main() as an entry point.
         /// </summary>
         [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
         public static extern void SDL_SetMainReady();
@@ -132,6 +137,7 @@ namespace Lench.AdvancedControls.Input
         public const uint SDL_INIT_HAPTIC = 0x00001000;
         public const uint SDL_INIT_GAMECONTROLLER = 0x00002000;
         public const uint SDL_INIT_NOPARACHUTE = 0x00100000;
+
         public const uint SDL_INIT_EVERYTHING = (
             SDL_INIT_TIMER | SDL_INIT_AUDIO | SDL_INIT_VIDEO |
             SDL_INIT_JOYSTICK | SDL_INIT_HAPTIC |
@@ -139,66 +145,92 @@ namespace Lench.AdvancedControls.Input
         );
 
         /// <summary>
-        /// Use this function to initialize the SDL library.
-        /// This must be called before using any other SDL function.
+        ///     Use this function to initialize the SDL library.
+        ///     This must be called before using any other SDL function.
         /// </summary>
         /// <param name="flags">subsystem initialization flags; see Remarks for details</param>
-        /// <returns>Returns 0 on success or a negative error code on failure.
-        /// Call <see cref="SDL_GetError()"/> for more information.</returns>
-        /// <remarks>The Event Handling, File I/O, and Threading subsystems are initialized by default.
-        /// You must specifically initialize other subsystems if you use them in your application.</remarks>
-        /// <remarks>Unless the SDL_INIT_NOPARACHUTE flag is set, it will install cleanup signal handlers
-        /// for some commonly ignored fatal signals (like SIGSEGV). </remarks>
+        /// <returns>
+        ///     Returns 0 on success or a negative error code on failure.
+        ///     Call <see cref="SDL_GetError()" /> for more information.
+        /// </returns>
+        /// <remarks>
+        ///     The Event Handling, File I/O, and Threading subsystems are initialized by default.
+        ///     You must specifically initialize other subsystems if you use them in your application.
+        /// </remarks>
+        /// <remarks>
+        ///     Unless the SDL_INIT_NOPARACHUTE flag is set, it will install cleanup signal handlers
+        ///     for some commonly ignored fatal signals (like SIGSEGV).
+        /// </remarks>
         [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
         public static extern int SDL_Init(uint flags);
 
         /// <summary>
-        /// Use this function to initialize specific SDL subsystems.
+        ///     Use this function to initialize specific SDL subsystems.
         /// </summary>
         /// <param name="flags">any of the flags used by SDL_Init(); see Remarks for details</param>
-        /// <returns>Returns 0 on success or a negative error code on failure.
-        /// Call <see cref="SDL_GetError()"/> for more information.</returns>
-        /// <remarks>After SDL has been initialized with <see cref="SDL_Init()"/> you may initialize
-        /// uninitialized subsystems with <see cref="SDL_InitSubSystem()"/>.</remarks>
-        /// <remarks>If you want to initialize subsystems separately you would call <see cref="SDL_Init(0)"/>
-        /// followed by <see cref="SDL_InitSubSystem()"/> with the desired subsystem flag. </remarks>
+        /// <returns>
+        ///     Returns 0 on success or a negative error code on failure.
+        ///     Call <see cref="SDL_GetError()" /> for more information.
+        /// </returns>
+        /// <remarks>
+        ///     After SDL has been initialized with <see cref="SDL_Init()" /> you may initialize
+        ///     uninitialized subsystems with <see cref="SDL_InitSubSystem()" />.
+        /// </remarks>
+        /// <remarks>
+        ///     If you want to initialize subsystems separately you would call <see cref="SDL_Init(0)" />
+        ///     followed by <see cref="SDL_InitSubSystem()" /> with the desired subsystem flag.
+        /// </remarks>
         [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
         public static extern int SDL_InitSubSystem(uint flags);
 
         /// <summary>
-        /// Use this function to clean up all initialized subsystems.
-        /// You should call it upon all exit conditions.
+        ///     Use this function to clean up all initialized subsystems.
+        ///     You should call it upon all exit conditions.
         /// </summary>
-        /// <remarks>You should call this function even if you have already shutdown each initialized
-        /// subsystem with <see cref="SDL_QuitSubSystem()"/>.</remarks>
-        /// <remarks>If you start a subsystem using a call to that subsystem's init function (for example
-        /// <see cref="SDL_VideoInit()"/>) instead of <see cref="SDL_Init()"/> or <see cref="SDL_InitSubSystem()"/>,
-        /// then you must use that subsystem's quit function (<see cref="SDL_VideoQuit()"/>) to shut it down
-        /// before calling <see cref="SDL_Quit()"/>.</remarks>
-        /// <remarks>You can use this function with atexit() to ensure that it is run when your application is
-        /// shutdown, but it is not wise to do this from a library or other dynamically loaded code. </remarks>
+        /// <remarks>
+        ///     You should call this function even if you have already shutdown each initialized
+        ///     subsystem with <see cref="SDL_QuitSubSystem()" />.
+        /// </remarks>
+        /// <remarks>
+        ///     If you start a subsystem using a call to that subsystem's init function (for example
+        ///     <see cref="SDL_VideoInit()" />) instead of <see cref="SDL_Init()" /> or <see cref="SDL_InitSubSystem()" />,
+        ///     then you must use that subsystem's quit function (<see cref="SDL_VideoQuit()" />) to shut it down
+        ///     before calling <see cref="SDL_Quit()" />.
+        /// </remarks>
+        /// <remarks>
+        ///     You can use this function with atexit() to ensure that it is run when your application is
+        ///     shutdown, but it is not wise to do this from a library or other dynamically loaded code.
+        /// </remarks>
         [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
         public static extern void SDL_Quit();
 
         /// <summary>
-        /// Use this function to shut down specific SDL subsystems.
+        ///     Use this function to shut down specific SDL subsystems.
         /// </summary>
-        /// <param name="flags">any of the flags used by <see cref="SDL_Init()"/>; see Remarks for details</param>
-        /// <remarks>If you start a subsystem using a call to that subsystem's init function (for example
-        /// <see cref="SDL_VideoInit()"/>) instead of <see cref="SDL_Init()"/> or <see cref="SDL_InitSubSystem()"/>,
-        /// then you must use that subsystem's quit function (<see cref="SDL_VideoQuit()"/>) to shut it down
-        /// before calling <see cref="SDL_Quit()"/>.</remarks>
-        /// <remarks>You can use this function with atexit() to en
-        /// <remarks>You still need to call <see cref="SDL_Quit()"/> even if you close all open subsystems with SDL_QuitSubSystem(). </remarks>
+        /// <param name="flags">any of the flags used by <see cref="SDL_Init()" />; see Remarks for details</param>
+        /// <remarks>
+        ///     If you start a subsystem using a call to that subsystem's init function (for example
+        ///     <see cref="SDL_VideoInit()" />) instead of <see cref="SDL_Init()" /> or <see cref="SDL_InitSubSystem()" />,
+        ///     then you must use that subsystem's quit function (<see cref="SDL_VideoQuit()" />) to shut it down
+        ///     before calling <see cref="SDL_Quit()" />.
+        /// </remarks>
+        /// <remarks>
+        ///     You can use this function with atexit() to en
+        ///     <remarks>
+        ///         You still need to call <see cref="SDL_Quit()" /> even if you close all open subsystems with
+        ///         SDL_QuitSubSystem().
+        ///     </remarks>
         [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
         public static extern void SDL_QuitSubSystem(uint flags);
 
         /// <summary>
-        /// Use this function to return a mask of the specified subsystems which have previously been initialized.
+        ///     Use this function to return a mask of the specified subsystems which have previously been initialized.
         /// </summary>
-        /// <param name="flags">any of the flags used by <see cref="SDL_Init()"/>; see Remarks for details</param>
-        /// <returns>If flags is 0 it returns a mask of all initialized subsystems, otherwise it returns the
-        /// initialization status of the specified subsystems. The return value does not include SDL_INIT_NOPARACHUTE.</returns>
+        /// <param name="flags">any of the flags used by <see cref="SDL_Init()" />; see Remarks for details</param>
+        /// <returns>
+        ///     If flags is 0 it returns a mask of all initialized subsystems, otherwise it returns the
+        ///     initialization status of the specified subsystems. The return value does not include SDL_INIT_NOPARACHUTE.
+        /// </returns>
         [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
         public static extern uint SDL_WasInit(uint flags);
 
@@ -207,7 +239,9 @@ namespace Lench.AdvancedControls.Input
         #region SDL_platform.h
 
         [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-        [return: MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(LPUtf8StrMarshaler), MarshalCookie = LPUtf8StrMarshaler.LeaveAllocated)]
+        [return:
+            MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(LPUtf8StrMarshaler),
+                MarshalCookie = LPUtf8StrMarshaler.LeaveAllocated)]
         public static extern string SDL_GetPlatform();
 
         #endregion
@@ -216,86 +250,124 @@ namespace Lench.AdvancedControls.Input
 
         public const string SDL_HINT_FRAMEBUFFER_ACCELERATION =
             "SDL_FRAMEBUFFER_ACCELERATION";
+
         public const string SDL_HINT_RENDER_DRIVER =
             "SDL_RENDER_DRIVER";
+
         public const string SDL_HINT_RENDER_OPENGL_SHADERS =
             "SDL_RENDER_OPENGL_SHADERS";
+
         public const string SDL_HINT_RENDER_DIRECT3D_THREADSAFE =
             "SDL_RENDER_DIRECT3D_THREADSAFE";
+
         public const string SDL_HINT_RENDER_VSYNC =
             "SDL_RENDER_VSYNC";
+
         public const string SDL_HINT_VIDEO_X11_XVIDMODE =
             "SDL_VIDEO_X11_XVIDMODE";
+
         public const string SDL_HINT_VIDEO_X11_XINERAMA =
             "SDL_VIDEO_X11_XINERAMA";
+
         public const string SDL_HINT_VIDEO_X11_XRANDR =
             "SDL_VIDEO_X11_XRANDR";
+
         public const string SDL_HINT_GRAB_KEYBOARD =
             "SDL_GRAB_KEYBOARD";
+
         public const string SDL_HINT_VIDEO_MINIMIZE_ON_FOCUS_LOSS =
             "SDL_VIDEO_MINIMIZE_ON_FOCUS_LOSS";
+
         public const string SDL_HINT_IDLE_TIMER_DISABLED =
             "SDL_IOS_IDLE_TIMER_DISABLED";
+
         public const string SDL_HINT_ORIENTATIONS =
             "SDL_IOS_ORIENTATIONS";
+
         public const string SDL_HINT_XINPUT_ENABLED =
             "SDL_XINPUT_ENABLED";
+
         public const string SDL_HINT_GAMECONTROLLERCONFIG =
             "SDL_GAMECONTROLLERCONFIG";
+
         public const string SDL_HINT_JOYSTICK_ALLOW_BACKGROUND_EVENTS =
             "SDL_JOYSTICK_ALLOW_BACKGROUND_EVENTS";
+
         public const string SDL_HINT_ALLOW_TOPMOST =
             "SDL_ALLOW_TOPMOST";
+
         public const string SDL_HINT_TIMER_RESOLUTION =
             "SDL_TIMER_RESOLUTION";
+
         public const string SDL_HINT_RENDER_SCALE_QUALITY =
             "SDL_RENDER_SCALE_QUALITY";
 
         /* Only available in SDL 2.0.1 or higher */
+
         public const string SDL_HINT_VIDEO_HIGHDPI_DISABLED =
             "SDL_VIDEO_HIGHDPI_DISABLED";
 
         /* Only available in SDL 2.0.2 or higher */
+
         public const string SDL_HINT_CTRL_CLICK_EMULATE_RIGHT_CLICK =
             "SDL_CTRL_CLICK_EMULATE_RIGHT_CLICK";
+
         public const string SDL_HINT_VIDEO_WIN_D3DCOMPILER =
             "SDL_VIDEO_WIN_D3DCOMPILER";
+
         public const string SDL_HINT_MOUSE_RELATIVE_MODE_WARP =
             "SDL_MOUSE_RELATIVE_MODE_WARP";
+
         public const string SDL_HINT_VIDEO_WINDOW_SHARE_PIXEL_FORMAT =
             "SDL_VIDEO_WINDOW_SHARE_PIXEL_FORMAT";
+
         public const string SDL_HINT_VIDEO_ALLOW_SCREENSAVER =
             "SDL_VIDEO_ALLOW_SCREENSAVER";
+
         public const string SDL_HINT_ACCELEROMETER_AS_JOYSTICK =
             "SDL_ACCELEROMETER_AS_JOYSTICK";
+
         public const string SDL_HINT_VIDEO_MAC_FULLSCREEN_SPACES =
             "SDL_VIDEO_MAC_FULLSCREEN_SPACES";
 
         /* Only available in SDL 2.0.4 or higher */
+
         public const string SDL_HINT_NO_SIGNAL_HANDLERS =
             "SDL_NO_SIGNAL_HANDLERS";
+
         public const string SDL_HINT_IME_INTERNAL_EDITING =
             "SDL_IME_INTERNAL_EDITING";
+
         public const string SDL_HINT_ANDROID_SEPARATE_MOUSE_AND_TOUCH =
             "SDL_ANDROID_SEPARATE_MOUSE_AND_TOUCH";
+
         public const string SDL_HINT_EMSCRIPTEN_KEYBOARD_ELEMENT =
             "SDL_EMSCRIPTEN_KEYBOARD_ELEMENT";
+
         public const string SDL_HINT_THREAD_STACK_SIZE =
             "SDL_THREAD_STACK_SIZE";
+
         public const string SDL_HINT_WINDOW_FRAME_USABLE_WHILE_CURSOR_HIDDEN =
             "SDL_WINDOW_FRAME_USABLE_WHILE_CURSOR_HIDDEN";
+
         public const string SDL_HINT_WINDOWS_ENABLE_MESSAGELOOP =
             "SDL_WINDOWS_ENABLE_MESSAGELOOP";
+
         public const string SDL_HINT_WINDOWS_NO_CLOSE_ON_ALT_F4 =
             "SDL_WINDOWS_NO_CLOSE_ON_ALT_F4";
+
         public const string SDL_HINT_XINPUT_USE_OLD_JOYSTICK_MAPPING =
             "SDL_XINPUT_USE_OLD_JOYSTICK_MAPPING";
+
         public const string SDL_HINT_MAC_BACKGROUND_APP =
             "SDL_MAC_BACKGROUND_APP";
+
         public const string SDL_HINT_VIDEO_X11_NET_WM_PING =
             "SDL_VIDEO_X11_NET_WM_PING";
+
         public const string SDL_HINT_ANDROID_APK_EXPANSION_MAIN_FILE_VERSION =
             "SDL_ANDROID_APK_EXPANSION_MAIN_FILE_VERSION";
+
         public const string SDL_HINT_ANDROID_APK_EXPANSION_PATCH_FILE_VERSION =
             "SDL_ANDROID_APK_EXPANSION_PATCH_FILE_VERSION";
 
@@ -307,60 +379,67 @@ namespace Lench.AdvancedControls.Input
         }
 
         /// <summary>
-        /// Use this function to clear all hints.
+        ///     Use this function to clear all hints.
         /// </summary>
-        /// <remarks>This function is automatically called during <see cref="SDL_Quit()"/>. </remarks>
+        /// <remarks>This function is automatically called during <see cref="SDL_Quit()" />. </remarks>
         [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
         public static extern void SDL_ClearHints();
 
         /// <summary>
-        /// Use this function to get the value of a hint.
+        ///     Use this function to get the value of a hint.
         /// </summary>
-        /// <param name="name">the hint to query; see the list of hints on
-        /// <a href="http://wiki.libsdl.org/moin.cgi/CategoryHints#Hints">CategoryHints</a> for details</param>
+        /// <param name="name">
+        ///     the hint to query; see the list of hints on
+        ///     <a href="http://wiki.libsdl.org/moin.cgi/CategoryHints#Hints">CategoryHints</a> for details
+        /// </param>
         /// <returns>Returns the string value of a hint or NULL if the hint isn't set.</returns>
         [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-        [return: MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(LPUtf8StrMarshaler), MarshalCookie = LPUtf8StrMarshaler.LeaveAllocated)]
+        [return:
+            MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(LPUtf8StrMarshaler),
+                MarshalCookie = LPUtf8StrMarshaler.LeaveAllocated)]
         public static extern string SDL_GetHint(
-            [In()] [MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(LPUtf8StrMarshaler))]
-                string name
+            [In()] [MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(LPUtf8StrMarshaler))] string name
         );
 
         /// <summary>
-        /// Use this function to set a hint with normal priority.
+        ///     Use this function to set a hint with normal priority.
         /// </summary>
-        /// <param name="name">the hint to query; see the list of hints on
-        /// <a href="http://wiki.libsdl.org/moin.cgi/CategoryHints#Hints">CategoryHints</a> for details</param>
+        /// <param name="name">
+        ///     the hint to query; see the list of hints on
+        ///     <a href="http://wiki.libsdl.org/moin.cgi/CategoryHints#Hints">CategoryHints</a> for details
+        /// </param>
         /// <param name="value">the value of the hint variable</param>
         /// <returns>Returns SDL_TRUE if the hint was set, SDL_FALSE otherwise.</returns>
-        /// <remarks>Hints will not be set if there is an existing override hint or environment
-        /// variable that takes precedence. You can use <see cref="SDL_SetHintWithPriority()"/> to set the hint with
-        /// override priority instead.</remarks>
+        /// <remarks>
+        ///     Hints will not be set if there is an existing override hint or environment
+        ///     variable that takes precedence. You can use <see cref="SDL_SetHintWithPriority()" /> to set the hint with
+        ///     override priority instead.
+        /// </remarks>
         [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
         public static extern SDL_bool SDL_SetHint(
-            [In()] [MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(LPUtf8StrMarshaler))]
-                string name,
-            [In()] [MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(LPUtf8StrMarshaler))]
-                string value
+            [In()] [MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(LPUtf8StrMarshaler))] string name,
+            [In()] [MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(LPUtf8StrMarshaler))] string value
         );
 
         /// <summary>
-        /// Use this function to set a hint with a specific priority.
+        ///     Use this function to set a hint with a specific priority.
         /// </summary>
-        /// <param name="name">the hint to query; see the list of hints on
-        /// <a href="http://wiki.libsdl.org/moin.cgi/CategoryHints#Hints">CategoryHints</a> for details</param>
+        /// <param name="name">
+        ///     the hint to query; see the list of hints on
+        ///     <a href="http://wiki.libsdl.org/moin.cgi/CategoryHints#Hints">CategoryHints</a> for details
+        /// </param>
         /// <param name="value">the value of the hint variable</param>
-        /// <param name="priority">the <see cref="SDL_HintPriority"/> level for the hint</param>
+        /// <param name="priority">the <see cref="SDL_HintPriority" /> level for the hint</param>
         /// <returns>Returns SDL_TRUE if the hint was set, SDL_FALSE otherwise.</returns>
-        /// <remarks>The priority controls the behavior when setting a hint that already has a value.
-        /// Hints will replace existing hints of their priority and lower. Environment variables are
-        /// considered to have override priority. </remarks>
+        /// <remarks>
+        ///     The priority controls the behavior when setting a hint that already has a value.
+        ///     Hints will replace existing hints of their priority and lower. Environment variables are
+        ///     considered to have override priority.
+        /// </remarks>
         [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
         public static extern SDL_bool SDL_SetHintWithPriority(
-            [In()] [MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(LPUtf8StrMarshaler))]
-                string name,
-            [In()] [MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(LPUtf8StrMarshaler))]
-                string value,
+            [In()] [MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(LPUtf8StrMarshaler))] string name,
+            [In()] [MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(LPUtf8StrMarshaler))] string value,
             SDL_HintPriority priority
         );
 
@@ -369,35 +448,38 @@ namespace Lench.AdvancedControls.Input
         #region SDL_error.h
 
         /// <summary>
-        /// Use this function to clear any previous error message.
+        ///     Use this function to clear any previous error message.
         /// </summary>
         [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
         public static extern void SDL_ClearError();
 
         /// <summary>
-        /// Use this function to retrieve a message about the last error that occurred.
+        ///     Use this function to retrieve a message about the last error that occurred.
         /// </summary>
-        /// <returns>Returns a message with information about the specific error that occurred,
-        /// or an empty string if there hasn't been an error since the last call to <see cref="SDL_ClearError()"/>.
-        /// Without calling <see cref="SDL_ClearError()"/>, the message is only applicable when an SDL function
-        /// has signaled an error. You must check the return values of SDL function calls to determine
-        /// when to appropriately call <see cref="SDL_GetError()"/>.
-        /// This string is statically allocated and must not be freed by the application.</returns>
+        /// <returns>
+        ///     Returns a message with information about the specific error that occurred,
+        ///     or an empty string if there hasn't been an error since the last call to <see cref="SDL_ClearError()" />.
+        ///     Without calling <see cref="SDL_ClearError()" />, the message is only applicable when an SDL function
+        ///     has signaled an error. You must check the return values of SDL function calls to determine
+        ///     when to appropriately call <see cref="SDL_GetError()" />.
+        ///     This string is statically allocated and must not be freed by the application.
+        /// </returns>
         /// <remarks>It is possible for multiple errors to occur before calling SDL_GetError(). Only the last error is returned. </remarks>
         [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-        [return: MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(LPUtf8StrMarshaler), MarshalCookie = LPUtf8StrMarshaler.LeaveAllocated)]
+        [return:
+            MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(LPUtf8StrMarshaler),
+                MarshalCookie = LPUtf8StrMarshaler.LeaveAllocated)]
         public static extern string SDL_GetError();
 
         /// <summary>
-        /// Use this function to set the SDL error string.
+        ///     Use this function to set the SDL error string.
         /// </summary>
         /// <param name="fmt">a printf() style message format string </param>
         /// <param name="...">additional parameters matching % tokens in the fmt string, if any</param>
         /// <remarks>Calling this function will replace any previous error message that was set.</remarks>
         [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
         public static extern void SDL_SetError(
-            [In()] [MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(LPUtf8StrMarshaler))]
-                string fmt,
+            [In()] [MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(LPUtf8StrMarshaler))] string fmt,
             __arglist
         );
 
@@ -440,7 +522,7 @@ namespace Lench.AdvancedControls.Input
         /* End nameless enum SDL_LOG_CATEGORY */
 
         /// <summary>
-        /// An enumeration of the predefined log priorities.
+        ///     An enumeration of the predefined log priorities.
         /// </summary>
         public enum SDL_LogPriority
         {
@@ -454,9 +536,9 @@ namespace Lench.AdvancedControls.Input
         }
 
         /// <summary>
-        /// Used as a callback for <see cref="SDL_LogGetOutputFunction()"/> and <see cref="SDL_LogSetOutputFunction()"/>
+        ///     Used as a callback for <see cref="SDL_LogGetOutputFunction()" /> and <see cref="SDL_LogSetOutputFunction()" />
         /// </summary>
-        /// <param name="userdata">what was passed as userdata to <see cref="SDL_LogSetOutputFunction()"/></param>
+        /// <param name="userdata">what was passed as userdata to <see cref="SDL_LogSetOutputFunction()" /></param>
         /// <param name="category">the category of the message; see Remarks for details</param>
         /// <param name="priority">the priority of the message; see Remarks for details</param>
         /// <param name="message">the message being output</param>
@@ -471,19 +553,18 @@ namespace Lench.AdvancedControls.Input
         );
 
         /// <summary>
-        /// Use this function to log a message with SDL_LOG_CATEGORY_APPLICATION and SDL_LOG_PRIORITY_INFO.
+        ///     Use this function to log a message with SDL_LOG_CATEGORY_APPLICATION and SDL_LOG_PRIORITY_INFO.
         /// </summary>
         /// <param name="fmt">a printf() style message format string</param>
         /// <param name="...">additional parameters matching % tokens in the fmt string, if any</param>
         [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
         public static extern void SDL_Log(
-            [In()] [MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(LPUtf8StrMarshaler))]
-                string fmt,
+            [In()] [MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(LPUtf8StrMarshaler))] string fmt,
             __arglist
         );
 
         /// <summary>
-        /// Use this function to log a message with SDL_LOG_PRIORITY_VERBOSE.
+        ///     Use this function to log a message with SDL_LOG_PRIORITY_VERBOSE.
         /// </summary>
         /// <param name="category">the category of the message; see Remarks for details</param>
         /// <param name="fmt">a printf() style message format string</param>
@@ -492,13 +573,12 @@ namespace Lench.AdvancedControls.Input
         [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
         public static extern void SDL_LogVerbose(
             int category,
-            [In()] [MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(LPUtf8StrMarshaler))]
-                string fmt,
+            [In()] [MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(LPUtf8StrMarshaler))] string fmt,
             __arglist
         );
 
         /// <summary>
-        /// Use this function to log a message with SDL_LOG_PRIORITY_DEBUG.
+        ///     Use this function to log a message with SDL_LOG_PRIORITY_DEBUG.
         /// </summary>
         /// <param name="category">the category of the message; see Remarks for details</param>
         /// <param name="fmt">a printf() style message format string</param>
@@ -507,13 +587,12 @@ namespace Lench.AdvancedControls.Input
         [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
         public static extern void SDL_LogDebug(
             int category,
-            [In()] [MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(LPUtf8StrMarshaler))]
-                string fmt,
+            [In()] [MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(LPUtf8StrMarshaler))] string fmt,
             __arglist
         );
 
         /// <summary>
-        /// Use this function to log a message with SDL_LOG_PRIORITY_INFO.
+        ///     Use this function to log a message with SDL_LOG_PRIORITY_INFO.
         /// </summary>
         /// <param name="category">the category of the message; see Remarks for details</param>
         /// <param name="fmt">a printf() style message format string</param>
@@ -522,13 +601,12 @@ namespace Lench.AdvancedControls.Input
         [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
         public static extern void SDL_LogInfo(
             int category,
-            [In()] [MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(LPUtf8StrMarshaler))]
-                string fmt,
+            [In()] [MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(LPUtf8StrMarshaler))] string fmt,
             __arglist
         );
 
         /// <summary>
-        /// Use this function to log a message with SDL_LOG_PRIORITY_WARN.
+        ///     Use this function to log a message with SDL_LOG_PRIORITY_WARN.
         /// </summary>
         /// <param name="category">the category of the message; see Remarks for details</param>
         /// <param name="fmt">a printf() style message format string</param>
@@ -537,13 +615,12 @@ namespace Lench.AdvancedControls.Input
         [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
         public static extern void SDL_LogWarn(
             int category,
-            [In()] [MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(LPUtf8StrMarshaler))]
-                string fmt,
+            [In()] [MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(LPUtf8StrMarshaler))] string fmt,
             __arglist
         );
 
         /// <summary>
-        /// Use this function to log a message with SDL_LOG_PRIORITY_ERROR.
+        ///     Use this function to log a message with SDL_LOG_PRIORITY_ERROR.
         /// </summary>
         /// <param name="category">the category of the message; see Remarks for details</param>
         /// <param name="fmt">a printf() style message format string</param>
@@ -552,13 +629,12 @@ namespace Lench.AdvancedControls.Input
         [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
         public static extern void SDL_LogError(
             int category,
-            [In()] [MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(LPUtf8StrMarshaler))]
-                string fmt,
+            [In()] [MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(LPUtf8StrMarshaler))] string fmt,
             __arglist
         );
 
         /// <summary>
-        /// Use this function to log a message with SDL_LOG_PRIORITY_CRITICAL.
+        ///     Use this function to log a message with SDL_LOG_PRIORITY_CRITICAL.
         /// </summary>
         /// <param name="category">the category of the message; see Remarks for details</param>
         /// <param name="fmt">a printf() style message format string</param>
@@ -567,13 +643,12 @@ namespace Lench.AdvancedControls.Input
         [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
         public static extern void SDL_LogCritical(
             int category,
-            [In()] [MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(LPUtf8StrMarshaler))]
-                string fmt,
+            [In()] [MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(LPUtf8StrMarshaler))] string fmt,
             __arglist
         );
 
         /// <summary>
-        /// Use this function to log a message with the specified category and priority.
+        ///     Use this function to log a message with the specified category and priority.
         /// </summary>
         /// <param name="category">the category of the message; see Remarks for details</param>
         /// <param name="priority">the priority of the message; see Remarks for details</param>
@@ -585,14 +660,13 @@ namespace Lench.AdvancedControls.Input
         public static extern void SDL_LogMessage(
             int category,
             SDL_LogPriority priority,
-            [In()] [MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(LPUtf8StrMarshaler))]
-                string fmt,
+            [In()] [MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(LPUtf8StrMarshaler))] string fmt,
             __arglist
         );
 
         /// <summary>
-        /// Use this function to log a message with the specified category and priority.
-        /// This version of <see cref="SDL_LogMessage"/> uses a stdarg variadic argument list.
+        ///     Use this function to log a message with the specified category and priority.
+        ///     This version of <see cref="SDL_LogMessage" /> uses a stdarg variadic argument list.
         /// </summary>
         /// <param name="category">the category of the message; see Remarks for details</param>
         /// <param name="priority">the priority of the message; see Remarks for details</param>
@@ -602,16 +676,15 @@ namespace Lench.AdvancedControls.Input
         public static extern void SDL_LogMessageV(
             int category,
             SDL_LogPriority priority,
-            [In()] [MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(LPUtf8StrMarshaler))]
-                string fmt,
+            [In()] [MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(LPUtf8StrMarshaler))] string fmt,
             __arglist
         );
 
         /// <summary>
-        /// Use this function to get the priority of a particular log category.
+        ///     Use this function to get the priority of a particular log category.
         /// </summary>
         /// <param name="category">the category to query; see Remarks for details</param>
-        /// <returns>Returns the <see cref="SDL_LogPriority"/> for the requested category; see Remarks for details. </returns>
+        /// <returns>Returns the <see cref="SDL_LogPriority" /> for the requested category; see Remarks for details. </returns>
         /// <remarks>The category can be one of SDL_LOG_CATEGORY*</remarks>
         /// <remarks>The returned priority will be one of SDL_LOG_PRIORITY*</remarks>
         [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
@@ -620,10 +693,10 @@ namespace Lench.AdvancedControls.Input
         );
 
         /// <summary>
-        /// Use this function to set the priority of a particular log category.
+        ///     Use this function to set the priority of a particular log category.
         /// </summary>
         /// <param name="category">the category to query; see Remarks for details</param>
-        /// <param name="priority">the <see cref="SDL_LogPriority"/> of the message; see Remarks for details</param>
+        /// <param name="priority">the <see cref="SDL_LogPriority" /> of the message; see Remarks for details</param>
         /// <remarks>The category can be one of SDL_LOG_CATEGORY*</remarks>
         /// <remarks>The priority can be one of SDL_LOG_PRIORITY*</remarks>
         [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
@@ -633,9 +706,9 @@ namespace Lench.AdvancedControls.Input
         );
 
         /// <summary>
-        /// Use this function to set the priority of all log categories.
+        ///     Use this function to set the priority of all log categories.
         /// </summary>
-        /// <param name="priority">the <see cref="SDL_LogPriority"/> of the message; see Remarks for details</param>
+        /// <param name="priority">the <see cref="SDL_LogPriority" /> of the message; see Remarks for details</param>
         /// <remarks>The priority can be one of SDL_LOG_PRIORITY*</remarks>
         [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
         public static extern void SDL_LogSetAllPriority(
@@ -643,14 +716,14 @@ namespace Lench.AdvancedControls.Input
         );
 
         /// <summary>
-        /// Use this function to reset all priorities to default.
+        ///     Use this function to reset all priorities to default.
         /// </summary>
-        /// <remarks>This is called in <see cref="SDL_Quit()"/>. </remarks>
+        /// <remarks>This is called in <see cref="SDL_Quit()" />. </remarks>
         [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
         public static extern void SDL_LogResetPriorities();
 
         /// <summary>
-        /// Use this function to get the current log output function.
+        ///     Use this function to get the current log output function.
         /// </summary>
         /// <param name="callback">a pointer filled in with the current log callback; see Remarks for details</param>
         /// <param name="userdata">a pointer filled in with the pointer that is passed to callback (refers to void*)</param>
@@ -661,8 +734,9 @@ namespace Lench.AdvancedControls.Input
         );
 
         /* userdata refers to a void* */
+
         /// <summary>
-        /// Use this function to replace the default log output function with one of your own.
+        ///     Use this function to replace the default log output function with one of your own.
         /// </summary>
         /// <param name="callback">the function to call instead of the default; see Remarks for details</param>
         /// <param name="userdata">a pointer that is passed to callback (refers to void*)</param>
@@ -726,45 +800,44 @@ namespace Lench.AdvancedControls.Input
         [StructLayout(LayoutKind.Sequential)]
         public struct SDL_MessageBoxColorScheme
         {
-            [MarshalAs(UnmanagedType.ByValArray, ArraySubType = UnmanagedType.Struct, SizeConst = (int)SDL_MessageBoxColorType.SDL_MESSAGEBOX_COLOR_MAX)]
-            public SDL_MessageBoxColor[] colors;
+            [MarshalAs(UnmanagedType.ByValArray, ArraySubType = UnmanagedType.Struct,
+                SizeConst = (int) SDL_MessageBoxColorType.SDL_MESSAGEBOX_COLOR_MAX)] public SDL_MessageBoxColor[] colors;
         }
 
         [StructLayout(LayoutKind.Sequential)]
         private struct INTERNAL_SDL_MessageBoxData
         {
             public SDL_MessageBoxFlags flags;
-            public IntPtr window;               /* Parent window, can be NULL */
-            public IntPtr title;                /* UTF-8 title */
-            public IntPtr message;              /* UTF-8 message text */
+            public IntPtr window; /* Parent window, can be NULL */
+            public IntPtr title; /* UTF-8 title */
+            public IntPtr message; /* UTF-8 message text */
             public int numbuttons;
             public IntPtr buttons;
-            public IntPtr colorScheme;          /* Can be NULL to use system settings */
+            public IntPtr colorScheme; /* Can be NULL to use system settings */
         }
 
         [StructLayout(LayoutKind.Sequential)]
         public struct SDL_MessageBoxData
         {
             public SDL_MessageBoxFlags flags;
-            public IntPtr window;               /* Parent window, can be NULL */
-            public string title;                /* UTF-8 title */
-            public string message;              /* UTF-8 message text */
+            public IntPtr window; /* Parent window, can be NULL */
+            public string title; /* UTF-8 title */
+            public string message; /* UTF-8 message text */
             public int numbuttons;
             public SDL_MessageBoxButtonData[] buttons;
-            public SDL_MessageBoxColorScheme? colorScheme;  /* Can be NULL to use system settings */
+            public SDL_MessageBoxColorScheme? colorScheme; /* Can be NULL to use system settings */
         }
 
         /// <summary>
-        ///
         /// </summary>
         /// <param name="messageboxdata"></param>
         /// <param name="buttonid"></param>
         /// <returns></returns>
         [DllImport(nativeLibName, EntryPoint = "SDL_ShowMessageBox", CallingConvention = CallingConvention.Cdecl)]
-        private static extern int INTERNAL_SDL_ShowMessageBox([In()] ref INTERNAL_SDL_MessageBoxData messageboxdata, out int buttonid);
+        private static extern int INTERNAL_SDL_ShowMessageBox([In()] ref INTERNAL_SDL_MessageBoxData messageboxdata,
+            out int buttonid);
 
         /// <summary>
-        ///
         /// </summary>
         /// <param name="messageboxdata"></param>
         /// <param name="buttonid"></param>
@@ -783,7 +856,7 @@ namespace Lench.AdvancedControls.Input
             };
 
             var buttons = new INTERNAL_SDL_MessageBoxButtonData[messageboxdata.numbuttons];
-            for (int i = 0; i < messageboxdata.numbuttons; i++)
+            for (var i = 0; i < messageboxdata.numbuttons; i++)
             {
                 buttons[i] = new INTERNAL_SDL_MessageBoxButtonData()
                 {
@@ -802,12 +875,12 @@ namespace Lench.AdvancedControls.Input
             int result;
             fixed (INTERNAL_SDL_MessageBoxButtonData* buttonsPtr = &buttons[0])
             {
-                data.buttons = (IntPtr)buttonsPtr;
+                data.buttons = (IntPtr) buttonsPtr;
                 result = INTERNAL_SDL_ShowMessageBox(ref data, out buttonid);
             }
 
             Marshal.FreeHGlobal(data.colorScheme);
-            for (int i = 0; i < messageboxdata.numbuttons; i++)
+            for (var i = 0; i < messageboxdata.numbuttons; i++)
             {
                 utf8.CleanUpNativeData(buttons[i].text);
             }
@@ -818,20 +891,19 @@ namespace Lench.AdvancedControls.Input
         }
 
         /// <summary>
-        /// Use this function to display a simple message box.
+        ///     Use this function to display a simple message box.
         /// </summary>
-        /// <param name="flags">An <see cref="SDL_MessageBoxFlag"/>; see Remarks for details;</param>
+        /// <param name="flags">An <see cref="SDL_MessageBoxFlag" />; see Remarks for details;</param>
         /// <param name="title">UTF-8 title text</param>
         /// <param name="message">UTF-8 message text</param>
-        /// <param name="window">the parent window, or NULL for no parent (refers to a <see cref="SDL_Window"/></param>
+        /// <param name="window">the parent window, or NULL for no parent (refers to a <see cref="SDL_Window" /></param>
         /// <returns>0 on success or a negative error code on failure; call SDL_GetError() for more information. </returns>
         [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
         public static extern int SDL_ShowSimpleMessageBox(
             SDL_MessageBoxFlags flags,
-            [In()] [MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(LPUtf8StrMarshaler))]
-                string title,
-            [In()] [MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(LPUtf8StrMarshaler))]
-                string message,
+            [In()] [MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(LPUtf8StrMarshaler))] string title,
+            [In()] [MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(LPUtf8StrMarshaler))] string
+                message,
             IntPtr window
         );
 
@@ -854,13 +926,13 @@ namespace Lench.AdvancedControls.Input
         );
 
         /// <summary>
-        /// A structure that contains information about the version of SDL in use.
+        ///     A structure that contains information about the version of SDL in use.
         /// </summary>
         /// <remarks>Represents the library's version as three levels: </remarks>
         /// <remarks>major revision (increments with massive changes, additions, and enhancements) </remarks>
         /// <remarks>minor revision (increments with backwards-compatible changes to the major revision), and </remarks>
         /// <remarks>patchlevel (increments with fixes to the minor revision)</remarks>
-        /// <remarks><see cref="SDL_VERSION"/> can be used to populate this structure with information</remarks>
+        /// <remarks><see cref="SDL_VERSION" /> can be used to populate this structure with information</remarks>
         [StructLayout(LayoutKind.Sequential)]
         public struct SDL_version
         {
@@ -870,9 +942,9 @@ namespace Lench.AdvancedControls.Input
         }
 
         /// <summary>
-        /// Use this macro to determine the SDL version your program was compiled against.
+        ///     Use this macro to determine the SDL version your program was compiled against.
         /// </summary>
-        /// <param name="x">an <see cref="SDL_version"/> structure to initialize</param>
+        /// <param name="x">an <see cref="SDL_version" /> structure to initialize</param>
         public static void SDL_VERSION(out SDL_version x)
         {
             x.major = SDL_MAJOR_VERSION;
@@ -881,7 +953,7 @@ namespace Lench.AdvancedControls.Input
         }
 
         /// <summary>
-        /// Use this macro to convert separate version components into a single numeric value.
+        ///     Use this macro to convert separate version components into a single numeric value.
         /// </summary>
         /// <param name="X">major version; reported in thousands place</param>
         /// <param name="Y">minor version; reported in hundreds place</param>
@@ -895,7 +967,7 @@ namespace Lench.AdvancedControls.Input
         }
 
         /// <summary>
-        /// Use this macro to determine whether the SDL version compiled against is at least as new as the specified version.
+        ///     Use this macro to determine whether the SDL version compiled against is at least as new as the specified version.
         /// </summary>
         /// <param name="X">major version</param>
         /// <param name="Y">minor version</param>
@@ -907,29 +979,37 @@ namespace Lench.AdvancedControls.Input
         }
 
         /// <summary>
-        /// Use this function to get the version of SDL that is linked against your program.
+        ///     Use this function to get the version of SDL that is linked against your program.
         /// </summary>
-        /// <param name="ver">the <see cref="SDL_version"/> structure that contains the version information</param>
+        /// <param name="ver">the <see cref="SDL_version" /> structure that contains the version information</param>
         /// <remarks>This function may be called safely at any time, even before SDL_Init(). </remarks>
         [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
         public static extern void SDL_GetVersion(out SDL_version ver);
 
         /// <summary>
-        /// Use this function to get the code revision of SDL that is linked against your program.
+        ///     Use this function to get the code revision of SDL that is linked against your program.
         /// </summary>
-        /// <returns>Returns an arbitrary string, uniquely identifying the exact revision
-        /// of the SDL library in use. </returns>
-        /// <remarks>The revision is a string including sequential revision number that is
-        /// incremented with each commit, and a hash of the last code change.</remarks>
+        /// <returns>
+        ///     Returns an arbitrary string, uniquely identifying the exact revision
+        ///     of the SDL library in use.
+        /// </returns>
+        /// <remarks>
+        ///     The revision is a string including sequential revision number that is
+        ///     incremented with each commit, and a hash of the last code change.
+        /// </remarks>
         /// <remarks>Example: hg-5344:94189aa89b54</remarks>
-        /// <remarks>This value is the revision of the code you are linked with and may be
-        /// different from the code you are compiling with, which is found in the constant SDL_REVISION.</remarks>
+        /// <remarks>
+        ///     This value is the revision of the code you are linked with and may be
+        ///     different from the code you are compiling with, which is found in the constant SDL_REVISION.
+        /// </remarks>
         [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-        [return: MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(LPUtf8StrMarshaler), MarshalCookie = LPUtf8StrMarshaler.LeaveAllocated)]
+        [return:
+            MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(LPUtf8StrMarshaler),
+                MarshalCookie = LPUtf8StrMarshaler.LeaveAllocated)]
         public static extern string SDL_GetRevision();
 
         /// <summary>
-        /// Use this function to get the revision number of SDL that is linked against your program.
+        ///     Use this function to get the revision number of SDL that is linked against your program.
         /// </summary>
         /// <returns>Returns a number uniquely identifying the exact revision of the SDL library in use.</returns>
         /// <remarks>This is an incrementing number based on commits to hg.libsdl.org.</remarks>
@@ -941,8 +1021,9 @@ namespace Lench.AdvancedControls.Input
         #region SDL_video.h
 
         /* Actually, this is from SDL_blendmode.h */
+
         /// <summary>
-        /// An enumeration of blend modes used in SDL_RenderCopy() and drawing operations.
+        ///     An enumeration of blend modes used in SDL_RenderCopy() and drawing operations.
         /// </summary>
         [Flags]
         public enum SDL_BlendMode
@@ -954,7 +1035,7 @@ namespace Lench.AdvancedControls.Input
         }
 
         /// <summary>
-        /// An enumeration of OpenGL configuration attributes.
+        ///     An enumeration of OpenGL configuration attributes.
         /// </summary>
         public enum SDL_GLattr
         {
@@ -986,7 +1067,7 @@ namespace Lench.AdvancedControls.Input
         }
 
         /// <summary>
-        /// An enumeration of OpenGL profiles.
+        ///     An enumeration of OpenGL profiles.
         /// </summary>
         [Flags]
         public enum SDL_GLprofile
@@ -997,8 +1078,8 @@ namespace Lench.AdvancedControls.Input
         }
 
         /// <summary>
-        /// This enumeration is used in conjunction with SDL_GL_SetAttribute
-        /// and SDL_GL_CONTEXT_FLAGS. Multiple flags can be OR'd together.
+        ///     This enumeration is used in conjunction with SDL_GL_SetAttribute
+        ///     and SDL_GL_CONTEXT_FLAGS. Multiple flags can be OR'd together.
         /// </summary>
         [Flags]
         public enum SDL_GLcontext
@@ -1010,7 +1091,7 @@ namespace Lench.AdvancedControls.Input
         }
 
         /// <summary>
-        /// An enumeration of window events.
+        ///     An enumeration of window events.
         /// </summary>
         public enum SDL_WindowEventID : byte
         {
@@ -1032,7 +1113,7 @@ namespace Lench.AdvancedControls.Input
         }
 
         /// <summary>
-        /// An enumeration of window states.
+        ///     An enumeration of window states.
         /// </summary>
         [Flags]
         public enum SDL_WindowFlags : uint
@@ -1048,21 +1129,22 @@ namespace Lench.AdvancedControls.Input
             SDL_WINDOW_INPUT_GRABBED = 0x00000100,
             SDL_WINDOW_INPUT_FOCUS = 0x00000200,
             SDL_WINDOW_MOUSE_FOCUS = 0x00000400,
+
             SDL_WINDOW_FULLSCREEN_DESKTOP =
                 (SDL_WINDOW_FULLSCREEN | 0x00001000),
             SDL_WINDOW_FOREIGN = 0x00000800,
-            SDL_WINDOW_ALLOW_HIGHDPI = 0x00002000,  /* Only available in 2.0.1 */
-            SDL_WINDOW_MOUSE_CAPTURE = 0x00004000,  /* Only available in 2.0.4 */
+            SDL_WINDOW_ALLOW_HIGHDPI = 0x00002000, /* Only available in 2.0.1 */
+            SDL_WINDOW_MOUSE_CAPTURE = 0x00004000, /* Only available in 2.0.4 */
         }
 
         /// <summary>
-        /// Possible return values from the SDL_HitTest callback.
-        /// This is only available in 2.0.4.
+        ///     Possible return values from the SDL_HitTest callback.
+        ///     This is only available in 2.0.4.
         /// </summary>
         public enum SDL_HitTestResult
         {
-            SDL_HITTEST_NORMAL,     /* Region is normal. No special properties. */
-            SDL_HITTEST_DRAGGABLE,      /* Region can drag entire window. */
+            SDL_HITTEST_NORMAL, /* Region is normal. No special properties. */
+            SDL_HITTEST_DRAGGABLE, /* Region can drag entire window. */
             SDL_HITTEST_RESIZE_TOPLEFT,
             SDL_HITTEST_RESIZE_TOP,
             SDL_HITTEST_RESIZE_TOPRIGHT,
@@ -1099,7 +1181,7 @@ namespace Lench.AdvancedControls.Input
         }
 
         /// <summary>
-        /// A structure that describes a display mode.
+        ///     A structure that describes a display mode.
         /// </summary>
         [StructLayout(LayoutKind.Sequential)]
         public struct SDL_DisplayMode
@@ -1113,24 +1195,28 @@ namespace Lench.AdvancedControls.Input
 
         /* win refers to an SDL_Window*, area to a cosnt SDL_Point*, data to a void* */
         /* Only available in 2.0.4 */
+
         public delegate SDL_HitTestResult SDL_HitTest(IntPtr win, IntPtr area, IntPtr data);
 
         /// <summary>
-        /// Use this function to create a window with the specified position, dimensions, and flags.
+        ///     Use this function to create a window with the specified position, dimensions, and flags.
         /// </summary>
         /// <param name="title">the title of the window, in UTF-8 encoding</param>
         /// <param name="x">the x position of the window, SDL_WINDOWPOS_CENTERED, or SDL_WINDOWPOS_UNDEFINED</param>
         /// <param name="y">the y position of the window, SDL_WINDOWPOS_CENTERED, or SDL_WINDOWPOS_UNDEFINED</param>
         /// <param name="w">the width of the window</param>
         /// <param name="h">the height of the window</param>
-        /// <param name="flags">0, or one or more <see cref="SDL_WindowFlags"/> OR'd together;
-        /// see Remarks for details</param>
-        /// <returns>Returns the window that was created or NULL on failure; call <see cref="SDL_GetError()"/>
-        /// for more information. (refers to an <see cref="SDL_Window"/>)</returns>
+        /// <param name="flags">
+        ///     0, or one or more <see cref="SDL_WindowFlags" /> OR'd together;
+        ///     see Remarks for details
+        /// </param>
+        /// <returns>
+        ///     Returns the window that was created or NULL on failure; call <see cref="SDL_GetError()" />
+        ///     for more information. (refers to an <see cref="SDL_Window" />)
+        /// </returns>
         [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
         public static extern IntPtr SDL_CreateWindow(
-            [In()] [MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(LPUtf8StrMarshaler))]
-                string title,
+            [In()] [MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(LPUtf8StrMarshaler))] string title,
             int x,
             int y,
             int w,
@@ -1139,14 +1225,14 @@ namespace Lench.AdvancedControls.Input
         );
 
         /// <summary>
-        /// Use this function to create a window and default renderer.
+        ///     Use this function to create a window and default renderer.
         /// </summary>
         /// <param name="width">The width of the window</param>
         /// <param name="height">The height of the window</param>
-        /// <param name="window_flags">The flags used to create the window (see <see cref="SDL_CreateWindow()"/>)</param>
-        /// <param name="window">A pointer filled with the window, or NULL on error (<see cref="SDL_Window*"/>)</param>
-        /// <param name="renderer">A pointer filled with the renderer, or NULL on error <see cref="(SDL_Renderer*)"/></param>
-        /// <returns>Returns 0 on success, or -1 on error; call <see cref="SDL_GetError()"/> for more information. </returns>
+        /// <param name="window_flags">The flags used to create the window (see <see cref="SDL_CreateWindow()" />)</param>
+        /// <param name="window">A pointer filled with the window, or NULL on error (<see cref="SDL_Window*" />)</param>
+        /// <param name="renderer">A pointer filled with the renderer, or NULL on error <see cref="(SDL_Renderer*)" /></param>
+        /// <returns>Returns 0 on success, or -1 on error; call <see cref="SDL_GetError()" /> for more information. </returns>
         [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
         public static extern int SDL_CreateWindowAndRenderer(
             int width,
@@ -1157,50 +1243,59 @@ namespace Lench.AdvancedControls.Input
         );
 
         /// <summary>
-        /// Use this function to create an SDL window from an existing native window.
+        ///     Use this function to create an SDL window from an existing native window.
         /// </summary>
         /// <param name="data">a pointer to driver-dependent window creation data, typically your native window cast to a void*</param>
-        /// <returns>Returns the window (<see cref="SDL_Window"/>) that was created or NULL on failure;
-        /// call <see cref="SDL_GetError()"/> for more information. </returns>
+        /// <returns>
+        ///     Returns the window (<see cref="SDL_Window" />) that was created or NULL on failure;
+        ///     call <see cref="SDL_GetError()" /> for more information.
+        /// </returns>
         [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
         public static extern IntPtr SDL_CreateWindowFrom(IntPtr data);
 
         /// <summary>
-        /// Use this function to destroy a window.
+        ///     Use this function to destroy a window.
         /// </summary>
-        /// <param name="window">the window to destroy (<see cref="SDL_Window"/>)</param>
+        /// <param name="window">the window to destroy (<see cref="SDL_Window" />)</param>
         [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
         public static extern void SDL_DestroyWindow(IntPtr window);
 
         /// <summary>
-        /// Use this function to prevent the screen from being blanked by a screen saver.
+        ///     Use this function to prevent the screen from being blanked by a screen saver.
         /// </summary>
         /// <remarks>If you disable the screensaver, it is automatically re-enabled when SDL quits. </remarks>
         [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
         public static extern void SDL_DisableScreenSaver();
 
         /// <summary>
-        /// Use this function to allow the screen to be blanked by a screen saver.
+        ///     Use this function to allow the screen to be blanked by a screen saver.
         /// </summary>
         [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
         public static extern void SDL_EnableScreenSaver();
 
         /* IntPtr refers to an SDL_DisplayMode. Just use closest. */
+
         /// <summary>
-        /// Use this function to get the closest match to the requested display mode.
+        ///     Use this function to get the closest match to the requested display mode.
         /// </summary>
         /// <param name="displayIndex">the index of the display to query</param>
-        /// <param name="mode">an <see cref="SDL_DisplayMode"/> structure containing the desired display mode </param>
-        /// <param name="closest">an <see cref="SDL_DisplayMode"/> structure filled in with
-        /// the closest match of the available display modes </param>
-        /// <returns>Returns the passed in value closest or NULL if no matching video mode was available;
-        /// (refers to a <see cref="SDL_DisplayMode"/>)
-        /// call <see cref="SDL_GetError()"/> for more information. </returns>
-        /// <remarks>The available display modes are scanned and closest is filled in with the closest mode
-        /// matching the requested mode and returned. The mode format and refresh rate default to the desktop
-        /// mode if they are set to 0. The modes are scanned with size being first priority, format being
-        /// second priority, and finally checking the refresh rate. If all the available modes are too small,
-        /// then NULL is returned. </remarks>
+        /// <param name="mode">an <see cref="SDL_DisplayMode" /> structure containing the desired display mode </param>
+        /// <param name="closest">
+        ///     an <see cref="SDL_DisplayMode" /> structure filled in with
+        ///     the closest match of the available display modes
+        /// </param>
+        /// <returns>
+        ///     Returns the passed in value closest or NULL if no matching video mode was available;
+        ///     (refers to a <see cref="SDL_DisplayMode" />)
+        ///     call <see cref="SDL_GetError()" /> for more information.
+        /// </returns>
+        /// <remarks>
+        ///     The available display modes are scanned and closest is filled in with the closest mode
+        ///     matching the requested mode and returned. The mode format and refresh rate default to the desktop
+        ///     mode if they are set to 0. The modes are scanned with size being first priority, format being
+        ///     second priority, and finally checking the refresh rate. If all the available modes are too small,
+        ///     then NULL is returned.
+        /// </remarks>
         [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
         public static extern IntPtr SDL_GetClosestDisplayMode(
             int displayIndex,
@@ -1209,15 +1304,19 @@ namespace Lench.AdvancedControls.Input
         );
 
         /// <summary>
-        /// Use this function to get information about the current display mode.
+        ///     Use this function to get information about the current display mode.
         /// </summary>
         /// <param name="displayIndex">the index of the display to query</param>
-        /// <param name="mode">an <see cref="SDL_DisplayMode"/> structure filled in with the current display mode</param>
-        /// <returns>Returns 0 on success or a negative error code on failure;
-        /// call <see cref="SDL_GetError()"/> for more information. </returns>
-        /// <remarks>There's a difference between this function and <see cref="SDL_GetDesktopDisplayMode"/> when SDL
-        /// runs fullscreen and has changed the resolution. In that case this function will return the
-        /// current display mode, and not the previous native display mode. </remarks>
+        /// <param name="mode">an <see cref="SDL_DisplayMode" /> structure filled in with the current display mode</param>
+        /// <returns>
+        ///     Returns 0 on success or a negative error code on failure;
+        ///     call <see cref="SDL_GetError()" /> for more information.
+        /// </returns>
+        /// <remarks>
+        ///     There's a difference between this function and <see cref="SDL_GetDesktopDisplayMode" /> when SDL
+        ///     runs fullscreen and has changed the resolution. In that case this function will return the
+        ///     current display mode, and not the previous native display mode.
+        /// </remarks>
         [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
         public static extern int SDL_GetCurrentDisplayMode(
             int displayIndex,
@@ -1225,26 +1324,34 @@ namespace Lench.AdvancedControls.Input
         );
 
         /// <summary>
-        /// Use this function to return the name of the currently initialized video driver.
+        ///     Use this function to return the name of the currently initialized video driver.
         /// </summary>
         /// <returns>Returns the name of the current video driver or NULL if no driver has been initialized. </returns>
-        /// <remarks>There's a difference between this function and <see cref="SDL_GetCurrentDisplayMode"/> when SDL
-        /// runs fullscreen and has changed the resolution. In that case this function will return the
-        /// previous native display mode, and not the current display mode. </remarks>
+        /// <remarks>
+        ///     There's a difference between this function and <see cref="SDL_GetCurrentDisplayMode" /> when SDL
+        ///     runs fullscreen and has changed the resolution. In that case this function will return the
+        ///     previous native display mode, and not the current display mode.
+        /// </remarks>
         [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-        [return: MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(LPUtf8StrMarshaler), MarshalCookie = LPUtf8StrMarshaler.LeaveAllocated)]
+        [return:
+            MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(LPUtf8StrMarshaler),
+                MarshalCookie = LPUtf8StrMarshaler.LeaveAllocated)]
         public static extern string SDL_GetCurrentVideoDriver();
 
         /// <summary>
-        /// Use this function to get information about the desktop display mode.
+        ///     Use this function to get information about the desktop display mode.
         /// </summary>
         /// <param name="displayIndex">the index of the display to query</param>
-        /// <param name="mode">an <see cref="SDL_DisplayMode"/> structure filled in with the current display mode</param>
-        /// <returns>Returns 0 on success or a negative error code on failure;
-        /// call <see cref="SDL_GetError()"/> for more information. </returns>
-        /// <remarks>There's a difference between this function and <see cref="SDL_GetCurrentDisplayMode"/> when SDL
-        /// runs fullscreen and has changed the resolution. In that case this function will return the
-        /// previous native display mode, and not the current display mode. </remarks>
+        /// <param name="mode">an <see cref="SDL_DisplayMode" /> structure filled in with the current display mode</param>
+        /// <returns>
+        ///     Returns 0 on success or a negative error code on failure;
+        ///     call <see cref="SDL_GetError()" /> for more information.
+        /// </returns>
+        /// <remarks>
+        ///     There's a difference between this function and <see cref="SDL_GetCurrentDisplayMode" /> when SDL
+        ///     runs fullscreen and has changed the resolution. In that case this function will return the
+        ///     previous native display mode, and not the current display mode.
+        /// </remarks>
         [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
         public static extern int SDL_GetDesktopDisplayMode(
             int displayIndex,
@@ -1252,16 +1359,20 @@ namespace Lench.AdvancedControls.Input
         );
 
         [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-        [return: MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(LPUtf8StrMarshaler), MarshalCookie = LPUtf8StrMarshaler.LeaveAllocated)]
+        [return:
+            MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(LPUtf8StrMarshaler),
+                MarshalCookie = LPUtf8StrMarshaler.LeaveAllocated)]
         public static extern string SDL_GetDisplayName(int index);
 
         /// <summary>
-        /// Use this function to get the desktop area represented by a display, with the primary display located at 0,0.
+        ///     Use this function to get the desktop area represented by a display, with the primary display located at 0,0.
         /// </summary>
         /// <param name="displayIndex">the index of the display to query</param>
-        /// <param name="rect">the <see cref="SDL_Rect"/> structure filled in with the display bounds</param>
-        /// <returns>Returns 0 on success or a negative error code on failure;
-        /// call <see cref="SDL_GetError()"/> for more information. </returns>
+        /// <param name="rect">the <see cref="SDL_Rect" /> structure filled in with the display bounds</param>
+        /// <returns>
+        ///     Returns 0 on success or a negative error code on failure;
+        ///     call <see cref="SDL_GetError()" /> for more information.
+        /// </returns>
         [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
         public static extern int SDL_GetDisplayBounds(
             int displayIndex,
@@ -1269,6 +1380,7 @@ namespace Lench.AdvancedControls.Input
         );
 
         /* This function is only available in 2.0.4 or higher */
+
         [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
         public static extern int SDL_GetDisplayDPI(
             int displayIndex,
@@ -1278,18 +1390,21 @@ namespace Lench.AdvancedControls.Input
         );
 
         /// <summary>
-        /// Use this function to get information about a specific display mode.
+        ///     Use this function to get information about a specific display mode.
         /// </summary>
         /// <param name="displayIndex">the index of the display to query</param>
         /// <param name="modeIndex">the index of the display mode to query</param>
-        /// <param name="mode">an <see cref="SDL_DisplayMode"/> structure filled in with the mode at modeIndex</param>
-        /// <returns>Returns 0 on success or a negative error code on failure;
-        /// call <see cref="SDL_GetError()"/> for more information. </returns>
-        /// <remarks>The display modes are sorted in this priority:
-        /// <remarks>bits per pixel -> more colors to fewer colors</remarks>
-        /// <remarks>width -> largest to smallest</remarks>
-        /// <remarks>height -> largest to smallest</remarks>
-        /// <remarks>refresh rate -> highest to lowest</remarks>
+        /// <param name="mode">an <see cref="SDL_DisplayMode" /> structure filled in with the mode at modeIndex</param>
+        /// <returns>
+        ///     Returns 0 on success or a negative error code on failure;
+        ///     call <see cref="SDL_GetError()" /> for more information.
+        /// </returns>
+        /// <remarks>
+        ///     The display modes are sorted in this priority:
+        ///     <remarks>bits per pixel -> more colors to fewer colors</remarks>
+        ///     <remarks>width -> largest to smallest</remarks>
+        ///     <remarks>height -> largest to smallest</remarks>
+        ///     <remarks>refresh rate -> highest to lowest</remarks>
         [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
         public static extern int SDL_GetDisplayMode(
             int displayIndex,
@@ -1298,48 +1413,56 @@ namespace Lench.AdvancedControls.Input
         );
 
         /// <summary>
-        /// Use this function to return the number of available display modes.
+        ///     Use this function to return the number of available display modes.
         /// </summary>
         /// <param name="displayIndex">the index of the display to query</param>
-        /// <returns>Returns a number >= 1 on success or a negative error code on failure;
-        /// call <see cref="SDL_GetError()"/> for more information. </returns>
+        /// <returns>
+        ///     Returns a number >= 1 on success or a negative error code on failure;
+        ///     call <see cref="SDL_GetError()" /> for more information.
+        /// </returns>
         [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
         public static extern int SDL_GetNumDisplayModes(
             int displayIndex
         );
 
         /// <summary>
-        /// Use this function to return the number of available video displays.
+        ///     Use this function to return the number of available video displays.
         /// </summary>
-        /// <returns>Returns a number >= 1 or a negative error code on failure;
-        /// call <see cref="SDL_GetError()"/> for more information. </returns>
+        /// <returns>
+        ///     Returns a number >= 1 or a negative error code on failure;
+        ///     call <see cref="SDL_GetError()" /> for more information.
+        /// </returns>
         [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
         public static extern int SDL_GetNumVideoDisplays();
 
         /// <summary>
-        /// Use this function to get the number of video drivers compiled into SDL.
+        ///     Use this function to get the number of video drivers compiled into SDL.
         /// </summary>
-        /// <returns>Returns a number >= 1 on success or a negative error code on failure;
-        /// call <see cref="SDL_GetError()"/> for more information. </returns>
+        /// <returns>
+        ///     Returns a number >= 1 on success or a negative error code on failure;
+        ///     call <see cref="SDL_GetError()" /> for more information.
+        /// </returns>
         [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
         public static extern int SDL_GetNumVideoDrivers();
 
         /// <summary>
-        /// Use this function to get the name of a built in video driver.
+        ///     Use this function to get the name of a built in video driver.
         /// </summary>
         /// <param name="index">the index of a video driver</param>
         /// <returns>Returns the name of the video driver with the given index. </returns>
         /// <remarks>The video drivers are presented in the order in which they are normally checked during initialization. </remarks>
         [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-        [return: MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(LPUtf8StrMarshaler), MarshalCookie = LPUtf8StrMarshaler.LeaveAllocated)]
+        [return:
+            MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(LPUtf8StrMarshaler),
+                MarshalCookie = LPUtf8StrMarshaler.LeaveAllocated)]
         public static extern string SDL_GetVideoDriver(
             int index
         );
 
         /// <summary>
-        /// Use this function to get the brightness (gamma correction) for a window.
+        ///     Use this function to get the brightness (gamma correction) for a window.
         /// </summary>
-        /// <param name="window">the window to query (<see cref="SDL_Window"/>)</param>
+        /// <param name="window">the window to query (<see cref="SDL_Window" />)</param>
         /// <returns>Returns the brightness for the window where 0.0 is completely dark and 1.0 is normal brightness. </returns>
         [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
         public static extern float SDL_GetWindowBrightness(
@@ -1347,37 +1470,40 @@ namespace Lench.AdvancedControls.Input
         );
 
         /// <summary>
-        /// Use this function to retrieve the data pointer associated with a window.
+        ///     Use this function to retrieve the data pointer associated with a window.
         /// </summary>
-        /// <param name="window">the window to query (<see cref="SDL_Window"/>)</param>
+        /// <param name="window">the window to query (<see cref="SDL_Window" />)</param>
         /// <param name="name">the name of the pointer</param>
         /// <returns>Returns the value associated with name. (void*)</returns>
         [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
         public static extern IntPtr SDL_GetWindowData(
             IntPtr window,
-            [In()] [MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(LPUtf8StrMarshaler))]
-                string name
+            [In()] [MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(LPUtf8StrMarshaler))] string name
         );
 
         /// <summary>
-        /// Use this function to get the index of the display associated with a window.
+        ///     Use this function to get the index of the display associated with a window.
         /// </summary>
-        /// <param name="window">the window to query (<see cref="SDL_Window"/>)</param>
-        /// <returns>Returns the index of the display containing the center of the window
-        /// on success or a negative error code on failure;
-        /// call <see cref="SDL_GetError()"/> for more information. </returns>
+        /// <param name="window">the window to query (<see cref="SDL_Window" />)</param>
+        /// <returns>
+        ///     Returns the index of the display containing the center of the window
+        ///     on success or a negative error code on failure;
+        ///     call <see cref="SDL_GetError()" /> for more information.
+        /// </returns>
         [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
         public static extern int SDL_GetWindowDisplayIndex(
             IntPtr window
         );
 
         /// <summary>
-        /// Use this function to fill in information about the display mode to use when a window is visible at fullscreen.
+        ///     Use this function to fill in information about the display mode to use when a window is visible at fullscreen.
         /// </summary>
-        /// <param name="window">the window to query (<see cref="SDL_Window"/>)</param>
-        /// <param name="mode">an <see cref="SDL_DisplayMode"/> structure filled in with the fullscreen display mode</param>
-        /// <returns>Returns 0 on success or a negative error code on failure;
-        /// call <see cref="SDL_GetError()"/> for more information. </returns>
+        /// <param name="window">the window to query (<see cref="SDL_Window" />)</param>
+        /// <param name="mode">an <see cref="SDL_DisplayMode" /> structure filled in with the fullscreen display mode</param>
+        /// <returns>
+        ///     Returns 0 on success or a negative error code on failure;
+        ///     call <see cref="SDL_GetError()" /> for more information.
+        /// </returns>
         [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
         public static extern int SDL_GetWindowDisplayMode(
             IntPtr window,
@@ -1385,49 +1511,53 @@ namespace Lench.AdvancedControls.Input
         );
 
         /// <summary>
-        /// Use this function to get the window flags.
+        ///     Use this function to get the window flags.
         /// </summary>
-        /// <param name="window">the window to query (<see cref="SDL_Window"/>)</param>
-        /// <returns>Returns a mask of the <see cref="SDL_WindowFlags"/> associated with window; see Remarks for details.</returns>
+        /// <param name="window">the window to query (<see cref="SDL_Window" />)</param>
+        /// <returns>Returns a mask of the <see cref="SDL_WindowFlags" /> associated with window; see Remarks for details.</returns>
         [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
         public static extern uint SDL_GetWindowFlags(IntPtr window);
 
         /// <summary>
-        /// Use this function to get a window from a stored ID.
+        ///     Use this function to get a window from a stored ID.
         /// </summary>
         /// <param name="id">the ID of the window</param>
-        /// <returns>Returns the window associated with id or NULL if it doesn't exist (<see cref="SDL_Window"/>);
-        /// call <see cref="SDL_GetError()"/> for more information. </returns>
+        /// <returns>
+        ///     Returns the window associated with id or NULL if it doesn't exist (<see cref="SDL_Window" />);
+        ///     call <see cref="SDL_GetError()" /> for more information.
+        /// </returns>
         [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
         public static extern IntPtr SDL_GetWindowFromID(uint id);
 
         /* window refers to an SDL_Window* */
+
         [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
         public static extern int SDL_GetWindowGammaRamp(
             IntPtr window,
-            [Out()] [MarshalAs(UnmanagedType.LPArray, ArraySubType = UnmanagedType.U2, SizeConst = 256)]
-                ushort[] red,
-            [Out()] [MarshalAs(UnmanagedType.LPArray, ArraySubType = UnmanagedType.U2, SizeConst = 256)]
-                ushort[] green,
-            [Out()] [MarshalAs(UnmanagedType.LPArray, ArraySubType = UnmanagedType.U2, SizeConst = 256)]
-                ushort[] blue
+            [Out()] [MarshalAs(UnmanagedType.LPArray, ArraySubType = UnmanagedType.U2, SizeConst = 256)] ushort[] red,
+            [Out()] [MarshalAs(UnmanagedType.LPArray, ArraySubType = UnmanagedType.U2, SizeConst = 256)] ushort[] green,
+            [Out()] [MarshalAs(UnmanagedType.LPArray, ArraySubType = UnmanagedType.U2, SizeConst = 256)] ushort[] blue
         );
 
         /* window refers to an SDL_Window* */
+
         [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
         public static extern SDL_bool SDL_GetWindowGrab(IntPtr window);
 
         /* window refers to an SDL_Window* */
+
         [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
         public static extern uint SDL_GetWindowID(IntPtr window);
 
         /* window refers to an SDL_Window* */
+
         [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
         public static extern uint SDL_GetWindowPixelFormat(
             IntPtr window
         );
 
         /* window refers to an SDL_Window* */
+
         [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
         public static extern void SDL_GetWindowMaximumSize(
             IntPtr window,
@@ -1436,6 +1566,7 @@ namespace Lench.AdvancedControls.Input
         );
 
         /* window refers to an SDL_Window* */
+
         [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
         public static extern void SDL_GetWindowMinimumSize(
             IntPtr window,
@@ -1444,6 +1575,7 @@ namespace Lench.AdvancedControls.Input
         );
 
         /* window refers to an SDL_Window* */
+
         [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
         public static extern void SDL_GetWindowPosition(
             IntPtr window,
@@ -1452,6 +1584,7 @@ namespace Lench.AdvancedControls.Input
         );
 
         /* window refers to an SDL_Window* */
+
         [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
         public static extern void SDL_GetWindowSize(
             IntPtr window,
@@ -1460,17 +1593,22 @@ namespace Lench.AdvancedControls.Input
         );
 
         /* IntPtr refers to an SDL_Surface*, window to an SDL_Window* */
+
         [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
         public static extern IntPtr SDL_GetWindowSurface(IntPtr window);
 
         /* window refers to an SDL_Window* */
+
         [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-        [return: MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(LPUtf8StrMarshaler), MarshalCookie = LPUtf8StrMarshaler.LeaveAllocated)]
+        [return:
+            MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(LPUtf8StrMarshaler),
+                MarshalCookie = LPUtf8StrMarshaler.LeaveAllocated)]
         public static extern string SDL_GetWindowTitle(
             IntPtr window
         );
 
         /* texture refers to an SDL_Texture* */
+
         [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
         public static extern int SDL_GL_BindTexture(
             IntPtr texture,
@@ -1479,27 +1617,30 @@ namespace Lench.AdvancedControls.Input
         );
 
         /* IntPtr and window refer to an SDL_GLContext and SDL_Window* */
+
         [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
         public static extern IntPtr SDL_GL_CreateContext(IntPtr window);
 
         /* context refers to an SDL_GLContext */
+
         [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
         public static extern void SDL_GL_DeleteContext(IntPtr context);
 
         /* IntPtr refers to a function pointer */
+
         [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
         public static extern IntPtr SDL_GL_GetProcAddress(
-            [In()] [MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(LPUtf8StrMarshaler))]
-                string proc
+            [In()] [MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(LPUtf8StrMarshaler))] string proc
         );
 
         [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
         public static extern SDL_bool SDL_GL_ExtensionSupported(
-            [In()] [MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(LPUtf8StrMarshaler))]
-                string extension
+            [In()] [MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(LPUtf8StrMarshaler))] string
+                extension
         );
 
         /* Only available in SDL 2.0.2 or higher */
+
         [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
         public static extern void SDL_GL_ResetAttributes();
 
@@ -1513,6 +1654,7 @@ namespace Lench.AdvancedControls.Input
         public static extern int SDL_GL_GetSwapInterval();
 
         /* window and context refer to an SDL_Window* and SDL_GLContext */
+
         [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
         public static extern int SDL_GL_MakeCurrent(
             IntPtr window,
@@ -1520,14 +1662,17 @@ namespace Lench.AdvancedControls.Input
         );
 
         /* IntPtr refers to an SDL_Window* */
+
         [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
         public static extern IntPtr SDL_GL_GetCurrentWindow();
 
         /* IntPtr refers to an SDL_Context */
+
         [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
         public static extern IntPtr SDL_GL_GetCurrentContext();
 
         /* window refers to an SDL_Window*, This function is only available in SDL 2.0.1 */
+
         [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
         public static extern void SDL_GL_GetDrawableSize(
             IntPtr window,
@@ -1545,14 +1690,17 @@ namespace Lench.AdvancedControls.Input
         public static extern int SDL_GL_SetSwapInterval(int interval);
 
         /* window refers to an SDL_Window* */
+
         [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
         public static extern void SDL_GL_SwapWindow(IntPtr window);
 
         /* texture refers to an SDL_Texture* */
+
         [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
         public static extern int SDL_GL_UnbindTexture(IntPtr texture);
 
         /* window refers to an SDL_Window* */
+
         [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
         public static extern void SDL_HideWindow(IntPtr window);
 
@@ -1560,22 +1708,27 @@ namespace Lench.AdvancedControls.Input
         public static extern SDL_bool SDL_IsScreenSaverEnabled();
 
         /* window refers to an SDL_Window* */
+
         [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
         public static extern void SDL_MaximizeWindow(IntPtr window);
 
         /* window refers to an SDL_Window* */
+
         [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
         public static extern void SDL_MinimizeWindow(IntPtr window);
 
         /* window refers to an SDL_Window* */
+
         [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
         public static extern void SDL_RaiseWindow(IntPtr window);
 
         /* window refers to an SDL_Window* */
+
         [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
         public static extern void SDL_RestoreWindow(IntPtr window);
 
         /* window refers to an SDL_Window* */
+
         [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
         public static extern int SDL_SetWindowBrightness(
             IntPtr window,
@@ -1583,15 +1736,16 @@ namespace Lench.AdvancedControls.Input
         );
 
         /* IntPtr and userdata are void*, window is an SDL_Window* */
+
         [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
         public static extern IntPtr SDL_SetWindowData(
             IntPtr window,
-            [In()] [MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(LPUtf8StrMarshaler))]
-                string name,
+            [In()] [MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(LPUtf8StrMarshaler))] string name,
             IntPtr userdata
         );
 
         /* window refers to an SDL_Window* */
+
         [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
         public static extern int SDL_SetWindowDisplayMode(
             IntPtr window,
@@ -1599,6 +1753,7 @@ namespace Lench.AdvancedControls.Input
         );
 
         /* window refers to an SDL_Window* */
+
         [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
         public static extern int SDL_SetWindowFullscreen(
             IntPtr window,
@@ -1606,18 +1761,17 @@ namespace Lench.AdvancedControls.Input
         );
 
         /* window refers to an SDL_Window* */
+
         [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
         public static extern int SDL_SetWindowGammaRamp(
             IntPtr window,
-            [In()] [MarshalAs(UnmanagedType.LPArray, ArraySubType = UnmanagedType.U2, SizeConst = 256)]
-                ushort[] red,
-            [In()] [MarshalAs(UnmanagedType.LPArray, ArraySubType = UnmanagedType.U2, SizeConst = 256)]
-                ushort[] green,
-            [In()] [MarshalAs(UnmanagedType.LPArray, ArraySubType = UnmanagedType.U2, SizeConst = 256)]
-                ushort[] blue
+            [In()] [MarshalAs(UnmanagedType.LPArray, ArraySubType = UnmanagedType.U2, SizeConst = 256)] ushort[] red,
+            [In()] [MarshalAs(UnmanagedType.LPArray, ArraySubType = UnmanagedType.U2, SizeConst = 256)] ushort[] green,
+            [In()] [MarshalAs(UnmanagedType.LPArray, ArraySubType = UnmanagedType.U2, SizeConst = 256)] ushort[] blue
         );
 
         /* window refers to an SDL_Window* */
+
         [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
         public static extern void SDL_SetWindowGrab(
             IntPtr window,
@@ -1625,6 +1779,7 @@ namespace Lench.AdvancedControls.Input
         );
 
         /* window refers to an SDL_Window*, icon to an SDL_Surface* */
+
         [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
         public static extern void SDL_SetWindowIcon(
             IntPtr window,
@@ -1632,6 +1787,7 @@ namespace Lench.AdvancedControls.Input
         );
 
         /* window refers to an SDL_Window* */
+
         [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
         public static extern void SDL_SetWindowMaximumSize(
             IntPtr window,
@@ -1640,6 +1796,7 @@ namespace Lench.AdvancedControls.Input
         );
 
         /* window refers to an SDL_Window* */
+
         [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
         public static extern void SDL_SetWindowMinimumSize(
             IntPtr window,
@@ -1648,6 +1805,7 @@ namespace Lench.AdvancedControls.Input
         );
 
         /* window refers to an SDL_Window* */
+
         [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
         public static extern void SDL_SetWindowPosition(
             IntPtr window,
@@ -1656,6 +1814,7 @@ namespace Lench.AdvancedControls.Input
         );
 
         /* window refers to an SDL_Window* */
+
         [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
         public static extern void SDL_SetWindowSize(
             IntPtr window,
@@ -1664,6 +1823,7 @@ namespace Lench.AdvancedControls.Input
         );
 
         /* window refers to an SDL_Window* */
+
         [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
         public static extern void SDL_SetWindowBordered(
             IntPtr window,
@@ -1671,34 +1831,36 @@ namespace Lench.AdvancedControls.Input
         );
 
         /* window refers to an SDL_Window* */
+
         [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
         public static extern void SDL_SetWindowTitle(
             IntPtr window,
-            [In()] [MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(LPUtf8StrMarshaler))]
-                string title
+            [In()] [MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(LPUtf8StrMarshaler))] string title
         );
 
         /* window refers to an SDL_Window* */
+
         [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
         public static extern void SDL_ShowWindow(IntPtr window);
 
         /* window refers to an SDL_Window* */
+
         [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
         public static extern int SDL_UpdateWindowSurface(IntPtr window);
 
         /* window refers to an SDL_Window* */
+
         [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
         public static extern int SDL_UpdateWindowSurfaceRects(
             IntPtr window,
-            [In()] [MarshalAs(UnmanagedType.LPArray, ArraySubType = UnmanagedType.Struct, SizeParamIndex = 2)]
-                SDL_Rect[] rects,
+            [In()] [MarshalAs(UnmanagedType.LPArray, ArraySubType = UnmanagedType.Struct, SizeParamIndex = 2)] SDL_Rect[] rects,
             int numrects
         );
 
         [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
         public static extern int SDL_VideoInit(
-            [In()] [MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(LPUtf8StrMarshaler))]
-                string driver_name
+            [In()] [MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(LPUtf8StrMarshaler))] string
+                driver_name
         );
 
         [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
@@ -1706,6 +1868,7 @@ namespace Lench.AdvancedControls.Input
 
         /* window refers to an SDL_Window*, callback_data to a void* */
         /* Only available in 2.0.4 */
+
         [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
         public static extern int SDL_SetWindowHitTest(
             IntPtr window,
@@ -1715,6 +1878,7 @@ namespace Lench.AdvancedControls.Input
 
         /* IntPtr refers to an SDL_Window* */
         /* Only available in 2.0.4 */
+
         [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
         public static extern IntPtr SDL_GetGrabbedWindow();
 
@@ -1760,12 +1924,13 @@ namespace Lench.AdvancedControls.Input
             public IntPtr name; // const char*
             public uint flags;
             public uint num_texture_formats;
-            public fixed uint texture_formats[16];
+            public fixed uint texture_formats [16];
             public int max_texture_width;
             public int max_texture_height;
         }
 
         /* IntPtr refers to an SDL_Renderer*, window to an SDL_Window* */
+
         [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
         public static extern IntPtr SDL_CreateRenderer(
             IntPtr window,
@@ -1774,10 +1939,12 @@ namespace Lench.AdvancedControls.Input
         );
 
         /* IntPtr refers to an SDL_Renderer*, surface to an SDL_Surface* */
+
         [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
         public static extern IntPtr SDL_CreateSoftwareRenderer(IntPtr surface);
 
         /* IntPtr refers to an SDL_Texture*, renderer to an SDL_Renderer* */
+
         [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
         public static extern IntPtr SDL_CreateTexture(
             IntPtr renderer,
@@ -1791,6 +1958,7 @@ namespace Lench.AdvancedControls.Input
 		 * renderer refers to an SDL_Renderer*
 		 * surface refers to an SDL_Surface*
 		 */
+
         [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
         public static extern IntPtr SDL_CreateTextureFromSurface(
             IntPtr renderer,
@@ -1798,10 +1966,12 @@ namespace Lench.AdvancedControls.Input
         );
 
         /* renderer refers to an SDL_Renderer* */
+
         [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
         public static extern void SDL_DestroyRenderer(IntPtr renderer);
 
         /* texture refers to an SDL_Texture* */
+
         [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
         public static extern void SDL_DestroyTexture(IntPtr texture);
 
@@ -1809,6 +1979,7 @@ namespace Lench.AdvancedControls.Input
         public static extern int SDL_GetNumRenderDrivers();
 
         /* renderer refers to an SDL_Renderer* */
+
         [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
         public static extern int SDL_GetRenderDrawBlendMode(
             IntPtr renderer,
@@ -1816,6 +1987,7 @@ namespace Lench.AdvancedControls.Input
         );
 
         /* renderer refers to an SDL_Renderer* */
+
         [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
         public static extern int SDL_GetRenderDrawColor(
             IntPtr renderer,
@@ -1832,10 +2004,12 @@ namespace Lench.AdvancedControls.Input
         );
 
         /* IntPtr refers to an SDL_Renderer*, window to an SDL_Window* */
+
         [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
         public static extern IntPtr SDL_GetRenderer(IntPtr window);
 
         /* renderer refers to an SDL_Renderer* */
+
         [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
         public static extern int SDL_GetRendererInfo(
             IntPtr renderer,
@@ -1843,6 +2017,7 @@ namespace Lench.AdvancedControls.Input
         );
 
         /* renderer refers to an SDL_Renderer* */
+
         [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
         public static extern int SDL_GetRendererOutputSize(
             IntPtr renderer,
@@ -1851,6 +2026,7 @@ namespace Lench.AdvancedControls.Input
         );
 
         /* texture refers to an SDL_Texture* */
+
         [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
         public static extern int SDL_GetTextureAlphaMod(
             IntPtr texture,
@@ -1858,6 +2034,7 @@ namespace Lench.AdvancedControls.Input
         );
 
         /* texture refers to an SDL_Texture* */
+
         [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
         public static extern int SDL_GetTextureBlendMode(
             IntPtr texture,
@@ -1865,6 +2042,7 @@ namespace Lench.AdvancedControls.Input
         );
 
         /* texture refers to an SDL_Texture* */
+
         [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
         public static extern int SDL_GetTextureColorMod(
             IntPtr texture,
@@ -1874,17 +2052,25 @@ namespace Lench.AdvancedControls.Input
         );
 
         /// <summary>
-        /// Use this function to lock a portion of the texture for write-only pixel access.
+        ///     Use this function to lock a portion of the texture for write-only pixel access.
         /// </summary>
-        /// <param name="texture">the texture to lock for access, which was created with
-        /// SDL_TEXTUREACCESS_STREAMING (refers to a SDL_Texture*)</param>
-        /// <param name="rect">an SDL_Rect structure representing the area to lock for access;
-        /// NULL to lock the entire texture </param>
-        /// <param name="pixels">this is filled in with a pointer to the locked pixels, appropriately
-        /// offset by the locked area (refers to a void*)</param>
+        /// <param name="texture">
+        ///     the texture to lock for access, which was created with
+        ///     SDL_TEXTUREACCESS_STREAMING (refers to a SDL_Texture*)
+        /// </param>
+        /// <param name="rect">
+        ///     an SDL_Rect structure representing the area to lock for access;
+        ///     NULL to lock the entire texture
+        /// </param>
+        /// <param name="pixels">
+        ///     this is filled in with a pointer to the locked pixels, appropriately
+        ///     offset by the locked area (refers to a void*)
+        /// </param>
         /// <param name="pitch">this is filled in with the pitch of the locked pixels </param>
-        /// <returns>Returns 0 on success or a negative error code if the texture is not valid or
-        /// was not created with SDL_TEXTUREACCESS_STREAMING; call <see cref="SDL_GetError()"/> for more information. </returns>
+        /// <returns>
+        ///     Returns 0 on success or a negative error code if the texture is not valid or
+        ///     was not created with SDL_TEXTUREACCESS_STREAMING; call <see cref="SDL_GetError()" /> for more information.
+        /// </returns>
         [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
         public static extern int SDL_LockTexture(
             IntPtr texture,
@@ -1894,18 +2080,26 @@ namespace Lench.AdvancedControls.Input
         );
 
         /// <summary>
-        /// Use this function to lock a portion of the texture for write-only pixel access. This overload
-        /// allows for passing an IntPtr.Zero (null) rect value to lock the entire texture.
+        ///     Use this function to lock a portion of the texture for write-only pixel access. This overload
+        ///     allows for passing an IntPtr.Zero (null) rect value to lock the entire texture.
         /// </summary>
-        /// <param name="texture">the texture to lock for access, which was created with
-        /// SDL_TEXTUREACCESS_STREAMING (refers to a SDL_Texture*)</param>
-        /// <param name="rect">an SDL_Rect structure representing the area to lock for access;
-        /// NULL to lock the entire texture </param>
-        /// <param name="pixels">this is filled in with a pointer to the locked pixels, appropriately
-        /// offset by the locked area (refers to a void*)</param>
+        /// <param name="texture">
+        ///     the texture to lock for access, which was created with
+        ///     SDL_TEXTUREACCESS_STREAMING (refers to a SDL_Texture*)
+        /// </param>
+        /// <param name="rect">
+        ///     an SDL_Rect structure representing the area to lock for access;
+        ///     NULL to lock the entire texture
+        /// </param>
+        /// <param name="pixels">
+        ///     this is filled in with a pointer to the locked pixels, appropriately
+        ///     offset by the locked area (refers to a void*)
+        /// </param>
         /// <param name="pitch">this is filled in with the pitch of the locked pixels </param>
-        /// <returns>Returns 0 on success or a negative error code if the texture is not valid or
-        /// was not created with SDL_TEXTUREACCESS_STREAMING; call <see cref="SDL_GetError()"/> for more information. </returns>
+        /// <returns>
+        ///     Returns 0 on success or a negative error code if the texture is not valid or
+        ///     was not created with SDL_TEXTUREACCESS_STREAMING; call <see cref="SDL_GetError()" /> for more information.
+        /// </returns>
         [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
         public static extern int SDL_LockTexture(
             IntPtr texture,
@@ -1915,6 +2109,7 @@ namespace Lench.AdvancedControls.Input
         );
 
         /* texture refers to an SDL_Texture* */
+
         [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
         public static extern int SDL_QueryTexture(
             IntPtr texture,
@@ -1925,10 +2120,12 @@ namespace Lench.AdvancedControls.Input
         );
 
         /* renderer refers to an SDL_Renderer* */
+
         [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
         public static extern int SDL_RenderClear(IntPtr renderer);
 
         /* renderer refers to an SDL_Renderer*, texture to an SDL_Texture* */
+
         [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
         public static extern int SDL_RenderCopy(
             IntPtr renderer,
@@ -1942,6 +2139,7 @@ namespace Lench.AdvancedControls.Input
 		 * source and destination rectangles are passed as NULL.
 		 * This overload allows for IntPtr.Zero (null) to be passed for srcrect.
 		 */
+
         [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
         public static extern int SDL_RenderCopy(
             IntPtr renderer,
@@ -1955,6 +2153,7 @@ namespace Lench.AdvancedControls.Input
 		 * source and destination rectangles are passed as NULL.
 		 * This overload allows for IntPtr.Zero (null) to be passed for dstrect.
 		 */
+
         [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
         public static extern int SDL_RenderCopy(
             IntPtr renderer,
@@ -1968,6 +2167,7 @@ namespace Lench.AdvancedControls.Input
 		 * source and destination rectangles are passed as NULL.
 		 * This overload allows for IntPtr.Zero (null) to be passed for both SDL_Rects.
 		 */
+
         [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
         public static extern int SDL_RenderCopy(
             IntPtr renderer,
@@ -1977,6 +2177,7 @@ namespace Lench.AdvancedControls.Input
         );
 
         /* renderer refers to an SDL_Renderer*, texture to an SDL_Texture* */
+
         [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
         public static extern int SDL_RenderCopyEx(
             IntPtr renderer,
@@ -1993,6 +2194,7 @@ namespace Lench.AdvancedControls.Input
 		 * source, destination, and/or center are passed as NULL.
 		 * This overload allows for IntPtr.Zero (null) to be passed for srcrect.
 		 */
+
         [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
         public static extern int SDL_RenderCopyEx(
             IntPtr renderer,
@@ -2009,6 +2211,7 @@ namespace Lench.AdvancedControls.Input
 		 * source, destination, and/or center are passed as NULL.
 		 * This overload allows for IntPtr.Zero (null) to be passed for dstrect.
 		 */
+
         [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
         public static extern int SDL_RenderCopyEx(
             IntPtr renderer,
@@ -2025,6 +2228,7 @@ namespace Lench.AdvancedControls.Input
 		 * source, destination, and/or center are passed as NULL.
 		 * This overload allows for IntPtr.Zero (null) to be passed for center.
 		 */
+
         [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
         public static extern int SDL_RenderCopyEx(
             IntPtr renderer,
@@ -2042,6 +2246,7 @@ namespace Lench.AdvancedControls.Input
 		 * This overload allows for IntPtr.Zero (null) to be passed for both
 		 * srcrect and dstrect.
 		 */
+
         [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
         public static extern int SDL_RenderCopyEx(
             IntPtr renderer,
@@ -2059,6 +2264,7 @@ namespace Lench.AdvancedControls.Input
 		 * This overload allows for IntPtr.Zero (null) to be passed for both
 		 * srcrect and center.
 		 */
+
         [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
         public static extern int SDL_RenderCopyEx(
             IntPtr renderer,
@@ -2076,6 +2282,7 @@ namespace Lench.AdvancedControls.Input
 		 * This overload allows for IntPtr.Zero (null) to be passed for both
 		 * dstrect and center.
 		 */
+
         [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
         public static extern int SDL_RenderCopyEx(
             IntPtr renderer,
@@ -2093,6 +2300,7 @@ namespace Lench.AdvancedControls.Input
 		 * This overload allows for IntPtr.Zero (null) to be passed for all
 		 * three parameters.
 		 */
+
         [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
         public static extern int SDL_RenderCopyEx(
             IntPtr renderer,
@@ -2105,6 +2313,7 @@ namespace Lench.AdvancedControls.Input
         );
 
         /* renderer refers to an SDL_Renderer* */
+
         [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
         public static extern int SDL_RenderDrawLine(
             IntPtr renderer,
@@ -2115,15 +2324,16 @@ namespace Lench.AdvancedControls.Input
         );
 
         /* renderer refers to an SDL_Renderer* */
+
         [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
         public static extern int SDL_RenderDrawLines(
             IntPtr renderer,
-            [In()] [MarshalAs(UnmanagedType.LPArray, ArraySubType = UnmanagedType.Struct, SizeParamIndex = 2)]
-                SDL_Point[] points,
+            [In()] [MarshalAs(UnmanagedType.LPArray, ArraySubType = UnmanagedType.Struct, SizeParamIndex = 2)] SDL_Point[] points,
             int count
         );
 
         /* renderer refers to an SDL_Renderer* */
+
         [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
         public static extern int SDL_RenderDrawPoint(
             IntPtr renderer,
@@ -2132,15 +2342,16 @@ namespace Lench.AdvancedControls.Input
         );
 
         /* renderer refers to an SDL_Renderer* */
+
         [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
         public static extern int SDL_RenderDrawPoints(
             IntPtr renderer,
-            [In()] [MarshalAs(UnmanagedType.LPArray, ArraySubType = UnmanagedType.Struct, SizeParamIndex = 2)]
-                SDL_Point[] points,
+            [In()] [MarshalAs(UnmanagedType.LPArray, ArraySubType = UnmanagedType.Struct, SizeParamIndex = 2)] SDL_Point[] points,
             int count
         );
 
         /* renderer refers to an SDL_Renderer* */
+
         [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
         public static extern int SDL_RenderDrawRect(
             IntPtr renderer,
@@ -2150,6 +2361,7 @@ namespace Lench.AdvancedControls.Input
         /* renderer refers to an SDL_Renderer*, rect to an SDL_Rect*.
 		 * This overload allows for IntPtr.Zero (null) to be passed for rect.
 		 */
+
         [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
         public static extern int SDL_RenderDrawRect(
             IntPtr renderer,
@@ -2157,15 +2369,16 @@ namespace Lench.AdvancedControls.Input
         );
 
         /* renderer refers to an SDL_Renderer* */
+
         [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
         public static extern int SDL_RenderDrawRects(
             IntPtr renderer,
-            [In()] [MarshalAs(UnmanagedType.LPArray, ArraySubType = UnmanagedType.Struct, SizeParamIndex = 2)]
-                SDL_Rect[] rects,
+            [In()] [MarshalAs(UnmanagedType.LPArray, ArraySubType = UnmanagedType.Struct, SizeParamIndex = 2)] SDL_Rect[] rects,
             int count
         );
 
         /* renderer refers to an SDL_Renderer* */
+
         [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
         public static extern int SDL_RenderFillRect(
             IntPtr renderer,
@@ -2175,6 +2388,7 @@ namespace Lench.AdvancedControls.Input
         /* renderer refers to an SDL_Renderer*, rect to an SDL_Rect*.
 		 * This overload allows for IntPtr.Zero (null) to be passed for rect.
 		 */
+
         [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
         public static extern int SDL_RenderFillRect(
             IntPtr renderer,
@@ -2182,15 +2396,16 @@ namespace Lench.AdvancedControls.Input
         );
 
         /* renderer refers to an SDL_Renderer* */
+
         [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
         public static extern int SDL_RenderFillRects(
             IntPtr renderer,
-            [In()] [MarshalAs(UnmanagedType.LPArray, ArraySubType = UnmanagedType.Struct, SizeParamIndex = 2)]
-                SDL_Rect[] rects,
+            [In()] [MarshalAs(UnmanagedType.LPArray, ArraySubType = UnmanagedType.Struct, SizeParamIndex = 2)] SDL_Rect[] rects,
             int count
         );
 
         /* renderer refers to an SDL_Renderer* */
+
         [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
         public static extern void SDL_RenderGetClipRect(
             IntPtr renderer,
@@ -2198,6 +2413,7 @@ namespace Lench.AdvancedControls.Input
         );
 
         /* renderer refers to an SDL_Renderer* */
+
         [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
         public static extern void SDL_RenderGetLogicalSize(
             IntPtr renderer,
@@ -2206,6 +2422,7 @@ namespace Lench.AdvancedControls.Input
         );
 
         /* renderer refers to an SDL_Renderer* */
+
         [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
         public static extern void SDL_RenderGetScale(
             IntPtr renderer,
@@ -2214,6 +2431,7 @@ namespace Lench.AdvancedControls.Input
         );
 
         /* renderer refers to an SDL_Renderer* */
+
         [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
         public static extern int SDL_RenderGetViewport(
             IntPtr renderer,
@@ -2221,10 +2439,12 @@ namespace Lench.AdvancedControls.Input
         );
 
         /* renderer refers to an SDL_Renderer* */
+
         [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
         public static extern void SDL_RenderPresent(IntPtr renderer);
 
         /* renderer refers to an SDL_Renderer* */
+
         [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
         public static extern int SDL_RenderReadPixels(
             IntPtr renderer,
@@ -2235,6 +2455,7 @@ namespace Lench.AdvancedControls.Input
         );
 
         /* renderer refers to an SDL_Renderer* */
+
         [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
         public static extern int SDL_RenderSetClipRect(
             IntPtr renderer,
@@ -2244,6 +2465,7 @@ namespace Lench.AdvancedControls.Input
         /* renderer refers to an SDL_Renderer*
 		 * This overload allows for IntPtr.Zero (null) to be passed for rect.
 		 */
+
         [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
         public static extern int SDL_RenderSetClipRect(
             IntPtr renderer,
@@ -2251,6 +2473,7 @@ namespace Lench.AdvancedControls.Input
         );
 
         /* renderer refers to an SDL_Renderer* */
+
         [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
         public static extern int SDL_RenderSetLogicalSize(
             IntPtr renderer,
@@ -2259,6 +2482,7 @@ namespace Lench.AdvancedControls.Input
         );
 
         /* renderer refers to an SDL_Renderer* */
+
         [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
         public static extern int SDL_RenderSetScale(
             IntPtr renderer,
@@ -2267,6 +2491,7 @@ namespace Lench.AdvancedControls.Input
         );
 
         /* renderer refers to an SDL_Renderer* */
+
         [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
         public static extern int SDL_RenderSetViewport(
             IntPtr renderer,
@@ -2274,6 +2499,7 @@ namespace Lench.AdvancedControls.Input
         );
 
         /* renderer refers to an SDL_Renderer* */
+
         [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
         public static extern int SDL_SetRenderDrawBlendMode(
             IntPtr renderer,
@@ -2281,6 +2507,7 @@ namespace Lench.AdvancedControls.Input
         );
 
         /* renderer refers to an SDL_Renderer* */
+
         [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
         public static extern int SDL_SetRenderDrawColor(
             IntPtr renderer,
@@ -2291,6 +2518,7 @@ namespace Lench.AdvancedControls.Input
         );
 
         /* renderer refers to an SDL_Renderer*, texture to an SDL_Texture* */
+
         [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
         public static extern int SDL_SetRenderTarget(
             IntPtr renderer,
@@ -2298,6 +2526,7 @@ namespace Lench.AdvancedControls.Input
         );
 
         /* texture refers to an SDL_Texture* */
+
         [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
         public static extern int SDL_SetTextureAlphaMod(
             IntPtr texture,
@@ -2305,6 +2534,7 @@ namespace Lench.AdvancedControls.Input
         );
 
         /* texture refers to an SDL_Texture* */
+
         [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
         public static extern int SDL_SetTextureBlendMode(
             IntPtr texture,
@@ -2312,6 +2542,7 @@ namespace Lench.AdvancedControls.Input
         );
 
         /* texture refers to an SDL_Texture* */
+
         [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
         public static extern int SDL_SetTextureColorMod(
             IntPtr texture,
@@ -2321,10 +2552,12 @@ namespace Lench.AdvancedControls.Input
         );
 
         /* texture refers to an SDL_Texture* */
+
         [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
         public static extern void SDL_UnlockTexture(IntPtr texture);
 
         /* texture refers to an SDL_Texture* */
+
         [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
         public static extern int SDL_UpdateTexture(
             IntPtr texture,
@@ -2334,17 +2567,20 @@ namespace Lench.AdvancedControls.Input
         );
 
         /* renderer refers to an SDL_Renderer* */
+
         [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
         public static extern SDL_bool SDL_RenderTargetSupported(
             IntPtr renderer
         );
 
         /* IntPtr refers to an SDL_Texture*, renderer to an SDL_Renderer* */
+
         [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
         public static extern IntPtr SDL_GetRenderTarget(IntPtr renderer);
 
         /* renderer refers to an SDL_Renderer* */
         /* Only available in 2.0.4 */
+
         [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
         public static extern SDL_bool SDL_RenderIsClipEnabled(IntPtr renderer);
 
@@ -2365,11 +2601,11 @@ namespace Lench.AdvancedControls.Input
             byte bytes
         )
         {
-            return (uint)(
+            return (uint) (
                 (1 << 28) |
-                (((byte)type) << 24) |
-                (((byte)order) << 20) |
-                (((byte)layout) << 16) |
+                (((byte) type) << 24) |
+                (((byte) order) << 20) |
+                (((byte) layout) << 16) |
                 (bits << 8) |
                 (bytes)
             );
@@ -2377,27 +2613,27 @@ namespace Lench.AdvancedControls.Input
 
         public static byte SDL_PIXELFLAG(uint X)
         {
-            return (byte)((X >> 28) & 0x0F);
+            return (byte) ((X >> 28) & 0x0F);
         }
 
         public static byte SDL_PIXELTYPE(uint X)
         {
-            return (byte)((X >> 24) & 0x0F);
+            return (byte) ((X >> 24) & 0x0F);
         }
 
         public static byte SDL_PIXELORDER(uint X)
         {
-            return (byte)((X >> 20) & 0x0F);
+            return (byte) ((X >> 20) & 0x0F);
         }
 
         public static byte SDL_PIXELLAYOUT(uint X)
         {
-            return (byte)((X >> 16) & 0x0F);
+            return (byte) ((X >> 16) & 0x0F);
         }
 
         public static byte SDL_BITSPERPIXEL(uint X)
         {
-            return (byte)((X >> 8) & 0x0F);
+            return (byte) ((X >> 8) & 0x0F);
         }
 
         public static byte SDL_BYTESPERPIXEL(uint X)
@@ -2405,14 +2641,14 @@ namespace Lench.AdvancedControls.Input
             if (SDL_ISPIXELFORMAT_FOURCC(X))
             {
                 if ((X == SDL_PIXELFORMAT_YUY2) ||
-                        (X == SDL_PIXELFORMAT_UYVY) ||
-                        (X == SDL_PIXELFORMAT_YVYU))
+                    (X == SDL_PIXELFORMAT_UYVY) ||
+                    (X == SDL_PIXELFORMAT_YVYU))
                 {
                     return 2;
                 }
                 return 1;
             }
-            return (byte)(X & 0xFF);
+            return (byte) (X & 0xFF);
         }
 
         public static bool SDL_ISPIXELFORMAT_INDEXED(uint format)
@@ -2421,8 +2657,8 @@ namespace Lench.AdvancedControls.Input
             {
                 return false;
             }
-            SDL_PIXELTYPE_ENUM pType =
-                    (SDL_PIXELTYPE_ENUM)SDL_PIXELTYPE(format);
+            var pType =
+                (SDL_PIXELTYPE_ENUM) SDL_PIXELTYPE(format);
             return (
                 pType == SDL_PIXELTYPE_ENUM.SDL_PIXELTYPE_INDEX1 ||
                 pType == SDL_PIXELTYPE_ENUM.SDL_PIXELTYPE_INDEX4 ||
@@ -2436,8 +2672,8 @@ namespace Lench.AdvancedControls.Input
             {
                 return false;
             }
-            SDL_PIXELORDER_ENUM pOrder =
-                    (SDL_PIXELORDER_ENUM)SDL_PIXELORDER(format);
+            var pOrder =
+                (SDL_PIXELORDER_ENUM) SDL_PIXELORDER(format);
             return (
                 pOrder == SDL_PIXELORDER_ENUM.SDL_PACKEDORDER_ARGB ||
                 pOrder == SDL_PIXELORDER_ENUM.SDL_PACKEDORDER_RGBA ||
@@ -2507,6 +2743,7 @@ namespace Lench.AdvancedControls.Input
         }
 
         public static readonly uint SDL_PIXELFORMAT_UNKNOWN = 0;
+
         public static readonly uint SDL_PIXELFORMAT_INDEX1LSB =
             SDL_DEFINE_PIXELFORMAT(
                 SDL_PIXELTYPE_ENUM.SDL_PIXELTYPE_INDEX1,
@@ -2514,6 +2751,7 @@ namespace Lench.AdvancedControls.Input
                 0,
                 1, 0
             );
+
         public static readonly uint SDL_PIXELFORMAT_INDEX1MSB =
             SDL_DEFINE_PIXELFORMAT(
                 SDL_PIXELTYPE_ENUM.SDL_PIXELTYPE_INDEX1,
@@ -2521,6 +2759,7 @@ namespace Lench.AdvancedControls.Input
                 0,
                 1, 0
             );
+
         public static readonly uint SDL_PIXELFORMAT_INDEX4LSB =
             SDL_DEFINE_PIXELFORMAT(
                 SDL_PIXELTYPE_ENUM.SDL_PIXELTYPE_INDEX4,
@@ -2528,6 +2767,7 @@ namespace Lench.AdvancedControls.Input
                 0,
                 4, 0
             );
+
         public static readonly uint SDL_PIXELFORMAT_INDEX4MSB =
             SDL_DEFINE_PIXELFORMAT(
                 SDL_PIXELTYPE_ENUM.SDL_PIXELTYPE_INDEX4,
@@ -2535,6 +2775,7 @@ namespace Lench.AdvancedControls.Input
                 0,
                 4, 0
             );
+
         public static readonly uint SDL_PIXELFORMAT_INDEX8 =
             SDL_DEFINE_PIXELFORMAT(
                 SDL_PIXELTYPE_ENUM.SDL_PIXELTYPE_INDEX8,
@@ -2542,6 +2783,7 @@ namespace Lench.AdvancedControls.Input
                 0,
                 8, 1
             );
+
         public static readonly uint SDL_PIXELFORMAT_RGB332 =
             SDL_DEFINE_PIXELFORMAT(
                 SDL_PIXELTYPE_ENUM.SDL_PIXELTYPE_PACKED8,
@@ -2549,6 +2791,7 @@ namespace Lench.AdvancedControls.Input
                 SDL_PACKEDLAYOUT_ENUM.SDL_PACKEDLAYOUT_332,
                 8, 1
             );
+
         public static readonly uint SDL_PIXELFORMAT_RGB444 =
             SDL_DEFINE_PIXELFORMAT(
                 SDL_PIXELTYPE_ENUM.SDL_PIXELTYPE_PACKED16,
@@ -2556,6 +2799,7 @@ namespace Lench.AdvancedControls.Input
                 SDL_PACKEDLAYOUT_ENUM.SDL_PACKEDLAYOUT_4444,
                 12, 2
             );
+
         public static readonly uint SDL_PIXELFORMAT_RGB555 =
             SDL_DEFINE_PIXELFORMAT(
                 SDL_PIXELTYPE_ENUM.SDL_PIXELTYPE_PACKED16,
@@ -2563,6 +2807,7 @@ namespace Lench.AdvancedControls.Input
                 SDL_PACKEDLAYOUT_ENUM.SDL_PACKEDLAYOUT_1555,
                 15, 2
             );
+
         public static readonly uint SDL_PIXELFORMAT_BGR555 =
             SDL_DEFINE_PIXELFORMAT(
                 SDL_PIXELTYPE_ENUM.SDL_PIXELTYPE_INDEX1,
@@ -2570,6 +2815,7 @@ namespace Lench.AdvancedControls.Input
                 SDL_PACKEDLAYOUT_ENUM.SDL_PACKEDLAYOUT_1555,
                 15, 2
             );
+
         public static readonly uint SDL_PIXELFORMAT_ARGB4444 =
             SDL_DEFINE_PIXELFORMAT(
                 SDL_PIXELTYPE_ENUM.SDL_PIXELTYPE_PACKED16,
@@ -2577,6 +2823,7 @@ namespace Lench.AdvancedControls.Input
                 SDL_PACKEDLAYOUT_ENUM.SDL_PACKEDLAYOUT_4444,
                 16, 2
             );
+
         public static readonly uint SDL_PIXELFORMAT_RGBA4444 =
             SDL_DEFINE_PIXELFORMAT(
                 SDL_PIXELTYPE_ENUM.SDL_PIXELTYPE_PACKED16,
@@ -2584,6 +2831,7 @@ namespace Lench.AdvancedControls.Input
                 SDL_PACKEDLAYOUT_ENUM.SDL_PACKEDLAYOUT_4444,
                 16, 2
             );
+
         public static readonly uint SDL_PIXELFORMAT_ABGR4444 =
             SDL_DEFINE_PIXELFORMAT(
                 SDL_PIXELTYPE_ENUM.SDL_PIXELTYPE_PACKED16,
@@ -2591,6 +2839,7 @@ namespace Lench.AdvancedControls.Input
                 SDL_PACKEDLAYOUT_ENUM.SDL_PACKEDLAYOUT_4444,
                 16, 2
             );
+
         public static readonly uint SDL_PIXELFORMAT_BGRA4444 =
             SDL_DEFINE_PIXELFORMAT(
                 SDL_PIXELTYPE_ENUM.SDL_PIXELTYPE_PACKED16,
@@ -2598,6 +2847,7 @@ namespace Lench.AdvancedControls.Input
                 SDL_PACKEDLAYOUT_ENUM.SDL_PACKEDLAYOUT_4444,
                 16, 2
             );
+
         public static readonly uint SDL_PIXELFORMAT_ARGB1555 =
             SDL_DEFINE_PIXELFORMAT(
                 SDL_PIXELTYPE_ENUM.SDL_PIXELTYPE_PACKED16,
@@ -2605,6 +2855,7 @@ namespace Lench.AdvancedControls.Input
                 SDL_PACKEDLAYOUT_ENUM.SDL_PACKEDLAYOUT_1555,
                 16, 2
             );
+
         public static readonly uint SDL_PIXELFORMAT_RGBA5551 =
             SDL_DEFINE_PIXELFORMAT(
                 SDL_PIXELTYPE_ENUM.SDL_PIXELTYPE_PACKED16,
@@ -2612,6 +2863,7 @@ namespace Lench.AdvancedControls.Input
                 SDL_PACKEDLAYOUT_ENUM.SDL_PACKEDLAYOUT_5551,
                 16, 2
             );
+
         public static readonly uint SDL_PIXELFORMAT_ABGR1555 =
             SDL_DEFINE_PIXELFORMAT(
                 SDL_PIXELTYPE_ENUM.SDL_PIXELTYPE_PACKED16,
@@ -2619,6 +2871,7 @@ namespace Lench.AdvancedControls.Input
                 SDL_PACKEDLAYOUT_ENUM.SDL_PACKEDLAYOUT_1555,
                 16, 2
             );
+
         public static readonly uint SDL_PIXELFORMAT_BGRA5551 =
             SDL_DEFINE_PIXELFORMAT(
                 SDL_PIXELTYPE_ENUM.SDL_PIXELTYPE_PACKED16,
@@ -2626,6 +2879,7 @@ namespace Lench.AdvancedControls.Input
                 SDL_PACKEDLAYOUT_ENUM.SDL_PACKEDLAYOUT_5551,
                 16, 2
             );
+
         public static readonly uint SDL_PIXELFORMAT_RGB565 =
             SDL_DEFINE_PIXELFORMAT(
                 SDL_PIXELTYPE_ENUM.SDL_PIXELTYPE_PACKED16,
@@ -2633,6 +2887,7 @@ namespace Lench.AdvancedControls.Input
                 SDL_PACKEDLAYOUT_ENUM.SDL_PACKEDLAYOUT_565,
                 16, 2
             );
+
         public static readonly uint SDL_PIXELFORMAT_BGR565 =
             SDL_DEFINE_PIXELFORMAT(
                 SDL_PIXELTYPE_ENUM.SDL_PIXELTYPE_PACKED16,
@@ -2640,6 +2895,7 @@ namespace Lench.AdvancedControls.Input
                 SDL_PACKEDLAYOUT_ENUM.SDL_PACKEDLAYOUT_565,
                 16, 2
             );
+
         public static readonly uint SDL_PIXELFORMAT_RGB24 =
             SDL_DEFINE_PIXELFORMAT(
                 SDL_PIXELTYPE_ENUM.SDL_PIXELTYPE_ARRAYU8,
@@ -2647,6 +2903,7 @@ namespace Lench.AdvancedControls.Input
                 0,
                 24, 3
             );
+
         public static readonly uint SDL_PIXELFORMAT_BGR24 =
             SDL_DEFINE_PIXELFORMAT(
                 SDL_PIXELTYPE_ENUM.SDL_PIXELTYPE_ARRAYU8,
@@ -2654,6 +2911,7 @@ namespace Lench.AdvancedControls.Input
                 0,
                 24, 3
             );
+
         public static readonly uint SDL_PIXELFORMAT_RGB888 =
             SDL_DEFINE_PIXELFORMAT(
                 SDL_PIXELTYPE_ENUM.SDL_PIXELTYPE_PACKED32,
@@ -2661,6 +2919,7 @@ namespace Lench.AdvancedControls.Input
                 SDL_PACKEDLAYOUT_ENUM.SDL_PACKEDLAYOUT_8888,
                 24, 4
             );
+
         public static readonly uint SDL_PIXELFORMAT_RGBX8888 =
             SDL_DEFINE_PIXELFORMAT(
                 SDL_PIXELTYPE_ENUM.SDL_PIXELTYPE_PACKED32,
@@ -2668,6 +2927,7 @@ namespace Lench.AdvancedControls.Input
                 SDL_PACKEDLAYOUT_ENUM.SDL_PACKEDLAYOUT_8888,
                 24, 4
             );
+
         public static readonly uint SDL_PIXELFORMAT_BGR888 =
             SDL_DEFINE_PIXELFORMAT(
                 SDL_PIXELTYPE_ENUM.SDL_PIXELTYPE_PACKED32,
@@ -2675,6 +2935,7 @@ namespace Lench.AdvancedControls.Input
                 SDL_PACKEDLAYOUT_ENUM.SDL_PACKEDLAYOUT_8888,
                 24, 4
             );
+
         public static readonly uint SDL_PIXELFORMAT_BGRX8888 =
             SDL_DEFINE_PIXELFORMAT(
                 SDL_PIXELTYPE_ENUM.SDL_PIXELTYPE_PACKED32,
@@ -2682,6 +2943,7 @@ namespace Lench.AdvancedControls.Input
                 SDL_PACKEDLAYOUT_ENUM.SDL_PACKEDLAYOUT_8888,
                 24, 4
             );
+
         public static readonly uint SDL_PIXELFORMAT_ARGB8888 =
             SDL_DEFINE_PIXELFORMAT(
                 SDL_PIXELTYPE_ENUM.SDL_PIXELTYPE_PACKED32,
@@ -2689,6 +2951,7 @@ namespace Lench.AdvancedControls.Input
                 SDL_PACKEDLAYOUT_ENUM.SDL_PACKEDLAYOUT_8888,
                 32, 4
             );
+
         public static readonly uint SDL_PIXELFORMAT_RGBA8888 =
             SDL_DEFINE_PIXELFORMAT(
                 SDL_PIXELTYPE_ENUM.SDL_PIXELTYPE_PACKED32,
@@ -2696,6 +2959,7 @@ namespace Lench.AdvancedControls.Input
                 SDL_PACKEDLAYOUT_ENUM.SDL_PACKEDLAYOUT_8888,
                 32, 4
             );
+
         public static readonly uint SDL_PIXELFORMAT_ABGR8888 =
             SDL_DEFINE_PIXELFORMAT(
                 SDL_PIXELTYPE_ENUM.SDL_PIXELTYPE_PACKED32,
@@ -2703,6 +2967,7 @@ namespace Lench.AdvancedControls.Input
                 SDL_PACKEDLAYOUT_ENUM.SDL_PACKEDLAYOUT_8888,
                 32, 4
             );
+
         public static readonly uint SDL_PIXELFORMAT_BGRA8888 =
             SDL_DEFINE_PIXELFORMAT(
                 SDL_PIXELTYPE_ENUM.SDL_PIXELTYPE_PACKED32,
@@ -2710,6 +2975,7 @@ namespace Lench.AdvancedControls.Input
                 SDL_PACKEDLAYOUT_ENUM.SDL_PACKEDLAYOUT_8888,
                 32, 4
             );
+
         public static readonly uint SDL_PIXELFORMAT_ARGB2101010 =
             SDL_DEFINE_PIXELFORMAT(
                 SDL_PIXELTYPE_ENUM.SDL_PIXELTYPE_PACKED32,
@@ -2717,25 +2983,30 @@ namespace Lench.AdvancedControls.Input
                 SDL_PACKEDLAYOUT_ENUM.SDL_PACKEDLAYOUT_2101010,
                 32, 4
             );
+
         public static readonly uint SDL_PIXELFORMAT_YV12 =
             SDL_DEFINE_PIXELFOURCC(
-                (byte)'Y', (byte)'V', (byte)'1', (byte)'2'
+                (byte) 'Y', (byte) 'V', (byte) '1', (byte) '2'
             );
+
         public static readonly uint SDL_PIXELFORMAT_IYUV =
             SDL_DEFINE_PIXELFOURCC(
-                (byte)'I', (byte)'Y', (byte)'U', (byte)'V'
+                (byte) 'I', (byte) 'Y', (byte) 'U', (byte) 'V'
             );
+
         public static readonly uint SDL_PIXELFORMAT_YUY2 =
             SDL_DEFINE_PIXELFOURCC(
-                (byte)'Y', (byte)'U', (byte)'Y', (byte)'2'
+                (byte) 'Y', (byte) 'U', (byte) 'Y', (byte) '2'
             );
+
         public static readonly uint SDL_PIXELFORMAT_UYVY =
             SDL_DEFINE_PIXELFOURCC(
-                (byte)'U', (byte)'Y', (byte)'V', (byte)'Y'
+                (byte) 'U', (byte) 'Y', (byte) 'V', (byte) 'Y'
             );
+
         public static readonly uint SDL_PIXELFORMAT_YVYU =
             SDL_DEFINE_PIXELFOURCC(
-                (byte)'Y', (byte)'V', (byte)'Y', (byte)'U'
+                (byte) 'Y', (byte) 'V', (byte) 'Y', (byte) 'U'
             );
 
         [StructLayout(LayoutKind.Sequential)]
@@ -2780,35 +3051,41 @@ namespace Lench.AdvancedControls.Input
         }
 
         /* IntPtr refers to an SDL_PixelFormat* */
+
         [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
         public static extern IntPtr SDL_AllocFormat(uint pixel_format);
 
         /* IntPtr refers to an SDL_Palette* */
+
         [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
         public static extern IntPtr SDL_AllocPalette(int ncolors);
 
         [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
         public static extern void SDL_CalculateGammaRamp(
             float gamma,
-            [Out()] [MarshalAs(UnmanagedType.LPArray, ArraySubType = UnmanagedType.U2, SizeConst = 256)]
-                ushort[] ramp
+            [Out()] [MarshalAs(UnmanagedType.LPArray, ArraySubType = UnmanagedType.U2, SizeConst = 256)] ushort[] ramp
         );
 
         /* format refers to an SDL_PixelFormat* */
+
         [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
         public static extern void SDL_FreeFormat(IntPtr format);
 
         /* palette refers to an SDL_Palette* */
+
         [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
         public static extern void SDL_FreePalette(IntPtr palette);
 
         [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-        [return: MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(LPUtf8StrMarshaler), MarshalCookie = LPUtf8StrMarshaler.LeaveAllocated)]
+        [return:
+            MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(LPUtf8StrMarshaler),
+                MarshalCookie = LPUtf8StrMarshaler.LeaveAllocated)]
         public static extern string SDL_GetPixelFormatName(
             uint format
         );
 
         /* format refers to an SDL_PixelFormat* */
+
         [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
         public static extern void SDL_GetRGB(
             uint pixel,
@@ -2819,6 +3096,7 @@ namespace Lench.AdvancedControls.Input
         );
 
         /* format refers to an SDL_PixelFormat* */
+
         [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
         public static extern void SDL_GetRGBA(
             uint pixel,
@@ -2830,6 +3108,7 @@ namespace Lench.AdvancedControls.Input
         );
 
         /* format refers to an SDL_PixelFormat* */
+
         [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
         public static extern uint SDL_MapRGB(
             IntPtr format,
@@ -2839,6 +3118,7 @@ namespace Lench.AdvancedControls.Input
         );
 
         /* format refers to an SDL_PixelFormat* */
+
         [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
         public static extern uint SDL_MapRGBA(
             IntPtr format,
@@ -2868,16 +3148,17 @@ namespace Lench.AdvancedControls.Input
         );
 
         /* palette refers to an SDL_Palette* */
+
         [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
         public static extern int SDL_SetPaletteColors(
             IntPtr palette,
-            [In()] [MarshalAs(UnmanagedType.LPArray, ArraySubType = UnmanagedType.Struct)]
-                SDL_Color[] colors,
+            [In()] [MarshalAs(UnmanagedType.LPArray, ArraySubType = UnmanagedType.Struct)] SDL_Color[] colors,
             int firstcolor,
             int ncolors
         );
 
         /* format and palette refer to an SDL_PixelFormat* and SDL_Palette* */
+
         [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
         public static extern int SDL_SetPixelFormatPalette(
             IntPtr format,
@@ -2905,13 +3186,13 @@ namespace Lench.AdvancedControls.Input
         }
 
         /* Only available in 2.0.4 */
+
         [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
         public static extern SDL_bool SDL_PointInRect(ref SDL_Point p, ref SDL_Rect r);
 
         [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
         public static extern SDL_bool SDL_EnclosePoints(
-            [In()] [MarshalAs(UnmanagedType.LPArray, ArraySubType = UnmanagedType.Struct, SizeParamIndex = 1)]
-                SDL_Point[] points,
+            [In()] [MarshalAs(UnmanagedType.LPArray, ArraySubType = UnmanagedType.Struct, SizeParamIndex = 1)] SDL_Point[] points,
             int count,
             ref SDL_Rect clip,
             out SDL_Rect result
@@ -2982,10 +3263,11 @@ namespace Lench.AdvancedControls.Input
         }
 
         /* surface refers to an SDL_Surface* */
+
         public static bool SDL_MUSTLOCK(IntPtr surface)
         {
             SDL_Surface sur;
-            sur = (SDL_Surface)Marshal.PtrToStructure(
+            sur = (SDL_Surface) Marshal.PtrToStructure(
                 surface,
                 typeof(SDL_Surface)
             );
@@ -2993,6 +3275,7 @@ namespace Lench.AdvancedControls.Input
         }
 
         /* src and dst refer to an SDL_Surface* */
+
         [DllImport(nativeLibName, EntryPoint = "SDL_UpperBlit", CallingConvention = CallingConvention.Cdecl)]
         public static extern int SDL_BlitSurface(
             IntPtr src,
@@ -3006,6 +3289,7 @@ namespace Lench.AdvancedControls.Input
 		 * source and destination rectangles are passed as NULL.
 		 * This overload allows for IntPtr.Zero (null) to be passed for srcrect.
 		 */
+
         [DllImport(nativeLibName, EntryPoint = "SDL_UpperBlit", CallingConvention = CallingConvention.Cdecl)]
         public static extern int SDL_BlitSurface(
             IntPtr src,
@@ -3019,6 +3303,7 @@ namespace Lench.AdvancedControls.Input
 		 * source and destination rectangles are passed as NULL.
 		 * This overload allows for IntPtr.Zero (null) to be passed for dstrect.
 		 */
+
         [DllImport(nativeLibName, EntryPoint = "SDL_UpperBlit", CallingConvention = CallingConvention.Cdecl)]
         public static extern int SDL_BlitSurface(
             IntPtr src,
@@ -3032,6 +3317,7 @@ namespace Lench.AdvancedControls.Input
 		 * source and destination rectangles are passed as NULL.
 		 * This overload allows for IntPtr.Zero (null) to be passed for both SDL_Rects.
 		 */
+
         [DllImport(nativeLibName, EntryPoint = "SDL_UpperBlit", CallingConvention = CallingConvention.Cdecl)]
         public static extern int SDL_BlitSurface(
             IntPtr src,
@@ -3041,6 +3327,7 @@ namespace Lench.AdvancedControls.Input
         );
 
         /* src and dst refer to an SDL_Surface* */
+
         [DllImport(nativeLibName, EntryPoint = "SDL_UpperBlitScaled", CallingConvention = CallingConvention.Cdecl)]
         public static extern int SDL_BlitScaled(
             IntPtr src,
@@ -3054,6 +3341,7 @@ namespace Lench.AdvancedControls.Input
 		 * source and destination rectangles are passed as NULL.
 		 * This overload allows for IntPtr.Zero (null) to be passed for srcrect.
 		 */
+
         [DllImport(nativeLibName, EntryPoint = "SDL_UpperBlitScaled", CallingConvention = CallingConvention.Cdecl)]
         public static extern int SDL_BlitScaled(
             IntPtr src,
@@ -3067,6 +3355,7 @@ namespace Lench.AdvancedControls.Input
 		 * source and destination rectangles are passed as NULL.
 		 * This overload allows for IntPtr.Zero (null) to be passed for dstrect.
 		 */
+
         [DllImport(nativeLibName, EntryPoint = "SDL_UpperBlitScaled", CallingConvention = CallingConvention.Cdecl)]
         public static extern int SDL_BlitScaled(
             IntPtr src,
@@ -3080,6 +3369,7 @@ namespace Lench.AdvancedControls.Input
 		 * source and destination rectangles are passed as NULL.
 		 * This overload allows for IntPtr.Zero (null) to be passed for both SDL_Rects.
 		 */
+
         [DllImport(nativeLibName, EntryPoint = "SDL_UpperBlitScaled", CallingConvention = CallingConvention.Cdecl)]
         public static extern int SDL_BlitScaled(
             IntPtr src,
@@ -3089,6 +3379,7 @@ namespace Lench.AdvancedControls.Input
         );
 
         /* src and dst are void* pointers */
+
         [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
         public static extern int SDL_ConvertPixels(
             int width,
@@ -3105,6 +3396,7 @@ namespace Lench.AdvancedControls.Input
 		 * src refers to an SDL_Surface*
 		 * fmt refers to an SDL_PixelFormat*
 		 */
+
         [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
         public static extern IntPtr SDL_ConvertSurface(
             IntPtr src,
@@ -3113,6 +3405,7 @@ namespace Lench.AdvancedControls.Input
         );
 
         /* IntPtr refers to an SDL_Surface*, src to an SDL_Surface* */
+
         [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
         public static extern IntPtr SDL_ConvertSurfaceFormat(
             IntPtr src,
@@ -3121,6 +3414,7 @@ namespace Lench.AdvancedControls.Input
         );
 
         /* IntPtr refers to an SDL_Surface* */
+
         [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
         public static extern IntPtr SDL_CreateRGBSurface(
             uint flags,
@@ -3134,6 +3428,7 @@ namespace Lench.AdvancedControls.Input
         );
 
         /* IntPtr refers to an SDL_Surface*, pixels to a void* */
+
         [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
         public static extern IntPtr SDL_CreateRGBSurfaceFrom(
             IntPtr pixels,
@@ -3148,6 +3443,7 @@ namespace Lench.AdvancedControls.Input
         );
 
         /* dst refers to an SDL_Surface* */
+
         [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
         public static extern int SDL_FillRect(
             IntPtr dst,
@@ -3158,6 +3454,7 @@ namespace Lench.AdvancedControls.Input
         /* dst refers to an SDL_Surface*.
 		 * This overload allows passing NULL to rect.
 		 */
+
         [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
         public static extern int SDL_FillRect(
             IntPtr dst,
@@ -3166,20 +3463,22 @@ namespace Lench.AdvancedControls.Input
         );
 
         /* dst refers to an SDL_Surface* */
+
         [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
         public static extern int SDL_FillRects(
             IntPtr dst,
-            [In()] [MarshalAs(UnmanagedType.LPArray, ArraySubType = UnmanagedType.Struct, SizeParamIndex = 2)]
-                SDL_Rect[] rects,
+            [In()] [MarshalAs(UnmanagedType.LPArray, ArraySubType = UnmanagedType.Struct, SizeParamIndex = 2)] SDL_Rect[] rects,
             int count,
             uint color
         );
 
         /* surface refers to an SDL_Surface* */
+
         [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
         public static extern void SDL_FreeSurface(IntPtr surface);
 
         /* surface refers to an SDL_Surface* */
+
         [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
         public static extern void SDL_GetClipRect(
             IntPtr surface,
@@ -3187,6 +3486,7 @@ namespace Lench.AdvancedControls.Input
         );
 
         /* surface refers to an SDL_Surface* */
+
         [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
         public static extern int SDL_GetColorKey(
             IntPtr surface,
@@ -3194,6 +3494,7 @@ namespace Lench.AdvancedControls.Input
         );
 
         /* surface refers to an SDL_Surface* */
+
         [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
         public static extern int SDL_GetSurfaceAlphaMod(
             IntPtr surface,
@@ -3201,6 +3502,7 @@ namespace Lench.AdvancedControls.Input
         );
 
         /* surface refers to an SDL_Surface* */
+
         [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
         public static extern int SDL_GetSurfaceBlendMode(
             IntPtr surface,
@@ -3208,6 +3510,7 @@ namespace Lench.AdvancedControls.Input
         );
 
         /* surface refers to an SDL_Surface* */
+
         [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
         public static extern int SDL_GetSurfaceColorMod(
             IntPtr surface,
@@ -3219,22 +3522,26 @@ namespace Lench.AdvancedControls.Input
         /* These are for SDL_LoadBMP, which is a macro in the SDL headers. */
         /* IntPtr refers to an SDL_Surface* */
         /* THIS IS AN RWops FUNCTION! */
+
         [DllImport(nativeLibName, EntryPoint = "SDL_LoadBMP_RW", CallingConvention = CallingConvention.Cdecl)]
         private static extern IntPtr INTERNAL_SDL_LoadBMP_RW(
             IntPtr src,
             int freesrc
         );
+
         public static IntPtr SDL_LoadBMP(string file)
         {
-            IntPtr rwops = INTERNAL_SDL_RWFromFile(file, "rb");
+            var rwops = INTERNAL_SDL_RWFromFile(file, "rb");
             return INTERNAL_SDL_LoadBMP_RW(rwops, 1);
         }
 
         /* surface refers to an SDL_Surface* */
+
         [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
         public static extern int SDL_LockSurface(IntPtr surface);
 
         /* src and dst refer to an SDL_Surface* */
+
         [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
         public static extern int SDL_LowerBlit(
             IntPtr src,
@@ -3244,6 +3551,7 @@ namespace Lench.AdvancedControls.Input
         );
 
         /* src and dst refer to an SDL_Surface* */
+
         [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
         public static extern int SDL_LowerBlitScaled(
             IntPtr src,
@@ -3255,19 +3563,22 @@ namespace Lench.AdvancedControls.Input
         /* These are for SDL_SaveBMP, which is a macro in the SDL headers. */
         /* IntPtr refers to an SDL_Surface* */
         /* THIS IS AN RWops FUNCTION! */
+
         [DllImport(nativeLibName, EntryPoint = "SDL_SaveBMP_RW", CallingConvention = CallingConvention.Cdecl)]
         private static extern int INTERNAL_SDL_SaveBMP_RW(
             IntPtr surface,
             IntPtr src,
             int freesrc
         );
+
         public static int SDL_SaveBMP(IntPtr surface, string file)
         {
-            IntPtr rwops = INTERNAL_SDL_RWFromFile(file, "wb");
+            var rwops = INTERNAL_SDL_RWFromFile(file, "wb");
             return INTERNAL_SDL_SaveBMP_RW(surface, rwops, 1);
         }
 
         /* surface refers to an SDL_Surface* */
+
         [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
         public static extern SDL_bool SDL_SetClipRect(
             IntPtr surface,
@@ -3275,6 +3586,7 @@ namespace Lench.AdvancedControls.Input
         );
 
         /* surface refers to an SDL_Surface* */
+
         [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
         public static extern int SDL_SetColorKey(
             IntPtr surface,
@@ -3283,6 +3595,7 @@ namespace Lench.AdvancedControls.Input
         );
 
         /* surface refers to an SDL_Surface* */
+
         [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
         public static extern int SDL_SetSurfaceAlphaMod(
             IntPtr surface,
@@ -3290,6 +3603,7 @@ namespace Lench.AdvancedControls.Input
         );
 
         /* surface refers to an SDL_Surface* */
+
         [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
         public static extern int SDL_SetSurfaceBlendMode(
             IntPtr surface,
@@ -3297,6 +3611,7 @@ namespace Lench.AdvancedControls.Input
         );
 
         /* surface refers to an SDL_Surface* */
+
         [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
         public static extern int SDL_SetSurfaceColorMod(
             IntPtr surface,
@@ -3306,6 +3621,7 @@ namespace Lench.AdvancedControls.Input
         );
 
         /* surface refers to an SDL_Surface*, palette to an SDL_Palette* */
+
         [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
         public static extern int SDL_SetSurfacePalette(
             IntPtr surface,
@@ -3313,6 +3629,7 @@ namespace Lench.AdvancedControls.Input
         );
 
         /* surface refers to an SDL_Surface* */
+
         [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
         public static extern int SDL_SetSurfaceRLE(
             IntPtr surface,
@@ -3320,6 +3637,7 @@ namespace Lench.AdvancedControls.Input
         );
 
         /* src and dst refer to an SDL_Surface* */
+
         [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
         public static extern int SDL_SoftStretch(
             IntPtr src,
@@ -3329,10 +3647,12 @@ namespace Lench.AdvancedControls.Input
         );
 
         /* surface refers to an SDL_Surface* */
+
         [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
         public static extern void SDL_UnlockSurface(IntPtr surface);
 
         /* src and dst refer to an SDL_Surface* */
+
         [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
         public static extern int SDL_UpperBlit(
             IntPtr src,
@@ -3342,6 +3662,7 @@ namespace Lench.AdvancedControls.Input
         );
 
         /* src and dst refer to an SDL_Surface* */
+
         [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
         public static extern int SDL_UpperBlitScaled(
             IntPtr src,
@@ -3358,13 +3679,14 @@ namespace Lench.AdvancedControls.Input
         public static extern SDL_bool SDL_HasClipboardText();
 
         [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-        [return: MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(LPUtf8StrMarshaler), MarshalCookie = LPUtf8StrMarshaler.LeaveAllocated)]
+        [return:
+            MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(LPUtf8StrMarshaler),
+                MarshalCookie = LPUtf8StrMarshaler.LeaveAllocated)]
         public static extern string SDL_GetClipboardText();
 
         [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
         public static extern int SDL_SetClipboardText(
-            [In()] [MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(LPUtf8StrMarshaler))]
-                string text
+            [In()] [MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(LPUtf8StrMarshaler))] string text
         );
 
         #endregion
@@ -3380,6 +3702,7 @@ namespace Lench.AdvancedControls.Input
         public const int SDL_TEXTINPUTEVENT_TEXT_SIZE = 32;
 
         /* The types of events that can be delivered. */
+
         public enum SDL_EventType : uint
         {
             SDL_FIRSTEVENT = 0,
@@ -3458,6 +3781,7 @@ namespace Lench.AdvancedControls.Input
         }
 
         /* Only available in 2.0.4 or higher */
+
         public enum SDL_MouseWheelDirection : uint
         {
             SDL_MOUSEHWEEL_NORMAL,
@@ -3465,6 +3789,7 @@ namespace Lench.AdvancedControls.Input
         }
 
         /* Fields shared by every event */
+
         [StructLayout(LayoutKind.Sequential)]
         public struct SDL_GenericEvent
         {
@@ -3475,6 +3800,7 @@ namespace Lench.AdvancedControls.Input
         // Ignore private members used for padding in this struct
 #pragma warning disable 0169
         /* Window state change event data (event.window.*) */
+
         [StructLayout(LayoutKind.Sequential)]
         public struct SDL_WindowEvent
         {
@@ -3493,6 +3819,7 @@ namespace Lench.AdvancedControls.Input
         // Ignore private members used for padding in this struct
 #pragma warning disable 0169
         /* Keyboard button event structure (event.key.*) */
+
         [StructLayout(LayoutKind.Sequential)]
         public struct SDL_KeyboardEvent
         {
@@ -3513,7 +3840,7 @@ namespace Lench.AdvancedControls.Input
             public SDL_EventType type;
             public UInt32 timestamp;
             public UInt32 windowID;
-            public fixed byte text[SDL_TEXTEDITINGEVENT_TEXT_SIZE];
+            public fixed byte text [SDL_TEXTEDITINGEVENT_TEXT_SIZE];
             public Int32 start;
             public Int32 length;
         }
@@ -3524,12 +3851,13 @@ namespace Lench.AdvancedControls.Input
             public SDL_EventType type;
             public UInt32 timestamp;
             public UInt32 windowID;
-            public fixed byte text[SDL_TEXTINPUTEVENT_TEXT_SIZE];
+            public fixed byte text [SDL_TEXTINPUTEVENT_TEXT_SIZE];
         }
 
         // Ignore private members used for padding in this struct
 #pragma warning disable 0169
         /* Mouse motion event structure (event.motion.*) */
+
         [StructLayout(LayoutKind.Sequential)]
         public struct SDL_MouseMotionEvent
         {
@@ -3551,6 +3879,7 @@ namespace Lench.AdvancedControls.Input
         // Ignore private members used for padding in this struct
 #pragma warning disable 0169
         /* Mouse button event structure (event.button.*) */
+
         [StructLayout(LayoutKind.Sequential)]
         public struct SDL_MouseButtonEvent
         {
@@ -3568,6 +3897,7 @@ namespace Lench.AdvancedControls.Input
 #pragma warning restore 0169
 
         /* Mouse wheel event structure (event.wheel.*) */
+
         [StructLayout(LayoutKind.Sequential)]
         public struct SDL_MouseWheelEvent
         {
@@ -3583,6 +3913,7 @@ namespace Lench.AdvancedControls.Input
         // Ignore private members used for padding in this struct
 #pragma warning disable 0169
         /* Joystick axis motion event structure (event.jaxis.*) */
+
         [StructLayout(LayoutKind.Sequential)]
         public struct SDL_JoyAxisEvent
         {
@@ -3601,6 +3932,7 @@ namespace Lench.AdvancedControls.Input
         // Ignore private members used for padding in this struct
 #pragma warning disable 0169
         /* Joystick trackball motion event structure (event.jball.*) */
+
         [StructLayout(LayoutKind.Sequential)]
         public struct SDL_JoyBallEvent
         {
@@ -3619,6 +3951,7 @@ namespace Lench.AdvancedControls.Input
         // Ignore private members used for padding in this struct
 #pragma warning disable 0169
         /* Joystick hat position change event struct (event.jhat.*) */
+
         [StructLayout(LayoutKind.Sequential)]
         public struct SDL_JoyHatEvent
         {
@@ -3635,6 +3968,7 @@ namespace Lench.AdvancedControls.Input
         // Ignore private members used for padding in this struct
 #pragma warning disable 0169
         /* Joystick button event structure (event.jbutton.*) */
+
         [StructLayout(LayoutKind.Sequential)]
         public struct SDL_JoyButtonEvent
         {
@@ -3649,6 +3983,7 @@ namespace Lench.AdvancedControls.Input
 #pragma warning restore 0169
 
         /* Joystick device event structure (event.jdevice.*) */
+
         [StructLayout(LayoutKind.Sequential)]
         public struct SDL_JoyDeviceEvent
         {
@@ -3660,6 +3995,7 @@ namespace Lench.AdvancedControls.Input
         // Ignore private members used for padding in this struct
 #pragma warning disable 0169
         /* Game controller axis motion event (event.caxis.*) */
+
         [StructLayout(LayoutKind.Sequential)]
         public struct SDL_ControllerAxisEvent
         {
@@ -3678,6 +4014,7 @@ namespace Lench.AdvancedControls.Input
         // Ignore private members used for padding in this struct
 #pragma warning disable 0169
         /* Game controller button event (event.cbutton.*) */
+
         [StructLayout(LayoutKind.Sequential)]
         public struct SDL_ControllerButtonEvent
         {
@@ -3692,11 +4029,13 @@ namespace Lench.AdvancedControls.Input
 #pragma warning restore 0169
 
         /* Game controller device event (event.cdevice.*) */
+
         [StructLayout(LayoutKind.Sequential)]
         public struct SDL_ControllerDeviceEvent
         {
             public SDL_EventType type;
             public UInt32 timestamp;
+
             public Int32 which; /* joystick id for ADDED,
 						 * else instance id
 						 */
@@ -3746,6 +4085,7 @@ namespace Lench.AdvancedControls.Input
         /* File open request by system (event.drop.*), disabled by
 		 * default
 		 */
+
         [StructLayout(LayoutKind.Sequential)]
         public struct SDL_DropEvent
         {
@@ -3755,6 +4095,7 @@ namespace Lench.AdvancedControls.Input
         }
 
         /* The "quit requested" event */
+
         [StructLayout(LayoutKind.Sequential)]
         public struct SDL_QuitEvent
         {
@@ -3763,6 +4104,7 @@ namespace Lench.AdvancedControls.Input
         }
 
         /* A user defined event (event.user.*) */
+
         [StructLayout(LayoutKind.Sequential)]
         public struct SDL_UserEvent
         {
@@ -3775,6 +4117,7 @@ namespace Lench.AdvancedControls.Input
         }
 
         /* A video driver dependent event (event.syswm.*), disabled */
+
         [StructLayout(LayoutKind.Sequential)]
         public struct SDL_SysWMEvent
         {
@@ -3788,52 +4131,29 @@ namespace Lench.AdvancedControls.Input
         [StructLayout(LayoutKind.Explicit)]
         public struct SDL_Event
         {
-            [FieldOffset(0)]
-            public SDL_EventType type;
-            [FieldOffset(0)]
-            public SDL_WindowEvent window;
-            [FieldOffset(0)]
-            public SDL_KeyboardEvent key;
-            [FieldOffset(0)]
-            public SDL_TextEditingEvent edit;
-            [FieldOffset(0)]
-            public SDL_TextInputEvent text;
-            [FieldOffset(0)]
-            public SDL_MouseMotionEvent motion;
-            [FieldOffset(0)]
-            public SDL_MouseButtonEvent button;
-            [FieldOffset(0)]
-            public SDL_MouseWheelEvent wheel;
-            [FieldOffset(0)]
-            public SDL_JoyAxisEvent jaxis;
-            [FieldOffset(0)]
-            public SDL_JoyBallEvent jball;
-            [FieldOffset(0)]
-            public SDL_JoyHatEvent jhat;
-            [FieldOffset(0)]
-            public SDL_JoyButtonEvent jbutton;
-            [FieldOffset(0)]
-            public SDL_JoyDeviceEvent jdevice;
-            [FieldOffset(0)]
-            public SDL_ControllerAxisEvent caxis;
-            [FieldOffset(0)]
-            public SDL_ControllerButtonEvent cbutton;
-            [FieldOffset(0)]
-            public SDL_ControllerDeviceEvent cdevice;
-            [FieldOffset(0)]
-            public SDL_QuitEvent quit;
-            [FieldOffset(0)]
-            public SDL_UserEvent user;
-            [FieldOffset(0)]
-            public SDL_SysWMEvent syswm;
-            [FieldOffset(0)]
-            public SDL_TouchFingerEvent tfinger;
-            [FieldOffset(0)]
-            public SDL_MultiGestureEvent mgesture;
-            [FieldOffset(0)]
-            public SDL_DollarGestureEvent dgesture;
-            [FieldOffset(0)]
-            public SDL_DropEvent drop;
+            [FieldOffset(0)] public SDL_EventType type;
+            [FieldOffset(0)] public SDL_WindowEvent window;
+            [FieldOffset(0)] public SDL_KeyboardEvent key;
+            [FieldOffset(0)] public SDL_TextEditingEvent edit;
+            [FieldOffset(0)] public SDL_TextInputEvent text;
+            [FieldOffset(0)] public SDL_MouseMotionEvent motion;
+            [FieldOffset(0)] public SDL_MouseButtonEvent button;
+            [FieldOffset(0)] public SDL_MouseWheelEvent wheel;
+            [FieldOffset(0)] public SDL_JoyAxisEvent jaxis;
+            [FieldOffset(0)] public SDL_JoyBallEvent jball;
+            [FieldOffset(0)] public SDL_JoyHatEvent jhat;
+            [FieldOffset(0)] public SDL_JoyButtonEvent jbutton;
+            [FieldOffset(0)] public SDL_JoyDeviceEvent jdevice;
+            [FieldOffset(0)] public SDL_ControllerAxisEvent caxis;
+            [FieldOffset(0)] public SDL_ControllerButtonEvent cbutton;
+            [FieldOffset(0)] public SDL_ControllerDeviceEvent cdevice;
+            [FieldOffset(0)] public SDL_QuitEvent quit;
+            [FieldOffset(0)] public SDL_UserEvent user;
+            [FieldOffset(0)] public SDL_SysWMEvent syswm;
+            [FieldOffset(0)] public SDL_TouchFingerEvent tfinger;
+            [FieldOffset(0)] public SDL_MultiGestureEvent mgesture;
+            [FieldOffset(0)] public SDL_DollarGestureEvent dgesture;
+            [FieldOffset(0)] public SDL_DropEvent drop;
         }
 
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
@@ -3843,6 +4163,7 @@ namespace Lench.AdvancedControls.Input
         );
 
         /* Pump the event loop, getting events from the input devices*/
+
         [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
         public static extern void SDL_PumpEvents();
 
@@ -3855,8 +4176,7 @@ namespace Lench.AdvancedControls.Input
 
         [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
         public static extern int SDL_PeepEvents(
-            [Out()] [MarshalAs(UnmanagedType.LPArray, ArraySubType = UnmanagedType.Struct, SizeParamIndex = 1)]
-                SDL_Event[] events,
+            [Out()] [MarshalAs(UnmanagedType.LPArray, ArraySubType = UnmanagedType.Struct, SizeParamIndex = 1)] SDL_Event[] events,
             int numevents,
             SDL_eventaction action,
             SDL_EventType minType,
@@ -3864,6 +4184,7 @@ namespace Lench.AdvancedControls.Input
         );
 
         /* Checks to see if certain events are in the event queue */
+
         [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
         public static extern SDL_bool SDL_HasEvent(SDL_EventType type);
 
@@ -3874,6 +4195,7 @@ namespace Lench.AdvancedControls.Input
         );
 
         /* Clears events from the event queue */
+
         [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
         public static extern void SDL_FlushEvent(SDL_EventType type);
 
@@ -3884,23 +4206,28 @@ namespace Lench.AdvancedControls.Input
         );
 
         /* Polls for currently pending events */
+
         [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
         public static extern int SDL_PollEvent(out SDL_Event _event);
 
         /* Waits indefinitely for the next event */
+
         [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
         public static extern int SDL_WaitEvent(out SDL_Event _event);
 
         /* Waits until the specified timeout (in ms) for the next event
 		 */
+
         [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
         public static extern int SDL_WaitEventTimeout(out SDL_Event _event, int timeout);
 
         /* Add an event to the event queue */
+
         [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
         public static extern int SDL_PushEvent(ref SDL_Event _event);
 
         /* userdata refers to a void* */
+
         [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
         public static extern void SDL_SetEventFilter(
             SDL_EventFilter filter,
@@ -3908,6 +4235,7 @@ namespace Lench.AdvancedControls.Input
         );
 
         /* userdata refers to a void* */
+
         [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
         public static extern SDL_bool SDL_GetEventFilter(
             out SDL_EventFilter filter,
@@ -3915,6 +4243,7 @@ namespace Lench.AdvancedControls.Input
         );
 
         /* userdata refers to a void* */
+
         [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
         public static extern void SDL_AddEventWatch(
             SDL_EventFilter filter,
@@ -3922,6 +4251,7 @@ namespace Lench.AdvancedControls.Input
         );
 
         /* userdata refers to a void* */
+
         [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
         public static extern void SDL_DelEventWatch(
             SDL_EventFilter filter,
@@ -3929,6 +4259,7 @@ namespace Lench.AdvancedControls.Input
         );
 
         /* userdata refers to a void* */
+
         [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
         public static extern void SDL_FilterEvents(
             SDL_EventFilter filter,
@@ -3942,23 +4273,28 @@ namespace Lench.AdvancedControls.Input
         public const int SDL_ENABLE = 1;
 
         /* This function allows you to enable/disable certain events */
+
         [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
         public static extern byte SDL_EventState(SDL_EventType type, int state);
 
         /* Get the state of an event */
+
         public static byte SDL_GetEventState(SDL_EventType type)
         {
             return SDL_EventState(type, SDL_QUERY);
         }
 
         /* Allocate a set of user-defined events */
+
         [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
         public static extern UInt32 SDL_RegisterEvents(int numevents);
+
         #endregion
 
         #region SDL_scancode.h
 
         /* Scancodes based off USB keyboard page (0x07) */
+
         public enum SDL_Scancode
         {
             SDL_SCANCODE_UNKNOWN = 0,
@@ -4236,15 +4572,17 @@ namespace Lench.AdvancedControls.Input
         #region SDL_keycode.h
 
         public const int SDLK_SCANCODE_MASK = (1 << 30);
+
         public static SDL_Keycode SDL_SCANCODE_TO_KEYCODE(SDL_Scancode X)
         {
-            return (SDL_Keycode)((int)X | SDLK_SCANCODE_MASK);
+            return (SDL_Keycode) ((int) X | SDLK_SCANCODE_MASK);
         }
 
         /* So, in the C headers, SDL_Keycode is a typedef of Sint32
 		 * and all of the names are in an anonymous enum. Yeah...
 		 * that's not going to cut it for C#. We'll just put them in an
 		 * enum for now? */
+
         public enum SDL_Keycode
         {
             SDLK_UNKNOWN = 0,
@@ -4322,197 +4660,209 @@ namespace Lench.AdvancedControls.Input
             SDLK_y = 'y',
             SDLK_z = 'z',
 
-            SDLK_CAPSLOCK = (int)SDL_Scancode.SDL_SCANCODE_CAPSLOCK | SDLK_SCANCODE_MASK,
+            SDLK_CAPSLOCK = (int) SDL_Scancode.SDL_SCANCODE_CAPSLOCK | SDLK_SCANCODE_MASK,
 
-            SDLK_F1 = (int)SDL_Scancode.SDL_SCANCODE_F1 | SDLK_SCANCODE_MASK,
-            SDLK_F2 = (int)SDL_Scancode.SDL_SCANCODE_F2 | SDLK_SCANCODE_MASK,
-            SDLK_F3 = (int)SDL_Scancode.SDL_SCANCODE_F3 | SDLK_SCANCODE_MASK,
-            SDLK_F4 = (int)SDL_Scancode.SDL_SCANCODE_F4 | SDLK_SCANCODE_MASK,
-            SDLK_F5 = (int)SDL_Scancode.SDL_SCANCODE_F5 | SDLK_SCANCODE_MASK,
-            SDLK_F6 = (int)SDL_Scancode.SDL_SCANCODE_F6 | SDLK_SCANCODE_MASK,
-            SDLK_F7 = (int)SDL_Scancode.SDL_SCANCODE_F7 | SDLK_SCANCODE_MASK,
-            SDLK_F8 = (int)SDL_Scancode.SDL_SCANCODE_F8 | SDLK_SCANCODE_MASK,
-            SDLK_F9 = (int)SDL_Scancode.SDL_SCANCODE_F9 | SDLK_SCANCODE_MASK,
-            SDLK_F10 = (int)SDL_Scancode.SDL_SCANCODE_F10 | SDLK_SCANCODE_MASK,
-            SDLK_F11 = (int)SDL_Scancode.SDL_SCANCODE_F11 | SDLK_SCANCODE_MASK,
-            SDLK_F12 = (int)SDL_Scancode.SDL_SCANCODE_F12 | SDLK_SCANCODE_MASK,
+            SDLK_F1 = (int) SDL_Scancode.SDL_SCANCODE_F1 | SDLK_SCANCODE_MASK,
+            SDLK_F2 = (int) SDL_Scancode.SDL_SCANCODE_F2 | SDLK_SCANCODE_MASK,
+            SDLK_F3 = (int) SDL_Scancode.SDL_SCANCODE_F3 | SDLK_SCANCODE_MASK,
+            SDLK_F4 = (int) SDL_Scancode.SDL_SCANCODE_F4 | SDLK_SCANCODE_MASK,
+            SDLK_F5 = (int) SDL_Scancode.SDL_SCANCODE_F5 | SDLK_SCANCODE_MASK,
+            SDLK_F6 = (int) SDL_Scancode.SDL_SCANCODE_F6 | SDLK_SCANCODE_MASK,
+            SDLK_F7 = (int) SDL_Scancode.SDL_SCANCODE_F7 | SDLK_SCANCODE_MASK,
+            SDLK_F8 = (int) SDL_Scancode.SDL_SCANCODE_F8 | SDLK_SCANCODE_MASK,
+            SDLK_F9 = (int) SDL_Scancode.SDL_SCANCODE_F9 | SDLK_SCANCODE_MASK,
+            SDLK_F10 = (int) SDL_Scancode.SDL_SCANCODE_F10 | SDLK_SCANCODE_MASK,
+            SDLK_F11 = (int) SDL_Scancode.SDL_SCANCODE_F11 | SDLK_SCANCODE_MASK,
+            SDLK_F12 = (int) SDL_Scancode.SDL_SCANCODE_F12 | SDLK_SCANCODE_MASK,
 
-            SDLK_PRINTSCREEN = (int)SDL_Scancode.SDL_SCANCODE_PRINTSCREEN | SDLK_SCANCODE_MASK,
-            SDLK_SCROLLLOCK = (int)SDL_Scancode.SDL_SCANCODE_SCROLLLOCK | SDLK_SCANCODE_MASK,
-            SDLK_PAUSE = (int)SDL_Scancode.SDL_SCANCODE_PAUSE | SDLK_SCANCODE_MASK,
-            SDLK_INSERT = (int)SDL_Scancode.SDL_SCANCODE_INSERT | SDLK_SCANCODE_MASK,
-            SDLK_HOME = (int)SDL_Scancode.SDL_SCANCODE_HOME | SDLK_SCANCODE_MASK,
-            SDLK_PAGEUP = (int)SDL_Scancode.SDL_SCANCODE_PAGEUP | SDLK_SCANCODE_MASK,
+            SDLK_PRINTSCREEN = (int) SDL_Scancode.SDL_SCANCODE_PRINTSCREEN | SDLK_SCANCODE_MASK,
+            SDLK_SCROLLLOCK = (int) SDL_Scancode.SDL_SCANCODE_SCROLLLOCK | SDLK_SCANCODE_MASK,
+            SDLK_PAUSE = (int) SDL_Scancode.SDL_SCANCODE_PAUSE | SDLK_SCANCODE_MASK,
+            SDLK_INSERT = (int) SDL_Scancode.SDL_SCANCODE_INSERT | SDLK_SCANCODE_MASK,
+            SDLK_HOME = (int) SDL_Scancode.SDL_SCANCODE_HOME | SDLK_SCANCODE_MASK,
+            SDLK_PAGEUP = (int) SDL_Scancode.SDL_SCANCODE_PAGEUP | SDLK_SCANCODE_MASK,
             SDLK_DELETE = 127,
-            SDLK_END = (int)SDL_Scancode.SDL_SCANCODE_END | SDLK_SCANCODE_MASK,
-            SDLK_PAGEDOWN = (int)SDL_Scancode.SDL_SCANCODE_PAGEDOWN | SDLK_SCANCODE_MASK,
-            SDLK_RIGHT = (int)SDL_Scancode.SDL_SCANCODE_RIGHT | SDLK_SCANCODE_MASK,
-            SDLK_LEFT = (int)SDL_Scancode.SDL_SCANCODE_LEFT | SDLK_SCANCODE_MASK,
-            SDLK_DOWN = (int)SDL_Scancode.SDL_SCANCODE_DOWN | SDLK_SCANCODE_MASK,
-            SDLK_UP = (int)SDL_Scancode.SDL_SCANCODE_UP | SDLK_SCANCODE_MASK,
+            SDLK_END = (int) SDL_Scancode.SDL_SCANCODE_END | SDLK_SCANCODE_MASK,
+            SDLK_PAGEDOWN = (int) SDL_Scancode.SDL_SCANCODE_PAGEDOWN | SDLK_SCANCODE_MASK,
+            SDLK_RIGHT = (int) SDL_Scancode.SDL_SCANCODE_RIGHT | SDLK_SCANCODE_MASK,
+            SDLK_LEFT = (int) SDL_Scancode.SDL_SCANCODE_LEFT | SDLK_SCANCODE_MASK,
+            SDLK_DOWN = (int) SDL_Scancode.SDL_SCANCODE_DOWN | SDLK_SCANCODE_MASK,
+            SDLK_UP = (int) SDL_Scancode.SDL_SCANCODE_UP | SDLK_SCANCODE_MASK,
 
-            SDLK_NUMLOCKCLEAR = (int)SDL_Scancode.SDL_SCANCODE_NUMLOCKCLEAR | SDLK_SCANCODE_MASK,
-            SDLK_KP_DIVIDE = (int)SDL_Scancode.SDL_SCANCODE_KP_DIVIDE | SDLK_SCANCODE_MASK,
-            SDLK_KP_MULTIPLY = (int)SDL_Scancode.SDL_SCANCODE_KP_MULTIPLY | SDLK_SCANCODE_MASK,
-            SDLK_KP_MINUS = (int)SDL_Scancode.SDL_SCANCODE_KP_MINUS | SDLK_SCANCODE_MASK,
-            SDLK_KP_PLUS = (int)SDL_Scancode.SDL_SCANCODE_KP_PLUS | SDLK_SCANCODE_MASK,
-            SDLK_KP_ENTER = (int)SDL_Scancode.SDL_SCANCODE_KP_ENTER | SDLK_SCANCODE_MASK,
-            SDLK_KP_1 = (int)SDL_Scancode.SDL_SCANCODE_KP_1 | SDLK_SCANCODE_MASK,
-            SDLK_KP_2 = (int)SDL_Scancode.SDL_SCANCODE_KP_2 | SDLK_SCANCODE_MASK,
-            SDLK_KP_3 = (int)SDL_Scancode.SDL_SCANCODE_KP_3 | SDLK_SCANCODE_MASK,
-            SDLK_KP_4 = (int)SDL_Scancode.SDL_SCANCODE_KP_4 | SDLK_SCANCODE_MASK,
-            SDLK_KP_5 = (int)SDL_Scancode.SDL_SCANCODE_KP_5 | SDLK_SCANCODE_MASK,
-            SDLK_KP_6 = (int)SDL_Scancode.SDL_SCANCODE_KP_6 | SDLK_SCANCODE_MASK,
-            SDLK_KP_7 = (int)SDL_Scancode.SDL_SCANCODE_KP_7 | SDLK_SCANCODE_MASK,
-            SDLK_KP_8 = (int)SDL_Scancode.SDL_SCANCODE_KP_8 | SDLK_SCANCODE_MASK,
-            SDLK_KP_9 = (int)SDL_Scancode.SDL_SCANCODE_KP_9 | SDLK_SCANCODE_MASK,
-            SDLK_KP_0 = (int)SDL_Scancode.SDL_SCANCODE_KP_0 | SDLK_SCANCODE_MASK,
-            SDLK_KP_PERIOD = (int)SDL_Scancode.SDL_SCANCODE_KP_PERIOD | SDLK_SCANCODE_MASK,
+            SDLK_NUMLOCKCLEAR = (int) SDL_Scancode.SDL_SCANCODE_NUMLOCKCLEAR | SDLK_SCANCODE_MASK,
+            SDLK_KP_DIVIDE = (int) SDL_Scancode.SDL_SCANCODE_KP_DIVIDE | SDLK_SCANCODE_MASK,
+            SDLK_KP_MULTIPLY = (int) SDL_Scancode.SDL_SCANCODE_KP_MULTIPLY | SDLK_SCANCODE_MASK,
+            SDLK_KP_MINUS = (int) SDL_Scancode.SDL_SCANCODE_KP_MINUS | SDLK_SCANCODE_MASK,
+            SDLK_KP_PLUS = (int) SDL_Scancode.SDL_SCANCODE_KP_PLUS | SDLK_SCANCODE_MASK,
+            SDLK_KP_ENTER = (int) SDL_Scancode.SDL_SCANCODE_KP_ENTER | SDLK_SCANCODE_MASK,
+            SDLK_KP_1 = (int) SDL_Scancode.SDL_SCANCODE_KP_1 | SDLK_SCANCODE_MASK,
+            SDLK_KP_2 = (int) SDL_Scancode.SDL_SCANCODE_KP_2 | SDLK_SCANCODE_MASK,
+            SDLK_KP_3 = (int) SDL_Scancode.SDL_SCANCODE_KP_3 | SDLK_SCANCODE_MASK,
+            SDLK_KP_4 = (int) SDL_Scancode.SDL_SCANCODE_KP_4 | SDLK_SCANCODE_MASK,
+            SDLK_KP_5 = (int) SDL_Scancode.SDL_SCANCODE_KP_5 | SDLK_SCANCODE_MASK,
+            SDLK_KP_6 = (int) SDL_Scancode.SDL_SCANCODE_KP_6 | SDLK_SCANCODE_MASK,
+            SDLK_KP_7 = (int) SDL_Scancode.SDL_SCANCODE_KP_7 | SDLK_SCANCODE_MASK,
+            SDLK_KP_8 = (int) SDL_Scancode.SDL_SCANCODE_KP_8 | SDLK_SCANCODE_MASK,
+            SDLK_KP_9 = (int) SDL_Scancode.SDL_SCANCODE_KP_9 | SDLK_SCANCODE_MASK,
+            SDLK_KP_0 = (int) SDL_Scancode.SDL_SCANCODE_KP_0 | SDLK_SCANCODE_MASK,
+            SDLK_KP_PERIOD = (int) SDL_Scancode.SDL_SCANCODE_KP_PERIOD | SDLK_SCANCODE_MASK,
 
-            SDLK_APPLICATION = (int)SDL_Scancode.SDL_SCANCODE_APPLICATION | SDLK_SCANCODE_MASK,
-            SDLK_POWER = (int)SDL_Scancode.SDL_SCANCODE_POWER | SDLK_SCANCODE_MASK,
-            SDLK_KP_EQUALS = (int)SDL_Scancode.SDL_SCANCODE_KP_EQUALS | SDLK_SCANCODE_MASK,
-            SDLK_F13 = (int)SDL_Scancode.SDL_SCANCODE_F13 | SDLK_SCANCODE_MASK,
-            SDLK_F14 = (int)SDL_Scancode.SDL_SCANCODE_F14 | SDLK_SCANCODE_MASK,
-            SDLK_F15 = (int)SDL_Scancode.SDL_SCANCODE_F15 | SDLK_SCANCODE_MASK,
-            SDLK_F16 = (int)SDL_Scancode.SDL_SCANCODE_F16 | SDLK_SCANCODE_MASK,
-            SDLK_F17 = (int)SDL_Scancode.SDL_SCANCODE_F17 | SDLK_SCANCODE_MASK,
-            SDLK_F18 = (int)SDL_Scancode.SDL_SCANCODE_F18 | SDLK_SCANCODE_MASK,
-            SDLK_F19 = (int)SDL_Scancode.SDL_SCANCODE_F19 | SDLK_SCANCODE_MASK,
-            SDLK_F20 = (int)SDL_Scancode.SDL_SCANCODE_F20 | SDLK_SCANCODE_MASK,
-            SDLK_F21 = (int)SDL_Scancode.SDL_SCANCODE_F21 | SDLK_SCANCODE_MASK,
-            SDLK_F22 = (int)SDL_Scancode.SDL_SCANCODE_F22 | SDLK_SCANCODE_MASK,
-            SDLK_F23 = (int)SDL_Scancode.SDL_SCANCODE_F23 | SDLK_SCANCODE_MASK,
-            SDLK_F24 = (int)SDL_Scancode.SDL_SCANCODE_F24 | SDLK_SCANCODE_MASK,
-            SDLK_EXECUTE = (int)SDL_Scancode.SDL_SCANCODE_EXECUTE | SDLK_SCANCODE_MASK,
-            SDLK_HELP = (int)SDL_Scancode.SDL_SCANCODE_HELP | SDLK_SCANCODE_MASK,
-            SDLK_MENU = (int)SDL_Scancode.SDL_SCANCODE_MENU | SDLK_SCANCODE_MASK,
-            SDLK_SELECT = (int)SDL_Scancode.SDL_SCANCODE_SELECT | SDLK_SCANCODE_MASK,
-            SDLK_STOP = (int)SDL_Scancode.SDL_SCANCODE_STOP | SDLK_SCANCODE_MASK,
-            SDLK_AGAIN = (int)SDL_Scancode.SDL_SCANCODE_AGAIN | SDLK_SCANCODE_MASK,
-            SDLK_UNDO = (int)SDL_Scancode.SDL_SCANCODE_UNDO | SDLK_SCANCODE_MASK,
-            SDLK_CUT = (int)SDL_Scancode.SDL_SCANCODE_CUT | SDLK_SCANCODE_MASK,
-            SDLK_COPY = (int)SDL_Scancode.SDL_SCANCODE_COPY | SDLK_SCANCODE_MASK,
-            SDLK_PASTE = (int)SDL_Scancode.SDL_SCANCODE_PASTE | SDLK_SCANCODE_MASK,
-            SDLK_FIND = (int)SDL_Scancode.SDL_SCANCODE_FIND | SDLK_SCANCODE_MASK,
-            SDLK_MUTE = (int)SDL_Scancode.SDL_SCANCODE_MUTE | SDLK_SCANCODE_MASK,
-            SDLK_VOLUMEUP = (int)SDL_Scancode.SDL_SCANCODE_VOLUMEUP | SDLK_SCANCODE_MASK,
-            SDLK_VOLUMEDOWN = (int)SDL_Scancode.SDL_SCANCODE_VOLUMEDOWN | SDLK_SCANCODE_MASK,
-            SDLK_KP_COMMA = (int)SDL_Scancode.SDL_SCANCODE_KP_COMMA | SDLK_SCANCODE_MASK,
+            SDLK_APPLICATION = (int) SDL_Scancode.SDL_SCANCODE_APPLICATION | SDLK_SCANCODE_MASK,
+            SDLK_POWER = (int) SDL_Scancode.SDL_SCANCODE_POWER | SDLK_SCANCODE_MASK,
+            SDLK_KP_EQUALS = (int) SDL_Scancode.SDL_SCANCODE_KP_EQUALS | SDLK_SCANCODE_MASK,
+            SDLK_F13 = (int) SDL_Scancode.SDL_SCANCODE_F13 | SDLK_SCANCODE_MASK,
+            SDLK_F14 = (int) SDL_Scancode.SDL_SCANCODE_F14 | SDLK_SCANCODE_MASK,
+            SDLK_F15 = (int) SDL_Scancode.SDL_SCANCODE_F15 | SDLK_SCANCODE_MASK,
+            SDLK_F16 = (int) SDL_Scancode.SDL_SCANCODE_F16 | SDLK_SCANCODE_MASK,
+            SDLK_F17 = (int) SDL_Scancode.SDL_SCANCODE_F17 | SDLK_SCANCODE_MASK,
+            SDLK_F18 = (int) SDL_Scancode.SDL_SCANCODE_F18 | SDLK_SCANCODE_MASK,
+            SDLK_F19 = (int) SDL_Scancode.SDL_SCANCODE_F19 | SDLK_SCANCODE_MASK,
+            SDLK_F20 = (int) SDL_Scancode.SDL_SCANCODE_F20 | SDLK_SCANCODE_MASK,
+            SDLK_F21 = (int) SDL_Scancode.SDL_SCANCODE_F21 | SDLK_SCANCODE_MASK,
+            SDLK_F22 = (int) SDL_Scancode.SDL_SCANCODE_F22 | SDLK_SCANCODE_MASK,
+            SDLK_F23 = (int) SDL_Scancode.SDL_SCANCODE_F23 | SDLK_SCANCODE_MASK,
+            SDLK_F24 = (int) SDL_Scancode.SDL_SCANCODE_F24 | SDLK_SCANCODE_MASK,
+            SDLK_EXECUTE = (int) SDL_Scancode.SDL_SCANCODE_EXECUTE | SDLK_SCANCODE_MASK,
+            SDLK_HELP = (int) SDL_Scancode.SDL_SCANCODE_HELP | SDLK_SCANCODE_MASK,
+            SDLK_MENU = (int) SDL_Scancode.SDL_SCANCODE_MENU | SDLK_SCANCODE_MASK,
+            SDLK_SELECT = (int) SDL_Scancode.SDL_SCANCODE_SELECT | SDLK_SCANCODE_MASK,
+            SDLK_STOP = (int) SDL_Scancode.SDL_SCANCODE_STOP | SDLK_SCANCODE_MASK,
+            SDLK_AGAIN = (int) SDL_Scancode.SDL_SCANCODE_AGAIN | SDLK_SCANCODE_MASK,
+            SDLK_UNDO = (int) SDL_Scancode.SDL_SCANCODE_UNDO | SDLK_SCANCODE_MASK,
+            SDLK_CUT = (int) SDL_Scancode.SDL_SCANCODE_CUT | SDLK_SCANCODE_MASK,
+            SDLK_COPY = (int) SDL_Scancode.SDL_SCANCODE_COPY | SDLK_SCANCODE_MASK,
+            SDLK_PASTE = (int) SDL_Scancode.SDL_SCANCODE_PASTE | SDLK_SCANCODE_MASK,
+            SDLK_FIND = (int) SDL_Scancode.SDL_SCANCODE_FIND | SDLK_SCANCODE_MASK,
+            SDLK_MUTE = (int) SDL_Scancode.SDL_SCANCODE_MUTE | SDLK_SCANCODE_MASK,
+            SDLK_VOLUMEUP = (int) SDL_Scancode.SDL_SCANCODE_VOLUMEUP | SDLK_SCANCODE_MASK,
+            SDLK_VOLUMEDOWN = (int) SDL_Scancode.SDL_SCANCODE_VOLUMEDOWN | SDLK_SCANCODE_MASK,
+            SDLK_KP_COMMA = (int) SDL_Scancode.SDL_SCANCODE_KP_COMMA | SDLK_SCANCODE_MASK,
+
             SDLK_KP_EQUALSAS400 =
-            (int)SDL_Scancode.SDL_SCANCODE_KP_EQUALSAS400 | SDLK_SCANCODE_MASK,
+                (int) SDL_Scancode.SDL_SCANCODE_KP_EQUALSAS400 | SDLK_SCANCODE_MASK,
 
-            SDLK_ALTERASE = (int)SDL_Scancode.SDL_SCANCODE_ALTERASE | SDLK_SCANCODE_MASK,
-            SDLK_SYSREQ = (int)SDL_Scancode.SDL_SCANCODE_SYSREQ | SDLK_SCANCODE_MASK,
-            SDLK_CANCEL = (int)SDL_Scancode.SDL_SCANCODE_CANCEL | SDLK_SCANCODE_MASK,
-            SDLK_CLEAR = (int)SDL_Scancode.SDL_SCANCODE_CLEAR | SDLK_SCANCODE_MASK,
-            SDLK_PRIOR = (int)SDL_Scancode.SDL_SCANCODE_PRIOR | SDLK_SCANCODE_MASK,
-            SDLK_RETURN2 = (int)SDL_Scancode.SDL_SCANCODE_RETURN2 | SDLK_SCANCODE_MASK,
-            SDLK_SEPARATOR = (int)SDL_Scancode.SDL_SCANCODE_SEPARATOR | SDLK_SCANCODE_MASK,
-            SDLK_OUT = (int)SDL_Scancode.SDL_SCANCODE_OUT | SDLK_SCANCODE_MASK,
-            SDLK_OPER = (int)SDL_Scancode.SDL_SCANCODE_OPER | SDLK_SCANCODE_MASK,
-            SDLK_CLEARAGAIN = (int)SDL_Scancode.SDL_SCANCODE_CLEARAGAIN | SDLK_SCANCODE_MASK,
-            SDLK_CRSEL = (int)SDL_Scancode.SDL_SCANCODE_CRSEL | SDLK_SCANCODE_MASK,
-            SDLK_EXSEL = (int)SDL_Scancode.SDL_SCANCODE_EXSEL | SDLK_SCANCODE_MASK,
+            SDLK_ALTERASE = (int) SDL_Scancode.SDL_SCANCODE_ALTERASE | SDLK_SCANCODE_MASK,
+            SDLK_SYSREQ = (int) SDL_Scancode.SDL_SCANCODE_SYSREQ | SDLK_SCANCODE_MASK,
+            SDLK_CANCEL = (int) SDL_Scancode.SDL_SCANCODE_CANCEL | SDLK_SCANCODE_MASK,
+            SDLK_CLEAR = (int) SDL_Scancode.SDL_SCANCODE_CLEAR | SDLK_SCANCODE_MASK,
+            SDLK_PRIOR = (int) SDL_Scancode.SDL_SCANCODE_PRIOR | SDLK_SCANCODE_MASK,
+            SDLK_RETURN2 = (int) SDL_Scancode.SDL_SCANCODE_RETURN2 | SDLK_SCANCODE_MASK,
+            SDLK_SEPARATOR = (int) SDL_Scancode.SDL_SCANCODE_SEPARATOR | SDLK_SCANCODE_MASK,
+            SDLK_OUT = (int) SDL_Scancode.SDL_SCANCODE_OUT | SDLK_SCANCODE_MASK,
+            SDLK_OPER = (int) SDL_Scancode.SDL_SCANCODE_OPER | SDLK_SCANCODE_MASK,
+            SDLK_CLEARAGAIN = (int) SDL_Scancode.SDL_SCANCODE_CLEARAGAIN | SDLK_SCANCODE_MASK,
+            SDLK_CRSEL = (int) SDL_Scancode.SDL_SCANCODE_CRSEL | SDLK_SCANCODE_MASK,
+            SDLK_EXSEL = (int) SDL_Scancode.SDL_SCANCODE_EXSEL | SDLK_SCANCODE_MASK,
 
-            SDLK_KP_00 = (int)SDL_Scancode.SDL_SCANCODE_KP_00 | SDLK_SCANCODE_MASK,
-            SDLK_KP_000 = (int)SDL_Scancode.SDL_SCANCODE_KP_000 | SDLK_SCANCODE_MASK,
+            SDLK_KP_00 = (int) SDL_Scancode.SDL_SCANCODE_KP_00 | SDLK_SCANCODE_MASK,
+            SDLK_KP_000 = (int) SDL_Scancode.SDL_SCANCODE_KP_000 | SDLK_SCANCODE_MASK,
+
             SDLK_THOUSANDSSEPARATOR =
-            (int)SDL_Scancode.SDL_SCANCODE_THOUSANDSSEPARATOR | SDLK_SCANCODE_MASK,
+                (int) SDL_Scancode.SDL_SCANCODE_THOUSANDSSEPARATOR | SDLK_SCANCODE_MASK,
+
             SDLK_DECIMALSEPARATOR =
-            (int)SDL_Scancode.SDL_SCANCODE_DECIMALSEPARATOR | SDLK_SCANCODE_MASK,
-            SDLK_CURRENCYUNIT = (int)SDL_Scancode.SDL_SCANCODE_CURRENCYUNIT | SDLK_SCANCODE_MASK,
+                (int) SDL_Scancode.SDL_SCANCODE_DECIMALSEPARATOR | SDLK_SCANCODE_MASK,
+            SDLK_CURRENCYUNIT = (int) SDL_Scancode.SDL_SCANCODE_CURRENCYUNIT | SDLK_SCANCODE_MASK,
+
             SDLK_CURRENCYSUBUNIT =
-            (int)SDL_Scancode.SDL_SCANCODE_CURRENCYSUBUNIT | SDLK_SCANCODE_MASK,
-            SDLK_KP_LEFTPAREN = (int)SDL_Scancode.SDL_SCANCODE_KP_LEFTPAREN | SDLK_SCANCODE_MASK,
-            SDLK_KP_RIGHTPAREN = (int)SDL_Scancode.SDL_SCANCODE_KP_RIGHTPAREN | SDLK_SCANCODE_MASK,
-            SDLK_KP_LEFTBRACE = (int)SDL_Scancode.SDL_SCANCODE_KP_LEFTBRACE | SDLK_SCANCODE_MASK,
-            SDLK_KP_RIGHTBRACE = (int)SDL_Scancode.SDL_SCANCODE_KP_RIGHTBRACE | SDLK_SCANCODE_MASK,
-            SDLK_KP_TAB = (int)SDL_Scancode.SDL_SCANCODE_KP_TAB | SDLK_SCANCODE_MASK,
-            SDLK_KP_BACKSPACE = (int)SDL_Scancode.SDL_SCANCODE_KP_BACKSPACE | SDLK_SCANCODE_MASK,
-            SDLK_KP_A = (int)SDL_Scancode.SDL_SCANCODE_KP_A | SDLK_SCANCODE_MASK,
-            SDLK_KP_B = (int)SDL_Scancode.SDL_SCANCODE_KP_B | SDLK_SCANCODE_MASK,
-            SDLK_KP_C = (int)SDL_Scancode.SDL_SCANCODE_KP_C | SDLK_SCANCODE_MASK,
-            SDLK_KP_D = (int)SDL_Scancode.SDL_SCANCODE_KP_D | SDLK_SCANCODE_MASK,
-            SDLK_KP_E = (int)SDL_Scancode.SDL_SCANCODE_KP_E | SDLK_SCANCODE_MASK,
-            SDLK_KP_F = (int)SDL_Scancode.SDL_SCANCODE_KP_F | SDLK_SCANCODE_MASK,
-            SDLK_KP_XOR = (int)SDL_Scancode.SDL_SCANCODE_KP_XOR | SDLK_SCANCODE_MASK,
-            SDLK_KP_POWER = (int)SDL_Scancode.SDL_SCANCODE_KP_POWER | SDLK_SCANCODE_MASK,
-            SDLK_KP_PERCENT = (int)SDL_Scancode.SDL_SCANCODE_KP_PERCENT | SDLK_SCANCODE_MASK,
-            SDLK_KP_LESS = (int)SDL_Scancode.SDL_SCANCODE_KP_LESS | SDLK_SCANCODE_MASK,
-            SDLK_KP_GREATER = (int)SDL_Scancode.SDL_SCANCODE_KP_GREATER | SDLK_SCANCODE_MASK,
-            SDLK_KP_AMPERSAND = (int)SDL_Scancode.SDL_SCANCODE_KP_AMPERSAND | SDLK_SCANCODE_MASK,
+                (int) SDL_Scancode.SDL_SCANCODE_CURRENCYSUBUNIT | SDLK_SCANCODE_MASK,
+            SDLK_KP_LEFTPAREN = (int) SDL_Scancode.SDL_SCANCODE_KP_LEFTPAREN | SDLK_SCANCODE_MASK,
+            SDLK_KP_RIGHTPAREN = (int) SDL_Scancode.SDL_SCANCODE_KP_RIGHTPAREN | SDLK_SCANCODE_MASK,
+            SDLK_KP_LEFTBRACE = (int) SDL_Scancode.SDL_SCANCODE_KP_LEFTBRACE | SDLK_SCANCODE_MASK,
+            SDLK_KP_RIGHTBRACE = (int) SDL_Scancode.SDL_SCANCODE_KP_RIGHTBRACE | SDLK_SCANCODE_MASK,
+            SDLK_KP_TAB = (int) SDL_Scancode.SDL_SCANCODE_KP_TAB | SDLK_SCANCODE_MASK,
+            SDLK_KP_BACKSPACE = (int) SDL_Scancode.SDL_SCANCODE_KP_BACKSPACE | SDLK_SCANCODE_MASK,
+            SDLK_KP_A = (int) SDL_Scancode.SDL_SCANCODE_KP_A | SDLK_SCANCODE_MASK,
+            SDLK_KP_B = (int) SDL_Scancode.SDL_SCANCODE_KP_B | SDLK_SCANCODE_MASK,
+            SDLK_KP_C = (int) SDL_Scancode.SDL_SCANCODE_KP_C | SDLK_SCANCODE_MASK,
+            SDLK_KP_D = (int) SDL_Scancode.SDL_SCANCODE_KP_D | SDLK_SCANCODE_MASK,
+            SDLK_KP_E = (int) SDL_Scancode.SDL_SCANCODE_KP_E | SDLK_SCANCODE_MASK,
+            SDLK_KP_F = (int) SDL_Scancode.SDL_SCANCODE_KP_F | SDLK_SCANCODE_MASK,
+            SDLK_KP_XOR = (int) SDL_Scancode.SDL_SCANCODE_KP_XOR | SDLK_SCANCODE_MASK,
+            SDLK_KP_POWER = (int) SDL_Scancode.SDL_SCANCODE_KP_POWER | SDLK_SCANCODE_MASK,
+            SDLK_KP_PERCENT = (int) SDL_Scancode.SDL_SCANCODE_KP_PERCENT | SDLK_SCANCODE_MASK,
+            SDLK_KP_LESS = (int) SDL_Scancode.SDL_SCANCODE_KP_LESS | SDLK_SCANCODE_MASK,
+            SDLK_KP_GREATER = (int) SDL_Scancode.SDL_SCANCODE_KP_GREATER | SDLK_SCANCODE_MASK,
+            SDLK_KP_AMPERSAND = (int) SDL_Scancode.SDL_SCANCODE_KP_AMPERSAND | SDLK_SCANCODE_MASK,
+
             SDLK_KP_DBLAMPERSAND =
-            (int)SDL_Scancode.SDL_SCANCODE_KP_DBLAMPERSAND | SDLK_SCANCODE_MASK,
+                (int) SDL_Scancode.SDL_SCANCODE_KP_DBLAMPERSAND | SDLK_SCANCODE_MASK,
+
             SDLK_KP_VERTICALBAR =
-            (int)SDL_Scancode.SDL_SCANCODE_KP_VERTICALBAR | SDLK_SCANCODE_MASK,
+                (int) SDL_Scancode.SDL_SCANCODE_KP_VERTICALBAR | SDLK_SCANCODE_MASK,
+
             SDLK_KP_DBLVERTICALBAR =
-            (int)SDL_Scancode.SDL_SCANCODE_KP_DBLVERTICALBAR | SDLK_SCANCODE_MASK,
-            SDLK_KP_COLON = (int)SDL_Scancode.SDL_SCANCODE_KP_COLON | SDLK_SCANCODE_MASK,
-            SDLK_KP_HASH = (int)SDL_Scancode.SDL_SCANCODE_KP_HASH | SDLK_SCANCODE_MASK,
-            SDLK_KP_SPACE = (int)SDL_Scancode.SDL_SCANCODE_KP_SPACE | SDLK_SCANCODE_MASK,
-            SDLK_KP_AT = (int)SDL_Scancode.SDL_SCANCODE_KP_AT | SDLK_SCANCODE_MASK,
-            SDLK_KP_EXCLAM = (int)SDL_Scancode.SDL_SCANCODE_KP_EXCLAM | SDLK_SCANCODE_MASK,
-            SDLK_KP_MEMSTORE = (int)SDL_Scancode.SDL_SCANCODE_KP_MEMSTORE | SDLK_SCANCODE_MASK,
-            SDLK_KP_MEMRECALL = (int)SDL_Scancode.SDL_SCANCODE_KP_MEMRECALL | SDLK_SCANCODE_MASK,
-            SDLK_KP_MEMCLEAR = (int)SDL_Scancode.SDL_SCANCODE_KP_MEMCLEAR | SDLK_SCANCODE_MASK,
-            SDLK_KP_MEMADD = (int)SDL_Scancode.SDL_SCANCODE_KP_MEMADD | SDLK_SCANCODE_MASK,
+                (int) SDL_Scancode.SDL_SCANCODE_KP_DBLVERTICALBAR | SDLK_SCANCODE_MASK,
+            SDLK_KP_COLON = (int) SDL_Scancode.SDL_SCANCODE_KP_COLON | SDLK_SCANCODE_MASK,
+            SDLK_KP_HASH = (int) SDL_Scancode.SDL_SCANCODE_KP_HASH | SDLK_SCANCODE_MASK,
+            SDLK_KP_SPACE = (int) SDL_Scancode.SDL_SCANCODE_KP_SPACE | SDLK_SCANCODE_MASK,
+            SDLK_KP_AT = (int) SDL_Scancode.SDL_SCANCODE_KP_AT | SDLK_SCANCODE_MASK,
+            SDLK_KP_EXCLAM = (int) SDL_Scancode.SDL_SCANCODE_KP_EXCLAM | SDLK_SCANCODE_MASK,
+            SDLK_KP_MEMSTORE = (int) SDL_Scancode.SDL_SCANCODE_KP_MEMSTORE | SDLK_SCANCODE_MASK,
+            SDLK_KP_MEMRECALL = (int) SDL_Scancode.SDL_SCANCODE_KP_MEMRECALL | SDLK_SCANCODE_MASK,
+            SDLK_KP_MEMCLEAR = (int) SDL_Scancode.SDL_SCANCODE_KP_MEMCLEAR | SDLK_SCANCODE_MASK,
+            SDLK_KP_MEMADD = (int) SDL_Scancode.SDL_SCANCODE_KP_MEMADD | SDLK_SCANCODE_MASK,
+
             SDLK_KP_MEMSUBTRACT =
-            (int)SDL_Scancode.SDL_SCANCODE_KP_MEMSUBTRACT | SDLK_SCANCODE_MASK,
+                (int) SDL_Scancode.SDL_SCANCODE_KP_MEMSUBTRACT | SDLK_SCANCODE_MASK,
+
             SDLK_KP_MEMMULTIPLY =
-            (int)SDL_Scancode.SDL_SCANCODE_KP_MEMMULTIPLY | SDLK_SCANCODE_MASK,
-            SDLK_KP_MEMDIVIDE = (int)SDL_Scancode.SDL_SCANCODE_KP_MEMDIVIDE | SDLK_SCANCODE_MASK,
-            SDLK_KP_PLUSMINUS = (int)SDL_Scancode.SDL_SCANCODE_KP_PLUSMINUS | SDLK_SCANCODE_MASK,
-            SDLK_KP_CLEAR = (int)SDL_Scancode.SDL_SCANCODE_KP_CLEAR | SDLK_SCANCODE_MASK,
-            SDLK_KP_CLEARENTRY = (int)SDL_Scancode.SDL_SCANCODE_KP_CLEARENTRY | SDLK_SCANCODE_MASK,
-            SDLK_KP_BINARY = (int)SDL_Scancode.SDL_SCANCODE_KP_BINARY | SDLK_SCANCODE_MASK,
-            SDLK_KP_OCTAL = (int)SDL_Scancode.SDL_SCANCODE_KP_OCTAL | SDLK_SCANCODE_MASK,
-            SDLK_KP_DECIMAL = (int)SDL_Scancode.SDL_SCANCODE_KP_DECIMAL | SDLK_SCANCODE_MASK,
+                (int) SDL_Scancode.SDL_SCANCODE_KP_MEMMULTIPLY | SDLK_SCANCODE_MASK,
+            SDLK_KP_MEMDIVIDE = (int) SDL_Scancode.SDL_SCANCODE_KP_MEMDIVIDE | SDLK_SCANCODE_MASK,
+            SDLK_KP_PLUSMINUS = (int) SDL_Scancode.SDL_SCANCODE_KP_PLUSMINUS | SDLK_SCANCODE_MASK,
+            SDLK_KP_CLEAR = (int) SDL_Scancode.SDL_SCANCODE_KP_CLEAR | SDLK_SCANCODE_MASK,
+            SDLK_KP_CLEARENTRY = (int) SDL_Scancode.SDL_SCANCODE_KP_CLEARENTRY | SDLK_SCANCODE_MASK,
+            SDLK_KP_BINARY = (int) SDL_Scancode.SDL_SCANCODE_KP_BINARY | SDLK_SCANCODE_MASK,
+            SDLK_KP_OCTAL = (int) SDL_Scancode.SDL_SCANCODE_KP_OCTAL | SDLK_SCANCODE_MASK,
+            SDLK_KP_DECIMAL = (int) SDL_Scancode.SDL_SCANCODE_KP_DECIMAL | SDLK_SCANCODE_MASK,
+
             SDLK_KP_HEXADECIMAL =
-            (int)SDL_Scancode.SDL_SCANCODE_KP_HEXADECIMAL | SDLK_SCANCODE_MASK,
+                (int) SDL_Scancode.SDL_SCANCODE_KP_HEXADECIMAL | SDLK_SCANCODE_MASK,
 
-            SDLK_LCTRL = (int)SDL_Scancode.SDL_SCANCODE_LCTRL | SDLK_SCANCODE_MASK,
-            SDLK_LSHIFT = (int)SDL_Scancode.SDL_SCANCODE_LSHIFT | SDLK_SCANCODE_MASK,
-            SDLK_LALT = (int)SDL_Scancode.SDL_SCANCODE_LALT | SDLK_SCANCODE_MASK,
-            SDLK_LGUI = (int)SDL_Scancode.SDL_SCANCODE_LGUI | SDLK_SCANCODE_MASK,
-            SDLK_RCTRL = (int)SDL_Scancode.SDL_SCANCODE_RCTRL | SDLK_SCANCODE_MASK,
-            SDLK_RSHIFT = (int)SDL_Scancode.SDL_SCANCODE_RSHIFT | SDLK_SCANCODE_MASK,
-            SDLK_RALT = (int)SDL_Scancode.SDL_SCANCODE_RALT | SDLK_SCANCODE_MASK,
-            SDLK_RGUI = (int)SDL_Scancode.SDL_SCANCODE_RGUI | SDLK_SCANCODE_MASK,
+            SDLK_LCTRL = (int) SDL_Scancode.SDL_SCANCODE_LCTRL | SDLK_SCANCODE_MASK,
+            SDLK_LSHIFT = (int) SDL_Scancode.SDL_SCANCODE_LSHIFT | SDLK_SCANCODE_MASK,
+            SDLK_LALT = (int) SDL_Scancode.SDL_SCANCODE_LALT | SDLK_SCANCODE_MASK,
+            SDLK_LGUI = (int) SDL_Scancode.SDL_SCANCODE_LGUI | SDLK_SCANCODE_MASK,
+            SDLK_RCTRL = (int) SDL_Scancode.SDL_SCANCODE_RCTRL | SDLK_SCANCODE_MASK,
+            SDLK_RSHIFT = (int) SDL_Scancode.SDL_SCANCODE_RSHIFT | SDLK_SCANCODE_MASK,
+            SDLK_RALT = (int) SDL_Scancode.SDL_SCANCODE_RALT | SDLK_SCANCODE_MASK,
+            SDLK_RGUI = (int) SDL_Scancode.SDL_SCANCODE_RGUI | SDLK_SCANCODE_MASK,
 
-            SDLK_MODE = (int)SDL_Scancode.SDL_SCANCODE_MODE | SDLK_SCANCODE_MASK,
+            SDLK_MODE = (int) SDL_Scancode.SDL_SCANCODE_MODE | SDLK_SCANCODE_MASK,
 
-            SDLK_AUDIONEXT = (int)SDL_Scancode.SDL_SCANCODE_AUDIONEXT | SDLK_SCANCODE_MASK,
-            SDLK_AUDIOPREV = (int)SDL_Scancode.SDL_SCANCODE_AUDIOPREV | SDLK_SCANCODE_MASK,
-            SDLK_AUDIOSTOP = (int)SDL_Scancode.SDL_SCANCODE_AUDIOSTOP | SDLK_SCANCODE_MASK,
-            SDLK_AUDIOPLAY = (int)SDL_Scancode.SDL_SCANCODE_AUDIOPLAY | SDLK_SCANCODE_MASK,
-            SDLK_AUDIOMUTE = (int)SDL_Scancode.SDL_SCANCODE_AUDIOMUTE | SDLK_SCANCODE_MASK,
-            SDLK_MEDIASELECT = (int)SDL_Scancode.SDL_SCANCODE_MEDIASELECT | SDLK_SCANCODE_MASK,
-            SDLK_WWW = (int)SDL_Scancode.SDL_SCANCODE_WWW | SDLK_SCANCODE_MASK,
-            SDLK_MAIL = (int)SDL_Scancode.SDL_SCANCODE_MAIL | SDLK_SCANCODE_MASK,
-            SDLK_CALCULATOR = (int)SDL_Scancode.SDL_SCANCODE_CALCULATOR | SDLK_SCANCODE_MASK,
-            SDLK_COMPUTER = (int)SDL_Scancode.SDL_SCANCODE_COMPUTER | SDLK_SCANCODE_MASK,
-            SDLK_AC_SEARCH = (int)SDL_Scancode.SDL_SCANCODE_AC_SEARCH | SDLK_SCANCODE_MASK,
-            SDLK_AC_HOME = (int)SDL_Scancode.SDL_SCANCODE_AC_HOME | SDLK_SCANCODE_MASK,
-            SDLK_AC_BACK = (int)SDL_Scancode.SDL_SCANCODE_AC_BACK | SDLK_SCANCODE_MASK,
-            SDLK_AC_FORWARD = (int)SDL_Scancode.SDL_SCANCODE_AC_FORWARD | SDLK_SCANCODE_MASK,
-            SDLK_AC_STOP = (int)SDL_Scancode.SDL_SCANCODE_AC_STOP | SDLK_SCANCODE_MASK,
-            SDLK_AC_REFRESH = (int)SDL_Scancode.SDL_SCANCODE_AC_REFRESH | SDLK_SCANCODE_MASK,
-            SDLK_AC_BOOKMARKS = (int)SDL_Scancode.SDL_SCANCODE_AC_BOOKMARKS | SDLK_SCANCODE_MASK,
+            SDLK_AUDIONEXT = (int) SDL_Scancode.SDL_SCANCODE_AUDIONEXT | SDLK_SCANCODE_MASK,
+            SDLK_AUDIOPREV = (int) SDL_Scancode.SDL_SCANCODE_AUDIOPREV | SDLK_SCANCODE_MASK,
+            SDLK_AUDIOSTOP = (int) SDL_Scancode.SDL_SCANCODE_AUDIOSTOP | SDLK_SCANCODE_MASK,
+            SDLK_AUDIOPLAY = (int) SDL_Scancode.SDL_SCANCODE_AUDIOPLAY | SDLK_SCANCODE_MASK,
+            SDLK_AUDIOMUTE = (int) SDL_Scancode.SDL_SCANCODE_AUDIOMUTE | SDLK_SCANCODE_MASK,
+            SDLK_MEDIASELECT = (int) SDL_Scancode.SDL_SCANCODE_MEDIASELECT | SDLK_SCANCODE_MASK,
+            SDLK_WWW = (int) SDL_Scancode.SDL_SCANCODE_WWW | SDLK_SCANCODE_MASK,
+            SDLK_MAIL = (int) SDL_Scancode.SDL_SCANCODE_MAIL | SDLK_SCANCODE_MASK,
+            SDLK_CALCULATOR = (int) SDL_Scancode.SDL_SCANCODE_CALCULATOR | SDLK_SCANCODE_MASK,
+            SDLK_COMPUTER = (int) SDL_Scancode.SDL_SCANCODE_COMPUTER | SDLK_SCANCODE_MASK,
+            SDLK_AC_SEARCH = (int) SDL_Scancode.SDL_SCANCODE_AC_SEARCH | SDLK_SCANCODE_MASK,
+            SDLK_AC_HOME = (int) SDL_Scancode.SDL_SCANCODE_AC_HOME | SDLK_SCANCODE_MASK,
+            SDLK_AC_BACK = (int) SDL_Scancode.SDL_SCANCODE_AC_BACK | SDLK_SCANCODE_MASK,
+            SDLK_AC_FORWARD = (int) SDL_Scancode.SDL_SCANCODE_AC_FORWARD | SDLK_SCANCODE_MASK,
+            SDLK_AC_STOP = (int) SDL_Scancode.SDL_SCANCODE_AC_STOP | SDLK_SCANCODE_MASK,
+            SDLK_AC_REFRESH = (int) SDL_Scancode.SDL_SCANCODE_AC_REFRESH | SDLK_SCANCODE_MASK,
+            SDLK_AC_BOOKMARKS = (int) SDL_Scancode.SDL_SCANCODE_AC_BOOKMARKS | SDLK_SCANCODE_MASK,
 
             SDLK_BRIGHTNESSDOWN =
-            (int)SDL_Scancode.SDL_SCANCODE_BRIGHTNESSDOWN | SDLK_SCANCODE_MASK,
-            SDLK_BRIGHTNESSUP = (int)SDL_Scancode.SDL_SCANCODE_BRIGHTNESSUP | SDLK_SCANCODE_MASK,
-            SDLK_DISPLAYSWITCH = (int)SDL_Scancode.SDL_SCANCODE_DISPLAYSWITCH | SDLK_SCANCODE_MASK,
+                (int) SDL_Scancode.SDL_SCANCODE_BRIGHTNESSDOWN | SDLK_SCANCODE_MASK,
+            SDLK_BRIGHTNESSUP = (int) SDL_Scancode.SDL_SCANCODE_BRIGHTNESSUP | SDLK_SCANCODE_MASK,
+            SDLK_DISPLAYSWITCH = (int) SDL_Scancode.SDL_SCANCODE_DISPLAYSWITCH | SDLK_SCANCODE_MASK,
+
             SDLK_KBDILLUMTOGGLE =
-            (int)SDL_Scancode.SDL_SCANCODE_KBDILLUMTOGGLE | SDLK_SCANCODE_MASK,
-            SDLK_KBDILLUMDOWN = (int)SDL_Scancode.SDL_SCANCODE_KBDILLUMDOWN | SDLK_SCANCODE_MASK,
-            SDLK_KBDILLUMUP = (int)SDL_Scancode.SDL_SCANCODE_KBDILLUMUP | SDLK_SCANCODE_MASK,
-            SDLK_EJECT = (int)SDL_Scancode.SDL_SCANCODE_EJECT | SDLK_SCANCODE_MASK,
-            SDLK_SLEEP = (int)SDL_Scancode.SDL_SCANCODE_SLEEP | SDLK_SCANCODE_MASK
+                (int) SDL_Scancode.SDL_SCANCODE_KBDILLUMTOGGLE | SDLK_SCANCODE_MASK,
+            SDLK_KBDILLUMDOWN = (int) SDL_Scancode.SDL_SCANCODE_KBDILLUMDOWN | SDLK_SCANCODE_MASK,
+            SDLK_KBDILLUMUP = (int) SDL_Scancode.SDL_SCANCODE_KBDILLUMUP | SDLK_SCANCODE_MASK,
+            SDLK_EJECT = (int) SDL_Scancode.SDL_SCANCODE_EJECT | SDLK_SCANCODE_MASK,
+            SDLK_SLEEP = (int) SDL_Scancode.SDL_SCANCODE_SLEEP | SDLK_SCANCODE_MASK
         }
 
         /* Key modifiers (bitfield) */
+
         [Flags]
         public enum SDL_Keymod : ushort
         {
@@ -4552,77 +4902,97 @@ namespace Lench.AdvancedControls.Input
 
         /* Get the window which has kbd focus */
         /* Return type is an SDL_Window pointer */
+
         [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
         public static extern IntPtr SDL_GetKeyboardFocus();
 
         /* Get a snapshot of the keyboard state. */
         /* Return value is a pointer to a UInt8 array */
         /* Numkeys returns the size of the array if non-null */
+
         [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
         public static extern IntPtr SDL_GetKeyboardState(out int numkeys);
 
         /* Get the current key modifier state for the keyboard. */
+
         [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
         public static extern SDL_Keymod SDL_GetModState();
 
         /* Set the current key modifier state */
+
         [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
         public static extern void SDL_SetModState(SDL_Keymod modstate);
 
         /* Get the key code corresponding to the given scancode
 		 * with the current keyboard layout.
 		 */
+
         [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
         public static extern SDL_Keycode SDL_GetKeyFromScancode(SDL_Scancode scancode);
 
         /* Get the scancode for the given keycode */
+
         [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
         public static extern SDL_Scancode SDL_GetScancodeFromKey(SDL_Keycode key);
 
         /* Wrapper for SDL_GetScancodeName */
+
         [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-        [return: MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(LPUtf8StrMarshaler), MarshalCookie = LPUtf8StrMarshaler.LeaveAllocated)]
+        [return:
+            MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(LPUtf8StrMarshaler),
+                MarshalCookie = LPUtf8StrMarshaler.LeaveAllocated)]
         public static extern string SDL_GetScancodeName(SDL_Scancode scancode);
 
         /* Get a scancode from a human-readable name */
+
         [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
         public static extern SDL_Scancode SDL_GetScancodeFromName(
             [In()] [MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(LPUtf8StrMarshaler))] string name
         );
 
         /* Wrapper for SDL_GetKeyName */
+
         [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-        [return: MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(LPUtf8StrMarshaler), MarshalCookie = LPUtf8StrMarshaler.LeaveAllocated)]
+        [return:
+            MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(LPUtf8StrMarshaler),
+                MarshalCookie = LPUtf8StrMarshaler.LeaveAllocated)]
         public static extern string SDL_GetKeyName(SDL_Keycode key);
 
         /* Get a key code from a human-readable name */
+
         [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
         public static extern SDL_Keycode SDL_GetKeyFromName(
             [In()] [MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(LPUtf8StrMarshaler))] string name
         );
 
         /* Start accepting Unicode text input events, show keyboard */
+
         [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
         public static extern void SDL_StartTextInput();
 
         /* Check if unicode input events are enabled */
+
         [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
         public static extern SDL_bool SDL_IsTextInputActive();
 
         /* Stop receiving any text input events, hide onscreen kbd */
+
         [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
         public static extern void SDL_StopTextInput();
 
         /* Set the rectangle used for text input, hint for IME */
+
         [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
         public static extern void SDL_SetTextInputRect(ref SDL_Rect rect);
 
         /* Does the platform support an on-screen keyboard? */
+
         [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
         public static extern SDL_bool SDL_HasScreenKeyboardSupport();
 
         /* Is the on-screen keyboard shown for a given window? */
         /* window is an SDL_Window pointer */
+
         [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
         public static extern SDL_bool SDL_IsScreenKeyboardShown(IntPtr window);
 
@@ -4635,100 +5005,117 @@ namespace Lench.AdvancedControls.Input
 		 */
 
         /* System cursor types */
+
         public enum SDL_SystemCursor
         {
-            SDL_SYSTEM_CURSOR_ARROW,    // Arrow
-            SDL_SYSTEM_CURSOR_IBEAM,    // I-beam
-            SDL_SYSTEM_CURSOR_WAIT,     // Wait
-            SDL_SYSTEM_CURSOR_CROSSHAIR,    // Crosshair
-            SDL_SYSTEM_CURSOR_WAITARROW,    // Small wait cursor (or Wait if not available)
+            SDL_SYSTEM_CURSOR_ARROW, // Arrow
+            SDL_SYSTEM_CURSOR_IBEAM, // I-beam
+            SDL_SYSTEM_CURSOR_WAIT, // Wait
+            SDL_SYSTEM_CURSOR_CROSSHAIR, // Crosshair
+            SDL_SYSTEM_CURSOR_WAITARROW, // Small wait cursor (or Wait if not available)
             SDL_SYSTEM_CURSOR_SIZENWSE, // Double arrow pointing northwest and southeast
             SDL_SYSTEM_CURSOR_SIZENESW, // Double arrow pointing northeast and southwest
-            SDL_SYSTEM_CURSOR_SIZEWE,   // Double arrow pointing west and east
-            SDL_SYSTEM_CURSOR_SIZENS,   // Double arrow pointing north and south
-            SDL_SYSTEM_CURSOR_SIZEALL,  // Four pointed arrow pointing north, south, east, and west
-            SDL_SYSTEM_CURSOR_NO,       // Slashed circle or crossbones
-            SDL_SYSTEM_CURSOR_HAND,     // Hand
+            SDL_SYSTEM_CURSOR_SIZEWE, // Double arrow pointing west and east
+            SDL_SYSTEM_CURSOR_SIZENS, // Double arrow pointing north and south
+            SDL_SYSTEM_CURSOR_SIZEALL, // Four pointed arrow pointing north, south, east, and west
+            SDL_SYSTEM_CURSOR_NO, // Slashed circle or crossbones
+            SDL_SYSTEM_CURSOR_HAND, // Hand
             SDL_NUM_SYSTEM_CURSORS
         }
 
         /* Get the window which currently has mouse focus */
         /* Return value is an SDL_Window pointer */
+
         [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
         public static extern IntPtr SDL_GetMouseFocus();
 
         /* Get the current state of the mouse */
+
         [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
         public static extern UInt32 SDL_GetMouseState(out int x, out int y);
 
         /* Get the current state of the mouse */
         /* This overload allows for passing NULL to x */
+
         [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
         public static extern UInt32 SDL_GetMouseState(IntPtr x, out int y);
 
         /* Get the current state of the mouse */
         /* This overload allows for passing NULL to y */
+
         [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
         public static extern UInt32 SDL_GetMouseState(out int x, IntPtr y);
 
         /* Get the current state of the mouse */
         /* This overload allows for passing NULL to both x and y */
+
         [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
         public static extern UInt32 SDL_GetMouseState(IntPtr x, IntPtr y);
 
         /* Get the current state of the mouse, in relation to the desktop */
         /* Only available in 2.0.4 */
+
         [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
         public static extern UInt32 SDL_GetGlobalMouseState(out int x, out int y);
 
         /* Get the current state of the mouse, in relation to the desktop */
         /* Only available in 2.0.4 */
         /* This overload allows for passing NULL to x */
+
         [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
         public static extern UInt32 SDL_GetGlobalMouseState(IntPtr x, out int y);
 
         /* Get the current state of the mouse, in relation to the desktop */
         /* Only available in 2.0.4 */
         /* This overload allows for passing NULL to y */
+
         [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
         public static extern UInt32 SDL_GetGlobalMouseState(out int x, IntPtr y);
 
         /* Get the current state of the mouse, in relation to the desktop */
         /* Only available in 2.0.4 */
         /* This overload allows for passing NULL to both x and y */
+
         [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
         public static extern UInt32 SDL_GetGlobalMouseState(IntPtr x, IntPtr y);
 
         /* Get the mouse state with relative coords*/
+
         [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
         public static extern UInt32 SDL_GetRelativeMouseState(out int x, out int y);
 
         /* Set the mouse cursor's position (within a window) */
         /* window is an SDL_Window pointer */
+
         [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
         public static extern void SDL_WarpMouseInWindow(IntPtr window, int x, int y);
 
         /* Set the mouse cursor's position in global screen space */
         /* Only available in 2.0.4 */
+
         [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
         public static extern int SDL_WarpMouseGlobal(int x, int y);
 
         /* Enable/Disable relative mouse mode (grabs mouse, rel coords) */
+
         [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
         public static extern int SDL_SetRelativeMouseMode(SDL_bool enabled);
 
         /* Capture the mouse, to track input outside an SDL window */
         /* Only available in 2.0.4 */
+
         [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
         public static extern int SDL_CaptureMouse(SDL_bool enabled);
 
         /* Query if the relative mouse mode is enabled */
+
         [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
         public static extern SDL_bool SDL_GetRelativeMouseMode();
 
         /* Create a cursor from bitmap data (amd mask) in MSB format */
         /* data and mask are byte arrays, and w must be a multiple of 8 */
         /* return value is an SDL_Cursor pointer */
+
         [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
         public static extern IntPtr SDL_CreateCursor(
             IntPtr data,
@@ -4741,6 +5128,7 @@ namespace Lench.AdvancedControls.Input
 
         /* Create a cursor from an SDL_Surface */
         /* IntPtr refers to an SDL_Cursor*, surface to an SDL_Surface* */
+
         [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
         public static extern IntPtr SDL_CreateColorCursor(
             IntPtr surface,
@@ -4750,32 +5138,37 @@ namespace Lench.AdvancedControls.Input
 
         /* Create a cursor from a system cursor id */
         /* return value is an SDL_Cursor pointer */
+
         [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
         public static extern IntPtr SDL_CreateSystemCursor(SDL_SystemCursor id);
 
         /* Set the active cursor */
         /* cursor is an SDL_Cursor pointer */
+
         [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
         public static extern void SDL_SetCursor(IntPtr cursor);
 
         /* Return the active cursor */
         /* return value is an SDL_Cursor pointer */
+
         [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
         public static extern IntPtr SDL_GetCursor();
 
         /* Frees a cursor created with one of the CreateCursor functions */
         /* cursor in an SDL_Cursor pointer */
+
         [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
         public static extern void SDL_FreeCursor(IntPtr cursor);
 
         /* Toggle whether or not the cursor is shown */
+
         [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
         public static extern int SDL_ShowCursor(int toggle);
 
         public static uint SDL_BUTTON(uint X)
         {
             // If only there were a better way of doing this in C#
-            return (uint)(1 << ((int)X - 1));
+            return (uint) (1 << ((int) X - 1));
         }
 
         public const uint SDL_BUTTON_LEFT = 1;
@@ -4808,18 +5201,21 @@ namespace Lench.AdvancedControls.Input
         /**
 		 *  \brief Get the number of registered touch devices.
  		 */
+
         [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
         public static extern int SDL_GetNumTouchDevices();
 
         /**
 		 *  \brief Get the touch ID with the given index, or 0 if the index is invalid.
 		 */
+
         [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
         public static extern long SDL_GetTouchDevice(int index);
 
         /**
 		 *  \brief Get the number of active fingers for a given touch device.
 		 */
+
         [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
         public static extern int SDL_GetNumTouchFingers(long touchID);
 
@@ -4827,6 +5223,7 @@ namespace Lench.AdvancedControls.Input
 		 *  \brief Get the finger object of the given touch, with the given index.
 		 *  Returns pointer to SDL_Finger.
 		 */
+
         [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
         public static extern IntPtr SDL_GetTouchFinger(long touchID, int index);
 
@@ -4856,6 +5253,7 @@ namespace Lench.AdvancedControls.Input
         }
 
         /* joystick refers to an SDL_Joystick* */
+
         [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
         public static extern void SDL_JoystickClose(IntPtr joystick);
 
@@ -4863,6 +5261,7 @@ namespace Lench.AdvancedControls.Input
         public static extern int SDL_JoystickEventState(int state);
 
         /* joystick refers to an SDL_Joystick* */
+
         [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
         public static extern short SDL_JoystickGetAxis(
             IntPtr joystick,
@@ -4870,6 +5269,7 @@ namespace Lench.AdvancedControls.Input
         );
 
         /* joystick refers to an SDL_Joystick* */
+
         [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
         public static extern int SDL_JoystickGetBall(
             IntPtr joystick,
@@ -4879,6 +5279,7 @@ namespace Lench.AdvancedControls.Input
         );
 
         /* joystick refers to an SDL_Joystick* */
+
         [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
         public static extern byte SDL_JoystickGetButton(
             IntPtr joystick,
@@ -4886,6 +5287,7 @@ namespace Lench.AdvancedControls.Input
         );
 
         /* joystick refers to an SDL_Joystick* */
+
         [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
         public static extern byte SDL_JoystickGetHat(
             IntPtr joystick,
@@ -4893,47 +5295,60 @@ namespace Lench.AdvancedControls.Input
         );
 
         /* joystick refers to an SDL_Joystick* */
+
         [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-        [return: MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(LPUtf8StrMarshaler), MarshalCookie = LPUtf8StrMarshaler.LeaveAllocated)]
+        [return:
+            MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(LPUtf8StrMarshaler),
+                MarshalCookie = LPUtf8StrMarshaler.LeaveAllocated)]
         public static extern string SDL_JoystickName(
             IntPtr joystick
         );
 
         [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-        [return: MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(LPUtf8StrMarshaler), MarshalCookie = LPUtf8StrMarshaler.LeaveAllocated)]
+        [return:
+            MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(LPUtf8StrMarshaler),
+                MarshalCookie = LPUtf8StrMarshaler.LeaveAllocated)]
         public static extern string SDL_JoystickNameForIndex(
             int device_index
         );
 
         /* joystick refers to an SDL_Joystick* */
+
         [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
         public static extern int SDL_JoystickNumAxes(IntPtr joystick);
 
         /* joystick refers to an SDL_Joystick* */
+
         [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
         public static extern int SDL_JoystickNumBalls(IntPtr joystick);
 
         /* joystick refers to an SDL_Joystick* */
+
         [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
         public static extern int SDL_JoystickNumButtons(IntPtr joystick);
 
         /* joystick refers to an SDL_Joystick* */
+
         [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
         public static extern int SDL_JoystickNumHats(IntPtr joystick);
 
         /* IntPtr refers to an SDL_Joystick* */
+
         [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
         public static extern IntPtr SDL_JoystickOpen(int device_index);
 
         /* joystick refers to an SDL_Joystick* */
+
         [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
         public static extern int SDL_JoystickOpened(int device_index);
 
         /* joystick refers to an SDL_Joystick* */
+
         [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
         public static extern void SDL_JoystickUpdate();
 
         /* joystick refers to an SDL_Joystick* */
+
         [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
         public static extern int SDL_NumJoysticks();
 
@@ -4943,6 +5358,7 @@ namespace Lench.AdvancedControls.Input
         );
 
         /* joystick refers to an SDL_Joystick* */
+
         [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
         public static extern Guid SDL_JoystickGetGUID(
             IntPtr joystick
@@ -4957,21 +5373,24 @@ namespace Lench.AdvancedControls.Input
 
         [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
         public static extern Guid SDL_JoystickGetGUIDFromString(
-            [In()] [MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(LPUtf8StrMarshaler))]
-                string pchGUID
+            [In()] [MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(LPUtf8StrMarshaler))] string
+                pchGUID
         );
 
         /* joystick refers to an SDL_Joystick* */
+
         [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
         public static extern SDL_bool SDL_JoystickGetAttached(IntPtr joystick);
 
         /* int refers to an SDL_JoystickID, joystick to an SDL_Joystick* */
+
         [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
         public static extern int SDL_JoystickInstanceID(IntPtr joystick);
 
         /* joystick refers to an SDL_Joystick*.
 		 * This function is only available in 2.0.4 or higher.
 		 */
+
         [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
         public static extern SDL_JoystickPowerLevel SDL_JoystickCurrentPowerLevel(
             IntPtr joystick
@@ -4980,6 +5399,7 @@ namespace Lench.AdvancedControls.Input
         /* int refers to an SDL_JoystickID, IntPtr to an SDL_Joystick*.
 		 * This function is only available in 2.0.4 or higher.
 		 */
+
         [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
         public static extern IntPtr SDL_JoystickFromInstanceID(int joyid);
 
@@ -5037,47 +5457,52 @@ namespace Lench.AdvancedControls.Input
         }
 
         /* This struct has a union in it, hence the Explicit layout. */
+
         [StructLayout(LayoutKind.Explicit)]
         public struct SDL_GameControllerButtonBind
         {
             /* Note: enum size is 4 bytes. */
-            [FieldOffset(0)]
-            public SDL_GameControllerBindType bindType;
-            [FieldOffset(4)]
-            public int button;
-            [FieldOffset(4)]
-            public int axis;
-            [FieldOffset(4)]
-            public INTERNAL_GameControllerButtonBind_hat hat;
+            [FieldOffset(0)] public SDL_GameControllerBindType bindType;
+            [FieldOffset(4)] public int button;
+            [FieldOffset(4)] public int axis;
+            [FieldOffset(4)] public INTERNAL_GameControllerButtonBind_hat hat;
         }
 
         [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
         public static extern int SDL_GameControllerAddMapping(
-            [In()] [MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(LPUtf8StrMarshaler))]
-                string mappingString
+            [In()] [MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(LPUtf8StrMarshaler))] string
+                mappingString
         );
 
         /* THIS IS AN RWops FUNCTION! */
-        [DllImport(nativeLibName, EntryPoint = "SDL_GameControllerAddMappingsFromRW", CallingConvention = CallingConvention.Cdecl)]
+
+        [DllImport(nativeLibName, EntryPoint = "SDL_GameControllerAddMappingsFromRW",
+            CallingConvention = CallingConvention.Cdecl)]
         private static extern int INTERNAL_SDL_GameControllerAddMappingsFromRW(
             IntPtr rw,
             int freerw
         );
+
         public static int SDL_GameControllerAddMappingsFromFile(string file)
         {
-            IntPtr rwops = INTERNAL_SDL_RWFromFile(file, "rb");
+            var rwops = INTERNAL_SDL_RWFromFile(file, "rb");
             return INTERNAL_SDL_GameControllerAddMappingsFromRW(rwops, 1);
         }
 
         [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-        [return: MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(LPUtf8StrMarshaler), MarshalCookie = LPUtf8StrMarshaler.LeaveAllocated)]
+        [return:
+            MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(LPUtf8StrMarshaler),
+                MarshalCookie = LPUtf8StrMarshaler.LeaveAllocated)]
         public static extern string SDL_GameControllerMappingForGUID(
             Guid guid
         );
 
         /* gamecontroller refers to an SDL_GameController* */
+
         [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-        [return: MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(LPUtf8StrMarshaler), MarshalCookie = LPUtf8StrMarshaler.LeaveAllocated)]
+        [return:
+            MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(LPUtf8StrMarshaler),
+                MarshalCookie = LPUtf8StrMarshaler.LeaveAllocated)]
         public static extern string SDL_GameControllerMapping(
             IntPtr gamecontroller
         );
@@ -5086,23 +5511,30 @@ namespace Lench.AdvancedControls.Input
         public static extern SDL_bool SDL_IsGameController(int joystick_index);
 
         [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-        [return: MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(LPUtf8StrMarshaler), MarshalCookie = LPUtf8StrMarshaler.LeaveAllocated)]
+        [return:
+            MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(LPUtf8StrMarshaler),
+                MarshalCookie = LPUtf8StrMarshaler.LeaveAllocated)]
         public static extern string SDL_GameControllerNameForIndex(
             int joystick_index
         );
 
         /* IntPtr refers to an SDL_GameController* */
+
         [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
         public static extern IntPtr SDL_GameControllerOpen(int joystick_index);
 
         /* gamecontroller refers to an SDL_GameController* */
+
         [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-        [return: MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(LPUtf8StrMarshaler), MarshalCookie = LPUtf8StrMarshaler.LeaveAllocated)]
+        [return:
+            MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(LPUtf8StrMarshaler),
+                MarshalCookie = LPUtf8StrMarshaler.LeaveAllocated)]
         public static extern string SDL_GameControllerName(
             IntPtr gamecontroller
         );
 
         /* gamecontroller refers to an SDL_GameController* */
+
         [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
         public static extern SDL_bool SDL_GameControllerGetAttached(
             IntPtr gamecontroller
@@ -5111,6 +5543,7 @@ namespace Lench.AdvancedControls.Input
         /* IntPtr refers to an SDL_Joystick*
 		 * gamecontroller refers to an SDL_GameController*
 		 */
+
         [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
         public static extern IntPtr SDL_GameControllerGetJoystick(
             IntPtr gamecontroller
@@ -5124,17 +5557,20 @@ namespace Lench.AdvancedControls.Input
 
         [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
         public static extern SDL_GameControllerAxis SDL_GameControllerGetAxisFromString(
-            [In()] [MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(LPUtf8StrMarshaler))]
-                string pchString
+            [In()] [MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(LPUtf8StrMarshaler))] string
+                pchString
         );
 
         [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-        [return: MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(LPUtf8StrMarshaler), MarshalCookie = LPUtf8StrMarshaler.LeaveAllocated)]
+        [return:
+            MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(LPUtf8StrMarshaler),
+                MarshalCookie = LPUtf8StrMarshaler.LeaveAllocated)]
         public static extern string SDL_GameControllerGetStringForAxis(
             SDL_GameControllerAxis axis
         );
 
         /* gamecontroller refers to an SDL_GameController* */
+
         [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
         public static extern SDL_GameControllerButtonBind SDL_GameControllerGetBindForAxis(
             IntPtr gamecontroller,
@@ -5142,6 +5578,7 @@ namespace Lench.AdvancedControls.Input
         );
 
         /* gamecontroller refers to an SDL_GameController* */
+
         [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
         public static extern short SDL_GameControllerGetAxis(
             IntPtr gamecontroller,
@@ -5150,17 +5587,20 @@ namespace Lench.AdvancedControls.Input
 
         [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
         public static extern SDL_GameControllerButton SDL_GameControllerGetButtonFromString(
-            [In()] [MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(LPUtf8StrMarshaler))]
-                string pchString
+            [In()] [MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(LPUtf8StrMarshaler))] string
+                pchString
         );
 
         [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-        [return: MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(LPUtf8StrMarshaler), MarshalCookie = LPUtf8StrMarshaler.LeaveAllocated)]
+        [return:
+            MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(LPUtf8StrMarshaler),
+                MarshalCookie = LPUtf8StrMarshaler.LeaveAllocated)]
         public static extern string SDL_GameControllerGetStringForButton(
             SDL_GameControllerButton button
         );
 
         /* gamecontroller refers to an SDL_GameController* */
+
         [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
         public static extern SDL_GameControllerButtonBind SDL_GameControllerGetBindForButton(
             IntPtr gamecontroller,
@@ -5168,6 +5608,7 @@ namespace Lench.AdvancedControls.Input
         );
 
         /* gamecontroller refers to an SDL_GameController* */
+
         [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
         public static extern byte SDL_GameControllerGetButton(
             IntPtr gamecontroller,
@@ -5175,6 +5616,7 @@ namespace Lench.AdvancedControls.Input
         );
 
         /* gamecontroller refers to an SDL_GameController* */
+
         [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
         public static extern void SDL_GameControllerClose(
             IntPtr gamecontroller
@@ -5183,6 +5625,7 @@ namespace Lench.AdvancedControls.Input
         /* int refers to an SDL_JoystickID, IntPtr to an SDL_GameController*.
 		 * This function is only available in 2.0.4 or higher.
 		 */
+
         [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
         public static extern IntPtr SDL_GameControllerFromInstanceID(int joyid);
 
@@ -5219,7 +5662,7 @@ namespace Lench.AdvancedControls.Input
         public unsafe struct SDL_HapticDirection
         {
             public byte type;
-            public fixed int dir[3];
+            public fixed int dir [3];
         }
 
         [StructLayout(LayoutKind.Sequential)]
@@ -5280,12 +5723,12 @@ namespace Lench.AdvancedControls.Input
             public ushort button;
             public ushort interval;
             // Condition
-            public fixed ushort right_sat[3];
-            public fixed ushort left_sat[3];
-            public fixed short right_coeff[3];
-            public fixed short left_coeff[3];
-            public fixed ushort deadband[3];
-            public fixed short center[3];
+            public fixed ushort right_sat [3];
+            public fixed ushort left_sat [3];
+            public fixed short right_coeff [3];
+            public fixed short left_coeff [3];
+            public fixed ushort deadband [3];
+            public fixed short center [3];
         }
 
         [StructLayout(LayoutKind.Sequential)]
@@ -5339,7 +5782,7 @@ namespace Lench.AdvancedControls.Input
             public ushort period;
             public ushort samples;
             public IntPtr data; // Uint16*
-                                // Envelope
+            // Envelope
             public ushort attack_length;
             public ushort attack_level;
             public ushort fade_length;
@@ -5349,27 +5792,22 @@ namespace Lench.AdvancedControls.Input
         [StructLayout(LayoutKind.Explicit)]
         public struct SDL_HapticEffect
         {
-            [FieldOffset(0)]
-            public ushort type;
-            [FieldOffset(0)]
-            public SDL_HapticConstant constant;
-            [FieldOffset(0)]
-            public SDL_HapticPeriodic periodic;
-            [FieldOffset(0)]
-            public SDL_HapticCondition condition;
-            [FieldOffset(0)]
-            public SDL_HapticRamp ramp;
-            [FieldOffset(0)]
-            public SDL_HapticLeftRight leftright;
-            [FieldOffset(0)]
-            public SDL_HapticCustom custom;
+            [FieldOffset(0)] public ushort type;
+            [FieldOffset(0)] public SDL_HapticConstant constant;
+            [FieldOffset(0)] public SDL_HapticPeriodic periodic;
+            [FieldOffset(0)] public SDL_HapticCondition condition;
+            [FieldOffset(0)] public SDL_HapticRamp ramp;
+            [FieldOffset(0)] public SDL_HapticLeftRight leftright;
+            [FieldOffset(0)] public SDL_HapticCustom custom;
         }
 
         /* haptic refers to an SDL_Haptic* */
+
         [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
         public static extern void SDL_HapticClose(IntPtr haptic);
 
         /* haptic refers to an SDL_Haptic* */
+
         [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
         public static extern void SDL_HapticDestroyEffect(
             IntPtr haptic,
@@ -5377,6 +5815,7 @@ namespace Lench.AdvancedControls.Input
         );
 
         /* haptic refers to an SDL_Haptic* */
+
         [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
         public static extern int SDL_HapticEffectSupported(
             IntPtr haptic,
@@ -5384,6 +5823,7 @@ namespace Lench.AdvancedControls.Input
         );
 
         /* haptic refers to an SDL_Haptic* */
+
         [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
         public static extern int SDL_HapticGetEffectStatus(
             IntPtr haptic,
@@ -5391,15 +5831,20 @@ namespace Lench.AdvancedControls.Input
         );
 
         /* haptic refers to an SDL_Haptic* */
+
         [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
         public static extern int SDL_HapticIndex(IntPtr haptic);
 
         /* haptic refers to an SDL_Haptic* */
+
         [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-        [return: MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(LPUtf8StrMarshaler), MarshalCookie = LPUtf8StrMarshaler.LeaveAllocated)]
+        [return:
+            MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(LPUtf8StrMarshaler),
+                MarshalCookie = LPUtf8StrMarshaler.LeaveAllocated)]
         public static extern string SDL_HapticName(int device_index);
 
         /* haptic refers to an SDL_Haptic* */
+
         [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
         public static extern int SDL_HapticNewEffect(
             IntPtr haptic,
@@ -5407,18 +5852,22 @@ namespace Lench.AdvancedControls.Input
         );
 
         /* haptic refers to an SDL_Haptic* */
+
         [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
         public static extern int SDL_HapticNumAxes(IntPtr haptic);
 
         /* haptic refers to an SDL_Haptic* */
+
         [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
         public static extern int SDL_HapticNumEffects(IntPtr haptic);
 
         /* haptic refers to an SDL_Haptic* */
+
         [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
         public static extern int SDL_HapticNumEffectsPlaying(IntPtr haptic);
 
         /* IntPtr refers to an SDL_Haptic* */
+
         [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
         public static extern IntPtr SDL_HapticOpen(int device_index);
 
@@ -5426,28 +5875,34 @@ namespace Lench.AdvancedControls.Input
         public static extern int SDL_HapticOpened(int device_index);
 
         /* IntPtr refers to an SDL_Haptic*, joystick to an SDL_Joystick* */
+
         [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
         public static extern IntPtr SDL_HapticOpenFromJoystick(
             IntPtr joystick
         );
 
         /* IntPtr refers to an SDL_Haptic* */
+
         [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
         public static extern IntPtr SDL_HapticOpenFromMouse();
 
         /* haptic refers to an SDL_Haptic* */
+
         [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
         public static extern int SDL_HapticPause(IntPtr haptic);
 
         /* haptic refers to an SDL_Haptic* */
+
         [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
         public static extern uint SDL_HapticQuery(IntPtr haptic);
 
         /* haptic refers to an SDL_Haptic* */
+
         [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
         public static extern int SDL_HapticRumbleInit(IntPtr haptic);
 
         /* haptic refers to an SDL_Haptic* */
+
         [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
         public static extern int SDL_HapticRumblePlay(
             IntPtr haptic,
@@ -5456,14 +5911,17 @@ namespace Lench.AdvancedControls.Input
         );
 
         /* haptic refers to an SDL_Haptic* */
+
         [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
         public static extern int SDL_HapticRumbleStop(IntPtr haptic);
 
         /* haptic refers to an SDL_Haptic* */
+
         [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
         public static extern int SDL_HapticRumbleSupported(IntPtr haptic);
 
         /* haptic refers to an SDL_Haptic* */
+
         [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
         public static extern int SDL_HapticRunEffect(
             IntPtr haptic,
@@ -5472,6 +5930,7 @@ namespace Lench.AdvancedControls.Input
         );
 
         /* haptic refers to an SDL_Haptic* */
+
         [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
         public static extern int SDL_HapticSetAutocenter(
             IntPtr haptic,
@@ -5479,6 +5938,7 @@ namespace Lench.AdvancedControls.Input
         );
 
         /* haptic refers to an SDL_Haptic* */
+
         [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
         public static extern int SDL_HapticSetGain(
             IntPtr haptic,
@@ -5486,10 +5946,12 @@ namespace Lench.AdvancedControls.Input
         );
 
         /* haptic refers to an SDL_Haptic* */
+
         [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
         public static extern int SDL_HapticStopAll(IntPtr haptic);
 
         /* haptic refers to an SDL_Haptic* */
+
         [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
         public static extern int SDL_HapticStopEffect(
             IntPtr haptic,
@@ -5497,10 +5959,12 @@ namespace Lench.AdvancedControls.Input
         );
 
         /* haptic refers to an SDL_Haptic* */
+
         [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
         public static extern int SDL_HapticUnpause(IntPtr haptic);
 
         /* haptic refers to an SDL_Haptic* */
+
         [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
         public static extern int SDL_HapticUpdateEffect(
             IntPtr haptic,
@@ -5509,6 +5973,7 @@ namespace Lench.AdvancedControls.Input
         );
 
         /* joystick refers to an SDL_Joystick* */
+
         [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
         public static extern int SDL_JoystickIsHaptic(IntPtr joystick);
 
@@ -5529,7 +5994,7 @@ namespace Lench.AdvancedControls.Input
 
         public static ushort SDL_AUDIO_BITSIZE(ushort x)
         {
-            return (ushort)(x & SDL_AUDIO_MASK_BITSIZE);
+            return (ushort) (x & SDL_AUDIO_MASK_BITSIZE);
         }
 
         public static bool SDL_AUDIO_ISFLOAT(ushort x)
@@ -5579,16 +6044,20 @@ namespace Lench.AdvancedControls.Input
 
         public static readonly ushort AUDIO_U16SYS =
             BitConverter.IsLittleEndian ? AUDIO_U16LSB : AUDIO_U16MSB;
+
         public static readonly ushort AUDIO_S16SYS =
             BitConverter.IsLittleEndian ? AUDIO_S16LSB : AUDIO_S16MSB;
+
         public static readonly ushort AUDIO_S32SYS =
             BitConverter.IsLittleEndian ? AUDIO_S32LSB : AUDIO_S32MSB;
+
         public static readonly ushort AUDIO_F32SYS =
             BitConverter.IsLittleEndian ? AUDIO_F32LSB : AUDIO_F32MSB;
 
         public const uint SDL_AUDIO_ALLOW_FREQUENCY_CHANGE = 0x00000001;
         public const uint SDL_AUDIO_ALLOW_FORMAT_CHANGE = 0x00000001;
         public const uint SDL_AUDIO_ALLOW_CHANNELS_CHANGE = 0x00000001;
+
         public const uint SDL_AUDIO_ALLOW_ANY_CHANGE = (
             SDL_AUDIO_ALLOW_FREQUENCY_CHANGE |
             SDL_AUDIO_ALLOW_FORMAT_CHANGE |
@@ -5618,6 +6087,7 @@ namespace Lench.AdvancedControls.Input
         }
 
         /* userdata refers to a void*, stream to a Uint8 */
+
         [UnmanagedFunctionPointer(CallingConvention.Cdecl)]
         public delegate void SDL_AudioCallback(
             IntPtr userdata,
@@ -5626,13 +6096,14 @@ namespace Lench.AdvancedControls.Input
         );
 
         /* dev refers to an SDL_AudioDeviceID */
+
         [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
         public static extern int SDL_AudioDeviceConnected(uint dev);
 
         [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
         public static extern int SDL_AudioInit(
-            [In()] [MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(LPUtf8StrMarshaler))]
-                string driver_name
+            [In()] [MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(LPUtf8StrMarshaler))] string
+                driver_name
         );
 
         [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
@@ -5642,35 +6113,44 @@ namespace Lench.AdvancedControls.Input
         public static extern void SDL_CloseAudio();
 
         /* dev refers to an SDL_AudioDeviceID */
+
         [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
         public static extern void SDL_CloseAudioDevice(uint dev);
 
         /* audio_buf refers to a malloc()'d buffer from SDL_LoadWAV */
+
         [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
         public static extern void SDL_FreeWAV(IntPtr audio_buf);
 
         [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-        [return: MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(LPUtf8StrMarshaler), MarshalCookie = LPUtf8StrMarshaler.LeaveAllocated)]
+        [return:
+            MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(LPUtf8StrMarshaler),
+                MarshalCookie = LPUtf8StrMarshaler.LeaveAllocated)]
         public static extern string SDL_GetAudioDeviceName(
             int index,
             int iscapture
         );
 
         /* dev refers to an SDL_AudioDeviceID */
+
         [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
         public static extern SDL_AudioStatus SDL_GetAudioDeviceStatus(
             uint dev
         );
 
         [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-        [return: MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(LPUtf8StrMarshaler), MarshalCookie = LPUtf8StrMarshaler.LeaveAllocated)]
+        [return:
+            MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(LPUtf8StrMarshaler),
+                MarshalCookie = LPUtf8StrMarshaler.LeaveAllocated)]
         public static extern string SDL_GetAudioDriver(int index);
 
         [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
         public static extern SDL_AudioStatus SDL_GetAudioStatus();
 
         [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
-        [return: MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(LPUtf8StrMarshaler), MarshalCookie = LPUtf8StrMarshaler.LeaveAllocated)]
+        [return:
+            MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(LPUtf8StrMarshaler),
+                MarshalCookie = LPUtf8StrMarshaler.LeaveAllocated)]
         public static extern string SDL_GetCurrentAudioDriver();
 
         [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
@@ -5681,6 +6161,7 @@ namespace Lench.AdvancedControls.Input
 
         /* audio_buf will refer to a malloc()'d byte buffer */
         /* THIS IS AN RWops FUNCTION! */
+
         [DllImport(nativeLibName, EntryPoint = "SDL_LoadWAV_RW", CallingConvention = CallingConvention.Cdecl)]
         private static extern IntPtr INTERNAL_SDL_LoadWAV_RW(
             IntPtr src,
@@ -5689,6 +6170,7 @@ namespace Lench.AdvancedControls.Input
             out IntPtr audio_buf,
             out uint audio_len
         );
+
         public static SDL_AudioSpec SDL_LoadWAV(
             string file,
             ref SDL_AudioSpec spec,
@@ -5697,15 +6179,15 @@ namespace Lench.AdvancedControls.Input
         )
         {
             SDL_AudioSpec result;
-            IntPtr rwops = INTERNAL_SDL_RWFromFile(file, "rb");
-            IntPtr result_ptr = INTERNAL_SDL_LoadWAV_RW(
+            var rwops = INTERNAL_SDL_RWFromFile(file, "rb");
+            var result_ptr = INTERNAL_SDL_LoadWAV_RW(
                 rwops,
                 1,
                 ref spec,
                 out audio_buf,
                 out audio_len
             );
-            result = (SDL_AudioSpec)Marshal.PtrToStructure(
+            result = (SDL_AudioSpec) Marshal.PtrToStructure(
                 result_ptr,
                 typeof(SDL_AudioSpec)
             );
@@ -5716,26 +6198,24 @@ namespace Lench.AdvancedControls.Input
         public static extern void SDL_LockAudio();
 
         /* dev refers to an SDL_AudioDeviceID */
+
         [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
         public static extern void SDL_LockAudioDevice(uint dev);
 
         [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
         public static extern void SDL_MixAudio(
-            [Out()] [MarshalAs(UnmanagedType.LPArray, ArraySubType = UnmanagedType.U1, SizeParamIndex = 2)]
-                byte[] dst,
-            [In()] [MarshalAs(UnmanagedType.LPArray, ArraySubType = UnmanagedType.U1, SizeParamIndex = 2)]
-                byte[] src,
+            [Out()] [MarshalAs(UnmanagedType.LPArray, ArraySubType = UnmanagedType.U1, SizeParamIndex = 2)] byte[] dst,
+            [In()] [MarshalAs(UnmanagedType.LPArray, ArraySubType = UnmanagedType.U1, SizeParamIndex = 2)] byte[] src,
             uint len,
             int volume
         );
 
         /* format refers to an SDL_AudioFormat */
+
         [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
         public static extern void SDL_MixAudioFormat(
-            [Out()] [MarshalAs(UnmanagedType.LPArray, ArraySubType = UnmanagedType.U1, SizeParamIndex = 3)]
-                byte[] dst,
-            [In()] [MarshalAs(UnmanagedType.LPArray, ArraySubType = UnmanagedType.U1, SizeParamIndex = 3)]
-                byte[] src,
+            [Out()] [MarshalAs(UnmanagedType.LPArray, ArraySubType = UnmanagedType.U1, SizeParamIndex = 3)] byte[] dst,
+            [In()] [MarshalAs(UnmanagedType.LPArray, ArraySubType = UnmanagedType.U1, SizeParamIndex = 3)] byte[] src,
             ushort format,
             uint len,
             int volume
@@ -5748,10 +6228,10 @@ namespace Lench.AdvancedControls.Input
         );
 
         /* uint refers to an SDL_AudioDeviceID */
+
         [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
         public static extern uint SDL_OpenAudioDevice(
-            [In()] [MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(LPUtf8StrMarshaler))]
-                string device,
+            [In()] [MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(LPUtf8StrMarshaler))] string device,
             int iscapture,
             ref SDL_AudioSpec desired,
             out SDL_AudioSpec obtained,
@@ -5762,6 +6242,7 @@ namespace Lench.AdvancedControls.Input
         public static extern void SDL_PauseAudio(int pause_on);
 
         /* dev refers to an SDL_AudioDeviceID */
+
         [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
         public static extern void SDL_PauseAudioDevice(
             uint dev,
@@ -5772,11 +6253,13 @@ namespace Lench.AdvancedControls.Input
         public static extern void SDL_UnlockAudio();
 
         /* dev refers to an SDL_AudioDeviceID */
+
         [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
         public static extern void SDL_UnlockAudioDevice(uint dev);
 
         /* dev refers to an SDL_AudioDeviceID, data to a void* */
         /* Only available in 2.0.4 */
+
         [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
         public static extern int SDL_QueueAudio(
             uint dev,
@@ -5786,11 +6269,13 @@ namespace Lench.AdvancedControls.Input
 
         /* dev refers to an SDL_AudioDeviceID */
         /* Only available in 2.0.4 */
+
         [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
         public static extern UInt32 SDL_GetQueuedAudioSize(uint dev);
 
         /* dev refers to an SDL_AudioDeviceID */
         /* Only available in 2.0.4 */
+
         [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
         public static extern void SDL_ClearQueuedAudio(uint dev);
 
@@ -5805,31 +6290,38 @@ namespace Lench.AdvancedControls.Input
         /* Compare tick values, return true if A has passed B. Introduced in SDL 2.0.1,
 		 * but does not require it (it was a macro).
 		 */
+
         public static bool SDL_TICKS_PASSED(UInt32 A, UInt32 B)
         {
-            return ((Int32)(B - A) <= 0);
+            return ((Int32) (B - A) <= 0);
         }
 
         /* Delays the thread's processing based on the milliseconds parameter */
+
         [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
         public static extern void SDL_Delay(UInt32 ms);
 
         /* Returns the milliseconds that have passed since SDL was initialized */
+
         [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
         public static extern UInt32 SDL_GetTicks();
 
         /* Get the current value of the high resolution counter */
+
         [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
         public static extern UInt64 SDL_GetPerformanceCounter();
 
         /* Get the count per second of the high resolution counter */
+
         [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
         public static extern UInt64 SDL_GetPerformanceFrequency();
 
         /* param refers to a void* */
+
         public delegate UInt32 SDL_TimerCallback(UInt32 interval, IntPtr param);
 
         /* int refers to an SDL_TimerID, param to a void* */
+
         [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
         public static extern int SDL_AddTimer(
             UInt32 interval,
@@ -5838,6 +6330,7 @@ namespace Lench.AdvancedControls.Input
         );
 
         /* id refers to an SDL_TimerID */
+
         [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
         public static extern SDL_bool SDL_RemoveTimer(int id);
 
@@ -5928,24 +6421,15 @@ namespace Lench.AdvancedControls.Input
         [StructLayout(LayoutKind.Explicit)]
         public struct INTERNAL_SysWMDriverUnion
         {
-            [FieldOffset(0)]
-            public INTERNAL_windows_wminfo win;
-            [FieldOffset(0)]
-            public INTERNAL_winrt_wminfo winrt;
-            [FieldOffset(0)]
-            public INTERNAL_x11_wminfo x11;
-            [FieldOffset(0)]
-            public INTERNAL_directfb_wminfo dfb;
-            [FieldOffset(0)]
-            public INTERNAL_cocoa_wminfo cocoa;
-            [FieldOffset(0)]
-            public INTERNAL_uikit_wminfo uikit;
-            [FieldOffset(0)]
-            public INTERNAL_wayland_wminfo wl;
-            [FieldOffset(0)]
-            public INTERNAL_mir_wminfo mir;
-            [FieldOffset(0)]
-            public INTERNAL_android_wminfo android;
+            [FieldOffset(0)] public INTERNAL_windows_wminfo win;
+            [FieldOffset(0)] public INTERNAL_winrt_wminfo winrt;
+            [FieldOffset(0)] public INTERNAL_x11_wminfo x11;
+            [FieldOffset(0)] public INTERNAL_directfb_wminfo dfb;
+            [FieldOffset(0)] public INTERNAL_cocoa_wminfo cocoa;
+            [FieldOffset(0)] public INTERNAL_uikit_wminfo uikit;
+            [FieldOffset(0)] public INTERNAL_wayland_wminfo wl;
+            [FieldOffset(0)] public INTERNAL_mir_wminfo mir;
+            [FieldOffset(0)] public INTERNAL_android_wminfo android;
             // private int dummy;
         }
 
@@ -5958,6 +6442,7 @@ namespace Lench.AdvancedControls.Input
         }
 
         /* window refers to an SDL_Window* */
+
         [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
         public static extern SDL_bool SDL_GetWindowWMInfo(
             IntPtr window,
@@ -5969,56 +6454,52 @@ namespace Lench.AdvancedControls.Input
         #region SDL_filesystem.h
 
         /// <summary>
-        /// Get the path where the application resides.
-        ///
-        /// Get the "base path". This is the directory where the application was run
-        /// from, which is probably the installation directory, and may or may not
-        /// be the process's current working directory.
-        ///
-        /// This returns an absolute path in UTF-8 encoding, and is garunteed to
-        /// end with a path separator ('\\' on Windows, '/' most other places).
+        ///     Get the path where the application resides.
+        ///     Get the "base path". This is the directory where the application was run
+        ///     from, which is probably the installation directory, and may or may not
+        ///     be the process's current working directory.
+        ///     This returns an absolute path in UTF-8 encoding, and is garunteed to
+        ///     end with a path separator ('\\' on Windows, '/' most other places).
         /// </summary>
         /// <returns>string of base dir in UTF-8 encoding</returns>
-        /// <remarks>The underlying C string is owned by the application,
-        /// and can be NULL on some platforms.
-        ///
-        /// This function is not necessarily fast, so you should only
-        /// call it once and save the string if you need it.
-        ///
-        /// This function is only available in SDL 2.0.1 and later.</remarks>
+        /// <remarks>
+        ///     The underlying C string is owned by the application,
+        ///     and can be NULL on some platforms.
+        ///     This function is not necessarily fast, so you should only
+        ///     call it once and save the string if you need it.
+        ///     This function is only available in SDL 2.0.1 and later.
+        /// </remarks>
         [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
         [return: MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(LPUtf8StrMarshaler))]
         public static extern string SDL_GetBasePath();
 
         /// <summary>
-        /// Get the user-and-app-specific path where files can be written.
-        ///
-        /// Get the "pref dir". This is meant to be where users can write personal
-        /// files (preferences and save games, etc) that are specific to your
-        /// application. This directory is unique per user, per application.
-        ///
-        /// This function will decide the appropriate location in the native filesystem¸
-        /// create the directory if necessary, and return a string of the absolute
-        /// path to the directory in UTF-8 encoding.
+        ///     Get the user-and-app-specific path where files can be written.
+        ///     Get the "pref dir". This is meant to be where users can write personal
+        ///     files (preferences and save games, etc) that are specific to your
+        ///     application. This directory is unique per user, per application.
+        ///     This function will decide the appropriate location in the native filesystem¸
+        ///     create the directory if necessary, and return a string of the absolute
+        ///     path to the directory in UTF-8 encoding.
         /// </summary>
         /// <param name="org">The name of your organization.</param>
         /// <param name="app">The name of your application.</param>
-        /// <returns>UTF-8 string of user dir in platform-dependent notation. NULL
-        /// if there's a problem (creating directory failed, etc).</returns>
-        /// <remarks>The underlying C string is owned by the application,
-        /// and can be NULL on some platforms. .NET provides some similar functions.
-        ///
-        /// This function is not necessarily fast, so you should only
-        /// call it once and save the string if you need it.
-        ///
-        /// This function is only available in SDL 2.0.1 and later.</remarks>
+        /// <returns>
+        ///     UTF-8 string of user dir in platform-dependent notation. NULL
+        ///     if there's a problem (creating directory failed, etc).
+        /// </returns>
+        /// <remarks>
+        ///     The underlying C string is owned by the application,
+        ///     and can be NULL on some platforms. .NET provides some similar functions.
+        ///     This function is not necessarily fast, so you should only
+        ///     call it once and save the string if you need it.
+        ///     This function is only available in SDL 2.0.1 and later.
+        /// </remarks>
         [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
         [return: MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(LPUtf8StrMarshaler))]
         public static extern string SDL_GetPrefPath(
-            [In()] [MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(LPUtf8StrMarshaler))]
-            string org,
-            [In()] [MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(LPUtf8StrMarshaler))]
-            string app
+            [In()] [MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(LPUtf8StrMarshaler))] string org,
+            [In()] [MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(LPUtf8StrMarshaler))] string app
         );
 
         #endregion
@@ -6026,7 +6507,7 @@ namespace Lench.AdvancedControls.Input
         #region SDL_power.h
 
         /// <summary>
-        /// The basic state for the system's power supply.
+        ///     The basic state for the system's power supply.
         /// </summary>
         public enum SDL_PowerState
         {
@@ -6038,14 +6519,18 @@ namespace Lench.AdvancedControls.Input
         }
 
         /// <summary>
-        /// Get the current power supply details.
+        ///     Get the current power supply details.
         /// </summary>
-        /// <param name="secs">Seconds of battery life left. You can pass a NULL here if
-        /// you don't care. Will return -1 if we can't determine a
-        /// value, or we're not running on a battery.</param>
-        /// <param name="pct">Percentage of battery life left, between 0 and 100. You can
-        /// pass a NULL here if you don't care. Will return -1 if we
-        /// can't determine a value, or we're not running on a battery.</param>
+        /// <param name="secs">
+        ///     Seconds of battery life left. You can pass a NULL here if
+        ///     you don't care. Will return -1 if we can't determine a
+        ///     value, or we're not running on a battery.
+        /// </param>
+        /// <param name="pct">
+        ///     Percentage of battery life left, between 0 and 100. You can
+        ///     pass a NULL here if you don't care. Will return -1 if we
+        ///     can't determine a value, or we're not running on a battery.
+        /// </param>
         /// <returns>The state of the battery (if any).</returns>
         [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
         public static extern SDL_PowerState SDL_GetPowerInfo(
@@ -6058,18 +6543,18 @@ namespace Lench.AdvancedControls.Input
         #region SDL_cpuinfo.h
 
         /// <summary>
-        /// This function returns the number of CPU cores available.
+        ///     This function returns the number of CPU cores available.
         /// </summary>
         /// <returns>The number of CPU cores available.</returns>
         [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
         public static extern int SDL_GetCPUCount();
 
         /// <summary>
-        /// This function returns the amount of RAM configured in the system, in MB.
+        ///     This function returns the amount of RAM configured in the system, in MB.
         /// </summary>
         /// <returns>The amount of RAM configured in the system, in MB.</returns>
         /// <remarks>
-        /// This function is only available in SDL 2.0.1 and later.
+        ///     This function is only available in SDL 2.0.1 and later.
         /// </remarks>
         [DllImport(nativeLibName, CallingConvention = CallingConvention.Cdecl)]
         public static extern int SDL_GetSystemRAM();

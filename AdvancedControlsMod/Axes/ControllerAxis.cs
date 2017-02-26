@@ -89,7 +89,7 @@ namespace Lench.AdvancedControls.Axes
         /// </summary>
         public bool Changed
         {
-            get { bool tmp = _changed; _changed = false; return tmp; }
+            get { var tmp = _changed; _changed = false; return tmp; }
         }
 
         /// <summary>

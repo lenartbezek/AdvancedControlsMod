@@ -63,10 +63,10 @@ namespace Lench.AdvancedControls.Axes
         {
             get
             {
-                float mousePos = Axis == Axis.X ? UnityEngine.Input.mousePosition.x : UnityEngine.Input.mousePosition.y;
+                var mousePos = Axis == Axis.X ? UnityEngine.Input.mousePosition.x : UnityEngine.Input.mousePosition.y;
                 float screenSize = Axis == Axis.X ? Screen.width : Screen.height;
-                float rangeSize = Range == 0 ? 1 : screenSize * Range / 2f;
-                float center = screenSize/2f + screenSize/2f * Center;
+                var rangeSize = Range == 0 ? 1 : screenSize * Range / 2f;
+                var center = screenSize/2f + screenSize/2f * Center;
                 return Mathf.Clamp((mousePos - center) / rangeSize, -1f, 1f);
             }
         }

@@ -1,44 +1,26 @@
 ﻿using System;
-using System.IO;
 using System.Collections;
-using System.Net;
-using Lench.AdvancedControls.Resources;
+using System.IO;
 using UnityEngine;
-using Lench.AdvancedControls.UI;
+
 // ReSharper disable UnusedMember.Local
 
 namespace Lench.AdvancedControls.Input
 {
     internal class DeviceManager
     {
-        internal delegate void AxisMotionEventHandler(SDL.SDL_Event e);
-        internal static event AxisMotionEventHandler OnAxisMotion;
-
-        internal delegate void BallMotionEventHandler(SDL.SDL_Event e);
-        internal static event BallMotionEventHandler OnBallMotion;
-
-        internal delegate void HatMotionEventHandler(SDL.SDL_Event e);
-        internal static event HatMotionEventHandler OnHatMotion;
-
-        internal delegate void ButtonEventHandler(SDL.SDL_Event e, bool down);
-        internal static event ButtonEventHandler OnButton;
-
-        internal delegate void KeyEventHandler(SDL.SDL_Event e, bool down);
-        internal static event KeyEventHandler OnKey;
-
-        internal delegate void DeviceAddedEventHandler(SDL.SDL_Event e);
-        internal static event DeviceAddedEventHandler OnDeviceAdded;
-
-        internal delegate void DeviceRemovedEventHandler(SDL.SDL_Event e);
-        internal static event DeviceRemovedEventHandler OnDeviceRemoved;
-
-        internal delegate void DeviceRemappedEventHandler(SDL.SDL_Event e);
-        internal static event DeviceRemappedEventHandler OnDeviceRemapped;
-
         public static bool SdlInitialized;
         public static bool SdlInstalled;
 
         private static DeviceManagerController _controller;
+        internal static event AxisMotionEventHandler OnAxisMotion;
+        internal static event BallMotionEventHandler OnBallMotion;
+        internal static event HatMotionEventHandler OnHatMotion;
+        internal static event ButtonEventHandler OnButton;
+        internal static event KeyEventHandler OnKey;
+        internal static event DeviceAddedEventHandler OnDeviceAdded;
+        internal static event DeviceRemovedEventHandler OnDeviceRemoved;
+        internal static event DeviceRemappedEventHandler OnDeviceRemapped;
 
         public static void InitSdl()
         {
@@ -73,50 +55,21 @@ namespace Lench.AdvancedControls.Input
             _controller.StartCoroutine(DeviceManagerController.AssignMappingsCoroutine(update, verbose));
         }
 
-        public static void InstallSdl()
-        {
-            ControllerAxisEditor.DownloadingInProgress = true;
-            ControllerAxisEditor.DownloadButtonText = "0.0 %";
-            if (File.Exists(Application.dataPath + "/Mods/Resources/AdvancedControls/lib/SDL2.dll"))
-                File.Delete(Application.dataPath + "/Mods/Resources/AdvancedControls/lib/SDL2.dll");
-            if (!Directory.Exists(Application.dataPath + "/Mods/Resources/AdvancedControls/lib/"))
-                Directory.CreateDirectory(Application.dataPath + "/Mods/Resources/AdvancedControls/lib/");
-            using (var client = new WebClient())
-            {
-                try
-                {
-                    client.DownloadProgressChanged += (sender, e) =>
-                    {
-                        ControllerAxisEditor.DownloadButtonText = (Convert.ToSingle(e.BytesReceived) / Convert.ToSingle(e.TotalBytesToReceive) * 100).ToString("0.0") + " %";
-                    };
-                    client.DownloadFileCompleted += (sender, e) =>
-                    {
-                        ControllerAxisEditor.DownloadingInProgress = false;
-                        if (e.Error != null)
-                        {
-                            ControllerAxisEditor.DownloadButtonText = Strings.DownloadButtonText_Error;
-                            spaar.ModLoader.ModConsole.AddMessage(LogType.Log, $"[ACM]: {Strings.Log_ErrorDownloadingFile} SDL2.dll", e.Error.Message);
-                        }
-                        else
-                        {
-                            spaar.ModLoader.ModConsole.AddMessage(LogType.Log, $"[ACM]: {Strings.Log_SuccessDownloadingFile} SDL2.dll");
-                            ControllerAxisEditor.DownloadButtonText = Strings.DownloadButtonText_Restart;
-                            SdlInstalled = true;
-                            InitSdl();
-                        } 
-                    };
-                    client.DownloadFileAsync(
-                        new Uri("http://lench4991.github.io/AdvancedControlsMod/files/SDL2.dll"),
-                        Application.dataPath + "/Mods/Resources/AdvancedControls/lib/SDL2.dll");
-                }
-                catch (Exception e)
-                {
-                    ControllerAxisEditor.DownloadingInProgress = false;
-                    ControllerAxisEditor.DownloadButtonText = Strings.DownloadButtonText_Error;
-                    spaar.ModLoader.ModConsole.AddMessage(LogType.Error, $"[ACM]: {Strings.Log_ErrorDownloadingFile} SDL2.dll", e.Message);
-                }
-            }
-        }
+        internal delegate void AxisMotionEventHandler(SDL.SDL_Event e);
+
+        internal delegate void BallMotionEventHandler(SDL.SDL_Event e);
+
+        internal delegate void HatMotionEventHandler(SDL.SDL_Event e);
+
+        internal delegate void ButtonEventHandler(SDL.SDL_Event e, bool down);
+
+        internal delegate void KeyEventHandler(SDL.SDL_Event e, bool down);
+
+        internal delegate void DeviceAddedEventHandler(SDL.SDL_Event e);
+
+        internal delegate void DeviceRemovedEventHandler(SDL.SDL_Event e);
+
+        internal delegate void DeviceRemappedEventHandler(SDL.SDL_Event e);
 
         // ReSharper disable once ClassNeverInstantiated.Local
         private class DeviceManagerController : MonoBehaviour
@@ -133,7 +86,6 @@ namespace Lench.AdvancedControls.Input
                 if (!SdlInitialized) return;
 
                 while (SDL.SDL_PollEvent(out SDL.SDL_Event e) > 0)
-                {
                     switch (e.type)
                     {
                         case SDL.SDL_EventType.SDL_KEYDOWN:
@@ -201,7 +153,6 @@ namespace Lench.AdvancedControls.Input
                             OnDeviceRemoved?.Invoke(e);
                             break;
                     }
-                }
             }
 
             public static IEnumerator AssignMappingsCoroutine(bool update, bool verbose = false)
@@ -215,8 +166,7 @@ namespace Lench.AdvancedControls.Input
 
                     if (www.isDone && string.IsNullOrEmpty(www.error))
                         mappings = www.text;
-                    else
-                        if (verbose) Debug.Log("=> " + Strings.Log_UnableToConnect);
+                    else if (verbose) Debug.Log("=> " + Strings.Log_UnableToConnect);
                 }
 
                 var dir = Application.dataPath + "/Mods/Resources/AdvancedControls/";
@@ -226,7 +176,6 @@ namespace Lench.AdvancedControls.Input
                 {
                     var currentMappings = File.ReadAllText(dir + file);
                     if (update && mappings != null)
-                    {
                         if (mappings == currentMappings)
                         {
                             if (verbose) Debug.Log("=> " + Strings.Log_GameControllerDBIsUpToDate);
@@ -236,11 +185,8 @@ namespace Lench.AdvancedControls.Input
                             File.WriteAllText(dir + file, mappings);
                             if (verbose) Debug.Log("=> " + Strings.Log_GameControllerDBUpdateSuccessfull);
                         }
-                    }
                     else
-                    {
                         mappings = currentMappings;
-                    }
                 }
                 else
                 {
@@ -260,7 +206,8 @@ namespace Lench.AdvancedControls.Input
 
                 try
                 {
-                    var envVar = Environment.GetEnvironmentVariable("SDL_GAMECONTROLLERCONFIG", EnvironmentVariableTarget.User);
+                    var envVar = Environment.GetEnvironmentVariable("SDL_GAMECONTROLLERCONFIG",
+                        EnvironmentVariableTarget.User);
                     if (string.IsNullOrEmpty(envVar))
                     {
                         if (verbose) Debug.Log("=> " + Strings.Log_EnvVarSet);

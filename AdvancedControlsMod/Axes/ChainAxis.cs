@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using Lench.AdvancedControls.Resources;
-using Lench.AdvancedControls.UI;
 using UnityEngine;
 
 // ReSharper disable PossibleNullReferenceException
@@ -11,6 +9,7 @@ namespace Lench.AdvancedControls.Axes
     /// <summary>
     /// Chain axis links two axes together and combines them in a new axis.
     /// </summary>
+    [Serializable]
     public class ChainAxis : InputAxis
     {
         /// <summary>
@@ -26,26 +25,15 @@ namespace Lench.AdvancedControls.Axes
 
             internal set
             {
+                var oldName = base.Name;
                 base.Name = value;
                 var sub1 = AxisManager.Get(SubAxis1) as ChainAxis;
                 var sub2 = AxisManager.Get(SubAxis2) as ChainAxis;
-                var error = false;
-                var errorMessage = Strings.ChainAxisEditor_Message_ChainCycleErrorDetail;
-                if (sub1 != null && sub1.CheckCycle(new List<string> { Name }))
+                if ((sub1 != null && sub1.CheckCycle(new List<string> {Name})) ||
+                    (sub2 != null && sub2.CheckCycle(new List<string> {Name})))
                 {
-                    error = true;
-                    errorMessage += string.Format(Strings.ChainAxisEditor_Message_ChainCycleErrorEffect, SubAxis1);
-                    SubAxis1 = null;
-                }
-                if (sub2 != null && sub2.CheckCycle(new List<string> { Name }))
-                {
-                    error = true;
-                    errorMessage += string.Format(Strings.ChainAxisEditor_Message_ChainCycleErrorEffect, SubAxis2);
-                    SubAxis2 = null;
-                }
-                if (error)
-                {
-                    (Editor as ChainAxisEditor).Error = $"<color=#FFFF00><b>{Strings.ChainAxisEditor_Message_ChainCycleError}</b></color>\n" + errorMessage;
+                    base.Name = oldName;
+                    throw new InvalidOperationException("Renaming this axis would create a cycle.");
                 }
             }
         }
@@ -66,7 +54,7 @@ namespace Lench.AdvancedControls.Axes
                 if (AxisManager.Get(value) is ChainAxis axis && axis.CheckCycle(new List<string>()))
                 {
                     _subAxis1 = null;
-                    throw new InvalidOperationException(string.Format(Strings.ChainAxisEditor_Message_ChainCycleErrorDetail2, value));
+                    throw new InvalidOperationException("Linking this axis here would create a cycle.");
                 }
             }
         }
@@ -88,7 +76,7 @@ namespace Lench.AdvancedControls.Axes
                 if (AxisManager.Get(_subAxis2) is ChainAxis axis && axis.CheckCycle(new List<string>()))
                 {
                     _subAxis2 = null;
-                    throw new InvalidOperationException(string.Format(Strings.ChainAxisEditor_Message_ChainCycleErrorDetail2, value));
+                    throw new InvalidOperationException("Linking this axis here would create a cycle.");
                 }
             }
         }
@@ -131,31 +119,6 @@ namespace Lench.AdvancedControls.Axes
         }
 
         /// <summary>
-        /// Returns localized string representation of a chain method.
-        /// </summary>
-        /// <param name="m">ChainMethod enumerator</param>
-        public static string GetMethodString(ChainMethod m)
-        {
-            switch (m)
-            {
-                case ChainMethod.Sum:
-                    return Strings.ChainMethod_Sum;
-                case ChainMethod.Subtract:
-                    return Strings.ChainMethod_Subtract;
-                case ChainMethod.Average:
-                    return Strings.ChainMethod_Average;
-                case ChainMethod.Multiply:
-                    return Strings.ChainMethod_Multiply;
-                case ChainMethod.Maximum:
-                    return Strings.ChainMethod_Maximum;
-                case ChainMethod.Minimum:
-                    return Strings.ChainMethod_Minimum;
-                default:
-                    throw new ArgumentOutOfRangeException(nameof(m), m, null);
-            }
-        }
-
-        /// <summary>
         /// Output value based on linked axes values and the chaining method.
         /// </summary>
         public override float OutputValue {
@@ -163,8 +126,8 @@ namespace Lench.AdvancedControls.Axes
             {
                 var axisA = AxisManager.Get(SubAxis1);
                 var axisB = AxisManager.Get(SubAxis2);
-                float a = axisA?.OutputValue ?? 0;
-                float b = axisB?.OutputValue ?? 0;
+                var a = axisA?.OutputValue ?? 0;
+                var b = axisB?.OutputValue ?? 0;
                 switch (Method)
                 {
                     case ChainMethod.Sum:
@@ -196,7 +159,6 @@ namespace Lench.AdvancedControls.Axes
             SubAxis1 = null;
             SubAxis2 = null;
             Method = ChainMethod.Sum;
-            Editor = new ChainAxisEditor(this);
         }
 
         /// <summary>
@@ -225,14 +187,14 @@ namespace Lench.AdvancedControls.Axes
          * Keeps list of already visited names as path.
          * Duplicate in path means there is a cycle.
          */
-        private bool CheckCycle(List<string> path)
+        private bool CheckCycle(ICollection<string> path)
         {
             // Check for duplicate
             if (path.Contains(Name))
                 return true;
             var sub1 = AxisManager.Get(SubAxis1) as ChainAxis;
             var sub2 = AxisManager.Get(SubAxis2) as ChainAxis;
-            bool cycle = false;
+            var cycle = false;
             // Traverse left node
             if (sub1 != null)
             {
@@ -263,53 +225,8 @@ namespace Lench.AdvancedControls.Axes
             return clone;
         }
 
-        internal override void Load()
-        {
-            Method = (ChainMethod)Enum.Parse(typeof(ChainMethod), spaar.ModLoader.Configuration.GetString("axis-" + Name + "-method", "Sum"));
-            SubAxis1 = spaar.ModLoader.Configuration.GetString("axis-" + Name + "-subaxis1", null);
-            SubAxis2 = spaar.ModLoader.Configuration.GetString("axis-" + Name + "-subaxis2", null);
-        }
-
-        internal override void Load(MachineInfo machineInfo)
-        {
-            if (machineInfo.MachineData.HasKey("axis-" + Name + "-method"))
-                Method = (ChainMethod)Enum.Parse(typeof(ChainMethod), machineInfo.MachineData.ReadString("axis-" + Name + "-method"));
-            if (machineInfo.MachineData.HasKey("axis-" + Name + "-subaxis1"))
-                SubAxis1 = machineInfo.MachineData.ReadString("axis-" + Name + "-subaxis1");
-            if (machineInfo.MachineData.HasKey("axis-" + Name + "-subaxis2"))
-                SubAxis2 = machineInfo.MachineData.ReadString("axis-" + Name + "-subaxis2");
-        }
-
-        internal override void Save()
-        {
-            spaar.ModLoader.Configuration.SetString("axis-" + Name + "-type", Type.ToString());
-            spaar.ModLoader.Configuration.SetString("axis-" + Name + "-method", Method.ToString());
-            if (SubAxis1 != null)
-                spaar.ModLoader.Configuration.SetString("axis-" + Name + "-subaxis1", SubAxis1);
-            else
-                spaar.ModLoader.Configuration.RemoveKey("axis-" + Name + "-subaxis1");
-            if (SubAxis2 != null)
-                spaar.ModLoader.Configuration.SetString("axis-" + Name + "-subaxis2", SubAxis2);
-            else
-                spaar.ModLoader.Configuration.RemoveKey("axis-" + Name + "-subaxis2");
-        }
-
-        internal override void Save(MachineInfo machineInfo)
-        {
-            machineInfo.MachineData.Write("axis-" + Name + "-type", Type.ToString());
-            machineInfo.MachineData.Write("axis-" + Name + "-method", Method.ToString());
-            if (SubAxis1 != null)
-                machineInfo.MachineData.Write("axis-" + Name + "-subaxis1", SubAxis1);
-            if (SubAxis2 != null)
-                machineInfo.MachineData.Write("axis-" + Name + "-subaxis2", SubAxis2);
-        }
-
         internal override void Delete()
         {
-            spaar.ModLoader.Configuration.RemoveKey("axis-" + Name + "-type");
-            spaar.ModLoader.Configuration.RemoveKey("axis-" + Name + "-method");
-            spaar.ModLoader.Configuration.RemoveKey("axis-" + Name + "-subaxis1");
-            spaar.ModLoader.Configuration.RemoveKey("axis-" + Name + "-subaxis2");
             Dispose();
         }
 

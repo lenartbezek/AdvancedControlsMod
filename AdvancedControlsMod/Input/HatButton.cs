@@ -1,74 +1,22 @@
 ﻿using System;
-using Lench.AdvancedControls.Resources;
 
 namespace Lench.AdvancedControls.Input
 {
     /// <summary>
-    /// Translates a joystick hat position into a button.
+    ///     Translates a joystick hat position into a button.
     /// </summary>
     public class HatButton : Button
     {
-        private Controller _controller;
-        private Guid _guid;
         private readonly byte _downState;
+        private Controller _controller;
 
         private bool _down;
+        private Guid _guid;
         private bool _pressed;
         private bool _released;
 
         /// <summary>
-        /// Hat button identifying string of the following format:
-        /// hat:[index]:[down_state_byte]:[device_guid]
-        /// </summary>
-        public override string ID => "hat:" + Index + ":" + _downState + ":" + _guid;
-
-        /// <summary>
-        /// Guid of the associated controller.
-        /// Changing it updates the controller.
-        /// </summary>
-        public Guid GUID
-        {
-            get { return _guid; }
-            set
-            {
-                _guid = value;
-                _controller = Controller.Get(_guid);
-            }
-        }
-
-        /// <summary>
-        /// Index of the button on a device.
-        /// </summary>
-        public int Index { get; }
-
-#pragma warning disable CS1591
-        public override bool IsDown => _down;
-        public override bool Pressed => _pressed;
-        public override bool Released => _released;
-        public override float Value => _down ? 1 : 0;
-        public override string Name
-        { 
-            get
-            {
-                var dir = string.Empty;
-                if ((_downState & SDL.SDL_HAT_UP) > 0)
-                    dir = Strings.HatButton_Direction_UP;
-                else if ((_downState & SDL.SDL_HAT_DOWN) > 0)
-                    dir = Strings.HatButton_Direction_DOWN;
-                else if ((_downState & SDL.SDL_HAT_LEFT) > 0)
-                    dir = Strings.HatButton_Direction_LEFT;
-                else if ((_downState & SDL.SDL_HAT_RIGHT) > 0)
-                    dir = Strings.HatButton_Direction_RIGHT;
-                return _controller != null && _controller.IsGameController && Index == 0
-                    ? $"{Strings.Controller_HatName_DPAD} - {dir}"
-                    : $"{string.Format(Strings.Controller_HatName_Default, Index + 1)} - {dir}";
-            }
-        }
-        public override bool Connected => _controller != null && _controller.Connected && Index < _controller.NumHats;
-#pragma warning restore CS1591
-
-        /// <summary>
-        /// Creates a hat button for given controller.
+        ///     Creates a hat button for given controller.
         /// </summary>
         /// <param name="controller">Controller class.</param>
         /// <param name="index">Index of the hat button.</param>
@@ -83,9 +31,9 @@ namespace Lench.AdvancedControls.Input
         }
 
         /// <summary>
-        /// Creates a hat button from an identifier string.
-        /// Intended for loading buttons from xml.
-        /// Throws FormatException.
+        ///     Creates a hat button from an identifier string.
+        ///     Intended for loading buttons from xml.
+        ///     Throws FormatException.
         /// </summary>
         /// <param name="id">Hat button identifier string.</param>
         public HatButton(string id)
@@ -99,11 +47,38 @@ namespace Lench.AdvancedControls.Input
                 _controller = Controller.Get(_guid);
             }
             else
+            {
                 throw new FormatException("Specified ID does not represent a hat button.");
+            }
 
             DeviceManager.OnHatMotion += HandleEvent;
             DeviceManager.OnDeviceAdded += UpdateDevice;
         }
+
+        /// <summary>
+        ///     Hat button identifying string of the following format:
+        ///     hat:[index]:[down_state_byte]:[device_guid]
+        /// </summary>
+        public override string ID => "hat:" + Index + ":" + _downState + ":" + _guid;
+
+        /// <summary>
+        ///     Guid of the associated controller.
+        ///     Changing it updates the controller.
+        /// </summary>
+        public Guid GUID
+        {
+            get { return _guid; }
+            set
+            {
+                _guid = value;
+                _controller = Controller.Get(_guid);
+            }
+        }
+
+        /// <summary>
+        ///     Index of the button on a device.
+        /// </summary>
+        public int Index { get; }
 
         private void HandleEvent(SDL.SDL_Event e)
         {
@@ -123,5 +98,14 @@ namespace Lench.AdvancedControls.Input
         {
             _controller = Controller.Get(_guid);
         }
+
+#pragma warning disable CS1591
+        public override bool IsDown => _down;
+        public override bool Pressed => _pressed;
+        public override bool Released => _released;
+        public override float Value => _down ? 1 : 0;
+        public override string Name => ID;
+        public override bool Connected => _controller != null && _controller.Connected && Index < _controller.NumHats;
+#pragma warning restore CS1591
     }
 }

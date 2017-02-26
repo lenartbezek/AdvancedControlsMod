@@ -248,7 +248,7 @@ axis_value";
             InitialisationCode = spaar.ModLoader.Configuration.GetString("axis-" + Name + "-init", InitialisationCode);
             UpdateCode = spaar.ModLoader.Configuration.GetString("axis-" + Name + "-update", UpdateCode);
             GlobalScope = spaar.ModLoader.Configuration.GetBool("axis-" + Name + "-global", GlobalScope);
-            for (int i = 0; spaar.ModLoader.Configuration.DoesKeyExist("axis-" + Name + "-link" + i); i++)
+            for (var i = 0; spaar.ModLoader.Configuration.DoesKeyExist("axis-" + Name + "-link" + i); i++)
                 LinkedAxes.Add(spaar.ModLoader.Configuration.GetString("axis-" + Name + "-link" + i, " "));
         }
 
@@ -271,7 +271,7 @@ axis_value";
             spaar.ModLoader.Configuration.SetString("axis-" + Name + "-update", UpdateCode);
             spaar.ModLoader.Configuration.SetBool("axis-" + Name + "-global", GlobalScope);
             var list = LinkedAxes.ToArray();
-            for (int i = 0; i < list.Length; i++)
+            for (var i = 0; i < list.Length; i++)
                 spaar.ModLoader.Configuration.SetString("axis-" + Name + "-link"+i, list[i]);
         }
 
@@ -291,7 +291,7 @@ axis_value";
             spaar.ModLoader.Configuration.RemoveKey("axis-" + Name + "-init");
             spaar.ModLoader.Configuration.RemoveKey("axis-" + Name + "-update");
             spaar.ModLoader.Configuration.RemoveKey("axis-" + Name + "-global");
-            for (int i = 0; spaar.ModLoader.Configuration.DoesKeyExist("axis-" + Name + "-link" + i); i++)
+            for (var i = 0; spaar.ModLoader.Configuration.DoesKeyExist("axis-" + Name + "-link" + i); i++)
                 spaar.ModLoader.Configuration.RemoveKey("axis-" + Name + "-link" + i);
             Dispose();
         }

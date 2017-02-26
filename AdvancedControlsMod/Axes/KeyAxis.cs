@@ -93,8 +93,8 @@ namespace Lench.AdvancedControls.Axes
         {
             get
             {
-                float p = PositiveBind?.Value ?? 0;
-                float n = NegativeBind?.Value * -1 ?? 0;
+                var p = PositiveBind?.Value ?? 0;
+                var n = NegativeBind?.Value * -1 ?? 0;
                 return p + n;
             }
         }
@@ -129,8 +129,8 @@ namespace Lench.AdvancedControls.Axes
         /// </summary>
         protected override void Update()
         {
-            float gForce = OutputValue > 0 ? -Gravity : Gravity;
-            float force = InputValue * Sensitivity + (1 - Mathf.Abs(InputValue)) * gForce;
+            var gForce = OutputValue > 0 ? -Gravity : Gravity;
+            var force = InputValue * Sensitivity + (1 - Mathf.Abs(InputValue)) * gForce;
             if (Momentum == 0)
                 _speed = force;
             else
