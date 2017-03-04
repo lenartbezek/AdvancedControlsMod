@@ -166,7 +166,7 @@ namespace Lench.AdvancedControls.Input
 
                     if (www.isDone && string.IsNullOrEmpty(www.error))
                         mappings = www.text;
-                    else if (verbose) Debug.Log("=> " + Strings.Log_UnableToConnect);
+                    else if (verbose) Debug.Log("=> " + "unable to connect"); 
                 }
 
                 var dir = Application.dataPath + "/Mods/Resources/AdvancedControls/";
@@ -178,12 +178,12 @@ namespace Lench.AdvancedControls.Input
                     if (update && mappings != null)
                         if (mappings == currentMappings)
                         {
-                            if (verbose) Debug.Log("=> " + Strings.Log_GameControllerDBIsUpToDate);
+                            if (verbose) Debug.Log("=> " + "DB is up to date"); // TODO: Localize
                         }
                         else
                         {
                             File.WriteAllText(dir + file, mappings);
-                            if (verbose) Debug.Log("=> " + Strings.Log_GameControllerDBUpdateSuccessfull);
+                            if (verbose) Debug.Log("=> " + "DB update successful"); // TODO: Localize
                         }
                     else
                         mappings = currentMappings;
@@ -195,7 +195,7 @@ namespace Lench.AdvancedControls.Input
                         if (!Directory.Exists(dir))
                             Directory.CreateDirectory(dir);
                         File.WriteAllText(dir + file, mappings);
-                        if (verbose) Debug.Log("=> " + Strings.Log_GameControllerDBDownloaded);
+                        if (verbose) Debug.Log("=> " + "DB downloaded"); // TODO: Localize
                     }
                 }
 
@@ -210,17 +210,17 @@ namespace Lench.AdvancedControls.Input
                         EnvironmentVariableTarget.User);
                     if (string.IsNullOrEmpty(envVar))
                     {
-                        if (verbose) Debug.Log("=> " + Strings.Log_EnvVarSet);
+                        if (verbose) Debug.Log("=> " + "Env var set"); // TODO: Localize
                     }
                     else
                     {
-                        if (verbose) Debug.Log("=> " + Strings.Log_EnvVarRead);
+                        if (verbose) Debug.Log("=> " + "Env var read");
                         SDL.SDL_GameControllerAddMapping(envVar);
                     }
                 }
                 catch
                 {
-                    if (verbose) Debug.Log("=> " + Strings.Log_EnvVarError);
+                    if (verbose) Debug.Log("=> " + "Env var error"); // TODO: Localize
                 }
             }
         }

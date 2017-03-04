@@ -1,6 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
 using Lench.AdvancedControls.Blocks;
-using Lench.AdvancedControls.Resources;
 using UnityEngine;
 // ReSharper disable UseNullPropagation
 
@@ -23,7 +23,7 @@ namespace Lench.AdvancedControls.Controls
         /// <summary>
         /// Localized display name of the control.
         /// </summary>
-        public override string Name => Strings.ControlName_Input;
+        public override string Name => "input control"; // TODO" Localize
 
         /// <summary>
         /// Creates an input control for a block with given GUID.
@@ -61,9 +61,12 @@ namespace Lench.AdvancedControls.Controls
             value = value > 0 
                 ? Mathf.Lerp(Center, Max, value) 
                 : Mathf.Lerp(Center, Min, -value);
-            _cog?.SetInput(value);
-            _steering?.SetInput(value);
-            _spring?.SetInput(value);
+            if (_cog != null)
+                _cog.Input = value;
+            if (_steering != null)
+                _steering.Input =value;
+            if (_spring != null)
+                _spring.Input = value;
         }
 
         /// <summary>
@@ -75,12 +78,12 @@ namespace Lench.AdvancedControls.Controls
         {
             if (_steering != null)
             {
-                Block.ClearKeys("LEFT");
-                Block.ClearKeys("RIGHT");
+                Block.Keys["left"] = new List<KeyCode>();
+                Block.Keys["right"] = new List<KeyCode>();
             }
             if (_spring != null)
             {
-                Block.ClearKeys("CONTRACT");
+                Block.Keys["contract"] = new List<KeyCode>();
             }
         }
 

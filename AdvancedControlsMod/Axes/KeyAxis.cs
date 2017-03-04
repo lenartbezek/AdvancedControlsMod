@@ -1,7 +1,5 @@
 ﻿using System;
 using Lench.AdvancedControls.Input;
-using Lench.AdvancedControls.Resources;
-using Lench.AdvancedControls.UI;
 using UnityEngine;
 
 // ReSharper disable CompareOfFloatsByEqualityOperator
@@ -76,7 +74,6 @@ namespace Lench.AdvancedControls.Axes
         public KeyAxis(string name) : base(name)
         {
             Type = AxisType.Key;
-            Editor = new KeyAxisEditor(this);
 
             PositiveBind = null;
             NegativeBind = null;
@@ -166,72 +163,6 @@ namespace Lench.AdvancedControls.Axes
             return clone;
         }
 
-        internal override void Load()
-        {
-            Sensitivity = spaar.ModLoader.Configuration.GetFloat("axis-" + Name + "-sensitivity", Sensitivity);
-            Gravity = spaar.ModLoader.Configuration.GetFloat("axis-" + Name + "-gravity", Gravity);
-            Momentum = spaar.ModLoader.Configuration.GetFloat("axis-" + Name + "-momentum", Momentum);
-            Snap = spaar.ModLoader.Configuration.GetBool("axis-" + Name + "-snap", Snap);
-            Raw = spaar.ModLoader.Configuration.GetBool("axis-" + Name + "-raw", Raw);
-            PositiveBind = ParseButtonID(spaar.ModLoader.Configuration.GetString("axis-" + Name + "-positive", null));
-            NegativeBind = ParseButtonID(spaar.ModLoader.Configuration.GetString("axis-" + Name + "-negative", null));
-        }
-
-        internal override void Load(MachineInfo machineInfo)
-        {
-            if (machineInfo.MachineData.HasKey("axis-" + Name + "-sensitivity"))
-                Sensitivity = machineInfo.MachineData.ReadFloat("axis-" + Name + "-sensitivity");
-            if (machineInfo.MachineData.HasKey("axis-" + Name + "-gravity"))
-                Gravity = machineInfo.MachineData.ReadFloat("axis-" + Name + "-gravity");
-            if (machineInfo.MachineData.HasKey("axis-" + Name + "-momentum"))
-                Momentum = machineInfo.MachineData.ReadFloat("axis-" + Name + "-momentum");
-            if (machineInfo.MachineData.HasKey("axis-" + Name + "-snap"))
-                Snap = machineInfo.MachineData.ReadBool("axis-" + Name + "-snap");
-            if (machineInfo.MachineData.HasKey("axis-" + Name + "-raw"))
-                Raw = machineInfo.MachineData.ReadBool("axis-" + Name + "-raw");
-            if (machineInfo.MachineData.HasKey("axis-" + Name + "-positive"))
-                PositiveBind = ParseButtonID(machineInfo.MachineData.ReadString("axis-" + Name + "-positive"));
-            if (machineInfo.MachineData.HasKey("axis-" + Name + "-negative"))
-                NegativeBind = ParseButtonID(machineInfo.MachineData.ReadString("axis-" + Name + "-negative"));
-        }
-
-        internal override void Save()
-        {
-            spaar.ModLoader.Configuration.SetString("axis-" + Name + "-type", Type.ToString());
-            spaar.ModLoader.Configuration.SetFloat("axis-" + Name + "-sensitivity", Sensitivity);
-            spaar.ModLoader.Configuration.SetFloat("axis-" + Name + "-gravity", Gravity);
-            spaar.ModLoader.Configuration.SetFloat("axis-" + Name + "-momentum", Momentum);
-            spaar.ModLoader.Configuration.SetBool("axis-" + Name + "-snap", Snap);
-            spaar.ModLoader.Configuration.SetBool("axis-" + Name + "-raw", Raw);
-            spaar.ModLoader.Configuration.SetString("axis-" + Name + "-positive", PositiveBind?.ID ?? "None");
-            spaar.ModLoader.Configuration.SetString("axis-" + Name + "-negative", NegativeBind?.ID ?? "None");
-        }
-
-        internal override void Save(MachineInfo machineInfo)
-        {
-            machineInfo.MachineData.Write("axis-" + Name + "-type", Type.ToString());
-            machineInfo.MachineData.Write("axis-" + Name + "-sensitivity", Sensitivity);
-            machineInfo.MachineData.Write("axis-" + Name + "-gravity", Gravity);
-            machineInfo.MachineData.Write("axis-" + Name + "-momentum", Momentum);
-            machineInfo.MachineData.Write("axis-" + Name + "-snap", Snap);
-            machineInfo.MachineData.Write("axis-" + Name + "-raw", Raw);
-            machineInfo.MachineData.Write("axis-" + Name + "-positive", PositiveBind?.ID ?? "None");
-            machineInfo.MachineData.Write("axis-" + Name + "-negative", NegativeBind?.ID ?? "None");
-        }
-
-        internal override void Delete()
-        {
-            spaar.ModLoader.Configuration.RemoveKey("axis-" + Name + "-type");
-            spaar.ModLoader.Configuration.RemoveKey("axis-" + Name + "-sensitivity");
-            spaar.ModLoader.Configuration.RemoveKey("axis-" + Name + "-gravity");
-            spaar.ModLoader.Configuration.RemoveKey("axis-" + Name + "-momentum");
-            spaar.ModLoader.Configuration.RemoveKey("axis-" + Name + "-snap");
-            spaar.ModLoader.Configuration.RemoveKey("axis-" + Name + "-raw");
-            spaar.ModLoader.Configuration.RemoveKey("axis-" + Name + "-positive");
-            spaar.ModLoader.Configuration.RemoveKey("axis-" + Name + "-negative");
-            Dispose();
-        }
-
         private static Button ParseButtonID(string id)
         {
             if (id == null)
@@ -248,7 +179,7 @@ namespace Lench.AdvancedControls.Axes
             }
             catch (Exception e)
             {
-                Debug.Log($"[ACM]: {Strings.KeyAxis_ParseButtonID_ErrorWhileLoadingAButton}");
+                Debug.Log($"[ACM]: {"Error loading button"}"); // TODO: Localize
                 Debug.LogException(e);
                 return null;
             }

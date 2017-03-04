@@ -1,7 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 using Lench.AdvancedControls.Blocks;
-using Lench.AdvancedControls.Resources;
 
 // ReSharper disable VirtualMemberCallInConstructor
 
@@ -22,7 +22,7 @@ namespace Lench.AdvancedControls.Controls
         /// <summary>
         /// Localized display name of the control.
         /// </summary>
-        public override string Name => Strings.ControlName_Position;
+        public override string Name => "position control"; // TODO: Localize
 
         /// <summary>
         /// Creates a position control for a piston with given GUID.
@@ -90,7 +90,8 @@ namespace Lench.AdvancedControls.Controls
             value = value > 0 
                 ? Mathf.Lerp(Center, Max, value) 
                 : Mathf.Lerp(Center, Min, -value);
-            _piston?.SetPosition(value);
+            if (_piston != null)
+                _piston.Extension = value;
         }
 
         /// <summary>
@@ -98,7 +99,7 @@ namespace Lench.AdvancedControls.Controls
         /// </summary>
         protected override void ClearKeys()
         {
-            Block.ClearKeys("EXTEND");
+            Block.Keys["extend"] = new List<KeyCode>();
         }
 
         internal override Control Clone()

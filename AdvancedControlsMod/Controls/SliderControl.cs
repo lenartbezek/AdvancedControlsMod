@@ -34,7 +34,8 @@ namespace Lench.AdvancedControls.Controls
             value = value > 0 
                 ? Mathf.Lerp(Center, Max, value) 
                 : Mathf.Lerp(Center, Min, -value);
-            Block?.SetSliderValue(Slider, value);
+            if (Block != null)
+                Block.Sliders[Slider] = value;
         }
 
         /// <summary>

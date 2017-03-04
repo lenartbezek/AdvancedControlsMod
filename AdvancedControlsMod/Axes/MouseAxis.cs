@@ -1,5 +1,4 @@
-﻿using Lench.AdvancedControls.UI;
-using UnityEngine;
+﻿using UnityEngine;
 // ReSharper disable CompareOfFloatsByEqualityOperator
 
 namespace Lench.AdvancedControls.Axes
@@ -52,8 +51,6 @@ namespace Lench.AdvancedControls.Axes
             Center = 0;
             Range = 0.5f;
             Axis = Axis.X;
-
-            Editor = new MouseAxisEditor(this);
         }
 
         /// <summary>
@@ -105,48 +102,6 @@ namespace Lench.AdvancedControls.Axes
                 Range = Range
             };
             return clone;
-        }
-
-        internal override void Delete()
-        {
-            spaar.ModLoader.Configuration.RemoveKey("axis-" + Name + "-type");
-            spaar.ModLoader.Configuration.RemoveKey("axis-" + Name + "-axis");
-            spaar.ModLoader.Configuration.RemoveKey("axis-" + Name + "-center");
-            spaar.ModLoader.Configuration.RemoveKey("axis-" + Name + "-range");
-            Dispose();
-        }
-
-        internal override void Load()
-        {
-            Axis = (Axis)spaar.ModLoader.Configuration.GetInt("axis-" + Name + "-axis", (int)Axis);
-            Center = spaar.ModLoader.Configuration.GetFloat("axis-" + Name + "-center", Center);
-            Range = spaar.ModLoader.Configuration.GetFloat("axis-" + Name + "-range", Range);
-        }
-
-        internal override void Load(MachineInfo machineInfo)
-        {
-            if (machineInfo.MachineData.HasKey("axis-" + Name + "-axis"))
-                Axis = (Axis)machineInfo.MachineData.ReadInt("axis-" + Name + "-axis");
-            if (machineInfo.MachineData.HasKey("axis-" + Name + "-center"))
-                Center = machineInfo.MachineData.ReadFloat("axis-" + Name + "-center");
-            if (machineInfo.MachineData.HasKey("axis-" + Name + "-range"))
-                Range = machineInfo.MachineData.ReadFloat("axis-" + Name + "-range");
-        }
-
-        internal override void Save()
-        {
-            spaar.ModLoader.Configuration.SetString("axis-" + Name + "-type", Type.ToString());
-            spaar.ModLoader.Configuration.SetInt("axis-" + Name + "-axis", (int)Axis);
-            spaar.ModLoader.Configuration.SetFloat("axis-" + Name + "-center", Center);
-            spaar.ModLoader.Configuration.SetFloat("axis-" + Name + "-range", Range);
-        }
-
-        internal override void Save(MachineInfo machineInfo)
-        {
-            machineInfo.MachineData.Write("axis-" + Name + "-type", Type.ToString());
-            machineInfo.MachineData.Write("axis-" + Name + "-axis", (int)Axis);
-            machineInfo.MachineData.Write("axis-" + Name + "-center", Center);
-            machineInfo.MachineData.Write("axis-" + Name + "-range", Range);
         }
     }
 }

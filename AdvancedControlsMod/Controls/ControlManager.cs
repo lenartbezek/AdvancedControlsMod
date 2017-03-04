@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using Lench.AdvancedControls.Axes;
-using Lench.AdvancedControls.Resources;
 
 // ReSharper disable RedundantArgumentDefaultValue
 
@@ -79,7 +78,7 @@ namespace Lench.AdvancedControls.Controls
 
         private static List<Control> CreateBlockControls(int blockID, Guid guid)
         {
-            switch (blockID)
+            switch (blockID) // TODO: Localize names, switch to slider keys
             {
                 case (int) BlockType.Wheel:
                 case (int) BlockType.LargeWheel:
@@ -91,7 +90,6 @@ namespace Lench.AdvancedControls.Controls
                         new SliderControl(guid)
                         {
                             Slider = "SPEED",
-                            Name = Strings.SliderName_Speed
                         }
                     };
                 case (int) BlockType.Piston:
@@ -101,7 +99,6 @@ namespace Lench.AdvancedControls.Controls
                         new SliderControl(guid)
                         {
                             Slider = "SPEED",
-                            Name = Strings.SliderName_Speed
                         }
                     };
                 case (int) BlockType.SteeringBlock:
@@ -113,7 +110,6 @@ namespace Lench.AdvancedControls.Controls
                         new SliderControl(guid)
                         {
                             Slider = "ROTATION SPEED",
-                            Name = Strings.SliderName_RotationSpeed
                         }
                     };
                 case (int) BlockType.Spring:
@@ -129,7 +125,6 @@ namespace Lench.AdvancedControls.Controls
                         new SliderControl(guid)
                         {
                             Slider = "STRENGTH",
-                            Name = Strings.SliderName_Strength
                         }
                     };
                 case (int) BlockType.RopeWinch:
@@ -139,7 +134,6 @@ namespace Lench.AdvancedControls.Controls
                         new SliderControl(guid)
                         {
                             Slider = "SPEED",
-                            Name = Strings.SliderName_Speed
                         }
                     };
                 case (int) BlockType.Suspension:
@@ -148,7 +142,6 @@ namespace Lench.AdvancedControls.Controls
                         new SliderControl(guid)
                         {
                             Slider = "SPRING",
-                            Name = Strings.SliderName_Spring
                         }
                     };
                 case (int) BlockType.SpinningBlock:
@@ -157,7 +150,6 @@ namespace Lench.AdvancedControls.Controls
                         new SliderControl(guid)
                         {
                             Slider = "SPEED",
-                            Name = Strings.SliderName_Speed
                         }
                     };
                 case (int) BlockType.CircularSaw:
@@ -166,7 +158,6 @@ namespace Lench.AdvancedControls.Controls
                         new SliderControl(guid)
                         {
                             Slider = "SPEED",
-                            Name = Strings.SliderName_Speed
                         }
                     };
                 case (int) BlockType.Flamethrower:
@@ -175,7 +166,6 @@ namespace Lench.AdvancedControls.Controls
                         new SliderControl(guid)
                         {
                             Slider = "RANGE",
-                            Name = Strings.SliderName_Range,
                             PositiveOnly = true,
                             Min = 0,
                             Center = 1,
@@ -188,7 +178,6 @@ namespace Lench.AdvancedControls.Controls
                         new SliderControl(guid)
                         {
                             Slider = "FLYING SPEED",
-                            Name = Strings.SliderName_FlyingSpeed,
                             PositiveOnly = true,
                             Min = 0,
                             Center = 1,
@@ -201,7 +190,6 @@ namespace Lench.AdvancedControls.Controls
                         new SliderControl(guid)
                         {
                             Slider = "POWER",
-                            Name = Strings.SliderName_Power,
                             PositiveOnly = true,
                             Min = 0,
                             Center = 1,
@@ -214,7 +202,6 @@ namespace Lench.AdvancedControls.Controls
                         new SliderControl(guid)
                         {
                             Slider = "POWER",
-                            Name = Strings.SliderName_Power,
                             PositiveOnly = true,
                             Min = 0,
                             Center = 1,
@@ -227,7 +214,6 @@ namespace Lench.AdvancedControls.Controls
                         new SliderControl(guid)
                         {
                             Slider = "THRUST",
-                            Name = Strings.SliderName_Thrust,
                             PositiveOnly = true,
                             Min = 0,
                             Center = 1,
@@ -236,7 +222,6 @@ namespace Lench.AdvancedControls.Controls
                         new SliderControl(guid)
                         {
                             Slider = "FLIGHT DURATION",
-                            Name = Strings.SliderName_FlightDuration,
                             PositiveOnly = true,
                             Min = 0,
                             Center = 5,
@@ -245,7 +230,6 @@ namespace Lench.AdvancedControls.Controls
                         new SliderControl(guid)
                         {
                             Slider = "EXPLOSIVE CHARGE",
-                            Name = Strings.SliderName_ExplosiveCharge,
                             PositiveOnly = true,
                             Min = 0,
                             Center = 1,
@@ -258,7 +242,6 @@ namespace Lench.AdvancedControls.Controls
                         new SliderControl(guid)
                         {
                             Slider = "BUOYANCY",
-                            Name = Strings.SliderName_Buoyancy,
                             PositiveOnly = true,
                             Min = 0,
                             Center = 1,
@@ -267,7 +250,6 @@ namespace Lench.AdvancedControls.Controls
                         new SliderControl(guid)
                         {
                             Slider = "STRING LENGTH",
-                            Name = Strings.SliderName_StringLength,
                             PositiveOnly = true,
                             Min = 0,
                             Center = 1,
@@ -280,7 +262,6 @@ namespace Lench.AdvancedControls.Controls
                         new SliderControl(guid)
                         {
                             Slider = "MASS",
-                            Name = Strings.SliderName_Mass,
                             PositiveOnly = true,
                             Min = 0,
                             Center = 1,
@@ -293,7 +274,6 @@ namespace Lench.AdvancedControls.Controls
                         new SliderControl(guid)
                         {
                             Slider = "DISTANCE",
-                            Name = Strings.SliderName_Distance,
                             PositiveOnly = true,
                             Min = 40,
                             Center = 60,
@@ -302,7 +282,6 @@ namespace Lench.AdvancedControls.Controls
                         new SliderControl(guid)
                         {
                             Slider = "HEIGHT",
-                            Name = Strings.SliderName_Height,
                             Min = 0,
                             Center = 30,
                             Max = 60
@@ -310,7 +289,6 @@ namespace Lench.AdvancedControls.Controls
                         new SliderControl(guid)
                         {
                             Slider = "ROTATION",
-                            Name = Strings.SliderName_Rotation,
                             Min = -60,
                             Center = 0,
                             Max = 60

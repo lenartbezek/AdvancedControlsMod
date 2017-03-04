@@ -64,14 +64,8 @@ namespace Lench.AdvancedControls.Input
             for (var i = 0; i < SDL_JoystickNumButtons(DevicePointer); i++)
                 Buttons.Add(new JoystickButton(this, i));
 
-            DeviceManager.OnDeviceRemapped += UpdateMapping;
-            Mod.OnUpdate += Update;
+            // TODO: Hook Update and mapping
         }
-
-        /// <summary>
-        ///     The mapping object for the controller.
-        /// </summary>
-        public Mapping Mapping { get; private set; }
 
         /// <summary>
         ///     Index of the device needed to access it through SDL.
@@ -196,14 +190,6 @@ namespace Lench.AdvancedControls.Input
             }
         }
 
-        private void UpdateMapping(SDL_Event e)
-        {
-            if (!Connected) return;
-            if (e.cdevice.which == Index ||
-                e.jdevice.which == Index)
-                Mapping = new Mapping(SDL_GameControllerMapping(GameController));
-        }
-
         /// <summary>
         ///     Returns raw value of an axis.
         /// </summary>
@@ -212,7 +198,7 @@ namespace Lench.AdvancedControls.Input
         /// <returns>value in range [-1, 1]</returns>
         public float GetAxis(int index, bool smooth = false)
         {
-            index = Mapping?[(SDL_GameControllerAxis) index] ?? index;
+            // TODO: Resolve mapping
             return smooth ? _axisValuesSmooth[index] : _axisValuesRaw[index];
         }
 

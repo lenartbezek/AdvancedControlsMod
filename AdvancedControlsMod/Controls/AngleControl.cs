@@ -1,7 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 using Lench.AdvancedControls.Blocks;
-using Lench.AdvancedControls.Resources;
 
 // ReSharper disable VirtualMemberCallInConstructor
 
@@ -33,7 +33,7 @@ namespace Lench.AdvancedControls.Controls
         /// <summary>
         /// Localized display name of the control.
         /// </summary>
-        public override string Name => Strings.ControlName_Angle;
+        public override string Name => "ANGLE";
 
         /// <summary>
         /// Control's block handler.
@@ -59,7 +59,8 @@ namespace Lench.AdvancedControls.Controls
             value = value > 0 
                 ? Mathf.Lerp(Center, Max, value) 
                 : Mathf.Lerp(Center, Min, -value);
-            _steering?.SetAngle(value);
+            if (_steering != null)
+                _steering.Angle = value;
         }
 
         /// <summary>
@@ -67,8 +68,8 @@ namespace Lench.AdvancedControls.Controls
         /// </summary>
         protected override void ClearKeys()
         {
-            Block.ClearKeys("LEFT");
-            Block.ClearKeys("RIGHT");
+            Block.Keys["left"] = new List<KeyCode>();
+            Block.Keys["right"] = new List<KeyCode>();
         }
 
         internal override Control Clone()

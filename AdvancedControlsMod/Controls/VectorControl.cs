@@ -1,6 +1,5 @@
 ﻿using Lench.AdvancedControls.Blocks;
 using System;
-using Lench.AdvancedControls.Resources;
 using UnityEngine;
 
 namespace Lench.AdvancedControls.Controls
@@ -37,23 +36,7 @@ namespace Lench.AdvancedControls.Controls
         /// <summary>
         /// Localized display name.
         /// </summary>
-        public override string Name
-        {
-            get
-            {
-                switch (_vectorAxis)
-                {
-                    case global::Axis.X:
-                        return Strings.VectorControl_AxisHorizontal;
-                    case global::Axis.Y:
-                        return Strings.VectorControl_AxisVertical;
-                    case global::Axis.Z:
-                        return Strings.VectorControl_AxisPower;
-                    default:
-                        throw new ArgumentOutOfRangeException();
-                }
-            }
-        }
+        public override string Name => "vector control"; //TODO: Localize
 
         /// <summary>
         /// Creates a new VectorControl for a block with given guid.

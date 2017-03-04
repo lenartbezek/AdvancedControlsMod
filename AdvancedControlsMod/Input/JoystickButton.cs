@@ -87,8 +87,7 @@ namespace Lench.AdvancedControls.Input
                 return;
             if (Controller.IsGameController)
             {
-                var en = (SDL.SDL_GameControllerButton) Index;
-                if (e.cbutton.button != Controller.GetIndexForButton(en)) return;
+                if (e.cbutton.button != Index) return; // TODO: Button mapping
 
                 _pressed = _down != down && down;
                 _released = _down != down && !down;

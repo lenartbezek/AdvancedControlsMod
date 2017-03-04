@@ -1,7 +1,6 @@
 ﻿using System;
 using UnityEngine;
 using Lench.AdvancedControls.Axes;
-using Lench.AdvancedControls.Resources;
 using spaar.ModLoader;
 // ReSharper disable SpecifyACultureInStringConversionExplicitly
 // ReSharper disable VirtualMemberCallInConstructor
@@ -16,7 +15,7 @@ namespace Lench.AdvancedControls.Controls
         /// <summary>
         /// Name of the control. Displayed in the control mapper.
         /// </summary>
-        public virtual string Name { get; set; } = Strings.ControlName_Default;
+        public virtual string Name { get; set; } = "default control"; // TODO: Localize
 
         /// <summary>
         /// Control key for saving, loading and copying. Should be unique per block.
@@ -115,7 +114,7 @@ namespace Lench.AdvancedControls.Controls
         protected Control(Guid guid)
         {
             BlockGUID = guid;
-            Mod.OnUpdate += Update;
+            //Mod.OnUpdate += Update; // TODO: Hook update
             Block.OnInitialisation += Initialise;
 
             MinString = (Mathf.Round(Min * 100) / 100).ToString();
@@ -129,17 +128,17 @@ namespace Lench.AdvancedControls.Controls
         /// </summary>
         protected virtual void Initialise()
         {
-            try
-            {
-                Block = Block.Get(BlockGUID);
+            Block = Machine.Current[BlockGUID];
 
+            if (Block != null)
+            {
                 var axis = AxisManager.Get(Axis);
                 if (Enabled && Block != null && axis != null && axis.Status == AxisStatus.OK)
                 {
                     ClearKeys();
                 }
             }
-            catch (BlockNotFoundException)
+            else
             {
                 Block = null;
                 ControlManager.Blocks.Remove(BlockGUID);

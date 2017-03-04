@@ -29,14 +29,20 @@ namespace Lench.AdvancedControls
 
         /// <summary>
         ///     Creates a Block handler from a BlockBehaviour object.
-        ///     Same BlockBehaviour should not have multiple Block handlers.
+        ///     Same BlockBehaviour will return same Block instance.
         /// </summary>
         public static Block Create(BlockBehaviour bb)
         {
-            return TypeMap.ContainsKey(bb.GetBlockID())
+            if (CreatedBlocks.ContainsKey(bb))
+                return CreatedBlocks[bb];
+            var block = TypeMap.ContainsKey(bb.GetBlockID())
                 ? (Block)Activator.CreateInstance(TypeMap[bb.GetBlockID()], new object[] { bb })
                 : new Block(bb);
+            CreatedBlocks[bb] = block;
+            return block;
         }
+
+        private static readonly Dictionary<BlockBehaviour, Block> CreatedBlocks = new Dictionary<BlockBehaviour, Block>();
 
         /// <summary>
         ///     Map of all Block IDs to Block Types.
