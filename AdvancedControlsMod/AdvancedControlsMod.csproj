@@ -112,6 +112,21 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\Steam\steamapps\common\Besiege\Besiege_Data\Managed\Assembly-UnityScript-firstpass.dll</HintPath>
     </Reference>
+    <Reference Include="IronPython">
+      <HintPath>..\..\..\..\Steam\steamapps\common\Besiege\Besiege_Data\Mods\Resources\LenchScripter\lib\ironpython3.0\IronPython.dll</HintPath>
+    </Reference>
+    <Reference Include="IronPython.Modules">
+      <HintPath>..\..\..\..\Steam\steamapps\common\Besiege\Besiege_Data\Mods\Resources\LenchScripter\lib\ironpython3.0\IronPython.Modules.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Dynamic">
+      <HintPath>..\..\..\..\Steam\steamapps\common\Besiege\Besiege_Data\Mods\Resources\LenchScripter\lib\ironpython3.0\Microsoft.Dynamic.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Scripting">
+      <HintPath>..\..\..\..\Steam\steamapps\common\Besiege\Besiege_Data\Mods\Resources\LenchScripter\lib\ironpython3.0\Microsoft.Scripting.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Scripting.Core">
+      <HintPath>..\..\..\..\Steam\steamapps\common\Besiege\Besiege_Data\Mods\Resources\LenchScripter\lib\ironpython3.0\Microsoft.Scripting.Core.dll</HintPath>
+    </Reference>
     <Reference Include="SpaarModLoader, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\Steam\steamapps\common\Besiege\Besiege_Data\Mods\SpaarModLoader.dll</HintPath>
@@ -174,7 +189,6 @@
     <Compile Include="Machine.cs" />
     <Compile Include="Mod.cs" />
     <Compile Include="PropertyWrapper.cs" />
-    <Compile Include="PythonEnvironment.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

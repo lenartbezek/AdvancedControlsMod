@@ -13,13 +13,18 @@ namespace Lench.AdvancedControls
     public abstract class PropertyWrapper<T> : IEnumerator<string>, IEnumerable<string>
     {
         /// <summary>
-        ///     BlockBehaviour object.
+        ///     Block handler object.
         /// </summary>
-        protected BlockBehaviour B;
+        protected Block Block;
 
-        internal PropertyWrapper(BlockBehaviour bb)
+        /// <summary>
+        ///     Blocks BlockBehaviour game object.
+        /// </summary>
+        protected BlockBehaviour Bb => Block.BlockBehaviour;
+
+        internal PropertyWrapper(Block block)
         {
-            B = bb;
+            Block = block;
         }
 
         /// <summary>
@@ -44,17 +49,17 @@ namespace Lench.AdvancedControls
     {
         private int _enumeratorPosition;
 
-        internal SliderWrapper(BlockBehaviour bb) : base(bb)
+        internal SliderWrapper(Block b) : base(b)
         {
         }
 
         public override float this[string key]
         {
-            get { return B.Sliders.Find(m => m.Key == key).Value; }
-            set { B.Sliders.Find(m => m.Key == key).Value = value; }
+            get { return Bb.Sliders.Find(m => m.Key == key).Value; }
+            set { Bb.Sliders.Find(m => m.Key == key).Value = value; }
         }
 
-        public override string Current => B.Sliders[_enumeratorPosition].Key;
+        public override string Current => Bb.Sliders[_enumeratorPosition].Key;
 
         public override void Dispose()
         {
@@ -63,7 +68,7 @@ namespace Lench.AdvancedControls
         public override bool MoveNext()
         {
             _enumeratorPosition++;
-            return _enumeratorPosition < B.Sliders.Count;
+            return _enumeratorPosition < Bb.Sliders.Count;
         }
 
         public override void Reset()
@@ -76,17 +81,17 @@ namespace Lench.AdvancedControls
     {
         private int _enumeratorPosition;
 
-        internal ToggleWrapper(BlockBehaviour bb) : base(bb)
+        internal ToggleWrapper(Block b) : base(b)
         {
         }
 
         public override bool this[string key]
         {
-            get { return B.Toggles.Find(m => m.Key == key).IsActive; }
-            set { B.Toggles.Find(m => m.Key == key).IsActive = value; }
+            get { return Bb.Toggles.Find(m => m.Key == key).IsActive; }
+            set { Bb.Toggles.Find(m => m.Key == key).IsActive = value; }
         }
 
-        public override string Current => B.Toggles[_enumeratorPosition].Key;
+        public override string Current => Bb.Toggles[_enumeratorPosition].Key;
 
         public override void Dispose()
         {
@@ -95,7 +100,7 @@ namespace Lench.AdvancedControls
         public override bool MoveNext()
         {
             _enumeratorPosition++;
-            return _enumeratorPosition < B.Sliders.Count;
+            return _enumeratorPosition < Bb.Sliders.Count;
         }
 
         public override void Reset()
@@ -109,17 +114,17 @@ namespace Lench.AdvancedControls
         private static readonly FieldInfo KeyCodeFieldInfo = typeof(MKey).GetField("_keyCodes");
         private int _enumeratorPosition;
 
-        public KeyWrapper(BlockBehaviour bb) : base(bb)
+        public KeyWrapper(Block b) : base(b)
         {
         }
 
         public override IList<KeyCode> this[string key]
         {
-            get { return B.Keys.Find(m => m.Key == key).KeyCode; }
-            set { KeyCodeFieldInfo.SetValue(B.Keys.Find(m => m.Key == key), value); }
+            get { return Bb.Keys.Find(m => m.Key == key).KeyCode; }
+            set { KeyCodeFieldInfo.SetValue(Bb.Keys.Find(m => m.Key == key), value); }
         }
 
-        public override string Current => B.Keys[_enumeratorPosition].Key;
+        public override string Current => Bb.Keys[_enumeratorPosition].Key;
 
         public override void Dispose()
         {
@@ -128,7 +133,7 @@ namespace Lench.AdvancedControls
         public override bool MoveNext()
         {
             _enumeratorPosition++;
-            return _enumeratorPosition < B.Sliders.Count;
+            return _enumeratorPosition < Bb.Sliders.Count;
         }
 
         public override void Reset()
@@ -141,17 +146,17 @@ namespace Lench.AdvancedControls
     {
         private int _enumeratorPosition;
 
-        public ColorWrapper(BlockBehaviour bb) : base(bb)
+        public ColorWrapper(Block b) : base(b)
         {
         }
 
         public override Color this[string key]
         {
-            get { return ((MColourSlider)B.MapperTypes.Find(m => m is MColourSlider && m.Key == key)).Value; }
-            set { ((MColourSlider) B.MapperTypes.Find(m => m is MColourSlider && m.Key == key)).Value = value; }
+            get { return ((MColourSlider)Bb.MapperTypes.Find(m => m is MColourSlider && m.Key == key)).Value; }
+            set { ((MColourSlider) Bb.MapperTypes.Find(m => m is MColourSlider && m.Key == key)).Value = value; }
         }
 
-        public override string Current => B.MapperTypes.FindAll(m => m is MColourSlider)[_enumeratorPosition].Key;
+        public override string Current => Bb.MapperTypes.FindAll(m => m is MColourSlider)[_enumeratorPosition].Key;
 
         public override void Dispose()
         {
@@ -160,7 +165,7 @@ namespace Lench.AdvancedControls
         public override bool MoveNext()
         {
             _enumeratorPosition++;
-            return _enumeratorPosition < B.Sliders.Count;
+            return _enumeratorPosition < Bb.Sliders.Count;
         }
 
         public override void Reset()

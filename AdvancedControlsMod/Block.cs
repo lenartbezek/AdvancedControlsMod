@@ -10,15 +10,31 @@ namespace Lench.AdvancedControls
     /// </summary>
     public partial class Block
     {
+        private BlockBehaviour _buildingClone;
+        private BlockBehaviour _simulationClone;
+
         /// <summary>
         ///     BlockBehaviour object of this handler.
         /// </summary>
-        protected readonly BlockBehaviour Bb;
+        protected BlockBehaviour Bb
+        {
+            get
+            {
+                if (StatMaster.isSimulating)
+                    return _simulationClone = _simulationClone ?? _buildingClone.SimBlock;
+                
+                return _buildingClone = _buildingClone ?? _simulationClone.BuildingBlock;
+            }
+        }
 
         /// <summary>
         ///     BlockLoaders BlockScript object.
         /// </summary>
-        protected readonly MonoBehaviour Bs;
+        protected MonoBehaviour Bs => Bb.GetComponent<BlockScript>();
+
+        // Internal wrappers
+        internal BlockBehaviour BlockBehaviour => Bb;
+        internal MonoBehaviour BlockScript => Bs;
 
         /// <summary>
         ///     Wrapper for accessing slider values.
@@ -41,35 +57,26 @@ namespace Lench.AdvancedControls
         public readonly ColorWrapper Colors;
 
         /// <summary>
-        ///     Creates a Block handler.
+        ///     Creates a Block handler from a BlockBehaviour object.
+        ///     BlockBehaviour can be building clone or simulation clone.
         /// </summary>
         /// <param name="bb">BlockBehaviour object.</param>
         protected Block(BlockBehaviour bb)
         {
-            Bb = bb;
-            Bs = bb.GetComponent<BlockScript>();
+            if (ReferenceEquals(bb, bb.BuildingBlock))
+                _buildingClone = bb;
+            else
+                _simulationClone = bb;
 
-            Sliders = new SliderWrapper(Bb);
-            Toggles = new ToggleWrapper(Bb);
-            Keys = new KeyWrapper(Bb);
-            Colors = new ColorWrapper(Bb);
+            Sliders = new SliderWrapper(this);
+            Toggles = new ToggleWrapper(this);
+            Keys = new KeyWrapper(this);
+            Colors = new ColorWrapper(this);
 
             OnUpdate += Update;
             OnLateUpdate += LateUpdate;
             OnFixedUpdate += FixedUpdate;
         }
-
-        /// <summary>
-        ///     Unsubscribes the block handler from update events.
-        /// </summary>
-        internal void Dispose()
-        {
-            OnUpdate -= Update;
-            OnLateUpdate -= LateUpdate;
-            OnFixedUpdate -= FixedUpdate;
-        }
-
-        internal BlockBehaviour BlockBehaviour => Bb;
 
         /// <summary>
         ///     Name of the block. References to MyBlockInfo.BlockName.
@@ -89,14 +96,14 @@ namespace Lench.AdvancedControls
         ///     Custom block identifier.
         ///     Used to look up blocks in the machine.
         /// </summary>
-        public string ID { get; private set; }
+        public string ID { get; set; }
 
         /// <summary>
         ///     Blocks GUID.
         ///     Only set when Block handler is created at simulation start.
         ///     Cannot be changed.
         /// </summary>
-        public Guid GUID { get; private set; }
+        public Guid GUID => (_buildingClone ?? _simulationClone.BuildingBlock).Guid;
 
         /// <summary>
         ///     Returns true if the block has RigidBody.
@@ -129,10 +136,16 @@ namespace Lench.AdvancedControls
         public virtual Vector3 Position => Bb.transform.position;
 
         /// <summary>
-        ///     Returns the block's rotation in the form of it's Euler angles.
+        ///     Returns the block's rotation as Euler angles.
         /// </summary>
         /// <returns>UnityEngine.Vector3 vector.</returns>
         public virtual Vector3 Rotation => Bb.transform.eulerAngles;
+
+        /// <summary>
+        ///     Returns the block's rotation as a quaternion.
+        /// </summary>
+        /// <returns>UnityEngine.Quaternion vector.</returns>
+        public virtual Quaternion Quaternion => Bb.transform.rotation;
 
         /// <summary>
         ///     Returns the velocity of the block in units per second.
