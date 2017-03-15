@@ -67,10 +67,10 @@ namespace Lench.AdvancedControls.UI
         {
             _scrollPosition = GUILayout.BeginScrollView(_scrollPosition,
                     new GUIStyle(Elements.Scrollview.ThumbVertical) { normal = new GUIStyleState(), padding = new RectOffset() },
-                    GUILayout.Width(304), GUILayout.Height(200));
+                    GUILayout.Width(304), GUILayout.Height(320));
             {
                 // Draw controls
-                foreach (Control c in Controls)
+                foreach (var c in Controls)
                 {
                     DrawControl(c);
                     GUILayout.Box(GUIContent.none, GUILayout.Height(20));

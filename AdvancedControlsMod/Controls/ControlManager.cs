@@ -327,13 +327,13 @@ namespace Lench.AdvancedControls.Controls
                             Max = 1.25f
                         },
                     };
-                case 791: // TODO: Put control names in resource file
+                case 791:
                     return new List<Control>
                     {
                         new SliderControl(guid)
                         {
                             Slider = "PARTICLE VELOCITY",
-                            Name = "PARTICLE VELOCITY",
+                            Name = Strings.SliderName_ParticleVelocity,
                             PositiveOnly = true,
                             Min = 0,
                             Center = 0.5f,
@@ -342,7 +342,7 @@ namespace Lench.AdvancedControls.Controls
                         new SliderControl(guid)
                         {
                             Slider = "EMISSION RATE",
-                            Name = "EMISSION RATE",
+                            Name = Strings.SliderName_EmissionRate,
                             PositiveOnly = true,
                             Min = 0,
                             Center = 1,
@@ -351,15 +351,7 @@ namespace Lench.AdvancedControls.Controls
                         new SliderControl(guid)
                         {
                             Slider = "PARTICLE GRAVITY",
-                            Name = "PARTICLE GRAVITY",
-                            Min = -2,
-                            Center = 0,
-                            Max = 2
-                        },
-                        new SliderControl(guid)
-                        {
-                            Slider = "PARTICLE GRAVITY",
-                            Name = "PARTICLE GRAVITY",
+                            Name = Strings.SliderName_ParticleGravity,
                             Min = -2,
                             Center = 0,
                             Max = 2
@@ -367,7 +359,7 @@ namespace Lench.AdvancedControls.Controls
                         new SliderControl(guid)
                         {
                             Slider = "OPACITY",
-                            Name = "OPACITY",
+                            Name = Strings.SliderName_Opacity,
                             Min = 0,
                             Center = 0.5f,
                             Max = 1
@@ -375,7 +367,7 @@ namespace Lench.AdvancedControls.Controls
                         new SliderControl(guid)
                         {
                             Slider = "PARTICLE LIFETIME",
-                            Name = "PARTICLE LIFETIME",
+                            Name = Strings.SliderName_ParticleLifetime,
                             Min = 0,
                             Center = 50,
                             Max = 100
@@ -383,7 +375,7 @@ namespace Lench.AdvancedControls.Controls
                         new SliderControl(guid)
                         {
                             Slider = "EMITTER ANGLE",
-                            Name = "EMITTER ANGLE",
+                            Name = Strings.SliderName_EmitterAngle,
                             Min = 0,
                             Center = 45,
                             Max = 90

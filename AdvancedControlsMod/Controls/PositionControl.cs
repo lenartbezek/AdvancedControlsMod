@@ -98,6 +98,7 @@ namespace Lench.AdvancedControls.Controls
         /// </summary>
         protected override void ClearKeys()
         {
+            Block.SetToggleMode("TOGGLE MODE", true); // TODO: Don't use this hacky workaround
             Block.ClearKeys("EXTEND");
         }
 

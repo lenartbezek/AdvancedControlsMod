@@ -189,8 +189,12 @@ namespace Lench.AdvancedControls
                         switch (args[1].ToLower())
                         {
                             case "check":
-                                CheckForDbUpdate(true);
-                                return Strings.Console_Acm_CheckingForControllerDBUpdates;
+                                if (DeviceManager.SdlInitialized)
+                                {
+                                    CheckForDbUpdate(true);
+                                    return Strings.Console_Acm_CheckingForControllerDBUpdates;
+                                }
+                                return "";
                             case "enable":
                                 DbUpdaterEnabled = true;
                                 return Strings.Console_Acm_ControllerDBUpdateCheckerEnabled;
@@ -255,7 +259,8 @@ namespace Lench.AdvancedControls
         /// <param name="verbose"></param>
         public static void CheckForDbUpdate(bool verbose = false)
         {
-            DeviceManager.AssignMappings(true, verbose);
+            if (DeviceManager.SdlInitialized)
+                DeviceManager.AssignMappings(true, verbose);
         }
 
         /// <summary>

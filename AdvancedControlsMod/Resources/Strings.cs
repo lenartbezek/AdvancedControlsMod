@@ -1098,6 +1098,36 @@ namespace Lench.AdvancedControls.Resources
         internal static string SliderName_Thrust => GetString("SliderName_Thrust");
 
         /// <summary>
+        ///   Looks up a localized string similar to PARTICLE VELOCITY.
+        /// </summary>
+        internal static string SliderName_ParticleVelocity => GetString("SliderName_ParticleVelocity");
+
+        /// <summary>
+        ///   Looks up a localized string similar to PARTICLE GRAVITY.
+        /// </summary>
+        internal static string SliderName_ParticleGravity => GetString("SliderName_ParticleGravity");
+
+        /// <summary>
+        ///   Looks up a localized string similar to PARTICLE LIFETIME.
+        /// </summary>
+        internal static string SliderName_ParticleLifetime => GetString("SliderName_ParticleLifetime");
+
+        /// <summary>
+        ///   Looks up a localized string similar to EMISSION RATE.
+        /// </summary>
+        internal static string SliderName_EmissionRate => GetString("SliderName_EmissionRate");
+
+        /// <summary>
+        ///   Looks up a localized string similar to EMITTER ANGLE.
+        /// </summary>
+        internal static string SliderName_EmitterAngle => GetString("SliderName_EmitterAngle");
+
+        /// <summary>
+        ///   Looks up a localized string similar to OPACITY.
+        /// </summary>
+        internal static string SliderName_Opacity => GetString("SliderName_Opacity");
+
+        /// <summary>
         ///   Looks up a localized string similar to GitHub release page.
         /// </summary>
         internal static string Updater_GithubReleasePageLink => GetString("Updater_GithubReleasePageLink");
