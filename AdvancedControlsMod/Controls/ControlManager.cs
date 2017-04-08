@@ -189,7 +189,6 @@ namespace Lench.AdvancedControls.Controls
                         {
                             Slider = "FLYING SPEED",
                             Name = Strings.SliderName_FlyingSpeed,
-                            PositiveOnly = true,
                             Min = 0,
                             Center = 1,
                             Max = 2
@@ -202,7 +201,6 @@ namespace Lench.AdvancedControls.Controls
                         {
                             Slider = "POWER",
                             Name = Strings.SliderName_Power,
-                            PositiveOnly = true,
                             Min = 0,
                             Center = 1,
                             Max = 2
@@ -215,7 +213,6 @@ namespace Lench.AdvancedControls.Controls
                         {
                             Slider = "POWER",
                             Name = Strings.SliderName_Power,
-                            PositiveOnly = true,
                             Min = 0,
                             Center = 1,
                             Max = 2
