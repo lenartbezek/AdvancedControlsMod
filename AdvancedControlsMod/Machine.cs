@@ -58,9 +58,11 @@ namespace Lench.AdvancedControls
         }
 
 #pragma warning disable 1591
+
         public Block this[string id] => GetBlock(id);
         public Block this[BlockBehaviour bb] => GetBlock(bb);
         public Block this[Guid guid] => GetBlock(guid);
+
 #pragma warning restore 1591
 
         /// <summary>

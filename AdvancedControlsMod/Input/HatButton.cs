@@ -27,7 +27,7 @@ namespace Lench.AdvancedControls.Input
             Index = index;
             _guid = controller.GUID;
             _downState = downState;
-            DeviceManager.OnDeviceAdded += UpdateDevice;
+            SdlManager.OnDeviceAdded += UpdateDevice;
         }
 
         /// <summary>
@@ -51,8 +51,8 @@ namespace Lench.AdvancedControls.Input
                 throw new FormatException("Specified ID does not represent a hat button.");
             }
 
-            DeviceManager.OnHatMotion += HandleEvent;
-            DeviceManager.OnDeviceAdded += UpdateDevice;
+            SdlManager.OnHatMotion += HandleEvent;
+            SdlManager.OnDeviceAdded += UpdateDevice;
         }
 
         /// <summary>

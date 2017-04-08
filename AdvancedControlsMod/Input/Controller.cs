@@ -4,6 +4,8 @@ using System.Linq;
 using UnityEngine;
 using static Lench.AdvancedControls.Input.SDL;
 
+// ReSharper disable UnusedMember.Local
+
 namespace Lench.AdvancedControls.Input
 {
     /// <summary>

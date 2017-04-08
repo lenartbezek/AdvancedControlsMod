@@ -100,7 +100,7 @@ namespace Lench.AdvancedControls.Axes
         /// <summary>
         /// Axis is saveable if SDL engine is initialized and at least one device is connected.
         /// </summary>
-        public override bool Saveable => DeviceManager.SdlInitialized && Controller.NumDevices > 0;
+        public override bool Saveable => SdlManager.SdlInitialized && Controller.NumDevices > 0;
 
         /// <summary>
         /// Controller axis status distinguishes between Engine Unavailable, Device Disconnected and OK.
@@ -109,7 +109,7 @@ namespace Lench.AdvancedControls.Axes
         {
             get
             {
-                if (!DeviceManager.SdlInitialized) return AxisStatus.Unavailable;
+                if (!SdlManager.SdlInitialized) return AxisStatus.Unavailable;
                 if (!Connected) return AxisStatus.Disconnected;
                 return AxisStatus.OK;
             }
@@ -132,8 +132,8 @@ namespace Lench.AdvancedControls.Axes
             Invert = false;
             Smooth = false;
 
-            DeviceManager.OnDeviceAdded += (e) => _controller = Controller.Get(_guid);
-            DeviceManager.OnDeviceRemoved += (e) => _controller = Controller.Get(_guid);
+            SdlManager.OnDeviceAdded += (e) => _controller = Controller.Get(_guid);
+            SdlManager.OnDeviceRemoved += (e) => _controller = Controller.Get(_guid);
         }
 
         /// <summary>

@@ -15,6 +15,7 @@ namespace Lench.AdvancedControls
     /// </summary>
     public class Mod : spaar.ModLoader.Mod
     {
+        private static PythonEnvironment _python;
 
 #pragma warning disable CS1591
 
@@ -26,6 +27,9 @@ namespace Lench.AdvancedControls
             Game.OnSimulationToggle += Block.HandleSimulationToggle;
 
             spaar.Commands.RegisterCommand("py", PythonCommand);
+
+            PythonEnvironment.InitializeEngine();
+            _python = new PythonEnvironment();
         }
 
         public override void OnUnload()
@@ -41,7 +45,7 @@ namespace Lench.AdvancedControls
         public override Version Version => Assembly.GetExecutingAssembly().GetName().Version;
         public override string VersionExtra { get; } = "";
         public override string BesiegeVersion { get; } = "v0.42";
-        public override bool CanBeUnloaded { get; } = true;
+        public override bool CanBeUnloaded { get; } = false;
         public override bool Preload { get; } = false;
 
 #pragma warning restore CS1591
@@ -66,14 +70,14 @@ namespace Lench.AdvancedControls
 
             try
             {
-                var result = Script.Global.Execute(expression);
+                var result = _python.Execute(expression);
                 return result?.ToString() ?? "";
             }
             catch (Exception e)
             {
                 if (e.InnerException != null) e = e.InnerException;
                 Debug.Log("<b><color=#FF0000>Python error: " + e.Message + "</color></b>\n" +
-                          Script.FormatException(e));
+                          PythonEnvironment.FormatException(e));
                 return "";
             }
         }

@@ -23,8 +23,8 @@ namespace Lench.AdvancedControls.Input
             Controller = controller;
             _guid = controller.GUID;
 
-            DeviceManager.OnButton += HandleEvent;
-            DeviceManager.OnDeviceAdded += UpdateDevice;
+            SdlManager.OnButton += HandleEvent;
+            SdlManager.OnDeviceAdded += UpdateDevice;
         }
 
         /// <summary>
@@ -45,8 +45,8 @@ namespace Lench.AdvancedControls.Input
                 throw new FormatException("Specified ID does not represent a joystick button.");
             }
 
-            DeviceManager.OnButton += HandleEvent;
-            DeviceManager.OnDeviceAdded += UpdateDevice;
+            SdlManager.OnButton += HandleEvent;
+            SdlManager.OnDeviceAdded += UpdateDevice;
         }
 
         /// <summary>
