@@ -336,18 +336,9 @@ namespace Lench.AdvancedControls
         public override string Name { get; } = "AdvancedControlsMod";
         public override string DisplayName { get; } = "Advanced Controls Mod";
         public override string Author { get; } = "Lench";
-
-        public override Version Version
-        {
-            get
-            {
-                var v = Assembly.GetExecutingAssembly().GetName().Version;
-                return new Version(v.Major, v.Minor, v.Build);
-            }
-        }
-
+        public override Version Version => Assembly.GetExecutingAssembly().GetName().Version;
         public override string VersionExtra { get; } = "";
-        public override string BesiegeVersion { get; } = "v0.42";
+        public override string BesiegeVersion { get; } = "v0.45";
         public override bool CanBeUnloaded { get; } = true;
         public override bool Preload { get; } = false;
 #pragma warning restore CS1591
